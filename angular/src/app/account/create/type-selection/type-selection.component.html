@@ -1,8 +1,8 @@
 <mat-card>
-    <mat-card-title>Select the account type!</mat-card-title>
-    <mat-card-content fxLayout="row" fxLayoutGap="10px">
-      <button mat-raised-button color="accent">Physician</button>
-      <button mat-raised-button color="accent">Vendor</button>
-      <button mat-raised-button color="accent">Admin</button>
-    </mat-card-content>
-  </mat-card>
+  <mat-card-title>Select the account type!</mat-card-title>
+  <mat-card-content fxLayout="row" fxLayoutGap="10px">
+    <button id="physician_button" mat-raised-button color="accent" (click)="physician_button_click()">Physician</button>
+    <button id="vendor_button" mat-raised-button color="accent" (click)="vendor_button_click()">Vendor</button>
+    <button id="admin_button" mat-raised-button color="accent" (click)="admin_button_click()">Admin</button>
+  </mat-card-content>
+</mat-card>

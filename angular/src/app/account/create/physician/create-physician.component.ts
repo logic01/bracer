@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { Router } from '@angular/router';
+import { RouteUrls } from '../../../constants/routes';
 
 @Component({
   selector: 'app-create-physician',
@@ -20,7 +22,7 @@ export class CreatePhysicianComponent implements OnInit {
     'backgroundColor': 'rgb(211,211,211)'
   };
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
@@ -30,6 +32,10 @@ export class CreatePhysicianComponent implements OnInit {
       first_name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
     });
+  }
+
+  onSubmit() {
+    this.router.navigateByUrl(RouteUrls.PhysicianDashboardComponent);
   }
 
   drawComplete() {

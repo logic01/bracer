@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RouteUrls } from '../../../constants/routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-admin',
@@ -10,7 +12,7 @@ export class CreateAdminComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
@@ -19,5 +21,9 @@ export class CreateAdminComponent implements OnInit {
       password_confirm: new FormControl('', Validators.required),
       pin: new FormControl('', Validators.required),
     });
+  }
+
+  onSubmit() {
+    this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
   }
 }

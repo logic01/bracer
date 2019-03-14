@@ -1,9 +1,25 @@
 @import '~@angular/material/theming';
 
-$palette: mat-palette($mat-indigo);
+$palette: mat-palette($mat-grey);
 
-.header{
+/*.header{
     background-color: mat-color($palette);
     height: 50px;
     margin-bottom: 20px;
+}*/
+
+.main {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 150px;
 }
+
+.header {
+    border-radius: 15px;
+    background: #ff4081;
+    padding: 20px; 
+  }
+
+  .body{ 
+    background: grey;
+  }

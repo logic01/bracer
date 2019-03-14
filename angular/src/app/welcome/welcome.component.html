@@ -1,7 +1,6 @@
-<mat-card>
-  <mat-card-title>Welcome</mat-card-title>
+<mat-card >
   <mat-card-content fxLayout="row" fxLayoutGap="10px">
-    <button mat-raised-button color="accent">Create Account</button>
-    <button mat-raised-button color="accent">Login</button>
+    <button id="create_account_button" mat-raised-button color="accent" (click)="create_account_button_click()">Create Account</button>
+    <button id="login_button" mat-raised-button color="accent" (click)="login_button_click()">Login</button>
   </mat-card-content>
 </mat-card>

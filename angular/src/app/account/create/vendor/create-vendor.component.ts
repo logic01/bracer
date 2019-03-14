@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RouteUrls } from '../../../constants/routes';
 
 @Component({
   selector: 'app-create-vendor',
@@ -10,7 +12,7 @@ export class CreateVendorComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
@@ -18,8 +20,15 @@ export class CreateVendorComponent implements OnInit {
       password: new FormControl('', Validators.required),
       password_confirm: new FormControl('', Validators.required),
       first_name: new FormControl('', Validators.required),
+      middle_name: new FormControl('', Validators.required),
       last_name: new FormControl('', Validators.required),
     });
+  }
+
+  onSubmit() {
+    // create account
+    // login
+    this.router.navigateByUrl(RouteUrls.VendorDashboardComponent);
   }
 
 }

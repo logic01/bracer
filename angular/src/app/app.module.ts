@@ -6,15 +6,16 @@ import { AccountCreateModule } from './account/create/account-create.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DesignModule } from './design/design.module';
-import { InventoryComponent } from './inventory/inventory.component';
 import { LoginModule } from './login/login.module';
 import { WelcomeModule } from './welcome/welcome.module';
+import { VendorModule } from './vendor/vendor.module';
+import { AdminModule } from './admin/admin.module';
+import { PhysicianModule } from './physician/physician.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    InventoryComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +24,10 @@ import { WelcomeModule } from './welcome/welcome.module';
     DesignModule,
     LoginModule,
     WelcomeModule,
-    AccountCreateModule
+    AccountCreateModule,
+    VendorModule,
+    AdminModule,
+    PhysicianModule
   ],
   providers: [],
   bootstrap: [AppComponent]

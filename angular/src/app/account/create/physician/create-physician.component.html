@@ -2,7 +2,7 @@
   <mat-card-title>Physician</mat-card-title>
   <mat-card-content>
 
-    <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px">
+    <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
       <mat-form-field>
         <input matInput placeholder="User Name" type="text" formControlName="username">

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouteUrls } from '../constants/routes';
 
 @Component({
   selector: 'app-welcome',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
+  }
+
+  create_account_button_click() {
+    this.router.navigateByUrl(RouteUrls.TypeSelectionComponent);
+  }
+
+  login_button_click() {
+    this.router.navigateByUrl(RouteUrls.LoginComponent);
   }
 
 }
