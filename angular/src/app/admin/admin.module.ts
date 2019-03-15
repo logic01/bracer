@@ -1,11 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+
 import { DesignModule } from '../design/design.module';
+import { CreateVendorComponent } from './create-vendor/create-vendor.component';
+import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 
 @NgModule({
-  declarations: [AdminDashboardComponent],
+  declarations: [
+    AdminDashboardComponent,
+    CreateVendorComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

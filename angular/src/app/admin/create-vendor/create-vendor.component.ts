@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RouteUrls } from '../../../constants/routes';
+
+import { RouteUrls } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-create-vendor',

@@ -1,25 +1,54 @@
-@import '~@angular/material/theming';
-
-$palette: mat-palette($mat-grey);
-
-/*.header{
-    background-color: mat-color($palette);
-    height: 50px;
-    margin-bottom: 20px;
-}*/
-
-.main {
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 150px;
-}
+@import "./../theme.scss";
 
 .header {
-    border-radius: 15px;
-    background: #ff4081;
-    padding: 20px; 
-  }
+    margin: 0px 10px 0px 10px;
+    padding: 2px 2px 1px 30px;
+    background-color: #A1F7A1;
+}
 
-  .body{ 
-    background: grey;
-  }
+.main{
+    margin: 0px 10px 0px 10px;
+}
+
+.menu{
+    margin: 5px 0px 0px 0px;
+    padding: 5px 0px 5px 0px;
+    border-style: solid;
+    border-color: mat-color($accent-palette);
+    border-width: 1px 0px 1px 0px;
+}
+
+.content{
+    margin: 10px;
+}
+
+.mat-button.mat-accent.menu-button{
+    color: mat-color($accent-palette, 900);
+    border-radius: 0%;
+}
+
+.mat-button.mat-accent:hover{
+    color: mat-color($accent-palette, default-contrast);
+    background-color: mat-color($accent-palette);
+}
+
+.header-title{
+    margin-bottom: 3px;
+}
+
+.subtext{
+    font-style: italic;
+    margin-top: 0px;
+}
+
+.footer{
+    color: mat-color($primary-palette);
+    border-style: solid;
+    border-color:  mat-color($primary-palette);
+    border-width: 1px 0px 1px 0px;
+    padding: 2px 0px 2px 0px;    
+    position:fixed;
+    bottom:0;    
+    width: 100%;
+    margin-bottom: 3px;
+}

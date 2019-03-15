@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { RouteUrls } from './constants/routes';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +10,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  constructor() {
+  constructor(private readonly router: Router) { }
+
+  loginClick() {
+    this.router.navigateByUrl(RouteUrls.LoginComponent);
   }
+
+  createAccountClick() {
+    this.router.navigateByUrl(RouteUrls.TypeSelectionComponent);
+  }
+
 }

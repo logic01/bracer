@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { RouteUrls } from '../../../constants/routes';
 
 @Component({
@@ -18,8 +19,8 @@ export class TypeSelectionComponent implements OnInit {
     this.router.navigateByUrl(RouteUrls.CreatePhysicianComponent);
   }
 
-  vendor_button_click() {
-    this.router.navigateByUrl(RouteUrls.CreateVendorComponent);
+  agent_button_click() {
+    this.router.navigateByUrl(RouteUrls.CreateAgentComponent);
   }
 
   admin_button_click() {

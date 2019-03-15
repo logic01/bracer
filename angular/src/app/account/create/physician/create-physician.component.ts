@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { Router } from '@angular/router';
+
 import { RouteUrls } from '../../../constants/routes';
 
 @Component({
@@ -12,25 +11,23 @@ import { RouteUrls } from '../../../constants/routes';
 })
 export class CreatePhysicianComponent implements OnInit {
 
-  @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
   public accountForm: FormGroup;
 
-  public signaturePadOptions: Object = {
-    'canvasWidth': 1000,
-    'canvasHeight': 100,
-    'backgroundColor': 'rgb(211,211,211)'
-  };
+
 
   constructor(private readonly router: Router) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      username: new FormControl('', Validators.required),
+      emailAddress: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
-      password_confirm: new FormControl('', Validators.required),
-      first_name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
+      confirmationPassword: new FormControl('', Validators.required),
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl('', Validators.required),
+      phoneNumber: new FormControl('', Validators.required),
+      contactFirstName: new FormControl('', Validators.required),
+      contactLastName: new FormControl('', Validators.required),
     });
   }
 
@@ -38,13 +35,4 @@ export class CreatePhysicianComponent implements OnInit {
     this.router.navigateByUrl(RouteUrls.PhysicianDashboardComponent);
   }
 
-  drawComplete() {
-    // will be notified of szimek/signature_pad's onEnd event
-    console.log(this.signaturePad.toDataURL());
-  }
-
-  drawStart() {
-    // will be notified of szimek/signature_pad's onBegin event
-    console.log('begin drawing');
-  }
 }
