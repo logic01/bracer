@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CallComponent } from './call/call.component';
-import { VendorDashboardComponent } from './dashboard/vendor-dashboard.component';
 import { DesignModule } from '../design/design.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditVendorComponent } from './edit/edit-vendor.component';
+import { CreateVendorComponent } from './create/create-vendor.component';
 
 @NgModule({
-  declarations: [CallComponent, VendorDashboardComponent],
+  declarations: [
+    EditVendorComponent,
+    CreateVendorComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

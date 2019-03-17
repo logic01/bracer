@@ -3,13 +3,17 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { DesignModule } from '../design/design.module';
-import { CreateVendorComponent } from './create-vendor/create-vendor.component';
+
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
+import { CreateAdminComponent } from './create/create-admin.component';
+import { EditAdminComponent } from './edit/edit-admin.component';
+
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
-    CreateVendorComponent
+    CreateAdminComponent,
+    EditAdminComponent
   ],
   imports: [
     CommonModule,

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.router.navigateByUrl(RouteUrls.VendorDashboardComponent);
+    this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
   }
 
 }
