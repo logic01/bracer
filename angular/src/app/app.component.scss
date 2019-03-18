@@ -3,7 +3,7 @@
 .header {
     margin: 0px 10px 0px 10px;
     padding: 2px 2px 1px 30px;
-    background-color: #A1F7A1;
+    background-color: $accent-sky-blue;    
 }
 
 .main{
@@ -14,7 +14,7 @@
     margin: 5px 0px 0px 0px;
     padding: 5px 0px 5px 0px;
     border-style: solid;
-    border-color: mat-color($accent-palette);
+    border-color: $accent-blue;
     border-width: 1px 0px 1px 0px;
 }
 
@@ -22,14 +22,12 @@
     margin: 10px;
 }
 
-.mat-button.mat-accent.menu-button{
-    color: mat-color($accent-palette, 900);
+.mat-button.mat-primary.menu-button{
     border-radius: 0%;
 }
 
-.mat-button.mat-accent:hover{
-    color: mat-color($accent-palette, default-contrast);
-    background-color: mat-color($accent-palette);
+.mat-button.mat-primary{
+    color: $accent-blue;
 }
 
 .header-title{
@@ -42,9 +40,9 @@
 }
 
 .footer{
-    color: mat-color($primary-palette);
+    color: $accent-blue;
     border-style: solid;
-    border-color:  mat-color($primary-palette);
+    border-color: $accent-blue;
     border-width: 1px 0px 1px 0px;
     padding: 2px 0px 2px 0px;    
     position:fixed;

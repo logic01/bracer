@@ -17,7 +17,7 @@ export class CreateAdminComponent implements OnInit {
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      emailAddress: new FormControl('', Validators.required),
+      userName: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
       confirmationPassword: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),

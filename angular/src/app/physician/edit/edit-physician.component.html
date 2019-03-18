@@ -1,10 +1,10 @@
-<h3>Physician</h3>
+<h2>Physician</h2>
 
 <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
   <mat-form-field>
-    <input matInput placeholder="Email" type="text" formControlName="emailAddress">
-    <mat-error *ngIf="accountForm.get('emailAddress').hasError('required')">Please enter a valid email address.
+    <input matInput placeholder="User Name" type="text" formControlName="userName">
+    <mat-error *ngIf="accountForm.get('userName').hasError('required')">Please enter a user name.
     </mat-error>
   </mat-form-field>
 
