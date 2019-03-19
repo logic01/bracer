@@ -1,5 +1,16 @@
+@import "./../../../theme.scss";
 
-.mat-table{
-    border-spacing: 5px;
-    background-color: lightgrey !important;
+table{
+    width: 800px;;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+  max-width: 64px;
+  min-width: 20px;
+}
+
+.mat-column-created {
+  max-width: 124px;
 }

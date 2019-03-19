@@ -11,6 +11,7 @@ import { PhysicianModule } from './physician/physician.module';
 import { VendorModule } from './vendor/vendor.module';
 import { SharedModule } from './shared/shared.module';
 import { AgentModule } from './agent/agent.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AgentModule } from './agent/agent.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
     DesignModule,
     LoginModule,
     VendorModule,
