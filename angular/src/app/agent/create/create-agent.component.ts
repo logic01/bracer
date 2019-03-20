@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { RouteUrls } from 'src/app/constants/routes';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { UserService } from '../../api/user.service';
 import { User } from '../../models/user.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-agent',
@@ -15,7 +16,7 @@ import { User } from '../../models/user.model';
 export class CreateAgentComponent implements OnInit, OnDestroy {
 
   public accountForm: FormGroup;
-  public subscription: Subscription;
+  private unsubscribe$ = new Subject();
 
   constructor(
     private readonly userApi: UserService,
@@ -32,7 +33,7 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+   this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {
@@ -43,8 +44,9 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
 
     const user = this.buildUser();
 
-    this.subscription = this.userApi
+    this.userApi
       .post(user)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newUser: User) => {
         this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
       });

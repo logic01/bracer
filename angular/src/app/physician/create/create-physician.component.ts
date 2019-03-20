@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { RouteUrls } from '../../constants/routes';
 import { UserService } from '../../api/user.service';
 import { User } from '../../models/user.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-physician',
@@ -15,7 +16,7 @@ import { Subscription } from 'rxjs';
 export class CreatePhysicianComponent implements OnInit, OnDestroy {
 
   public accountForm: FormGroup;
-  public subscription: Subscription;
+  private unsubscribe$ = new Subject();
 
   constructor(
     private readonly userApi: UserService,
@@ -35,7 +36,7 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+   this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {
@@ -46,8 +47,9 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
 
     const user = this.buildUser();
 
-    this.subscription = this.userApi
+    this.userApi
       .post(user)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newUser: User) => {
         this.router.navigateByUrl(RouteUrls.PhysicianDashboardComponent);
       });
