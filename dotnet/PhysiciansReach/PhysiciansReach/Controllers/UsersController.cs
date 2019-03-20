@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PhysiciansReach.Models;
 using PR.Business.Interfaces;
+using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
@@ -23,23 +23,24 @@ namespace PhysiciansReach.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<UserModel> Get(int id)
+        [HttpGet("{userId}")]
+        public ActionResult<UserModel> Get(int userId)
         {
-            return new UserModel();
+            return _business.Get(userId);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] UserModel value)
+        public ActionResult<UserModel> Post([FromBody] UserModel value)
         {
-            _business.SaveUser();
+            return _business.Create(value);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UserModel value)
+        public ActionResult<UserModel> Put(int id, [FromBody] UserModel value)
         {
+            return _business.Update(value);
         }
     }
 }
