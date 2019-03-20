@@ -5,12 +5,12 @@ namespace PR.Business.Interfaces
 {
     public interface IUserBusiness
     {
-        List<UserModel> Get(int[] userIds);
+        List<UserAccountModel> Get(int[] userIds);
 
-        UserModel Get(int userId);
+        UserAccountModel Get(int userId);
 
-        UserModel Create(UserModel userModel);
+        UserAccountModel Create(UserAccountModel userModel);
 
-        UserModel Update(UserModel userModel);
+        UserAccountModel Update(UserAccountModel userModel);
     }
 }

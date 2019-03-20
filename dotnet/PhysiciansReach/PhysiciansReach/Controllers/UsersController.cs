@@ -17,28 +17,28 @@ namespace PhysiciansReach.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<UserModel>> Get()
+        public ActionResult<IEnumerable<UserAccountModel>> Get()
         {
-            return new UserModel[] { new UserModel(), new UserModel() };
+            return new UserAccountModel[] { new UserAccountModel(), new UserAccountModel() };
         }
 
         // GET api/values/5
         [HttpGet("{userId}")]
-        public ActionResult<UserModel> Get(int userId)
+        public ActionResult<UserAccountModel> Get(int userId)
         {
             return _business.Get(userId);
         }
 
         // POST api/values
         [HttpPost]
-        public ActionResult<UserModel> Post([FromBody] UserModel value)
+        public ActionResult<UserAccountModel> Post([FromBody] UserAccountModel value)
         {
             return _business.Create(value);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public ActionResult<UserModel> Put(int id, [FromBody] UserModel value)
+        public ActionResult<UserAccountModel> Put(int id, [FromBody] UserAccountModel value)
         {
             return _business.Update(value);
         }

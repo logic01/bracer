@@ -12,8 +12,6 @@ namespace PR.Data.Models
 
         public string Password { get; set; }
 
-        public string ConfirmationPassword { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -23,5 +21,9 @@ namespace PR.Data.Models
         public string ContactFirstName { get; set; }
 
         public string ContactLastName { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime ModifiedOn { get; set; }
     }
 }

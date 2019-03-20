@@ -1,5 +1,6 @@
 ﻿using PhysiciansReach.Models;
 using PR.Business.Interfaces;
+using PR.Business.Mappings;
 using PR.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,61 +23,32 @@ namespace PR.Business
 
         public UserModel Get(int userId)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
-            return Map(user);
+            var user = _context.User.FirstOrDefault(u => u.UserId == userId);
+            return user.ToModel();
         }
 
         public UserModel Create(UserModel userModel)
         {
-            var user = Map(userModel);
+            var user = userModel.ToEntity();
 
-            _context.Users.Add(user);
+            _context.User.Add(user);
             _context.SaveChanges();
 
-            return Map(user);
+            return user.ToModel();
         }
 
         public UserModel Update(UserModel userModel)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userModel.UserId);
-            user = Map(userModel);
+            var user = _context.User.FirstOrDefault(u => u.UserId == userModel.UserId);
 
-            _context.Users.Add(user);
+            user = userModel.ToEntity();
+
+            _context.User.Add(user);
             _context.SaveChanges();
 
-            return Map(user);
+            return user.ToModel();
         }
 
-        private UserModel Map(User user)
-        {
-            return new UserModel
-            {
-                UserId = user.UserId,
-                ConfirmationPassword = user.ConfirmationPassword,
-                ContactFirstName = user.ConfirmationPassword,
-                ContactLastName = user.ConfirmationPassword,
-                FirstName = user.ConfirmationPassword,
-                LastName = user.ConfirmationPassword,
-                Password = user.ConfirmationPassword,
-                PhoneNumber = user.ConfirmationPassword,
-                UserName = user.UserName
-            };
-        }
 
-        private User Map(UserModel userModel)
-        {
-            return new User
-            {
-                UserId = userModel.UserId,
-                ConfirmationPassword = userModel.ConfirmationPassword,
-                ContactFirstName = userModel.ConfirmationPassword,
-                ContactLastName = userModel.ConfirmationPassword,
-                FirstName = userModel.ConfirmationPassword,
-                LastName = userModel.ConfirmationPassword,
-                Password = userModel.ConfirmationPassword,
-                PhoneNumber = userModel.ConfirmationPassword,
-                UserName = userModel.UserName
-            };
-        }
     }
 }

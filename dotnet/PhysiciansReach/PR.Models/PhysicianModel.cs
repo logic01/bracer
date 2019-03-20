@@ -1,14 +1,10 @@
-﻿namespace PhysiciansReach.Models
+﻿using System;
+
+namespace PhysiciansReach.Models
 {
-    public class UserModel
+    public class PhysicianModel
     {
-        public int UserId { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public string ConfirmationPassword { get; set; }
+        public UserAccountModel UserAccount { get; set; }
 
         public string FirstName { get; set; }
 
@@ -19,5 +15,9 @@
         public string ContactFirstName { get; set; }
 
         public string ContactLastName { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime ModifiedOn { get; set; }
     }
 }
