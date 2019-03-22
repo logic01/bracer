@@ -1,8 +1,7 @@
-export class User {
-    userId: string;
-    username: string;
-    password: string;
-    confirmationPassword: string;
+import { UserAccount } from './user-account.model';
+
+export class Physician {
+    userAccount: UserAccount;
     firstName: string;
     lastName: string;
     phoneNumber: string;

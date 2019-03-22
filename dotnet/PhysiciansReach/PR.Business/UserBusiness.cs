@@ -16,20 +16,20 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<UserModel> Get(int[] userIds)
+        public List<UserAccountModel> Get(int[] userIds)
         {
-            return new List<UserModel> { new UserModel() };
+            return new List<UserAccountModel> { new UserAccountModel() };
         }
 
-        public UserModel Get(int userId)
+        public UserAccountModel Get(int userId)
         {
             var user = _context.User.FirstOrDefault(u => u.UserId == userId);
             return user.ToModel();
         }
 
-        public UserModel Create(UserModel userModel)
+        public UserAccountModel Create(UserAccountModel userAccount)
         {
-            var user = userModel.ToEntity();
+            var user = userAccount.ToEntity();
 
             _context.User.Add(user);
             _context.SaveChanges();
@@ -37,11 +37,11 @@ namespace PR.Business
             return user.ToModel();
         }
 
-        public UserModel Update(UserModel userModel)
+        public UserAccountModel Update(UserAccountModel userAccount)
         {
-            var user = _context.User.FirstOrDefault(u => u.UserId == userModel.UserId);
+            var user = _context.User.FirstOrDefault(u => u.UserId == userAccount.UserId);
 
-            user = userModel.ToEntity();
+            user = userAccount.ToEntity();
 
             _context.User.Add(user);
             _context.SaveChanges();

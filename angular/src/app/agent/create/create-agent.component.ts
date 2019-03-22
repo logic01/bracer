@@ -1,12 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { RouteUrls } from 'src/app/constants/routes';
-import { Subscription, Subject } from 'rxjs';
-import { UserService } from '../../api/user.service';
-import { User } from '../../models/user.model';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { AgentService } from 'src/app/api/agent.service';
+import { RouteUrls } from 'src/app/constants/routes';
+import { Agent } from 'src/app/models/agent.model';
+import { UserAccount } from 'src/app/models/user-account.model';
+
 
 @Component({
   selector: 'app-create-agent',
@@ -19,12 +22,12 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   constructor(
-    private readonly userApi: UserService,
+    private readonly agentApi: AgentService,
     private readonly router: Router) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      username: new FormControl('', Validators.required),
+      userName: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
       confirmationPassword: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),
@@ -33,7 +36,7 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-   this.unsubscribe$.unsubscribe();
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {
@@ -42,25 +45,28 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const user = this.buildUser();
+    const agent = this.buildAgent();
 
-    this.userApi
-      .post(user)
+    this.agentApi
+      .post(agent)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newUser: User) => {
+      .subscribe((newAgent: Agent) => {
         this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
       });
   }
 
-  private buildUser(): User {
-    const user = new User();
-    user.username = this.accountForm.controls['userName'].value;
-    user.password = this.accountForm.controls['password'].value;
-    user.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
-    user.firstName = this.accountForm.controls['firstName'].value;
-    user.lastName = this.accountForm.controls['lastName'].value;
+  private buildAgent(): Agent {
 
-    return user;
+    const agent = new Agent();
+    agent.userAccount = new UserAccount();
+
+    agent.userAccount.username = this.accountForm.controls['userName'].value;
+    agent.userAccount.password = this.accountForm.controls['password'].value;
+    agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
+    agent.firstName = this.accountForm.controls['firstName'].value;
+    agent.lastName = this.accountForm.controls['lastName'].value;
+
+    return agent;
   }
 
 }

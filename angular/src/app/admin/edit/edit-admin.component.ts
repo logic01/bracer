@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { RouteUrls } from '../../constants/routes';
-import { User } from '../../models/user.model';
-import {  Subject } from 'rxjs';
-import { UserService } from '../../api/user.service';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { RouteUrls } from '../../constants/routes';
+import { AdminService } from 'src/app/api/admin.service';
+import { Admin } from 'src/app/models/admin.model';
+import { UserAccount } from 'src/app/models/user-account.model';
 
 @Component({
   selector: 'app-edit-admin',
@@ -19,7 +21,7 @@ export class EditAdminComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   constructor(
-    private readonly userApi: UserService,
+    private readonly adminApi: AdminService,
     private readonly router: Router) { }
 
   ngOnInit() {
@@ -42,25 +44,27 @@ export class EditAdminComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const user = this.buildUser();
+    const admin = this.buildAdminAccount();
 
-    this.userApi
-      .put(user)
+    this.adminApi
+      .put(admin)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newUser: User) => {
+      .subscribe((newAdmin: Admin) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
 
   }
 
-  private buildUser(): User {
-    const user = new User();
-    user.username = this.accountForm.controls['userName'].value;
-    user.password = this.accountForm.controls['password'].value;
-    user.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
-    user.firstName = this.accountForm.controls['firstName'].value;
-    user.lastName = this.accountForm.controls['lastName'].value;
+  private buildAdminAccount(): Admin {
 
-    return user;
+    const admin = new Admin();
+    admin.userAccount = new UserAccount();
+    admin.userAccount.username = this.accountForm.controls['userName'].value;
+    admin.userAccount.password = this.accountForm.controls['password'].value;
+    admin.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
+    admin.firstName = this.accountForm.controls['firstName'].value;
+    admin.lastName = this.accountForm.controls['lastName'].value;
+
+    return admin;
   }
 }

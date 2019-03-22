@@ -5,18 +5,13 @@ namespace PR.Business.Mappings
 {
     public static class UserMappings
     {
-        public static UserModel ToModel(this User entity)
+        public static UserAccountModel ToModel(this UserAccount entity)
         {
-            var model = new UserModel
+            var model = new UserAccountModel
             {
-                UserId = entity.UserId,
+                UserId = entity.UserAccountId,
                 UserName = entity.UserName,
                 Password = entity.Password,
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                PhoneNumber = entity.PhoneNumber,
-                ContactFirstName = entity.ContactFirstName,
-                ContactLastName = entity.ContactLastName,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -24,18 +19,13 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static User ToEntity(this UserModel model)
+        public static UserAccount ToEntity(this UserAccountModel model)
         {
-            var entity = new User
+            var entity = new UserAccount
             {
-                UserId = model.UserId,
+                UserAccountId = model.UserId,
                 UserName = model.UserName,
                 Password = model.Password,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
-                ContactFirstName = model.ContactFirstName,
-                ContactLastName = model.ContactLastName,
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };

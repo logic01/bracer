@@ -1,12 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { RouteUrls } from '../../constants/routes';
-import { User } from '../../models/user.model';
-import { UserService } from '../../api/user.service';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { RouteUrls } from '../../constants/routes';
+import { PhysicianService } from 'src/app/api/physician.service';
+import { Physician } from 'src/app/models/physician.model';
+import { UserAccount } from 'src/app/models/user-account.model';
+
 
 @Component({
   selector: 'app-edit-physician',
@@ -19,7 +22,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   constructor(
-    private readonly userApi: UserService,
+    private readonly physicianApi: PhysicianService,
     private readonly router: Router) { }
 
   ngOnInit() {
@@ -36,7 +39,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-   this.unsubscribe$.unsubscribe();
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {
@@ -45,27 +48,31 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const user = this.buildUser();
+    const physician = this.buildPhysician();
 
-    this.userApi
-      .put(user)
+    this.physicianApi
+      .put(physician)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newUser: User) => {
+      .subscribe((newPhysician: Physician) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }
 
-  private buildUser(): User {
-    const user = new User();
-    user.username = this.accountForm.controls['userName'].value;
-    user.password = this.accountForm.controls['password'].value;
-    user.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
-    user.firstName = this.accountForm.controls['firstName'].value;
-    user.lastName = this.accountForm.controls['lastName'].value;
-    user.phoneNumber = this.accountForm.controls['phoneNumber'].value;
-    user.contactFirstName = this.accountForm.controls['contactFirstName'].value;
-    user.contactLastName = this.accountForm.controls['contactLastName'].value;
+  private buildPhysician(): Physician {
 
-    return user;
+    const physician = new Physician();
+    physician.userAccount = new UserAccount();
+
+    physician.userAccount.username = this.accountForm.controls['username'].value;
+    physician.userAccount.password = this.accountForm.controls['password'].value;
+    physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
+
+    physician.firstName = this.accountForm.controls['firstName'].value;
+    physician.lastName = this.accountForm.controls['lastName'].value;
+    physician.phoneNumber = this.accountForm.controls['phoneNumber'].value;
+    physician.contactFirstName = this.accountForm.controls['contactFirstName'].value;
+    physician.contactLastName = this.accountForm.controls['contactLastName'].value;
+
+    return physician;
   }
 }
