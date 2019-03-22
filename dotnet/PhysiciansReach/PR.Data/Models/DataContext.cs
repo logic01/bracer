@@ -59,6 +59,13 @@ namespace PR.Data.Models
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.UserAccount)
+                     .WithOne(p => p.Admin)
+                     .HasForeignKey<Admin>(b => b.UserAccountId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Admin_UserAccount");
+
             });
         }
 

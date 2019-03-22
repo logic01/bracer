@@ -21,29 +21,29 @@ namespace PR.Business
             return new List<UserAccountModel> { new UserAccountModel() };
         }
 
-        public UserAccountModel Get(int userId)
+        public UserAccountModel Get(int userAccountId)
         {
-            var user = _context.User.FirstOrDefault(u => u.UserId == userId);
+            var user = _context.UserAccount.FirstOrDefault(u => u.UserAccountId == userAccountId);
+
             return user.ToModel();
         }
 
-        public UserAccountModel Create(UserAccountModel userAccount)
+        public UserAccountModel Create(UserAccountModel userAccountModel)
         {
-            var user = userAccount.ToEntity();
+            var user = userAccountModel.ToEntity();
 
-            _context.User.Add(user);
+            _context.UserAccount.Add(user);
             _context.SaveChanges();
 
             return user.ToModel();
         }
 
-        public UserAccountModel Update(UserAccountModel userAccount)
+        public UserAccountModel Update(UserAccountModel userAccountModel)
         {
-            var user = _context.User.FirstOrDefault(u => u.UserId == userAccount.UserId);
+            var user = _context.UserAccount.FirstOrDefault(u => u.UserAccountId == userAccountModel.UserId);
 
-            user = userAccount.ToEntity();
-
-            _context.User.Add(user);
+            user = userAccountModel.ToEntity();
+            _context.UserAccount.Add(user);
             _context.SaveChanges();
 
             return user.ToModel();
