@@ -4,9 +4,7 @@ namespace PR.Data.Models
 {
     public class Physician
     {
-        public int PhysicianId { get; set; }
-
-        public int UserId { get; set; }
+        public int UserAccountId { get; set; }
 
         public string FirstName { get; set; }
 
@@ -21,5 +19,7 @@ namespace PR.Data.Models
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public UserAccount UserAccount { get; set; }
     }
 }

@@ -63,7 +63,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
     const physician = new Physician();
     physician.userAccount = new UserAccount();
 
-    physician.userAccount.username = this.accountForm.controls['username'].value;
+    physician.userAccount.userName = this.accountForm.controls['userName'].value;
     physician.userAccount.password = this.accountForm.controls['password'].value;
     physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
 

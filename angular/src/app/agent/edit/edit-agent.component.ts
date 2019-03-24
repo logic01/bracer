@@ -60,7 +60,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
     const agent = new Agent();
     agent.userAccount = new UserAccount();
 
-    agent.userAccount.username = this.accountForm.controls['userName'].value;
+    agent.userAccount.userName = this.accountForm.controls['userName'].value;
     agent.userAccount.password = this.accountForm.controls['password'].value;
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     agent.firstName = this.accountForm.controls['firstName'].value;

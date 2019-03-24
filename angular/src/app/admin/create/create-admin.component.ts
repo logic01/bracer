@@ -60,7 +60,7 @@ export class CreateAdminComponent implements OnInit, OnDestroy {
     const admin = new Admin();
     admin.userAccount = new UserAccount();
 
-    admin.userAccount.username = this.accountForm.controls['userName'].value;
+    admin.userAccount.userName = this.accountForm.controls['userName'].value;
     admin.userAccount.password = this.accountForm.controls['password'].value;
     admin.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     admin.firstName = this.accountForm.controls['firstName'].value;

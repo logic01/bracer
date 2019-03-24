@@ -6,34 +6,34 @@ namespace PhysiciansReach.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AgentController : ControllerBase
+    public class PhysicianController : ControllerBase
     {
-        private readonly IAgentBusiness _business;
+        private readonly IPhysicianBusiness _business;
 
-        public AgentController(IAgentBusiness business)
+        public PhysicianController(IPhysicianBusiness business)
         {
             _business = business;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<AgentModel> Get(int id)
+        public ActionResult<PhysicianModel> Get(int id)
         {
             return _business.Get(id);
         }
 
         // POST api/values
         [HttpPost]
-        public ActionResult<AgentModel> Post([FromBody] AgentModel agent)
+        public ActionResult<PhysicianModel> Post([FromBody] PhysicianModel physician)
         {
-            return _business.Create(agent);
+            return _business.Create(physician);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public ActionResult<AgentModel> Put(int id, [FromBody] AgentModel agent)
+        public ActionResult<PhysicianModel> Put(int id, [FromBody] PhysicianModel physician)
         {
-            return _business.Update(agent);
+            return _business.Update(physician);
         }
     }
 }

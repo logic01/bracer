@@ -1,0 +1,16 @@
+﻿using PhysiciansReach.Models;
+using System.Collections.Generic;
+
+namespace PR.Business.Interfaces
+{
+    public interface IPhysicianBusiness
+    {
+        List<PhysicianModel> Get(int[] ids);
+
+        PhysicianModel Get(int id);
+
+        PhysicianModel Create(PhysicianModel physicianModel);
+
+        PhysicianModel Update(PhysicianModel physicianModel);
+    }
+}

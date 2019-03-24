@@ -50,7 +50,7 @@ namespace PR.Data.Models
             {
                 entity.ToTable("Admin", "dbo");
 
-                entity.HasKey(e => e.AdminId).ForSqlServerIsClustered(false);
+                entity.HasKey(e => e.UserAccountId).ForSqlServerIsClustered(false);
 
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
 
@@ -75,7 +75,7 @@ namespace PR.Data.Models
             {
                 entity.ToTable("Physician", "dbo");
 
-                entity.HasKey(e => e.PhysicianId).ForSqlServerIsClustered(false);
+                entity.HasKey(e => e.UserAccountId).ForSqlServerIsClustered(false);
 
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
 
@@ -90,6 +90,12 @@ namespace PR.Data.Models
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.UserAccount)
+                     .WithOne(p => p.Physician)
+                     .HasForeignKey<Physician>(b => b.UserAccountId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Physician_UserAccount");
             });
         }
 
@@ -99,7 +105,7 @@ namespace PR.Data.Models
             {
                 entity.ToTable("Agent", "dbo");
 
-                entity.HasKey(e => e.AgentId).ForSqlServerIsClustered(false);
+                entity.HasKey(e => e.UserAccountId).ForSqlServerIsClustered(false);
 
                 entity.HasIndex(e => e.VendorId);
 

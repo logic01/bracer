@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PR.Business;
+using PR.Business.Business;
 using PR.Business.Interfaces;
 using PR.Data.Models;
 
@@ -68,7 +69,11 @@ namespace PhysiciansReach
 
         private void ConfigureDependecyInjection(IServiceCollection services)
         {
-            services.AddTransient<IUserBusiness, UserBusiness>();
+            services.AddTransient<IAdminBusiness, AdminBusiness>();
+            services.AddTransient<IAgentBusiness, AgentBusiness>();
+            services.AddTransient<IPhysicianBusiness, PhysicianBusiness>();
+            services.AddTransient<IVendorBusiness, VendorBusiness>();
+            services.AddTransient<ILoginBusiness, LoginBusiness>();
         }
     }
 }

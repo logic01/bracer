@@ -2,14 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AgentService } from 'src/app/api/agent.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/agent.model';
 import { UserAccount } from 'src/app/models/user-account.model';
-
+import { VendorService } from 'src/app/api/vendor.service';
+import { Vendor } from 'src/app/models/vendor.model';
 
 @Component({
   selector: 'app-create-agent',
@@ -19,10 +20,13 @@ import { UserAccount } from 'src/app/models/user-account.model';
 export class CreateAgentComponent implements OnInit, OnDestroy {
 
   public accountForm: FormGroup;
+  public vendors$: Observable<Vendor[]>;
+
   private unsubscribe$ = new Subject();
 
   constructor(
     private readonly agentApi: AgentService,
+    private readonly vendorApi: VendorService,
     private readonly router: Router) { }
 
   ngOnInit() {
@@ -32,7 +36,10 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
       confirmationPassword: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
+      vendor: new FormControl('', Validators.required)
     });
+
+    this.vendors$ = this.vendorApi.getAll();
   }
 
   ngOnDestroy(): void {
@@ -60,12 +67,12 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
     const agent = new Agent();
     agent.userAccount = new UserAccount();
 
-    agent.userAccount.username = this.accountForm.controls['userName'].value;
+    agent.userAccount.userName = this.accountForm.controls['userName'].value;
     agent.userAccount.password = this.accountForm.controls['password'].value;
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     agent.firstName = this.accountForm.controls['firstName'].value;
     agent.lastName = this.accountForm.controls['lastName'].value;
-
+    agent.vendorId = this.accountForm.controls['vendor'].value;
     return agent;
   }
 

@@ -9,7 +9,7 @@ namespace PR.Business.Mappings
         {
             var model = new UserAccountModel
             {
-                UserId = entity.UserAccountId,
+                UserAccountId = entity.UserAccountId,
                 UserName = entity.UserName,
                 Password = entity.Password,
                 CreatedOn = entity.CreatedOn,
@@ -23,7 +23,7 @@ namespace PR.Business.Mappings
         {
             var entity = new UserAccount
             {
-                UserAccountId = model.UserId,
+                UserAccountId = model.UserAccountId,
                 UserName = model.UserName,
                 Password = model.Password,
                 CreatedOn = model.CreatedOn,

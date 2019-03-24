@@ -4,8 +4,6 @@ namespace PR.Data.Models
 {
     public class Agent
     {
-        public int AgentId { get; set; }
-
         public int UserAccountId { get; set; }
 
         public int VendorId { get; set; }

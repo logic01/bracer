@@ -2,40 +2,34 @@
 <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
   <mat-form-field>
-    <input matInput placeholder=" User Name" type="text" formControlName="username">
-    <mat-error *ngIf="accountForm.get('username').hasError('required')">Please enter the user name.</mat-error>
+    <input matInput placeholder="Company Name" type="text" formControlName="companyName">
+    <mat-error *ngIf="accountForm.get('companyName').hasError('required')">Please enter the company name.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Doing Business As" type="text" formControlName="doingBusinessAs">
+    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('required')">Please enter your the doing business as
+      name.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
+    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please enter the company phone number.
+    </mat-error>
   </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>
-      <input matInput placeholder="Password" type="text" formControlName="password">
-      <mat-error *ngIf="accountForm.get('password').hasError('required')">Please enter the password.</mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Confirm Password" type="text" formControlName="password_confirm">
-      <mat-error *ngIf="accountForm.get('password_confirm').hasError('required')">Please enter the confirmation
-        password.
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <div fxLayout="row" fxLayoutGap="10px">
-    <mat-form-field>
-      <input matInput placeholder="First Name" type="text" formControlName="first_name">
-      <mat-error *ngIf="accountForm.get('first_name').hasError('required')">Please enter your first name.
+      <input matInput placeholder="Contact First Name" type="text" formControlName="contactFirstName">
+      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('required')">Please enter your contact first name.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Middle Name" type="text" formControlName="middle_name">
-      <mat-error *ngIf="accountForm.get('middle_name').hasError('required')">Please enter your middle name.
+      <input matInput placeholder="Contact Last Name" type="text" formControlName="contactLastName">
+      <mat-error *ngIf="accountForm.get('contactLastName').hasError('required')">Please enter your contact last name.
       </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Last Name" type="text" formControlName="last_name">
-      <mat-error *ngIf="accountForm.get('last_name').hasError('required')">Please enter your last name.</mat-error>
     </mat-form-field>
   </div>
 

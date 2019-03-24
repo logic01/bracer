@@ -4,7 +4,7 @@ namespace PhysiciansReach.Models
 {
     public class UserAccountModel
     {
-        public int UserId { get; set; }
+        public int UserAccountId { get; set; }
 
         public string UserName { get; set; }
 

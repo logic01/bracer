@@ -13,8 +13,12 @@ export class VendorService {
 
   constructor(private http: HttpClient) { }
 
-  get() {
-    return this.http.get(this.url);
+  getAll(): Observable<Vendor[]> {
+    return this.http.get<Vendor[]>(this.url);
+  }
+
+  get(id: number) {
+    return this.http.get(`${this.url}/${id}`);
   }
 
   post(admin: Vendor): Observable<Vendor> {

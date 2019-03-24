@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PR.Data.Models
 {
     public class Admin
     {
-        public int AdminId { get; set; }
-
         public int UserAccountId { get; set; }
 
         public string FirstName { get; set; }

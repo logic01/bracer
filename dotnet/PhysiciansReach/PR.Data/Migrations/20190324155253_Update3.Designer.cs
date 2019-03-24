@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190324155253_Update3")]
+    partial class Update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,9 @@ namespace PR.Data.Migrations
 
             modelBuilder.Entity("PR.Data.Models.Admin", b =>
                 {
-                    b.Property<int>("UserAccountId");
+                    b.Property<int>("AdminId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -41,15 +45,22 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.HasKey("UserAccountId")
+                    b.Property<int>("UserAccountId");
+
+                    b.HasKey("AdminId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("UserAccountId")
+                        .IsUnique();
 
                     b.ToTable("Admin","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Agent", b =>
                 {
-                    b.Property<int>("UserAccountId");
+                    b.Property<int>("AgentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -69,10 +80,15 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int>("UserAccountId");
+
                     b.Property<int>("VendorId");
 
-                    b.HasKey("UserAccountId")
+                    b.HasKey("AgentId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("UserAccountId")
+                        .IsUnique();
 
                     b.HasIndex("VendorId");
 
@@ -81,7 +97,9 @@ namespace PR.Data.Migrations
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>
                 {
-                    b.Property<int>("UserAccountId");
+                    b.Property<int>("PhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ContactFirstName")
                         .IsRequired()
@@ -113,8 +131,13 @@ namespace PR.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.HasKey("UserAccountId")
+                    b.Property<int>("UserAccountId");
+
+                    b.HasKey("PhysicianId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("UserAccountId")
+                        .IsUnique();
 
                     b.ToTable("Physician","dbo");
                 });

@@ -3,8 +3,8 @@
 <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
   <mat-form-field>
-    <input matInput placeholder="User Name" type="text" formControlName="username">
-    <mat-error *ngIf="accountForm.get('username').hasError('required')">Please enter a valid user name.
+    <input matInput placeholder="User Name" type="text" formControlName="userName">
+    <mat-error *ngIf="accountForm.get('userName').hasError('required')">Please enter a valid user name.
     </mat-error>
   </mat-form-field>
 
@@ -33,17 +33,17 @@
     </mat-form-field>
   </div>
 
-  <!--
+
   <mat-form-field>
       <mat-select placeholder="Vendor" formControlName="vendor">
         <mat-option>--</mat-option>
-        <mat-option *ngFor="let vendor of vendors" [value]="vendor">
-          {{vendor}}
+        <mat-option *ngFor="let vendor of vendors$ | async" [value]="vendor.vendorId">
+          {{vendor.companyName}}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="accountFormget('vendor')">Please select a vendor.</mat-error>
+      <mat-error *ngIf="accountForm.get('vendor').hasError('required')">Please select a vendor.</mat-error>
     </mat-form-field>
--->
+
   <button type="submit" mat-raised-button color="accent">Submit</button>
 
 </form>

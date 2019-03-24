@@ -6,5 +6,5 @@ export class Vendor {
     public billingAddress: Address;
     public phoneNumber: string;
     public contactFirstName: string;
-    public contactLasttName: string;
+    public contactLastName: string;
 }
