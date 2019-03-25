@@ -18,12 +18,15 @@ namespace PR.Data.Models
 
         public DbSet<Vendor> Vendor { get; set; }
 
+        public DbSet<Address> Address { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             UserAccountBuilder(modelBuilder);
             AdminBuilder(modelBuilder);
             PhysicianBuilder(modelBuilder);
             AgentBuilder(modelBuilder);
+            AddressBuilder(modelBuilder);
         }
 
         protected void UserAccountBuilder(ModelBuilder modelBuilder)
@@ -69,6 +72,31 @@ namespace PR.Data.Models
             });
         }
 
+        protected void AddressBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Address>(entity =>
+            {
+                entity.ToTable("Address", "dbo");
+
+                entity.HasKey(e => e.AddressId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.AddressLineOne).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.AddressLineTwo).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.City).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.State).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.ZipCode).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+            });
+        }
+
         protected void PhysicianBuilder(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Physician>(entity =>
@@ -96,6 +124,12 @@ namespace PR.Data.Models
                      .HasForeignKey<Physician>(b => b.UserAccountId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Physician_UserAccount");
+
+                entity.HasOne(d => d.Address)
+                     .WithOne(p => p.Physician)
+                     .HasForeignKey<Physician>(b => b.UserAccountId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Physician_Address");
             });
         }
 

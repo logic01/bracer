@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR.Models;
+using System;
 
 namespace PhysiciansReach.Models
 {
@@ -15,6 +16,8 @@ namespace PhysiciansReach.Models
         public string ContactFirstName { get; set; }
 
         public string ContactLastName { get; set; }
+
+        public AddressModel Address { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

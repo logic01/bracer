@@ -9,6 +9,7 @@ import { RouteUrls } from '../../constants/routes';
 import { PhysicianService } from 'src/app/api/physician.service';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
+import { Address } from 'src/app/models/address.model';
 
 
 @Component({
@@ -35,6 +36,11 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
       phoneNumber: new FormControl('', Validators.required),
       contactFirstName: new FormControl('', Validators.required),
       contactLastName: new FormControl('', Validators.required),
+      addressLineOne: new FormControl('', Validators.required),
+      addressLineTwo: new FormControl('', Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      zip: new FormControl('', Validators.required)
     });
   }
 
@@ -62,6 +68,7 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
 
     const physician = new Physician();
     physician.userAccount = new UserAccount();
+    physician.address = new Address();
 
     physician.userAccount.userName = this.accountForm.controls['userName'].value;
     physician.userAccount.password = this.accountForm.controls['password'].value;
@@ -72,6 +79,12 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
     physician.phoneNumber = this.accountForm.controls['phoneNumber'].value;
     physician.contactFirstName = this.accountForm.controls['contactFirstName'].value;
     physician.contactLastName = this.accountForm.controls['contactLastName'].value;
+
+    physician.address.addressLine1 = this.accountForm.controls['addressLineOne'].value;
+    physician.address.addressLine2 = this.accountForm.controls['addressLineTwo'].value;
+    physician.address.city = this.accountForm.controls['city'].value;
+    physician.address.state = this.accountForm.controls['state'].value;
+    physician.address.zipCode = this.accountForm.controls['zip'].value;
 
     return physician;
   }

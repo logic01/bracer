@@ -16,10 +16,14 @@ namespace PR.Data.Models
 
         public string ContactLastName { get; set; }
 
+        public int AddresstId { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 
         public UserAccount UserAccount { get; set; }
+
+        public Address Address { get; set; }
     }
 }
