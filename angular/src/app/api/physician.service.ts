@@ -15,6 +15,10 @@ export class PhysicianService {
 
   constructor(private http: HttpClient) { }
 
+  getAll(): Observable<Physician[]> {
+    return this.http.get<Physician[]>(this.url);
+  }
+
   get(): Observable<Physician> {
     return this.http.get<Physician>(this.url);
   }

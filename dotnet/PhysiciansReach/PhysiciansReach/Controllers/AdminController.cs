@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhysiciansReach.Models;
 using PR.Business.Interfaces;
+using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
@@ -8,32 +9,35 @@ namespace PhysiciansReach.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminBusiness _adminBusiness;
+        private readonly IAdminBusiness _business;
 
-        public AdminController(IAdminBusiness adminBusiness)
+        public AdminController(IAdminBusiness business)
         {
-            _adminBusiness = adminBusiness;
+            _business = business;
         }
 
-        // GET api/values/5
+        [HttpGet]
+        public ActionResult<List<AdminModel>> Get()
+        {
+            return _business.Get();
+        }
+
         [HttpGet("{id}")]
         public ActionResult<AdminModel> Get(int id)
         {
-            return _adminBusiness.Get(id);
+            return _business.Get(id);
         }
 
-        // POST api/values
         [HttpPost]
         public ActionResult<AdminModel> Post([FromBody] AdminModel admin)
         {
-            return _adminBusiness.Create(admin);
+            return _business.Create(admin);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public ActionResult<AdminModel> Put(int id, [FromBody] AdminModel admin)
         {
-            return _adminBusiness.Update(admin);
+            return _business.Update(admin);
         }
     }
 }

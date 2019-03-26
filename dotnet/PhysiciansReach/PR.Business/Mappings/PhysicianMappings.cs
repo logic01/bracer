@@ -9,14 +9,15 @@ namespace PR.Business.Mappings
         {
             PhysicianModel model = new PhysicianModel
             {
-                UserAccount = entity.UserAccount.ToModel(),
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 PhoneNumber = entity.PhoneNumber,
                 ContactFirstName = entity.ContactFirstName,
                 ContactLastName = entity.ContactLastName,
                 CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn
+                ModifiedOn = entity.ModifiedOn,
+                UserAccount = entity.UserAccount.ToModel(),
+                Address = entity.Address.ToModel()
             };
 
             return model;
@@ -26,14 +27,16 @@ namespace PR.Business.Mappings
         {
             Physician entity = new Physician
             {
-                UserAccount = model.UserAccount.ToEntity(),
+              
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
                 ContactFirstName = model.ContactFirstName,
                 ContactLastName = model.ContactLastName,
                 CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
+                ModifiedOn = model.ModifiedOn,
+                UserAccount = model.UserAccount.ToEntity(),
+                Address = model.Address.ToEntity()
             };
 
             return entity;

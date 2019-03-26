@@ -5,7 +5,7 @@ namespace PR.Business.Interfaces
 {
     public interface IAdminBusiness
     {
-        List<AdminModel> Get(int[] ids);
+        List<AdminModel> Get();
 
         AdminModel Get(int id);
 

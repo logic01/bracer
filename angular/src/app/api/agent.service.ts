@@ -15,6 +15,10 @@ export class AgentService {
 
   constructor(private http: HttpClient) { }
 
+  getAll(): Observable<Agent[]> {
+    return this.http.get<Agent[]>(this.url);
+  }
+
   get(): Observable<Agent> {
     return this.http.get<Agent>(this.url);
   }

@@ -1,51 +1,44 @@
-<mat-card>
-  <mat-card-title>Search</mat-card-title>
-  <mat-card-content>
-    <form [formGroup]="searchForm" novalidate fxLayout="column" fxLayoutGap="20px" (click)="onSubmit()">
-
-      <mat-form-field>
-        <input matInput placeholder="User Name" type="text" formControlName="username">
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput placeholder="Document Id" type="text" formControlName="document_id">
-      </mat-form-field>
-
-      <button mat-raised-button color="accent">Submit</button>
-
-    </form>
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-title>Results</mat-card-title>
-  <mat-card-content>
-    <table mat-table class="mat-elevation-z8" [dataSource]="data">
-      <ng-container matColumnDef="userId">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let result"> {{result.userId}} </td>
-      </ng-container>
-      <ng-container matColumnDef="userName">
-        <th mat-header-cell *matHeaderCellDef> User Name </th>
-        <td mat-cell *matCellDef="let result"> {{result.userName}} </td>
-      </ng-container>
-      <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef> First Name </th>
-        <td mat-cell *matCellDef="let result"> {{result.firstName}} </td>
-      </ng-container>
-      <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef> Last Name </th>
-        <td mat-cell *matCellDef="let result"> {{result.lastName}} </td>
-      </ng-container>
-      <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef> Edit </th>
-        <td mat-cell *matCellDef="let result"> <button mat-raised-button color="accent"
-            (click)="edit(result.userId. result.type)">Edit</button> </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef=" columnsToDisplay "></tr>
-      <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay "></tr>
-
-    </table>
-  </mat-card-content>
-</mat-card>
+<mat-tab-group>
+  <mat-tab label="Admins">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-admin-list></app-admin-list>
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab label="Physicians">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-physician-list></app-physician-list>
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab label="Agents">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-agent-list></app-agent-list>
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab label="Vendors">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-vendor-list></app-vendor-list>
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab label="Orders">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-order-list></app-order-list>
+      </p>
+    </div>
+  </mat-tab>
+  <mat-tab label="Documents">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <p>
+        <app-document-list></app-document-list>
+      </p>
+    </div>
+  </mat-tab>
+</mat-tab-group>

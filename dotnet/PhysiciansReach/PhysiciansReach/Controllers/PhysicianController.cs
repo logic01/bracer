@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhysiciansReach.Models;
 using PR.Business.Interfaces;
+using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
@@ -15,21 +16,22 @@ namespace PhysiciansReach.Controllers
             _business = business;
         }
 
-        // GET api/values/5
+        [HttpGet]
+        public ActionResult<List<PhysicianModel>> Get()
+        {
+            return _business.Get();
+        }
+
         [HttpGet("{id}")]
         public ActionResult<PhysicianModel> Get(int id)
         {
             return _business.Get(id);
         }
-
-        // POST api/values
         [HttpPost]
         public ActionResult<PhysicianModel> Post([FromBody] PhysicianModel physician)
         {
             return _business.Create(physician);
         }
-
-        // PUT api/values/5
         [HttpPut("{id}")]
         public ActionResult<PhysicianModel> Put(int id, [FromBody] PhysicianModel physician)
         {

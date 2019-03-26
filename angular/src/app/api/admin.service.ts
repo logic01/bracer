@@ -15,6 +15,10 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
+  getAll(): Observable<Admin[]> {
+    return this.http.get<Admin[]>(this.url);
+  }
+
   get(): Observable<Admin> {
     return this.http.get<Admin>(this.url);
   }

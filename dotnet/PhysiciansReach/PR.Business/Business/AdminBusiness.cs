@@ -17,11 +17,12 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<AdminModel> Get(int[] userAccountIds)
+        public List<AdminModel> Get()
         {
-            IQueryable<Admin> admins = _context.Admin.Where(a => userAccountIds.Contains(a.UserAccountId));
-
-            return admins.Select(i => i.ToModel()).ToList();
+            return _context.Admin
+                    .Include(p => p.UserAccount)
+                    .Select(i => i.ToModel())
+                    .ToList();
         }
 
         public AdminModel Get(int userAccountId)

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { RouteUrls } from '../../constants/routes';
 
 @Component({
@@ -15,7 +16,7 @@ export class AgentDashboardComponent implements OnInit {
   ngOnInit() {
   }
 
-  new_call_button_click() {
-    this.router.navigateByUrl(RouteUrls.AgentCallComponent);
+  new_order_button_click() {
+    this.router.navigateByUrl(RouteUrls.AgentOrderComponent);
   }
 }

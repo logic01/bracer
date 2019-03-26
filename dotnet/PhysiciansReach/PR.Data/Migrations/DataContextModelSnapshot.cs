@@ -26,11 +26,9 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AddressLineOne")
-                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("AddressLineTwo")
-                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("City")
@@ -125,7 +123,7 @@ namespace PR.Data.Migrations
                 {
                     b.Property<int>("UserAccountId");
 
-                    b.Property<int>("AddresstId");
+                    b.Property<int>("AddressId");
 
                     b.Property<string>("ContactFirstName")
                         .IsRequired()
@@ -159,6 +157,9 @@ namespace PR.Data.Migrations
 
                     b.HasKey("UserAccountId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.ToTable("Physician","dbo");
                 });
@@ -239,7 +240,7 @@ namespace PR.Data.Migrations
                 {
                     b.HasOne("PR.Data.Models.Address", "Address")
                         .WithOne("Physician")
-                        .HasForeignKey("PR.Data.Models.Physician", "UserAccountId")
+                        .HasForeignKey("PR.Data.Models.Physician", "AddressId")
                         .HasConstraintName("FK_Physician_Address");
 
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")

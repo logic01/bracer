@@ -17,17 +17,20 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<PhysicianModel> Get(int[] userAccountIds)
+        public List<PhysicianModel> Get()
         {
-            IQueryable<Physician> physicians = _context.Physician.Where(a => userAccountIds.Contains(a.UserAccountId));
-
-            return physicians.Select(i => i.ToModel()).ToList();
+            return _context.Physician
+                    .Include(p => p.UserAccount)
+                    .Include(p => p.Address)
+                    .Select(i => i.ToModel())
+                    .ToList();
         }
 
         public PhysicianModel Get(int userAccountId)
         {
             Physician physician = _context.Physician
-                .Include(a => a.UserAccount)
+                .Include(p => p.UserAccount)
+                .Include(p => p.Address)
                 .FirstOrDefault(u => u.UserAccountId == userAccountId);
 
             return physician.ToModel();

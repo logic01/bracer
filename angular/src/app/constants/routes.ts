@@ -4,7 +4,7 @@ export const RouteUrls = {
   CreateAdminComponent: 'account/create/admin',
   CreatePhysicianComponent: 'account/create/physician',
   CreateAgentComponent: 'account/create/agent',
-  AgentCallComponent: 'agent/call',
+  AgentOrderComponent: 'agent/order',
   AgentDashboardComponent: 'agent/dashboard',
   PhysicianDashboardComponent: 'physician/dashboard',
   PhysicianDocumentComponent: 'physician/document',

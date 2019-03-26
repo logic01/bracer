@@ -5,7 +5,7 @@ namespace PR.Business.Interfaces
 {
     public interface IAgentBusiness
     {
-        List<AgentModel> Get(int[] ids);
+        List<AgentModel> Get();
 
         AgentModel Get(int id);
 

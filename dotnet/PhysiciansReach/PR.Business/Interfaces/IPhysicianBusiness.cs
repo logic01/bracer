@@ -5,7 +5,7 @@ namespace PR.Business.Interfaces
 {
     public interface IPhysicianBusiness
     {
-        List<PhysicianModel> Get(int[] ids);
+        List<PhysicianModel> Get();
 
         PhysicianModel Get(int id);
 

@@ -17,6 +17,14 @@ namespace PR.Business
             _context = context;
         }
 
+        public List<AgentModel> Get()
+        {
+            return _context.Agent
+                    .Include(p => p.UserAccount)
+                    .Select(i => i.ToModel())
+                    .ToList();
+        }
+
         public List<AgentModel> Get(int[] userAccountIds)
         {
             IQueryable<Agent> agents = _context.Agent.Where(a => userAccountIds.Contains(a.UserAccountId));

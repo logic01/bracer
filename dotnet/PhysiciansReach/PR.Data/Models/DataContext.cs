@@ -80,9 +80,9 @@ namespace PR.Data.Models
 
                 entity.HasKey(e => e.AddressId).ForSqlServerIsClustered(false);
 
-                entity.Property(e => e.AddressLineOne).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.AddressLineOne).HasMaxLength(100);
 
-                entity.Property(e => e.AddressLineTwo).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.AddressLineTwo).HasMaxLength(100);
 
                 entity.Property(e => e.City).IsRequired().HasMaxLength(100);
 
@@ -127,7 +127,7 @@ namespace PR.Data.Models
 
                 entity.HasOne(d => d.Address)
                      .WithOne(p => p.Physician)
-                     .HasForeignKey<Physician>(b => b.UserAccountId)
+                     .HasForeignKey<Physician>(b => b.AddressId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Physician_Address");
             });

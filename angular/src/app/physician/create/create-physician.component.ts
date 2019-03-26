@@ -7,9 +7,9 @@ import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../../constants/routes';
 import { PhysicianService } from 'src/app/api/physician.service';
+import { Address } from 'src/app/models/address.model';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
-import { Address } from 'src/app/models/address.model';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
       contactFirstName: new FormControl('', Validators.required),
       contactLastName: new FormControl('', Validators.required),
       addressLineOne: new FormControl('', Validators.required),
-      addressLineTwo: new FormControl('', Validators.required),
+      addressLineTwo: new FormControl(''),
       city: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       zip: new FormControl('', Validators.required)
@@ -80,8 +80,8 @@ export class CreatePhysicianComponent implements OnInit, OnDestroy {
     physician.contactFirstName = this.accountForm.controls['contactFirstName'].value;
     physician.contactLastName = this.accountForm.controls['contactLastName'].value;
 
-    physician.address.addressLine1 = this.accountForm.controls['addressLineOne'].value;
-    physician.address.addressLine2 = this.accountForm.controls['addressLineTwo'].value;
+    physician.address.addressLineOne = this.accountForm.controls['addressLineOne'].value;
+    physician.address.addressLineTwo = this.accountForm.controls['addressLineTwo'].value;
     physician.address.city = this.accountForm.controls['city'].value;
     physician.address.state = this.accountForm.controls['state'].value;
     physician.address.zipCode = this.accountForm.controls['zip'].value;
