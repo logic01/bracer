@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { PhysicianService } from 'src/app/api/physician.service';
 import { Physician } from 'src/app/models/physician.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-physician-list',
@@ -19,7 +20,9 @@ export class PhysicianListComponent implements OnInit, OnDestroy {
 
   public data: Physician[];
 
-  constructor(private readonly physicianApi: PhysicianService) { }
+  constructor(
+    private readonly physicianApi: PhysicianService,
+    private readonly router: Router) { }
 
   ngOnInit() {
     this.physicianApi
@@ -30,14 +33,11 @@ export class PhysicianListComponent implements OnInit, OnDestroy {
       });
   }
 
-
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
-  view(id: number, type: string) {
-    console.log(id);
-    console.log(type);
+  edit(id: number) {
+    this.router.navigate(['/physician/edit', id]);
   }
-
 }

@@ -5,6 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AdminService } from 'src/app/api/admin.service';
 import { Admin } from 'src/app/models/admin.model';
+import { Router } from '@angular/router';
+import { RouteUrls } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-admin-list',
@@ -19,7 +21,9 @@ export class AdminListComponent implements OnInit, OnDestroy {
 
   public data: Admin[];
 
-  constructor(private readonly adminApi: AdminService) { }
+  constructor(
+    private readonly adminApi: AdminService,
+    private readonly router: Router) { }
 
   ngOnInit() {
     this.adminApi
@@ -30,13 +34,12 @@ export class AdminListComponent implements OnInit, OnDestroy {
       });
   }
 
-
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
-  view(id: number, type: string) {
-    console.log(id);
-    console.log(type);
+  edit(id: number) {
+    this.router.navigate(['/admin/edit', id]);
+    this.router.navigateByUrl(RouteUrls.AdminEditComponent);
   }
 }

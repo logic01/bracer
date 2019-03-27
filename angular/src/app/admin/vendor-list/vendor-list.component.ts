@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { VendorService } from 'src/app/api/vendor.service';
 import { Vendor } from 'src/app/models/vendor.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-list',
@@ -19,7 +20,9 @@ export class VendorListComponent implements OnInit, OnDestroy {
 
   public data: Vendor[];
 
-  constructor(private readonly vendorApi: VendorService) { }
+  constructor(
+    private readonly vendorApi: VendorService,
+    private readonly router: Router) { }
 
   ngOnInit() {
     this.vendorApi
@@ -35,9 +38,7 @@ export class VendorListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  view(id: number, type: string) {
-    console.log(id);
-    console.log(type);
+  edit(id: number) {
+    this.router.navigate(['/vendor/edit', id]);
   }
-
 }

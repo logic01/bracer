@@ -1,14 +1,14 @@
 <h2>Physician</h2>
 
 <form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
-
-  <mat-form-field>
-    <input matInput placeholder="User Name" type="text" formControlName="userName">
-    <mat-error *ngIf="accountForm.get('userName').hasError('required')">Please enter a valid user name.
-    </mat-error>
-  </mat-form-field>
-
   <div fxLayout="row" fxLayoutGap="10px">
+
+    <mat-form-field>
+      <input matInput placeholder="User Name" type="text" formControlName="userName">
+      <mat-error *ngIf="accountForm.get('userName').hasError('required')">Please enter a valid user name.
+      </mat-error>
+    </mat-form-field>
+
     <mat-form-field>
       <input matInput placeholder="Password" type="password" formControlName="password">
       <mat-error *ngIf="accountForm.get('password').hasError('required')">Please enter the password.</mat-error>
@@ -33,10 +33,6 @@
     </mat-form-field>
   </div>
 
-  <mat-form-field>
-    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
-    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please a phone number.</mat-error>
-  </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>
@@ -51,6 +47,12 @@
       </mat-error>
     </mat-form-field>
   </div>
+
+  <mat-form-field>
+    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
+    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please a phone number.</mat-error>
+  </mat-form-field>
+
   <mat-form-field>
     <input matInput placeholder="Address Line One" type="text" formControlName="addressLineOne">
     <mat-error *ngIf="accountForm.get('addressLineOne').hasError('required')">Please enter address line one.
@@ -82,7 +84,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  
+
   <button mat-raised-button color="accent">Submit</button>
 
 </form>

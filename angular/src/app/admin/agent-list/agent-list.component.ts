@@ -5,6 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AgentService } from 'src/app/api/agent.service';
 import { Agent } from 'src/app/models/Agent.model';
+import { Router } from '@angular/router';
+import { RouteUrls } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-agent-list',
@@ -19,7 +21,9 @@ export class AgentListComponent implements OnInit, OnDestroy {
 
   public data: Agent[];
 
-  constructor(private readonly agentApi: AgentService) { }
+  constructor(
+    private readonly agentApi: AgentService,
+    private readonly router: Router) { }
 
   ngOnInit() {
     this.agentApi
@@ -30,13 +34,11 @@ export class AgentListComponent implements OnInit, OnDestroy {
       });
   }
 
-
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
-  view(id: number, type: string) {
-    console.log(id);
-    console.log(type);
+  edit(id: number) {
+    this.router.navigate(['/agent/edit', id]);
   }
 }

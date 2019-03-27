@@ -3,18 +3,21 @@
 <div mat-app-background>
 
     <div class="header">
-        <h1 class="header-title">Physicians Reach</h1>
-        <h5 class="subtext">Connecting Patients with Doctors</h5>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <div>
+                <h1 class="header-title">Physicians Reach</h1>
+                <h5 class="subtext">Connecting Patients with Doctors</h5>
+            </div>
+            <div fxLayoutAlign="end end" style="width:80%">
+                <button mat-button color="primary" class="menu-button" (click)="loginClick()">Sign In</button>
+                <button mat-button color="primary" class="menu-button" (click)="createAccountClick()">Sign Up</button>
+            </div>
+        </div>
     </div>
 
     <div class="main" fxLayout="column" fxLayoutGap="10px">
 
-        <div class="menu" fxLayout="row" fxLayoutGap="5px">
-            <button mat-button color="primary" class="menu-button" (click)="loginClick()">Login</button>
-            <button mat-button color="primary" class="menu-button" (click)="createAccountClick()">Create Account</button>
-            <button mat-button color="primary" class="menu-button" (click)="aboutUsClick()">About Us</button>
-            <button mat-button color="primary" class="menu-button" (click)="contactUsClick()">Contact Us</button>
-        </div>
+        <div class="menu" fxLayout="row" fxLayoutGap="5px"> </div>
 
         <div class="content" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center start">
             <router-outlet></router-outlet>

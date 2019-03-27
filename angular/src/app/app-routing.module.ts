@@ -12,6 +12,10 @@ import { CreatePhysicianComponent } from './physician/create/create-physician.co
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { TypeSelectionComponent } from './shared/type-selection/type-selection.component';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
+import { EditAdminComponent } from './admin/edit/edit-admin.component';
+import { EditAgentComponent } from './agent/edit/edit-agent.component';
+import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
+import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 
 
 const routes: Routes = [
@@ -25,6 +29,10 @@ const routes: Routes = [
   { path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent },
   { path: RouteUrls.AdminDashboardComponent, component: AdminDashboardComponent },
   { path: RouteUrls.CreateVendorComponent, component: CreateVendorComponent },
+  { path: RouteUrls.AdminEditComponent, component: EditAdminComponent },
+  { path: RouteUrls.AgentEditComponent, component: EditAgentComponent },
+  { path: RouteUrls.PhysicianEditComponent, component: EditPhysicianComponent },
+  { path: RouteUrls.VendorEditComponent, component: EditVendorComponent }
 ];
 
 @NgModule({
