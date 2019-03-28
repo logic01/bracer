@@ -13,10 +13,6 @@ namespace PhysiciansReach.Models
 
         public string PhoneNumber { get; set; }
 
-        public string ContactFirstName { get; set; }
-
-        public string ContactLastName { get; set; }
-
         public AddressModel Address { get; set; }
 
         public DateTime CreatedOn { get; set; }

@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { PhysicianService } from 'src/app/api/physician.service';
+import { RouteUrls } from 'src/app/constants/routes';
 import { Physician } from 'src/app/models/physician.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-physician-list',
@@ -39,5 +40,9 @@ export class PhysicianListComponent implements OnInit, OnDestroy {
 
   edit(id: number) {
     this.router.navigate(['/physician/edit', id]);
+  }
+
+  add() {
+    this.router.navigateByUrl(RouteUrls.PhysicianCreateComponent);
   }
 }

@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { VendorService } from 'src/app/api/vendor.service';
+import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-list',
@@ -33,12 +34,15 @@ export class VendorListComponent implements OnInit, OnDestroy {
       });
   }
 
-
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
   edit(id: number) {
     this.router.navigate(['/vendor/edit', id]);
+  }
+
+  add() {
+    this.router.navigateByUrl(RouteUrls.VendorCreateComponent);
   }
 }

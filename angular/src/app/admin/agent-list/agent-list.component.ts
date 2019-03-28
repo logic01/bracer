@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AgentService } from 'src/app/api/agent.service';
-import { Agent } from 'src/app/models/Agent.model';
-import { Router } from '@angular/router';
 import { RouteUrls } from 'src/app/constants/routes';
+import { Agent } from 'src/app/models/Agent.model';
 
 @Component({
   selector: 'app-agent-list',
@@ -40,5 +40,9 @@ export class AgentListComponent implements OnInit, OnDestroy {
 
   edit(id: number) {
     this.router.navigate(['/agent/edit', id]);
+  }
+
+  add() {
+    this.router.navigateByUrl(RouteUrls.AgentCreateComponent);
   }
 }

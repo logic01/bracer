@@ -4,3 +4,4 @@
 03/19/2019 - 1h - added business / entity framework
 03/24/2019 - 3h - full slice of agent, physician, admin, vendor creation, started login
 03/26/2019 - 2h - admin dashboard tables for agent, phys, admin, vendor
+03/26/2019 - 2h - admin linked to edit agent, phys, admin, vendor

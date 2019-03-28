@@ -15,9 +15,4 @@ export class AppComponent {
   loginClick() {
     this.router.navigateByUrl(RouteUrls.LoginComponent);
   }
-
-  createAccountClick() {
-    this.router.navigateByUrl(RouteUrls.TypeSelectionComponent);
-  }
-
 }

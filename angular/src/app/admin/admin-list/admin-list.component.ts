@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AdminService } from 'src/app/api/admin.service';
-import { Admin } from 'src/app/models/admin.model';
-import { Router } from '@angular/router';
 import { RouteUrls } from 'src/app/constants/routes';
+import { Admin } from 'src/app/models/admin.model';
 
 @Component({
   selector: 'app-admin-list',
@@ -41,5 +41,9 @@ export class AdminListComponent implements OnInit, OnDestroy {
   edit(id: number) {
     this.router.navigate(['/admin/edit', id]);
     this.router.navigateByUrl(RouteUrls.AdminEditComponent);
+  }
+
+  add() {
+    this.router.navigateByUrl(RouteUrls.AdminCreateComponent);
   }
 }
