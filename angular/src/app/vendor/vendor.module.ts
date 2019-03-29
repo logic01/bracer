@@ -4,11 +4,13 @@ import { DesignModule } from '../design/design.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditVendorComponent } from './edit/edit-vendor.component';
 import { CreateVendorComponent } from './create/create-vendor.component';
+import { VendorAccountFormComponent } from './account-form/vendor-account-form.component';
 
 @NgModule({
   declarations: [
     EditVendorComponent,
-    CreateVendorComponent
+    CreateVendorComponent,
+    VendorAccountFormComponent
   ],
   imports: [
     CommonModule,

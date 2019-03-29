@@ -17,8 +17,8 @@ export class VendorService {
     return this.http.get<Vendor[]>(this.url);
   }
 
-  get(id: number) {
-    return this.http.get(`${this.url}/${id}`);
+  get(id: string): Observable<Vendor> {
+    return this.http.get<Vendor>(`${this.url}/${id}`);
   }
 
   post(admin: Vendor): Observable<Vendor> {

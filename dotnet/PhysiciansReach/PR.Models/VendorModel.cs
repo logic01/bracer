@@ -12,6 +12,10 @@ namespace PR.Data.Models
 
         public string PhoneNumber { get; set; }
 
+        public string ContactFirstName { get; set; }
+
+        public string ContactLastName { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }

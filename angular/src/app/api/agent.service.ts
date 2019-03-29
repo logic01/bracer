@@ -19,8 +19,8 @@ export class AgentService {
     return this.http.get<Agent[]>(this.url);
   }
 
-  get(): Observable<Agent> {
-    return this.http.get<Agent>(this.url);
+  get(id: string): Observable<Agent> {
+    return this.http.get<Agent>(`${this.url}/${id}`);
   }
 
   post(agent: Agent): Observable<Agent> {

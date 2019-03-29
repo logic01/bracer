@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../../constants/routes';
@@ -18,59 +18,29 @@ import { UserAccount } from 'src/app/models/user-account.model';
 })
 export class EditPhysicianComponent implements OnInit, OnDestroy {
 
-  public accountForm: FormGroup;
   private unsubscribe$ = new Subject();
+  public physician$: Observable<Physician>;
 
   constructor(
     private readonly physicianApi: PhysicianService,
+    private readonly route: ActivatedRoute,
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.accountForm = new FormGroup({
-      userName: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-      confirmationPassword: new FormControl('', Validators.required),
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
-      phoneNumber: new FormControl('', Validators.required),
-      contactFirstName: new FormControl('', Validators.required),
-      contactLastName: new FormControl('', Validators.required),
-    });
+    const id = this.route.snapshot.paramMap.get('id');
+    this.physician$ = this.physicianApi.get(id);
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
-  onSubmit() {
-
-    if (!this.accountForm.valid) {
-      return;
-    }
-
-    const physician = this.buildPhysician();
-
+  onSubmit(physician: Physician) {
     this.physicianApi
-      .put(physician)
+      .post(physician)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newPhysician: Physician) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
-  }
-
-  private buildPhysician(): Physician {
-
-    const physician = new Physician();
-    physician.userAccount = new UserAccount();
-
-    physician.userAccount.userName = this.accountForm.controls['userName'].value;
-    physician.userAccount.password = this.accountForm.controls['password'].value;
-    physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
-
-    physician.firstName = this.accountForm.controls['firstName'].value;
-    physician.lastName = this.accountForm.controls['lastName'].value;
-    physician.phoneNumber = this.accountForm.controls['phoneNumber'].value;
-
-    return physician;
   }
 }

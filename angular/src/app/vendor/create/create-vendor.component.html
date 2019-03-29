@@ -1,38 +1,3 @@
 <h2>Vendor</h2>
-<form [formGroup]="accountForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
-  <mat-form-field>
-    <input matInput placeholder="Company Name" type="text" formControlName="companyName">
-    <mat-error *ngIf="accountForm.get('companyName').hasError('required')">Please enter the company name.</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput placeholder="Doing Business As" type="text" formControlName="doingBusinessAs">
-    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('required')">Please enter your the doing business as
-      name.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
-    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please enter the company phone number.
-    </mat-error>
-  </mat-form-field>
-
-  <div fxLayout="row" fxLayoutGap="10px">
-    <mat-form-field>
-      <input matInput placeholder="Contact First Name" type="text" formControlName="contactFirstName">
-      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('required')">Please enter your contact first name.
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Contact Last Name" type="text" formControlName="contactLastName">
-      <mat-error *ngIf="accountForm.get('contactLastName').hasError('required')">Please enter your contact last name.
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <button mat-raised-button color="accent">Submit</button>
-
-</form>
+<app-vendor-account-form (formSubmitEvent)="onSubmit($event)" ></app-vendor-account-form>

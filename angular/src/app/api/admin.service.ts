@@ -19,8 +19,8 @@ export class AdminService {
     return this.http.get<Admin[]>(this.url);
   }
 
-  get(): Observable<Admin> {
-    return this.http.get<Admin>(this.url);
+  get(id: string): Observable<Admin> {
+    return this.http.get<Admin>(`${this.url}/${id}`);
   }
 
   post(admin: Admin): Observable<Admin> {

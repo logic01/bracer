@@ -22,7 +22,6 @@ export class CreatePhysicianComponent implements OnDestroy {
     private readonly physicianApi: PhysicianService,
     private readonly router: Router) { }
 
-
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }

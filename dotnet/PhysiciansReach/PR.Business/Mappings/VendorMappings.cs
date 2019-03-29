@@ -12,6 +12,8 @@ namespace PR.Business.Mappings
                 CompanyName = entity.CompanyName,
                 DoingBusinessAs = entity.DoingBusinessAs,
                 PhoneNumber = entity.PhoneNumber,
+                ContactFirstName = entity.ContactFirstName,
+                ContactLastName = entity.ContactLastName,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -27,6 +29,8 @@ namespace PR.Business.Mappings
                 CompanyName = model.CompanyName,
                 DoingBusinessAs = model.DoingBusinessAs,
                 PhoneNumber = model.PhoneNumber,
+                ContactFirstName = model.ContactFirstName,
+                ContactLastName = model.ContactLastName,
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };

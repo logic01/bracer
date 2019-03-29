@@ -7,12 +7,13 @@ import { DesignModule } from '../design/design.module';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { CreateAdminComponent } from './create/create-admin.component';
 import { EditAdminComponent } from './edit/edit-admin.component';
-import { PhysicianListComponent } from './physician-list/physician-list.component';
-import { AgentListComponent } from './agent-list/agent-list.component';
-import { AdminListComponent } from './admin-list/admin-list.component';
-import { OrderListComponent } from './order-list/order-list.component';
-import { DocumentListComponent } from './document-list/document-list.component';
-import { VendorListComponent } from './vendor-list/vendor-list.component';
+import { AgentListComponent } from './tables/agent-list/agent-list.component';
+import { AdminListComponent } from './tables/admin-list/admin-list.component';
+import { OrderListComponent } from './tables/order-list/order-list.component';
+import { DocumentListComponent } from './tables/document-list/document-list.component';
+import { VendorListComponent } from './tables/vendor-list/vendor-list.component';
+import { PhysicianListComponent } from './tables/physician-list/physician-list.component';
+import { AdminAccountFormComponent } from './account-form/admin-account-form.component';
 
 
 @NgModule({
@@ -20,12 +21,13 @@ import { VendorListComponent } from './vendor-list/vendor-list.component';
     AdminDashboardComponent,
     CreateAdminComponent,
     EditAdminComponent,
-    PhysicianListComponent,
     AgentListComponent,
     AdminListComponent,
     OrderListComponent,
     DocumentListComponent,
-    VendorListComponent
+    VendorListComponent,
+    PhysicianListComponent,
+    AdminAccountFormComponent
   ],
   imports: [
     CommonModule,

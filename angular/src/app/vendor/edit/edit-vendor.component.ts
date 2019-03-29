@@ -1,32 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUrls } from 'src/app/constants/routes';
+import { Subject, Observable } from 'rxjs';
+import { Vendor } from 'src/app/models/vendor.model';
+import { VendorService } from 'src/app/api/vendor.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-vendor',
   templateUrl: './edit-vendor.component.html',
   styleUrls: ['./edit-vendor.component.scss']
 })
-export class EditVendorComponent implements OnInit {
+export class EditVendorComponent implements OnInit, OnDestroy {
 
-  public accountForm: FormGroup;
+  private unsubscribe$ = new Subject();
+  public vendor$: Observable<Vendor>;
 
-  constructor(private readonly router: Router) { }
+  constructor(
+    private readonly vendorApi: VendorService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router) { }
 
   ngOnInit() {
-    this.accountForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-      password_confirm: new FormControl('', Validators.required),
-      first_name: new FormControl('', Validators.required),
-      middle_name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
-    });
+    const id = this.route.snapshot.paramMap.get('id');
+    this.vendor$ = this.vendorApi.get(id);
   }
 
-  onSubmit() {
-    this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
+
+  onSubmit(vendor: Vendor) {
+    this.vendorApi
+      .post(vendor)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((newVendor: Vendor) => {
+        this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+      });
   }
 }

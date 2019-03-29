@@ -175,6 +175,10 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(10);
 
+                entity.Property(e => e.ContactFirstName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.ContactLastName).IsRequired().HasMaxLength(100);
+
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");

@@ -1,9 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Address } from 'src/app/models/address.model';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-physician-account-form',
@@ -12,6 +13,7 @@ import { UserAccount } from 'src/app/models/user-account.model';
 })
 export class PhysicianAccountFormComponent implements OnInit {
 
+  @Input() physician$: Observable<Physician>;
   @Output() formSubmitEvent = new EventEmitter<Physician>();
 
   public accountForm: FormGroup;
@@ -32,6 +34,15 @@ export class PhysicianAccountFormComponent implements OnInit {
       state: new FormControl('', Validators.required),
       zip: new FormControl('', Validators.required)
     });
+
+    // populate form if we have a physician bound to the form
+    if (this.physician$) {
+      this.physician$.subscribe((result: Physician) => {
+        this.accountForm.patchValue(result);
+        this.accountForm.patchValue(result.userAccount);
+        this.accountForm.patchValue(result.address);
+      });
+    }
   }
 
   onSubmit() {

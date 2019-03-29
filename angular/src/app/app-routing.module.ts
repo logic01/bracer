@@ -16,8 +16,8 @@ import { EditPhysicianComponent } from './physician/edit/edit-physician.componen
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 
-
 const routes: Routes = [
+  { path: '', component: LoginComponent },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
   { path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent },
   { path: RouteUrls.PhysicianCreateComponent, component: CreatePhysicianComponent },

@@ -11,7 +11,7 @@ namespace PR.Business.Mappings
             {
                 UserAccountId = entity.UserAccountId,
                 UserName = entity.UserName,
-                Password = entity.Password,
+                // Password = entity.Password, Never let the password leave the API
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };

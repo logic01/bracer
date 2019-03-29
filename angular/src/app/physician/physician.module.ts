@@ -15,8 +15,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     EditPhysicianComponent,
     CreatePhysicianComponent,
     PhysicianDashboardComponent,
+    PhysicianAccountFormComponent,
     DocumentComponent,
-    PhysicianAccountFormComponent
   ],
   imports: [
     CommonModule,

@@ -19,8 +19,8 @@ export class PhysicianService {
     return this.http.get<Physician[]>(this.url);
   }
 
-  get(): Observable<Physician> {
-    return this.http.get<Physician>(this.url);
+  get(id: string): Observable<Physician> {
+    return this.http.get<Physician>(`${this.url}/${id}`);
   }
 
   post(physician: Physician): Observable<Physician> {

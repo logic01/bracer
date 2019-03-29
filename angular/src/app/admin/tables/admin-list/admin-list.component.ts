@@ -38,9 +38,8 @@ export class AdminListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  edit(id: number) {
-    this.router.navigate(['/admin/edit', id]);
-    this.router.navigateByUrl(RouteUrls.AdminEditComponent);
+  edit(adminId: number) {
+    this.router.navigate(['/admin/edit', adminId]);
   }
 
   add() {

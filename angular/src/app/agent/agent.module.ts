@@ -7,13 +7,15 @@ import { CreateAgentComponent } from './create/create-agent.component';
 import { AgentDashboardComponent } from './dashboard/agent-dashboard.component';
 import { EditAgentComponent } from './edit/edit-agent.component';
 import { OrderComponent } from './order/order.component';
+import { AgentAccountFormComponent } from './account-form/agent-account-form.component';
 
 @NgModule({
   declarations: [
     CreateAgentComponent,
     EditAgentComponent,
     AgentDashboardComponent,
-    OrderComponent
+    OrderComponent,
+    AgentAccountFormComponent
   ],
   imports: [
     CommonModule,
