@@ -1,6 +1,6 @@
 ﻿using PR.Data.Models;
 using System.Collections.Generic;
-
+using PR.Models;
 namespace PR.Business.Interfaces
 {
     public interface IVendorBusiness

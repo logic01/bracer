@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PhysiciansReach.Models
+namespace PR.Models
 {
     public class DocumentModel
     {

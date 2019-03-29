@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PhysiciansReach.Models
+namespace PR.Models
 {
     public class AdminModel
     {
@@ -13,5 +13,7 @@ namespace PhysiciansReach.Models
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public ErrorModel error { get; set;  }
     }
 }

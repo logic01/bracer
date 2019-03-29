@@ -1,4 +1,4 @@
-﻿using PhysiciansReach.Models;
+﻿using PR.Models;
 using PR.Data.Models;
 
 namespace PR.Business.Mappings

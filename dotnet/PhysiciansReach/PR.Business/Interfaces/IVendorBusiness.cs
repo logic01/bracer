@@ -1,4 +1,4 @@
-﻿using PhysiciansReach.Models;
+﻿using PR.Models;
 
 namespace PR.Business.Interfaces
 {

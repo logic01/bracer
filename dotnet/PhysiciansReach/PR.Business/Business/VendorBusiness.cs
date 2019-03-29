@@ -1,6 +1,7 @@
 ﻿using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;
+using PR.Models;
 using System.Collections.Generic;
 using System.Linq;
 

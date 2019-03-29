@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Data.Models;
+using PR.Models;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PR.Data.Models
+namespace PR.Models
 {
     public class VendorModel
     {
@@ -19,5 +19,7 @@ namespace PR.Data.Models
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public ErrorModel error { get; set; }
     }
 }

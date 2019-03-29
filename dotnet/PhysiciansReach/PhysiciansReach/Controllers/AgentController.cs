@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PhysiciansReach.Models;
+using PR.Models;
 using PR.Business.Interfaces;
 using System.Collections.Generic;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PhysiciansReach.Models;
+using PR.Models;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;

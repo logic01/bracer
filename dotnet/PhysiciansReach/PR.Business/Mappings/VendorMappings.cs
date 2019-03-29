@@ -1,5 +1,5 @@
 ﻿using PR.Data.Models;
-
+using PR.Models;
 namespace PR.Business.Mappings
 {
     public static class VendorMappings

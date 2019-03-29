@@ -1,4 +1,4 @@
-﻿namespace PhysiciansReach.Models
+﻿namespace PR.Models
 {
     public class CallModel
     {
