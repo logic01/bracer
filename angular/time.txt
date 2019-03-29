@@ -5,3 +5,6 @@
 03/24/2019 - 3h - full slice of agent, physician, admin, vendor creation, started login
 03/26/2019 - 2h - admin dashboard tables for agent, phys, admin, vendor
 03/26/2019 - 2h - admin linked to edit agent, phys, admin, vendor
+03/27/2019 - 2h - Create and Edit pages linked together,
+                - Removed orders/documents from admin screen
+                - Made Login page default
