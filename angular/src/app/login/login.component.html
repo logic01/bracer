@@ -1,6 +1,7 @@
 <h2>Login</h2>
 
-<form [formGroup]="loginForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
+
+<form [formGroup]="loginForm" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()" style="width: 195px">
 
   <mat-form-field>
     <input matInput placeholder="User Name" type="text" formControlName="username">
@@ -8,9 +9,14 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Password" type="text" formControlName="password">
+    <input matInput placeholder="Password" type="password" formControlName="password">
     <mat-error *ngIf="loginForm.get('password').hasError('required')">Please enter the password.</mat-error>
   </mat-form-field>
+
+
+  <mat-error *ngIf="loginForm.hasError('fail')">
+    Wrong username or password.
+  </mat-error>
 
   <button mat-raised-button color="accent">Log In</button>
 

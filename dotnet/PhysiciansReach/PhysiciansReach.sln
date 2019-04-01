@@ -5,11 +5,11 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Api", "PhysiciansReach\PR.Api.csproj", "{130C9AA8-78C5-4E56-A772-EA333F844377}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Business", "PR.Business\PR.Business.csproj", "{3ACD7646-30B4-4EB6-9E1F-634E3A973826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Business", "PR.Business\PR.Business.csproj", "{3ACD7646-30B4-4EB6-9E1F-634E3A973826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Data", "PR.Data\PR.Data.csproj", "{2F0DD145-BFC8-45FE-8071-BDDEB7D9D193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Data", "PR.Data\PR.Data.csproj", "{2F0DD145-BFC8-45FE-8071-BDDEB7D9D193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR.Models", "PR.Models\PR.Models.csproj", "{7ABE0B98-6FFD-4CA7-A488-5E162AEFE26C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PR.Models", "PR.Models\PR.Models.csproj", "{7ABE0B98-6FFD-4CA7-A488-5E162AEFE26C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

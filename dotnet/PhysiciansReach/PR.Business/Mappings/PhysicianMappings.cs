@@ -35,6 +35,8 @@ namespace PR.Business.Mappings
                 Address = model.Address.ToEntity()
             };
 
+            entity.UserAccount.Type = UserAccount.AccountType.Physician;
+
             return entity;
         }
     }

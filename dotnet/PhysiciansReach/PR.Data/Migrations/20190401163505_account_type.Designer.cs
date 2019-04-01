@@ -10,8 +10,8 @@ using PR.Data.Models;
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190324160705_Update4")]
-    partial class Update4
+    [Migration("20190401163505_account_type")]
+    partial class account_type
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,46 @@ namespace PR.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("PR.Data.Models.Address", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AddressLineOne")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("AddressLineTwo")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("AddressId")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.ToTable("Address","dbo");
+                });
 
             modelBuilder.Entity("PR.Data.Models.Admin", b =>
                 {
@@ -85,13 +125,7 @@ namespace PR.Data.Migrations
                 {
                     b.Property<int>("UserAccountId");
 
-                    b.Property<string>("ContactFirstName")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("ContactLastName")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<int>("AddressId");
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -118,6 +152,9 @@ namespace PR.Data.Migrations
                     b.HasKey("UserAccountId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
+                    b.HasIndex("AddressId")
+                        .IsUnique();
+
                     b.ToTable("Physician","dbo");
                 });
 
@@ -137,9 +174,13 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -158,6 +199,10 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CompanyName");
+
+                    b.Property<string>("ContactFirstName");
+
+                    b.Property<string>("ContactLastName");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -195,6 +240,11 @@ namespace PR.Data.Migrations
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>
                 {
+                    b.HasOne("PR.Data.Models.Address", "Address")
+                        .WithOne("Physician")
+                        .HasForeignKey("PR.Data.Models.Physician", "AddressId")
+                        .HasConstraintName("FK_Physician_Address");
+
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Physician")
                         .HasForeignKey("PR.Data.Models.Physician", "UserAccountId")

@@ -1,5 +1,5 @@
-﻿using PR.Models;
-using PR.Data.Models;
+﻿using PR.Data.Models;
+using PR.Models;
 
 namespace PR.Business.Mappings
 {
@@ -29,6 +29,8 @@ namespace PR.Business.Mappings
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };
+
+            entity.UserAccount.Type = UserAccount.AccountType.Admin;
 
             return entity;
         }

@@ -10,8 +10,8 @@ using PR.Data.Models;
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190328163409_update8")]
-    partial class update8
+    [Migration("20190401155706_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -174,7 +174,7 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
                         .HasMaxLength(200);
 
@@ -195,6 +195,10 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CompanyName");
+
+                    b.Property<string>("ContactFirstName");
+
+                    b.Property<string>("ContactLastName");
 
                     b.Property<DateTime>("CreatedOn");
 

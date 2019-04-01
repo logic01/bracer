@@ -32,6 +32,8 @@ namespace PR.Business.Mappings
                 ModifiedOn = model.ModifiedOn
             };
 
+            entity.UserAccount.Type = UserAccount.AccountType.Agent;
+
             return entity;
         }
     }

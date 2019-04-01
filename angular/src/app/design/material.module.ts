@@ -3,9 +3,12 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatNativeDateModule,
+  MatRadioModule,
   MatSelectModule,
   MatTableModule,
   MatTabsModule,
@@ -24,7 +27,10 @@ const modules = [
   MatTableModule,
   MatToolbarModule,
   MatSelectModule,
-  MatTabsModule
+  MatTabsModule,
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 ];
 
 @NgModule({

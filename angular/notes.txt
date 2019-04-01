@@ -1,0 +1,44 @@
+[English, Spanish]
+[Call back immediately]
+
+Best Time to Call [Morning, Afternoon, Evening]
+Date
+First Name
+Middle Name
+Last Name
+Dat of Birth
+Phone Number
+Email
+Street Address Line 1
+Street Address Line 2
+City
+State
+Zip
+
+Sex: (Male, Female)
+Pharmacy [TWA, Universal RX]
+MEdication
+Additional Notes
+
+Patient Priamry Care Physician Name
+Address
+Phone
+
+is this a DMA (yes, no)
+yes -> Pop up
+	- What is your main area of pain? [Left Wrist, Right Wrist, Left Elbow, Right Elbow, Left Anterior Shoulder, Right Anterior SHoulder, Left Hip, Right Hip, Left Knee, Right Knee, Posterior Left SHoulder, Posterior Right SHoulder, Neck, Upper Middle Back, Middle Back, Lower back, Left Occipital, Right Occipital, Frontal or forhead, left ankle, right ankle]
+
+	- Are there other areas of pain you would like help for? {smae list}
+
+	have you ever had a brace for your "Main area of Pain"? (yes, no)
+
+	- Our doctores offer different pain relief creams to help with your pain. If a doctor believes it would help your problem would you be intersted in taht i your insurance covers it? (yes. no)
+
+Therapy Type [Rx. DME. BOTH, LABS]
+
+Upload File
+
+Other Product 
+Insurance Type (Private insurance, medicare, both)
+
+Complete Intake Survey (yes, No)

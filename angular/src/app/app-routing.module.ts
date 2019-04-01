@@ -10,9 +10,11 @@ import { EditAgentComponent } from './agent/edit/edit-agent.component';
 import { OrderComponent } from './agent/order/order.component';
 import { RouteUrls } from './constants/routes';
 import { LoginComponent } from './login/login.component';
+import { AccountType } from './models/Enums/account.type.enum';
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
+import { RoleGuardService } from './services/role-guard.service';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 
@@ -23,9 +25,21 @@ const routes: Routes = [
   { path: RouteUrls.PhysicianCreateComponent, component: CreatePhysicianComponent },
   { path: RouteUrls.AgentCreateComponent, component: CreateAgentComponent },
   { path: RouteUrls.AgentOrderComponent, component: OrderComponent },
-  { path: RouteUrls.AgentDashboardComponent, component: AgentDashboardComponent },
-  { path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent },
-  { path: RouteUrls.AdminDashboardComponent, component: AdminDashboardComponent },
+  {
+    path: RouteUrls.AgentDashboardComponent, component: AgentDashboardComponent,
+    canActivate: [RoleGuardService],
+    data: { expectedRole: AccountType.Agent }
+  },
+  {
+    path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent,
+    canActivate: [RoleGuardService],
+    data: { expectedRole: AccountType.Physician }
+  },
+  {
+    path: RouteUrls.AdminDashboardComponent, component: AdminDashboardComponent,
+    canActivate: [RoleGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
   { path: RouteUrls.VendorCreateComponent, component: CreateVendorComponent },
   { path: RouteUrls.AdminEditComponent, component: EditAdminComponent },
   { path: RouteUrls.AgentEditComponent, component: EditAgentComponent },

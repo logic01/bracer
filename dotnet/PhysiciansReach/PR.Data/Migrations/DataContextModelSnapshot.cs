@@ -172,9 +172,12 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<int>("Type")
+                        .HasMaxLength(100);
 
                     b.Property<string>("UserName")
                         .IsRequired()

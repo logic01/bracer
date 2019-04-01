@@ -35,6 +35,8 @@ namespace PR.Data.Models
             {
                 entity.ToTable("UserAccount", "dbo");
 
+                entity.Property(e => e.Type).IsRequired().HasMaxLength(100).HasConversion<string>();
+
                 entity.HasKey(e => e.UserAccountId).ForSqlServerIsClustered(false);
 
                 entity.Property(e => e.UserName).IsRequired().HasMaxLength(100);
