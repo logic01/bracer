@@ -1,88 +1,168 @@
 <form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
+  <div fxLayout="row" fxLayoutGap="20px">
+    <div fxLayout="column" fxLayoutGap="20px">
+      <h3>Patient Information</h3>
 
-  <div fxLayout="row" fxLayoutGap="10px">
-    <mat-form-field>
-      <input matInput placeholder="First Name" type="text" formControlName="firstName">
-      <mat-error *ngIf="form.get('firstName').hasError('required')">Please enter the first name.</mat-error>
-    </mat-form-field>
+      <mat-radio-group formControlName="sex" fxLayout="row" fxLayoutGap="20px">
+        <mat-radio-button value="Male"> Male </mat-radio-button>
+        <mat-radio-button value="Female"> Female </mat-radio-button>
+      </mat-radio-group>
 
-    <mat-form-field>
-      <input matInput placeholder="Middle Name" type="text" formControlName="middleName">
-      <mat-error *ngIf="form.get('middleName').hasError('required')">Please enter the middle name.</mat-error>
-    </mat-form-field>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field>
+          <input matInput placeholder="First Name" type="text" formControlName="firstName">
+          <mat-error *ngIf="form.get('firstName').hasError('required')">Please enter the first name.</mat-error>
+        </mat-form-field>
 
-    <mat-form-field>
-      <input matInput placeholder="Last Name" type="text" formControlName="lastName">
-      <mat-error *ngIf="form.get('lastName').hasError('required')">Please enter the last name.</mat-error>
-    </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Middle Name" type="text" formControlName="middleName">
+          <mat-error *ngIf="form.get('middleName').hasError('required')">Please enter the middle name.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Last Name" type="text" formControlName="lastName">
+          <mat-error *ngIf="form.get('lastName').hasError('required')">Please enter the last name.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" placeholder="Date of Birth">
+        <mat-datepicker #dobPicker></mat-datepicker>
+        <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+        <mat-error *ngIf="form.get('lastName').hasError('required')">Please enter the birthdate.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
+        <mat-error *ngIf="form.get('phoneNumber').hasError('required')">Please enter the phone number.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Address Line One" type="text" formControlName="addressLineOne">
+        <mat-error *ngIf="form.get('addressLineOne').hasError('required')">Please enter an address.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Address Line Two" type="text" formControlName="addressLineTwo">
+      </mat-form-field>
+
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field>
+          <input matInput placeholder="City" type="text" formControlName="city">
+          <mat-error *ngIf="form.get('city').hasError('required')">Please enter a city.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="State" type="text" formControlName="state">
+          <mat-error *ngIf="form.get('state').hasError('required')">Please enter a state.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Zip Code" type="text" formControlName="zip">
+          <mat-error *ngIf="form.get('zip').hasError('required')">Please enter a zip code.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <mat-select placeholder="Preferred Call Back Time" formControlName="bestTimeToCallBack">
+          <mat-option>--</mat-option>
+          <mat-option value="Morning"> Morning </mat-option>
+          <mat-option value="Afternoon"> Afternoon </mat-option>
+          <mat-option value="Evening"> Evening </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('bestTimeToCallBack').hasError('required')">Please select a time for the call.
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-checkbox formControlName="callBackImmediately" labelPosition="before" color="primary" >Call Back Immediately</mat-checkbox>
+
+      <div fxLayout="row" fxLayoutGap="20px">
+        <mat-label>Language:</mat-label>
+        <mat-radio-group formControlName="language" fxLayout="row" fxLayoutGap="30px">
+          <mat-radio-button value="English" color="primary"> English </mat-radio-button>
+          <mat-radio-button value="Spanish" color="primary"> Spanish </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+    </div><!-- // Patient Inforamtion -->
+
+    <div fxLayout="column" fxLayoutGap="20px">
+      <h3>Medical Information</h3>
+      <mat-form-field>
+        <mat-select placeholder="Pharmacy" formControlName="pharmacy">
+          <mat-option>--</mat-option>
+          <mat-option value="TWA"> TWA </mat-option>
+          <mat-option value="UniversalRX"> Universal RX</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('pharmacy').hasError('required')">Please select a pharmacy. </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Medications" type="text" formControlName="medications">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Additional Notes" type="text" formControlName="notes">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Primary Care Physician Name" type="text" formControlName="physicianName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Phone Number" type="text" formControlName="physicianPhoneNumber">
+        <mat-error *ngIf="form.get('phoneNumber').hasError('required')">Please enter the phone number.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Address Line One" type="text" formControlName="physicianAddressLineOne">
+        <mat-error *ngIf="form.get('addressLineOne').hasError('required')">Please enter an address.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Address Line Two" type="text" formControlName="physicianAddressLineTwo">
+      </mat-form-field>
+
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field>
+          <input matInput placeholder="City" type="text" formControlName="physicianCity">
+          <mat-error *ngIf="form.get('city').hasError('required')">Please enter a city.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="State" type="text" formControlName="physicianState">
+          <mat-error *ngIf="form.get('state').hasError('required')">Please enter a state.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Zip Code" type="text" formControlName="physicianZip">
+          <mat-error *ngIf="form.get('zip').hasError('required')">Please enter a zip code.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div fxLayout="row" fxLayoutGap="20px">
+        <mat-label>DMA:</mat-label>
+        <mat-radio-group formControlName="isDma" fxLayout="row" fxLayoutGap="30px">
+          <mat-radio-button value="true" color="primary" (click)="openDmaDialog()"> Yes </mat-radio-button>
+          <mat-radio-button value="false" color="primary"> No </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+    </div> <!-- // Medical Information -->
+
   </div>
 
-  <mat-form-field>
-    <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" placeholder="Date of Birth">
-    <mat-datepicker #dobPicker></mat-datepicker>
-    <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
-    <mat-error *ngIf="form.get('lastName').hasError('required')">Please enter the birthdate.</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
-    <mat-error *ngIf="form.get('phoneNumber').hasError('required')">Please enter the phone number.</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-select placeholder="Preferred Call Back Time" formControlName="bestTimeToCallBack">
-      <mat-option>--</mat-option>
-      <mat-option value="Morning"> Morning </mat-option>
-      <mat-option value="Afternoon"> Afternoon </mat-option>
-      <mat-option value="Evening"> Evening </mat-option>
-    </mat-select>
-    <mat-error *ngIf="form.get('bestTimeToCallBack').hasError('required')">Please select a time for the call.
-    </mat-error>
-  </mat-form-field>
-  
-  <mat-checkbox formControlName="callBackImmediately">Call Back Immediately</mat-checkbox>
-
-  <mat-radio-group formControlName="language" fxLayout="row" fxLayoutGap="30px">
-    <mat-radio-button value="English"> English </mat-radio-button>
-    <mat-radio-button value="Spanish"> Spanish </mat-radio-button>
-  </mat-radio-group>
-
-  <mat-form-field>
-    <input matInput placeholder="Address Line One" type="text" formControlName="addressLineOne">
-    <mat-error *ngIf="form.get('addressLineOne').hasError('required')">Please enter an address.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput placeholder="Address Line Two" type="text" formControlName="addressLineTwo">
-  </mat-form-field>
-
-  <div fxLayout="row" fxLayoutGap="10px">
-    <mat-form-field>
-      <input matInput placeholder="City" type="text" formControlName="city">
-      <mat-error *ngIf="form.get('city').hasError('required')">Please enter a city.
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="State" type="text" formControlName="state">
-      <mat-error *ngIf="form.get('state').hasError('required')">Please enter a state.
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput placeholder="Zip Code" type="text" formControlName="zip">
-      <mat-error *ngIf="form.get('zip').hasError('required')">Please enter a zip code.
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <mat-radio-group formControlName="language" fxLayout="row" fxLayoutGap="20px">
-    <mat-radio-button value="Male"> Male </mat-radio-button>
-    <mat-radio-button value="Female"> Female </mat-radio-button>
-  </mat-radio-group>
 
   <button type="submit" mat-raised-button color="accent">Submit</button>
-
 </form>
