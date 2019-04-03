@@ -16,6 +16,7 @@ namespace PR.Business.Mappings
                 UserAccountId = entity.UserAccountId,
                 UserName = entity.UserName,
                 Type = entity.Type.ToModel(),
+                Active = entity.Active,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -35,6 +36,7 @@ namespace PR.Business.Mappings
                 UserAccountId = model.UserAccountId,
                 UserName = model.UserName,
                 Password = hashBytes,
+                Active = model.Active,
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };

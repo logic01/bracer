@@ -20,6 +20,8 @@ namespace PR.Data.Models
 
         public byte[] Password { get; set; }
 
+        public bool Active { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }

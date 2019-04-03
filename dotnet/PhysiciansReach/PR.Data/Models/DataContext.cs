@@ -43,6 +43,8 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.Password).IsRequired().HasMaxLength(200);
 
+                entity.Property(e => e.Active).IsRequired().HasDefaultValue(true);
+
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");

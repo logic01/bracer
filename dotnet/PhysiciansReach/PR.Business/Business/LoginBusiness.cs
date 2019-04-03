@@ -20,7 +20,7 @@ namespace PR.Business.Business
         {
             var userAccount = userAccountModel.ToEntity();
 
-            var user = _context.UserAccount.FirstOrDefault(u => u.UserName == userAccount.UserName);
+            var user = _context.UserAccount.FirstOrDefault(u => u.UserName == userAccount.UserName && u.Active);
 
             if (user != null)
             {

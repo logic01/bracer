@@ -16,6 +16,8 @@ namespace PR.Models
 
         public string ConfirmationPassword { get; set; }
 
+        public bool Active { get; set; }
+
         public List<ErrorModel> Errors { get; set; }
 
         public DateTime CreatedOn { get; set; }

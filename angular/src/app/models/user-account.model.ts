@@ -6,6 +6,7 @@ export class UserAccount {
     type: AccountType;
     userName: string;
     password: string;
+    active: boolean;
     confirmationPassword: string;
     errors: ErrorModel[];
 }

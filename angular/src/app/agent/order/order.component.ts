@@ -41,7 +41,10 @@ export class OrderComponent implements OnInit {
       physicianCity: new FormControl('', Validators.required),
       physicianState: new FormControl('', Validators.required),
       physicianZip: new FormControl('', Validators.required),
-      isDma: new FormControl('', Validators.required)
+      isDma: new FormControl('', Validators.required),
+      therapyType: new FormControl('', Validators.required),
+      otherProduct: new FormControl(''),
+      insuranceType: new FormControl('', Validators.required),
     });
   }
 

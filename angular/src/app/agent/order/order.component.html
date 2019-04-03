@@ -1,6 +1,8 @@
 <form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
 
   <div fxLayout="row" fxLayoutGap="20px">
+
+    <!-- // Patient Inforamtion -->
     <div fxLayout="column" fxLayoutGap="20px">
       <h3>Patient Information</h3>
 
@@ -80,7 +82,8 @@
       </mat-form-field>
 
 
-      <mat-checkbox formControlName="callBackImmediately" labelPosition="before" color="primary" >Call Back Immediately</mat-checkbox>
+      <mat-checkbox formControlName="callBackImmediately" labelPosition="before" color="primary">Call Back Immediately
+      </mat-checkbox>
 
       <div fxLayout="row" fxLayoutGap="20px">
         <mat-label>Language:</mat-label>
@@ -90,15 +93,17 @@
         </mat-radio-group>
       </div>
 
-    </div><!-- // Patient Inforamtion -->
+    </div>
+    <!-- // Patient Inforamtion -->
 
+    <!-- // Medical Information -->
     <div fxLayout="column" fxLayoutGap="20px">
       <h3>Medical Information</h3>
       <mat-form-field>
         <mat-select placeholder="Pharmacy" formControlName="pharmacy">
           <mat-option>--</mat-option>
           <mat-option value="TWA"> TWA </mat-option>
-          <mat-option value="UniversalRX"> Universal RX</mat-option>
+          <mat-option value="UniversalRx"> Universal Rx</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('pharmacy').hasError('required')">Please select a pharmacy. </mat-error>
       </mat-form-field>
@@ -150,7 +155,6 @@
         </mat-form-field>
       </div>
 
-
       <div fxLayout="row" fxLayoutGap="20px">
         <mat-label>DMA:</mat-label>
         <mat-radio-group formControlName="isDma" fxLayout="row" fxLayoutGap="30px">
@@ -159,10 +163,78 @@
         </mat-radio-group>
       </div>
 
-    </div> <!-- // Medical Information -->
+      <mat-form-field>
+        <mat-select placeholder="Insurance Type" formControlName="insuranceType">
+          <mat-option>--</mat-option>
+          <mat-option value="Private"> PRIVATE </mat-option>
+          <mat-option value="Medicare"> MEDICARE </mat-option>
+          <mat-option value="BOTH"> BOTH </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('insuranceType').hasError('required')">Please select a type of insurance.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Therapy Type" formControlName="therapyType">
+          <mat-option>--</mat-option>
+          <mat-option value="Rx"> Rx </mat-option>
+          <mat-option value="DME">DME</mat-option>
+          <mat-option value="BOTH">BOTH</mat-option>
+          <mat-option value="BOTH">LABS</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('therapyType').hasError('required')">Please select a type of therapy. </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Other Product" type="text" formControlName="otherProduct">
+      </mat-form-field>
+
+    </div>
+    <!-- // Medical Information -->
 
   </div>
 
+  <div fxLayout="column" fxLayoutGap="20px">
+    <h3>Intake Survey</h3>
+    <mat-tab-group>
+      <mat-tab label="General (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="General (DME & Rx)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Pain (DME Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Pain (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Scar (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Heartburn / Acid Reflux (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Rash / Skin (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Anti-Fungal (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+      <mat-tab label="Footbath (Rx Only)">
+        <div fxLayout="row" fxLayoutAlign="center start">
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 
   <button type="submit" mat-raised-button color="accent">Submit</button>
 </form>

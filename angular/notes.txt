@@ -1,44 +1,22 @@
-[English, Spanish]
-[Call back immediately]
 
-Best Time to Call [Morning, Afternoon, Evening]
-Date
-First Name
-Middle Name
-Last Name
-Dat of Birth
-Phone Number
-Email
-Street Address Line 1
-Street Address Line 2
-City
-State
-Zip
+physician dashboard-> intake form -> patient information, name of form.
 
-Sex: (Male, Female)
-Pharmacy [TWA, Universal RX]
-MEdication
-Additional Notes
+intake (scan) sign -> form 1 , sign -> form 2, sign
 
-Patient Priamry Care Physician Name
-Address
-Phone
+* docusign type interface
 
-is this a DMA (yes, no)
-yes -> Pop up
-	- What is your main area of pain? [Left Wrist, Right Wrist, Left Elbow, Right Elbow, Left Anterior Shoulder, Right Anterior SHoulder, Left Hip, Right Hip, Left Knee, Right Knee, Posterior Left SHoulder, Posterior Right SHoulder, Neck, Upper Middle Back, Middle Back, Lower back, Left Occipital, Right Occipital, Frontal or forhead, left ankle, right ankle]
+ability to enable/disable agents
 
-	- Are there other areas of pain you would like help for? {smae list}
+Ion2018!
 
-	have you ever had a brace for your "Main area of Pain"? (yes, no)
+orders -> status -> open/closed
 
-	- Our doctores offer different pain relief creams to help with your pain. If a doctor believes it would help your problem would you be intersted in taht i your insurance covers it? (yes. no)
+vendor -> agent -> order -> documents
 
-Therapy Type [Rx. DME. BOTH, LABS]
+mechanism for admins to close orders after they do a manual verification process.
 
-Upload File
+per vendor patient list billing report (open closed) (maybe both)
+billed/paid next to paintent 
 
-Other Product 
-Insurance Type (Private insurance, medicare, both)
 
-Complete Intake Survey (yes, No)
+physician report in admin (documents paid)
