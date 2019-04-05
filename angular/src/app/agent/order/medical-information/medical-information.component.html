@@ -1,0 +1,96 @@
+<form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
+
+  <h3>Medical Information</h3>
+
+  <mat-form-field>
+    <mat-select placeholder="Pharmacy" formControlName="pharmacy">
+      <mat-option>--</mat-option>
+      <mat-option value="TWA"> TWA </mat-option>
+      <mat-option value="UNIVERSALRX"> Universal Rx</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('pharmacy').hasError('required')">Please select a pharmacy.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Medications" type="text" formControlName="medications">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Additional Notes" type="text" formControlName="notes">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Primary Care Physician Name" type="text" formControlName="physicianName">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Phone Number" type="text" formControlName="physicianPhoneNumber">
+    <mat-error *ngIf="form.get('physicianPhoneNumber').hasError('required')">Please enter the phone number.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Address Line One" type="text" formControlName="physicianAddressLineOne">
+    <mat-error *ngIf="form.get('physicianAddressLineOne').hasError('required')">Please enter an address.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Address Line Two" type="text" formControlName="physicianAddressLineTwo">
+  </mat-form-field>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field>
+      <input matInput placeholder="City" type="text" formControlName="physicianCity">
+      <mat-error *ngIf="form.get('physicianCity').hasError('required')">Please enter a city.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="State" type="text" formControlName="physicianState">
+      <mat-error *ngIf="form.get('physicianState').hasError('required')">Please enter a state.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Zip Code" type="text" formControlName="physicianZip">
+      <mat-error *ngIf="form.get('physicianZip').hasError('required')">Please enter a zip code.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-select placeholder="Insurance Type" formControlName="insuranceType">
+      <mat-option>--</mat-option>
+      <mat-option value="PRIVATE"> PRIVATE </mat-option>
+      <mat-option value="MEDICARE"> MEDICARE </mat-option>
+      <mat-option value="BOTH"> BOTH </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('insuranceType').hasError('required')">Please select a type of insurance.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Therapy Type" formControlName="therapyType">
+      <mat-option>--</mat-option>
+      <mat-option value="RX"> Rx </mat-option>
+      <mat-option value="DME">DME</mat-option>
+      <mat-option value="BOTH">BOTH</mat-option>
+      <mat-option value="BOTH">LABS</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('therapyType').hasError('required')">Please select a type of therapy. </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Other Product" type="text" formControlName="otherProduct">
+  </mat-form-field>
+
+  <div fxLayout="row" fxLayoutGap="20px">
+    <mat-label>DMA:</mat-label>
+    <mat-radio-group formControlName="isDma" fxLayout="row" fxLayoutGap="30px">
+      <mat-radio-button value="TRUE" color="primary" (click)="openDmaDialog()"> Yes </mat-radio-button>
+      <mat-radio-button value="FALS" color="primary"> No </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+</form>

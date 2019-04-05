@@ -7,7 +7,7 @@ import { EditAdminComponent } from './admin/edit/edit-admin.component';
 import { CreateAgentComponent } from './agent/create/create-agent.component';
 import { AgentDashboardComponent } from './agent/dashboard/agent-dashboard.component';
 import { EditAgentComponent } from './agent/edit/edit-agent.component';
-import { OrderComponent } from './agent/order/order.component';
+import { OrderComponent } from './agent/order/order/order.component';
 import { RouteUrls } from './constants/routes';
 import { LoginComponent } from './login/login.component';
 import { AccountType } from './models/Enums/account.type.enum';
@@ -27,8 +27,8 @@ const routes: Routes = [
   { path: RouteUrls.AgentOrderComponent, component: OrderComponent },
   {
     path: RouteUrls.AgentDashboardComponent, component: AgentDashboardComponent,
-    canActivate: [RoleGuardService],
-    data: { expectedRole: AccountType.Agent }
+   // canActivate: [RoleGuardService],
+  //  data: { expectedRole: AccountType.Agent }
   },
   {
     path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent,

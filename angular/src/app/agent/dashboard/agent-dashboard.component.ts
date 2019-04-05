@@ -10,7 +10,6 @@ import { RouteUrls } from '../../constants/routes';
 })
 export class AgentDashboardComponent implements OnInit {
 
-
   constructor(private readonly router: Router) { }
 
   ngOnInit() {
