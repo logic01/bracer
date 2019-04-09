@@ -21,6 +21,7 @@ import { ScarRxOnlyComponent } from './order/intake/scar-rx-only/scar-rx-only.co
 import { MedicalInformationComponent } from './order/medical-information/medical-information.component';
 import { OrderComponent } from './order/order/order.component';
 import { PatientInformationComponent } from './order/patient-information/patient-information.component';
+import { GeneralDmeOnlyComponent } from './order/intake/general-dme-only/general-dme-only.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PatientInformationComponent } from './order/patient-information/patient
     AntiFungalRxOnlyComponent,
     FootbathRxOnlyComponent,
     IntakeFormComponent,
-    PainDmeOnlyComponent
+    PainDmeOnlyComponent,
+    GeneralDmeOnlyComponent
   ],
   imports: [
     CommonModule,

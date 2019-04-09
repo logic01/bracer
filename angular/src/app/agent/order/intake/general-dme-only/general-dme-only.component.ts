@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-general-rx-only',
-  templateUrl: './general-rx-only.component.html',
-  styleUrls: ['./general-rx-only.component.scss']
+  selector: 'app-general-dme-only',
+  templateUrl: './general-dme-only.component.html',
+  styleUrls: ['./general-dme-only.component.scss']
 })
-export class GeneralRxOnlyComponent implements OnInit {
+export class GeneralDmeOnlyComponent implements OnInit {
 
   form: FormGroup;
 
@@ -23,14 +23,7 @@ export class GeneralRxOnlyComponent implements OnInit {
       q7: new FormControl('', Validators.required),
       q8: new FormControl('', Validators.required),
       q9: new FormControl('', Validators.required),
-      q10: new FormControl('', Validators.required),
-      q11: new FormControl('', Validators.required),
-      q12: new FormControl('', Validators.required),
-      q13: new FormControl('', Validators.required),
-      q14: new FormControl('', Validators.required),
-      q15: new FormControl('', Validators.required),
-      q16: new FormControl('', Validators.required),
-      q17: new FormControl('', Validators.required)
+      q10: new FormControl('', Validators.required)
     });
 
   }

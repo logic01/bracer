@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderComponent implements OnInit {
 
-  step = 1;
+  step = 3;
 
   constructor() { }
 
