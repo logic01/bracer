@@ -4,7 +4,7 @@ using PR.Business.Interfaces;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class VendorController : ControllerBase
     {
