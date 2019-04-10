@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PR.Api.Configurations;
 using PR.Business;
 using PR.Business.Business;
 using PR.Business.Interfaces;
@@ -13,12 +14,16 @@ namespace PhysiciansReach
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfigurationRoot Configuration { get; set; }
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
         readonly string MyAllowSpecificOrigins = "localOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -43,6 +48,15 @@ namespace PhysiciansReach
             ConfigureDependecyInjection(services);
         }
 
+        private void ConfigureAppSettings(IServiceCollection services)
+        {
+            // Add functionality to inject IOptions<T>
+            services.AddOptions();
+
+            // Add our Config object so it can be injected
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -63,7 +77,8 @@ namespace PhysiciansReach
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=PhysiciansReach;Trusted_Connection=True;ConnectRetryCount=0";
+
+            var connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
         }
 
