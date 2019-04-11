@@ -3,15 +3,20 @@
 .header {
     margin: 0px 10px 0px 10px;
     padding: 2px 2px 1px 30px;
-    background-color: $accent-sky-blue;    
+    background-color: $accent-sky-blue;   
+
+    .title{
+        margin-bottom: 3px;
+    } 
+
+    .subtext{
+        font-style: italic;
+        margin-top: 0px;
+    }
 }
 
-.main{
-    margin: 0px 10px 0px 10px;
-}
-
-.menu{
-    margin: 5px 0px 0px 0px;
+.separator{
+    margin: 5px 10px 0px 10px;
     padding: 5px 0px 5px 0px;
     border-style: solid;
     border-color: $accent-blue;
@@ -31,14 +36,6 @@
     color: $accent-blue;
 }
 
-.header-title{
-    margin-bottom: 3px;
-}
-
-.subtext{
-    font-style: italic;
-    margin-top: 0px;
-}
 
 .footer{
     color: $accent-blue;

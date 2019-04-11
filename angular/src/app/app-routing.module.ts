@@ -10,11 +10,9 @@ import { EditAgentComponent } from './agent/edit/edit-agent.component';
 import { OrderComponent } from './agent/order/order/order.component';
 import { RouteUrls } from './constants/routes';
 import { LoginComponent } from './login/login.component';
-import { AccountType } from './models/Enums/account.type.enum';
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
-import { RoleGuardService } from './services/role-guard.service';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 
@@ -32,13 +30,13 @@ const routes: Routes = [
   },
   {
     path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent,
-    canActivate: [RoleGuardService],
-    data: { expectedRole: AccountType.Physician }
+   // canActivate: [RoleGuardService],
+   // data: { expectedRole: AccountType.Physician }
   },
   {
     path: RouteUrls.AdminDashboardComponent, component: AdminDashboardComponent,
-    canActivate: [RoleGuardService],
-    data: { expectedRole: AccountType.Admin }
+  //  canActivate: [RoleGuardService],
+   // data: { expectedRole: AccountType.Admin }
   },
   { path: RouteUrls.VendorCreateComponent, component: CreateVendorComponent },
   { path: RouteUrls.AdminEditComponent, component: EditAdminComponent },

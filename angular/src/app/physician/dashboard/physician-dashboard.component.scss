@@ -1,16 +1,8 @@
 @import "./../../../theme.scss";
 
-table{
-    width: 800px;;
-}
 
-/* Column Widths */
-.mat-column-number,
-.mat-column-state {
-  max-width: 64px;
-  min-width: 20px;
-}
+.mat-cell { padding:10px; }
 
-.mat-column-created {
-  max-width: 124px;
-}
+.mat-footer-cell { padding:10px; }
+
+.mat-header-cell { padding:10px; }
