@@ -20,3 +20,12 @@ billed/paid next to paintent
 
 
 physician report in admin (documents paid)
+
+DME NOT DMA!
+
+1) Agent add-patient order form partial complete
+2) Each Tab is it's own Intake Form / Physcian Document for signature.
+3) Pain Image (Drop Down or Image?)
+4) 
+	a) once the physic signs (form complete) 
+	b) the forms need to be emailed to DME or Pharmacy (send email)
