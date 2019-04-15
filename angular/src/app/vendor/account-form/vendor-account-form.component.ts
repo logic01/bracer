@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { VendorService } from 'src/app/api/vendor.service';
-import { Router } from '@angular/router';
-import { Vendor } from 'src/app/models/vendor.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Observable } from 'rxjs';
+
+import { Vendor } from 'src/app/models/vendor.model';
 
 @Component({
   selector: 'app-vendor-account-form',

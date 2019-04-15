@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PR.Models;
 using PR.Business.Interfaces;
+using PR.Models;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
@@ -46,4 +46,5 @@ namespace PhysiciansReach.Controllers
             return _business.Update(agent);
         }
     }
+
 }

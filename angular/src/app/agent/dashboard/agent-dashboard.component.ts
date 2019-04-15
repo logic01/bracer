@@ -15,7 +15,7 @@ export class AgentDashboardComponent implements OnInit {
   ngOnInit() {
   }
 
-  new_order_button_click() {
-    this.router.navigateByUrl(RouteUrls.AgentOrderComponent);
+  new_patient_button_click() {
+    this.router.navigateByUrl(RouteUrls.PatientCreateComponent);
   }
 }

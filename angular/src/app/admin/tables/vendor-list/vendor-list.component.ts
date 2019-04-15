@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { VendorService } from 'src/app/api/vendor.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
+import { VendorService } from 'src/app/services/api/vendor.service';
 
 @Component({
   selector: 'app-vendor-list',

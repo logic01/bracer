@@ -11,6 +11,7 @@ import { DmaDialogComponent } from './order/dma-dialog/dma-dialog.component';
 import { AntiFungalRxOnlyComponent } from './order/intake/anti-fungal-rx-only/anti-fungal-rx-only.component';
 import { FootbathRxOnlyComponent } from './order/intake/footbath-rx-only/footbath-rx-only.component';
 import { GeneralDmeAndRxComponent } from './order/intake/general-dme-and-rx/general-dme-and-rx.component';
+import { GeneralDmeOnlyComponent } from './order/intake/general-dme-only/general-dme-only.component';
 import { GeneralRxOnlyComponent } from './order/intake/general-rx-only/general-rx-only.component';
 import { HeartburnAcidRxOnlyComponent } from './order/intake/heartburn-acid-rx-only/heartburn-acid-rx-only.component';
 import { IntakeFormComponent } from './order/intake/intake-form/intake-form.component';
@@ -21,7 +22,7 @@ import { ScarRxOnlyComponent } from './order/intake/scar-rx-only/scar-rx-only.co
 import { MedicalInformationComponent } from './order/medical-information/medical-information.component';
 import { OrderComponent } from './order/order/order.component';
 import { PatientInformationComponent } from './order/patient-information/patient-information.component';
-import { GeneralDmeOnlyComponent } from './order/intake/general-dme-only/general-dme-only.component';
+import { CreatePatientComponent } from './patient/create/create-patient.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { GeneralDmeOnlyComponent } from './order/intake/general-dme-only/general
     FootbathRxOnlyComponent,
     IntakeFormComponent,
     PainDmeOnlyComponent,
-    GeneralDmeOnlyComponent
+    GeneralDmeOnlyComponent,
+    CreatePatientComponent
   ],
   imports: [
     CommonModule,

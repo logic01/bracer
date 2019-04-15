@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { RouteUrls } from '../constants/routes';
-import { AccountType } from '../models/Enums/account.type.enum';
+import { AccountType } from '../models/enums/account-type.enum';
 import { SessionService } from './session.service';
 
 @Injectable({

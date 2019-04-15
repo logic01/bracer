@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { RouteUrls } from 'src/app/constants/routes';
 import { Subject } from 'rxjs';
-import { VendorService } from 'src/app/api/vendor.service';
 import { takeUntil } from 'rxjs/operators';
+
+import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
+import { VendorService } from 'src/app/services/api/vendor.service';
 
 @Component({
   selector: 'app-create-vendor',

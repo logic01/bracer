@@ -1,13 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AdminService } from '../../api/admin.service';
 import { RouteUrls } from '../../constants/routes';
-import { UserAccount } from '../../models/user-account.model';
+import { AdminService } from '../../services/api/admin.service';
 import { Admin } from 'src/app/models/admin.model';
 
 @Component({

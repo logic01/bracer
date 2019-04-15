@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../../constants/routes';
-import { PhysicianService } from 'src/app/api/physician.service';
 import { Physician } from 'src/app/models/physician.model';
-import { UserAccount } from 'src/app/models/user-account.model';
+import { PhysicianService } from 'src/app/services/api/physician.service';
 
 
 @Component({

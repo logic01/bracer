@@ -89,6 +89,7 @@ namespace PhysiciansReach
             services.AddTransient<IPhysicianBusiness, PhysicianBusiness>();
             services.AddTransient<IVendorBusiness, VendorBusiness>();
             services.AddTransient<ILoginBusiness, LoginBusiness>();
+            services.AddTransient<IPatientBusiness, PatientBusiness>();
             services.AddTransient<ILoggingBusiness, LoggingBusiness>();
         }
     }

@@ -22,5 +22,8 @@ namespace PR.Data.Models
 
         public Physician Physician { get; set; }
 
+        public Patient Patient { get; set; }
+
+        public Patient PatientsPhysician { get; set; }
     }
 }

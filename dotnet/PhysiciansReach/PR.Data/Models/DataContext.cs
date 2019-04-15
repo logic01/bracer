@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace PR.Data.Models
 {
@@ -22,12 +23,15 @@ namespace PR.Data.Models
 
         public DbSet<Log> Log { get; set; }
 
+        public DbSet<Patient> Patient { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             UserAccountBuilder(modelBuilder);
             AdminBuilder(modelBuilder);
             PhysicianBuilder(modelBuilder);
             AgentBuilder(modelBuilder);
+            PatientBuilder(modelBuilder);
             AddressBuilder(modelBuilder);
             LogBuilder(modelBuilder);
         }
@@ -48,9 +52,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.Active).IsRequired().HasDefaultValue(true);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.HasIndex(e => e.UserName).IsUnique();
             });
@@ -68,9 +72,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.UserAccount)
                      .WithOne(p => p.Admin)
@@ -99,9 +103,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.ZipCode).IsRequired().HasMaxLength(100);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
             });
         }
@@ -120,9 +124,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(10);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.UserAccount)
                      .WithOne(p => p.Physician)
@@ -152,9 +156,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.UserAccount)
                      .WithOne(p => p.Agent)
@@ -188,9 +192,73 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.ContactLastName).IsRequired().HasMaxLength(100);
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+            });
+        }
+
+        protected void PatientBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Patient>(entity =>
+            {
+                entity.ToTable("Patient", "dbo");
+
+                entity.HasKey(e => e.PatientId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.MiddleName).HasMaxLength(100);
+
+                entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(10);
+
+                entity.Property(e => e.DateOfBirth).IsRequired().HasColumnType("datetime2");
+
+                entity.Property(e => e.Language).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.BestTimeToCallBack).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Therapy).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Insurance).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Pharmacy).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Sex).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.CallBackImmediately).IsRequired().HasDefaultValue(true);
+
+                entity.Property(e => e.IsDme).IsRequired().HasDefaultValue(false);
+
+                entity.Property(e => e.BestTimeToCallBack).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Medications).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.Notes).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.OtherProducts).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.PhysiciansName).IsRequired().HasMaxLength(10);
+
+                entity.Property(e => e.PhysiciansPhoneNumber).IsRequired().HasMaxLength(10);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Address)
+                     .WithOne(p => p.Patient)
+                     .HasForeignKey<Patient>(b => b.AddressId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_Address");
+
+                entity.HasOne(d => d.PhysiciansAddress)
+                     .WithOne(p => p.PatientsPhysician)
+                     .HasForeignKey<Patient>(b => b.PhysiciansAddressId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_Physicians_Address");
             });
         }
 
@@ -208,9 +276,9 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.StackTrace).IsRequired();
 
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
             });
         }
     }

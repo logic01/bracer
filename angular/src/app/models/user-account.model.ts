@@ -1,4 +1,4 @@
-import { AccountType } from './Enums/account.type.enum';
+import { AccountType } from './enums/account-type.enum';
 import { ErrorModel } from './error.model';
 
 export class UserAccount {
