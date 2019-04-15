@@ -1,10 +1,13 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Observable } from 'rxjs';
 
 import { Address } from 'src/app/models/address.model';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
-import { Observable } from 'rxjs';
+import { MaskService } from 'src/app/services/mask.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-physician-account-form',
@@ -18,22 +21,32 @@ export class PhysicianAccountFormComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor() { }
+  constructor(public readonly maskService: MaskService) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      userName: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-      confirmationPassword: new FormControl('', Validators.required),
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
-      phoneNumber: new FormControl('', Validators.required),
-      addressLineOne: new FormControl('', Validators.required),
-      addressLineTwo: new FormControl(''),
-      city: new FormControl('', Validators.required),
-      state: new FormControl('', Validators.required),
-      zip: new FormControl('', Validators.required)
+      userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      password: new FormControl('', CustomValidators.password(6, 20)),
+      confirmationPassword: new FormControl('', CustomValidators.password(6, 20)),
+      firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      phoneNumber: new FormControl('', [CustomValidators.phonenumber, Validators.required]),
+      addressLineOne: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      addressLineTwo: new FormControl('', Validators.maxLength(100)),
+      city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      state: new FormControl('', CustomValidators.state),
+      zip: new FormControl('', CustomValidators.zip)
     });
+
+    this.accountForm.get('password').validator = Validators.compose([
+      this.accountForm.get('password').validator,
+      CustomValidators.equal(this.accountForm.get('confirmationPassword'))
+    ]);
+
+    this.accountForm.get('confirmationPassword').validator = Validators.compose([
+      this.accountForm.get('confirmationPassword').validator,
+      CustomValidators.equal(this.accountForm.get('password'))
+    ]);
 
     // populate form if we have a physician bound to the form
     if (this.physician$) {

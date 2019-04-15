@@ -8,7 +8,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class RashSkinRxOnlyComponent implements OnInit {
 
-
   form: FormGroup;
 
   constructor() { }
@@ -21,5 +20,9 @@ export class RashSkinRxOnlyComponent implements OnInit {
       q4: new FormControl(''),
 
     });
+  }
+
+  onSubmit(){
+    
   }
 }

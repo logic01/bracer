@@ -27,4 +27,8 @@ export class GeneralDmeOnlyComponent implements OnInit {
     });
 
   }
+
+  onSubmit(){
+    
+  }
 }

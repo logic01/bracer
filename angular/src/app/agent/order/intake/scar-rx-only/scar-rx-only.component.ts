@@ -26,4 +26,8 @@ export class ScarRxOnlyComponent implements OnInit {
     });
   }
 
+  onSubmit() {
+
+  }
+
 }

@@ -45,4 +45,8 @@ export class PainRxOnlyComponent implements OnInit {
       q7_6: new FormControl('')
     });
   }
+
+  onSubmit(){
+    
+  }
 }

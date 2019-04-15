@@ -57,4 +57,8 @@ export class DmaDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onSubmit() {
+
+  }
+
 }

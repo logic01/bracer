@@ -23,4 +23,8 @@ export class HeartburnAcidRxOnlyComponent implements OnInit {
       q2_other: new FormControl('')
     });
   }
+
+  onSubmit(){
+    
+  }
 }

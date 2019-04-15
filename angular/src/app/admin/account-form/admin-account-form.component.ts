@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Observable } from 'rxjs';
+
 import { Admin } from 'src/app/models/admin.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 
@@ -20,11 +22,11 @@ export class AdminAccountFormComponent implements OnInit {
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      userName: new FormControl('', Validators.required),
+      userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', Validators.required),
       confirmationPassword: new FormControl('', Validators.required),
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required)
+      firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)])
     });
 
     // populate form if we have a vendor bound to the form

@@ -12,4 +12,8 @@ export class PainDmeOnlyComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit(){
+    
+  }
+
 }

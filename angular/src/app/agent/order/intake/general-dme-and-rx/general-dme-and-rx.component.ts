@@ -36,4 +36,8 @@ export class GeneralDmeAndRxComponent implements OnInit {
 
   }
 
+  onSubmit(){
+    
+  }
+
 }

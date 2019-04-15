@@ -12,4 +12,8 @@ export class IntakeFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit(){
+    
+  }
+
 }

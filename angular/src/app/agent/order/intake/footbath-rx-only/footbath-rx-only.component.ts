@@ -21,4 +21,8 @@ export class FootbathRxOnlyComponent implements OnInit {
     });
   }
 
+  onSubmit(){
+    
+  }
+
 }

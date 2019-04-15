@@ -21,12 +21,14 @@ namespace PhysiciansReach.Controllers
         [HttpGet]
         public ActionResult<List<AdminModel>> Get()
         {
+            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Get All Admin");
             return _business.Get();
         }
 
         [HttpGet("{id}")]
         public ActionResult<AdminModel> Get(int id)
         {
+            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Get Admin");
             return _business.Get(id);
         }
 
@@ -40,6 +42,7 @@ namespace PhysiciansReach.Controllers
         [HttpPut("{id}")]
         public ActionResult<AdminModel> Put(int id, [FromBody] AdminModel admin)
         {
+            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Put Admin");
             return _business.Update(admin);
         }
     }

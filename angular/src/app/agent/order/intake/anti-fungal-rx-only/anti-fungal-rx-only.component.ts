@@ -19,4 +19,8 @@ export class AntiFungalRxOnlyComponent implements OnInit {
       q3: new FormControl('', Validators.required)
     });
   }
+
+  onSubmit(){
+
+  }
 }

@@ -24,32 +24,12 @@ namespace PR.Data.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            LogEntryBuilder(modelBuilder);
             UserAccountBuilder(modelBuilder);
             AdminBuilder(modelBuilder);
             PhysicianBuilder(modelBuilder);
             AgentBuilder(modelBuilder);
             AddressBuilder(modelBuilder);
-        }
-
-        protected void LogEntryBuilder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Log>(entity =>
-            {
-                entity.ToTable("Log", "dbo");
-
-                entity.Property(e => e.Severity).IsRequired().HasMaxLength(100).HasConversion<string>();
-
-                entity.HasKey(e => e.LogId).ForSqlServerIsClustered(false);
-
-                entity.Property(e => e.Message).IsRequired();
-
-                entity.Property(e => e.StackTrace).IsRequired();
-
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
-            });
+            LogBuilder(modelBuilder);
         }
 
         protected void UserAccountBuilder(ModelBuilder modelBuilder)
@@ -71,6 +51,8 @@ namespace PR.Data.Models
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.HasIndex(e => e.UserName).IsUnique();
             });
         }
 
@@ -205,6 +187,26 @@ namespace PR.Data.Models
                 entity.Property(e => e.ContactFirstName).IsRequired().HasMaxLength(100);
 
                 entity.Property(e => e.ContactLastName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            });
+        }
+
+        protected void LogBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("Log", "dbo");
+
+                entity.Property(e => e.Severity).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.HasKey(e => e.LogId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.Property(e => e.StackTrace).IsRequired();
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
 

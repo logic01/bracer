@@ -634,6 +634,13 @@ angular2-signaturepad@^2.8.0:
   dependencies:
     signature_pad "2.3.2"
 
+angular2-text-mask@^9.0.0:
+  version "9.0.0"
+  resolved "https://artifactory.transunion.com/artifactory/api/npm/libs-npm/angular2-text-mask/-/angular2-text-mask-9.0.0.tgz#70490170a8096241fc3ce9482ed6a758ddbce8ea"
+  integrity sha1-cEkBcKgJYkH8POlILtanWN286Oo=
+  dependencies:
+    text-mask-core "^5.0.0"
+
 ansi-colors@^3.0.0:
   version "3.2.4"
   resolved "https://artifactory.transunion.com/artifactory/api/npm/libs-npm/ansi-colors/-/ansi-colors-3.2.4.tgz#e3a3da4bfbae6c86a9c285625de124a234026fbf"
@@ -6785,6 +6792,11 @@ terser@^3.8.1:
     source-map "~0.6.1"
     source-map-support "~0.5.10"
 
+text-mask-core@^5.0.0:
+  version "5.1.2"
+  resolved "https://artifactory.transunion.com/artifactory/api/npm/libs-npm/text-mask-core/-/text-mask-core-5.1.2.tgz#80dd5ebe04825757e46619e691407a9f8b3c1b6f"
+  integrity sha1-gN1evgSCV1fkZhnmkUB6n4s8G28=
+
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://artifactory.transunion.com/artifactory/api/npm/libs-npm/through2/-/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"
@@ -7566,6 +7578,11 @@ yargs@^7.0.0:
     which-module "^1.0.0"
     y18n "^3.2.1"
     yargs-parser "^5.0.0"
+
+yarn@^1.15.2:
+  version "1.15.2"
+  resolved "https://artifactory.transunion.com/artifactory/api/npm/libs-npm/yarn/-/yarn-1.15.2.tgz#7a064ca81ca34235f16376ad2f796ed432f9e285"
+  integrity sha1-egZMqByjQjXxY3atL3lu1DL54oU=
 
 yeast@0.1.2:
   version "0.1.2"

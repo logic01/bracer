@@ -34,4 +34,8 @@ export class GeneralRxOnlyComponent implements OnInit {
     });
 
   }
+
+  onSubmit(){
+    
+  }
 }
