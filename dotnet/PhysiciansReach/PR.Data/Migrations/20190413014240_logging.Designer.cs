@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190413014240_logging")]
+    partial class logging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace PR.Data.Migrations
                     b.ToTable("Agent","dbo");
                 });
 
-            modelBuilder.Entity("PR.Data.Models.Log", b =>
+            modelBuilder.Entity("PR.Data.Models.LogEntry", b =>
                 {
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
@@ -131,7 +133,8 @@ namespace PR.Data.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Message")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -143,12 +146,13 @@ namespace PR.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("StackTrace")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("LogId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
-                    b.ToTable("Log","dbo");
+                    b.ToTable("LogEntry","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>

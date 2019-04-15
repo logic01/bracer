@@ -1,17 +1,19 @@
-﻿using PR.Business.Interfaces;
-using System;
+﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace PR.Business.Business
 {
     public sealed class PasswordHash
     {
-        const int SaltSize = 16, HashSize = 20, HashIter = 10000;
-        readonly byte[] _salt, _hash;
+        private const int SaltSize = 16, HashSize = 20, HashIter = 10000;
+        private readonly byte[] _hash;
+        private readonly byte[] _salt =  new byte[] { 0, 3, 3, 4, 9, 7, 7, 1, 0, 3, 3, 4, 9, 7, 7, 1 };
 
-        public PasswordHash(string password)
+
+    public PasswordHash(string password)
         {
-            new RNGCryptoServiceProvider().GetBytes(_salt = new byte[SaltSize]);
+            new RNGCryptoServiceProvider().GetBytes(_salt );
             _hash = new Rfc2898DeriveBytes(password, _salt, HashIter).GetBytes(HashSize);
         }
 
@@ -35,9 +37,9 @@ namespace PR.Business.Business
             return hashBytes;
         }
 
-        public byte[] Salt { get { return (byte[])_salt.Clone(); } }
+        public byte[] Salt => (byte[])_salt.Clone();
 
-        public byte[] Hash { get { return (byte[])_hash.Clone(); } }
+        public byte[] Hash => (byte[])_hash.Clone();
 
         public bool Verify(string password)
         {

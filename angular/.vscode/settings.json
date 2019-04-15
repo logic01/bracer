@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b615836b-f691-44fe-82ca-4e2d7d52dc48/resourceGroups/physicians-reach/providers/Microsoft.Web/sites/physicians-reach",
+    "appService.deploySubpath": "dist"
+}

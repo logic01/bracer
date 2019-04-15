@@ -17,14 +17,14 @@ namespace PhysiciansReach
         public IConfigurationRoot Configuration { get; set; }
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+            IConfigurationBuilder builder = new ConfigurationBuilder()
             .SetBasePath(env.ContentRootPath)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             Configuration = builder.Build();
         }
 
-        readonly string MyAllowSpecificOrigins = "localOrigins";
+        private readonly string MyAllowSpecificOrigins = "localOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -78,7 +78,7 @@ namespace PhysiciansReach
         private void ConfigureDatabase(IServiceCollection services)
         {
 
-            var connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
+            string connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
         }
 
@@ -89,6 +89,7 @@ namespace PhysiciansReach
             services.AddTransient<IPhysicianBusiness, PhysicianBusiness>();
             services.AddTransient<IVendorBusiness, VendorBusiness>();
             services.AddTransient<ILoginBusiness, LoginBusiness>();
+            services.AddTransient<ILoggingBusiness, LoggingBusiness>();
         }
     }
 }

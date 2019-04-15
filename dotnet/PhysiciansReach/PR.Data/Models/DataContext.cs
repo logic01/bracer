@@ -20,13 +20,36 @@ namespace PR.Data.Models
 
         public DbSet<Address> Address { get; set; }
 
+        public DbSet<Log> Log { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            LogEntryBuilder(modelBuilder);
             UserAccountBuilder(modelBuilder);
             AdminBuilder(modelBuilder);
             PhysicianBuilder(modelBuilder);
             AgentBuilder(modelBuilder);
             AddressBuilder(modelBuilder);
+        }
+
+        protected void LogEntryBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("Log", "dbo");
+
+                entity.Property(e => e.Severity).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.HasKey(e => e.LogId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.Property(e => e.StackTrace).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime").HasDefaultValueSql("(getdate())");
+            });
         }
 
         protected void UserAccountBuilder(ModelBuilder modelBuilder)

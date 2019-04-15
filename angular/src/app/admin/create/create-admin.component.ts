@@ -18,7 +18,6 @@ import { Admin } from 'src/app/models/admin.model';
 export class CreateAdminComponent implements OnDestroy {
 
   private unsubscribe$ = new Subject();
-
   constructor(
     private readonly adminApi: AdminService,
     private readonly router: Router) { }
