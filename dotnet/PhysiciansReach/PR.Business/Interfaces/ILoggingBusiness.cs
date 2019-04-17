@@ -1,4 +1,4 @@
-﻿using static PR.Data.Models.Log;
+﻿using PR.Constants.Enums;
 
 namespace PR.Business.Interfaces
 {

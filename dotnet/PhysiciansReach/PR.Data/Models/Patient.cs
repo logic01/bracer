@@ -1,49 +1,10 @@
-﻿using System;
+﻿using PR.Constants.Enums;
+using System;
 
 namespace PR.Data.Models
 {
     public class Patient
     {
-        public enum CallbackTime
-        {
-            Morning,
-            Afternoon,
-            Evening
-        }
-
-        public enum LanguageType
-        {
-            English,
-            Spanish
-        }
-
-        public enum SexType
-        {
-            Male,
-            Female
-        }
-
-        public enum TherapyType
-        {
-            RX,
-            DME,
-            BOTH,
-            LABS
-        }
-
-        public enum InsuranceType
-        {
-            PRIVATE,
-            MEDICARE,
-            BOTH
-        }
-
-        public enum PharmacyType
-        {
-            TWA,
-            UNIVERSALRX
-        }
-
         public int PatientId { get; set; }
 
         public LanguageType Language { get; set; }

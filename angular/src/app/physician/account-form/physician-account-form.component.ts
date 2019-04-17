@@ -26,16 +26,16 @@ export class PhysicianAccountFormComponent implements OnInit {
   ngOnInit() {
     this.accountForm = new FormGroup({
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      password: new FormControl('', CustomValidators.password(6, 20)),
-      confirmationPassword: new FormControl('', CustomValidators.password(6, 20)),
+      password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      confirmationPassword: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       phoneNumber: new FormControl('', [CustomValidators.phonenumber, Validators.required]),
       addressLineOne: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      state: new FormControl('', CustomValidators.state),
-      zip: new FormControl('', CustomValidators.zip)
+      state: new FormControl('', [CustomValidators.state, Validators.required]),
+      zip: new FormControl('', [CustomValidators.zip, Validators.required])
     });
 
     this.accountForm.get('password').validator = Validators.compose([

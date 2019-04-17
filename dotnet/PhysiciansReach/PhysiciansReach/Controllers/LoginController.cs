@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PR.Business.Interfaces;
+using PR.Constants.Enums;
 using PR.Models;
-using static PR.Data.Models.Log;
 
 namespace PhysiciansReach.Controllers
 {

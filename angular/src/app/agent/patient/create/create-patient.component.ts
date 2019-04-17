@@ -76,7 +76,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     this.patientApi
       .post(patient)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newAgent: Patient) => {
+      .subscribe((newPatient: Patient) => {
         this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
       });
   }
@@ -115,11 +115,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.address.zipCode = this.form.controls['zip'].value;
 
     patient.physiciansAddress = new Address();
-    patient.address.addressLineOne = this.form.controls['physicianAddressLineOne'].value;
-    patient.address.addressLineTwo = this.form.controls['physicianAddressLineTwo'].value;
-    patient.address.city = this.form.controls['physicianCity'].value;
-    patient.address.state = this.form.controls['physicianState'].value;
-    patient.address.zipCode = this.form.controls['physicianZip'].value;
+    patient.physiciansAddress.addressLineOne = this.form.controls['physicianAddressLineOne'].value;
+    patient.physiciansAddress.addressLineTwo = this.form.controls['physicianAddressLineTwo'].value;
+    patient.physiciansAddress.city = this.form.controls['physicianCity'].value;
+    patient.physiciansAddress.state = this.form.controls['physicianState'].value;
+    patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
 
     return patient;
   }

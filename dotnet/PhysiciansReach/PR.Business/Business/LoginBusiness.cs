@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Models;
 using System.Collections.Generic;
 using System.Linq;
-using static PR.Data.Models.Log;
 
 namespace PR.Business.Business
 {
@@ -30,7 +30,7 @@ namespace PR.Business.Business
 
             if (user != null)
             {
-                PasswordHash hash = new PasswordHash(user.Password);
+                var hash = new PasswordHash(user.Password);
 
                 _logging.Log(LogSeverity.Info, $"newhash: {hash}, oldhash: {userAccountModel.Password}");
 
@@ -47,9 +47,9 @@ namespace PR.Business.Business
 
         private UserAccountModel LoginFailed()
         {
-            UserAccountModel model = new UserAccountModel
+            var model = new UserAccountModel
             {
-                Type = Models.Enum.AccountType.None,
+                Type = AccountType.None,
                 Errors = new List<ErrorModel>
                 {
                     new ErrorModel

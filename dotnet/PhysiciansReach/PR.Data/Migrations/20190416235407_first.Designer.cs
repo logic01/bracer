@@ -10,8 +10,8 @@ using PR.Data.Models;
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190413033731_log2")]
-    partial class log2
+    [Migration("20190416235407_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,12 +39,12 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("State")
@@ -67,7 +67,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("FirstName")
@@ -80,7 +80,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("UserAccountId")
@@ -95,7 +95,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("FirstName")
@@ -108,7 +108,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("VendorId");
@@ -129,16 +129,15 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                        .IsRequired();
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Severity")
@@ -146,13 +145,114 @@ namespace PR.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("StackTrace")
-                        .IsRequired()
-                        .HasMaxLength(200);
+                        .IsRequired();
 
                     b.HasKey("LogId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("Log","dbo");
+                });
+
+            modelBuilder.Entity("PR.Data.Models.Patient", b =>
+                {
+                    b.Property<int>("PatientId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AddressId");
+
+                    b.Property<string>("BestTimeToCallBack")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("CallBackImmediately")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Insurance")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsDme")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Medications")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("OtherProducts")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Pharmacy")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<int>("PhysiciansAddressId");
+
+                    b.Property<string>("PhysiciansName")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<string>("PhysiciansPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Therapy")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("PatientId")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("AddressId")
+                        .IsUnique();
+
+                    b.HasIndex("PhysiciansAddressId")
+                        .IsUnique();
+
+                    b.ToTable("Patient","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>
@@ -163,7 +263,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("FirstName")
@@ -176,7 +276,7 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("PhoneNumber")
@@ -204,12 +304,12 @@ namespace PR.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<byte[]>("Password")
@@ -226,6 +326,9 @@ namespace PR.Data.Migrations
 
                     b.HasKey("UserAccountId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("UserAccount","dbo");
                 });
@@ -274,6 +377,19 @@ namespace PR.Data.Migrations
                         .WithMany("Agent")
                         .HasForeignKey("VendorId")
                         .HasConstraintName("FK_Agent_Vendor");
+                });
+
+            modelBuilder.Entity("PR.Data.Models.Patient", b =>
+                {
+                    b.HasOne("PR.Data.Models.Address", "Address")
+                        .WithOne("Patient")
+                        .HasForeignKey("PR.Data.Models.Patient", "AddressId")
+                        .HasConstraintName("FK_Patient_Address");
+
+                    b.HasOne("PR.Data.Models.Address", "PhysiciansAddress")
+                        .WithOne("PatientsPhysician")
+                        .HasForeignKey("PR.Data.Models.Patient", "PhysiciansAddressId")
+                        .HasConstraintName("FK_Patient_Physicians_Address");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>

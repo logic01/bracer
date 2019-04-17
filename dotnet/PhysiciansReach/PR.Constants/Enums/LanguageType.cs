@@ -1,4 +1,4 @@
-﻿namespace PR.Models.Enum
+﻿namespace PR.Constants.Enums
 {
     public enum LanguageType
     {

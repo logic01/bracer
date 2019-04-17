@@ -6,7 +6,7 @@ namespace PR.Business.Mappings
     {
         public static VendorModel ToModel(this Vendor entity)
         {
-            VendorModel model = new VendorModel
+            var model = new VendorModel
             {
                 VendorId = entity.VendorId,
                 CompanyName = entity.CompanyName,
@@ -23,7 +23,7 @@ namespace PR.Business.Mappings
 
         public static Vendor ToEntity(this VendorModel model)
         {
-            Vendor entity = new Vendor
+            var entity = new Vendor
             {
                 VendorId = model.VendorId,
                 CompanyName = model.CompanyName,

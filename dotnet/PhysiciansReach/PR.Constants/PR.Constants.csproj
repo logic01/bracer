@@ -4,8 +4,4 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PR.Constants\PR.Constants.csproj" />
-  </ItemGroup>
-
 </Project>

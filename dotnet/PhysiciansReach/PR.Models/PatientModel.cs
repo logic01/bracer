@@ -1,4 +1,4 @@
-﻿using PR.Models.Enum;
+﻿using PR.Constants.Enums;
 using System;
 
 namespace PR.Models

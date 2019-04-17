@@ -1,8 +1,6 @@
 ﻿using PR.Business.Business;
 using PR.Data.Models;
 using PR.Models;
-using System;
-using static PR.Data.Models.UserAccount;
 
 namespace PR.Business.Mappings
 {
@@ -15,7 +13,7 @@ namespace PR.Business.Mappings
             {
                 UserAccountId = entity.UserAccountId,
                 UserName = entity.UserName,
-                Type = entity.Type.ToModel(),
+                Type = entity.Type,
                 Active = entity.Active,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
@@ -29,7 +27,7 @@ namespace PR.Business.Mappings
         {
             var hash = new PasswordHash(model.Password);
 
-            byte[] hashBytes = hash.ToArray();
+            var hashBytes = hash.ToArray();
 
             var entity = new UserAccount
             {
@@ -44,25 +42,5 @@ namespace PR.Business.Mappings
             return entity;
         }
 
-        public static PR.Models.Enum.AccountType ToModel(this PR.Data.Models.UserAccount.AccountType entity)
-        {
-            switch (entity)
-            {
-                case AccountType.Admin:
-                    {
-                        return Models.Enum.AccountType.Admin;
-                    }
-                case AccountType.Agent:
-                    {
-                        return Models.Enum.AccountType.Agent;
-                    }
-                case AccountType.Physician:
-                    {
-                        return Models.Enum.AccountType.Physician;
-                    }
-            }
-
-            throw new Exception("Invalid Account Type");
-        }
     }
 }

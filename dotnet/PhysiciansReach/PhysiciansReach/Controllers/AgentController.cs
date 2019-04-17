@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
+using PR.Constants.Enums;
 using PR.Models;
 using System.Collections.Generic;
 
@@ -21,28 +22,28 @@ namespace PhysiciansReach.Controllers
         [HttpGet]
         public ActionResult<List<AgentModel>> Get()
         {
-            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Get All Agent");
+            _logging.Log(LogSeverity.Info, "Get All Agent");
             return _business.Get();
         }
 
         [HttpGet("{id}")]
         public ActionResult<AgentModel> Get(int id)
         {
-            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Get Agent");
+            _logging.Log(LogSeverity.Info, "Get Agent");
             return _business.Get(id);
         }
 
         [HttpPost]
         public ActionResult<AgentModel> Post([FromBody] AgentModel agent)
         {
-            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Post Agent");
+            _logging.Log(LogSeverity.Info, "Post Agent");
             return _business.Create(agent);
         }
 
         [HttpPut("{id}")]
         public ActionResult<AgentModel> Put(int id, [FromBody] AgentModel agent)
         {
-            _logging.Log(PR.Data.Models.Log.LogSeverity.Info, "Put Agent");
+            _logging.Log(LogSeverity.Info, "Put Agent");
             return _business.Update(agent);
         }
     }

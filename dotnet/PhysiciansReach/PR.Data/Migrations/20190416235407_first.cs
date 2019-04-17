@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PR.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,12 +42,31 @@ namespace PR.Data.Migrations
                     City = table.Column<string>(maxLength: 100, nullable: false),
                     State = table.Column<string>(maxLength: 100, nullable: false),
                     ZipCode = table.Column<string>(maxLength: 100, nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Address", x => x.AddressId)
+                        .Annotation("SqlServer:Clustered", false);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Log",
+                schema: "dbo",
+                columns: table => new
+                {
+                    LogId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Severity = table.Column<string>(maxLength: 100, nullable: false),
+                    Message = table.Column<string>(nullable: false),
+                    StackTrace = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Log", x => x.LogId)
                         .Annotation("SqlServer:Clustered", false);
                 });
 
@@ -58,15 +77,67 @@ namespace PR.Data.Migrations
                 {
                     UserAccountId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<string>(maxLength: 100, nullable: false),
                     UserName = table.Column<string>(maxLength: 100, nullable: false),
                     Password = table.Column<byte[]>(maxLength: 200, nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                    Active = table.Column<bool>(nullable: false, defaultValue: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserAccount", x => x.UserAccountId)
                         .Annotation("SqlServer:Clustered", false);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patient",
+                schema: "dbo",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Language = table.Column<string>(maxLength: 100, nullable: false),
+                    Sex = table.Column<string>(maxLength: 100, nullable: false),
+                    Therapy = table.Column<string>(maxLength: 100, nullable: false),
+                    Insurance = table.Column<string>(maxLength: 100, nullable: false),
+                    Pharmacy = table.Column<string>(maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 100, nullable: false),
+                    MiddleName = table.Column<string>(maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(maxLength: 100, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
+                    CallBackImmediately = table.Column<bool>(nullable: false, defaultValue: true),
+                    BestTimeToCallBack = table.Column<string>(maxLength: 100, nullable: false),
+                    IsDme = table.Column<bool>(nullable: false, defaultValue: false),
+                    Medications = table.Column<string>(maxLength: 100, nullable: false),
+                    Notes = table.Column<string>(maxLength: 100, nullable: false),
+                    OtherProducts = table.Column<string>(maxLength: 100, nullable: false),
+                    PhysiciansName = table.Column<string>(maxLength: 10, nullable: false),
+                    PhysiciansPhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
+                    AddressId = table.Column<int>(nullable: false),
+                    PhysiciansAddressId = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.PatientId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Patient_Address",
+                        column: x => x.AddressId,
+                        principalSchema: "dbo",
+                        principalTable: "Address",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Patient_Physicians_Address",
+                        column: x => x.PhysiciansAddressId,
+                        principalSchema: "dbo",
+                        principalTable: "Address",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,8 +148,8 @@ namespace PR.Data.Migrations
                     UserAccountId = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 100, nullable: false),
                     LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
@@ -102,8 +173,8 @@ namespace PR.Data.Migrations
                     VendorId = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 100, nullable: false),
                     LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
@@ -134,8 +205,8 @@ namespace PR.Data.Migrations
                     LastName = table.Column<string>(maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
                     AddressId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
@@ -164,10 +235,31 @@ namespace PR.Data.Migrations
                 column: "VendorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Patient_AddressId",
+                schema: "dbo",
+                table: "Patient",
+                column: "AddressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_PhysiciansAddressId",
+                schema: "dbo",
+                table: "Patient",
+                column: "PhysiciansAddressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Physician_AddressId",
                 schema: "dbo",
                 table: "Physician",
                 column: "AddressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAccount_UserName",
+                schema: "dbo",
+                table: "UserAccount",
+                column: "UserName",
                 unique: true);
         }
 
@@ -179,6 +271,14 @@ namespace PR.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Agent",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Log",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Patient",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

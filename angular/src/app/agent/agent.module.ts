@@ -19,9 +19,7 @@ import { PainDmeOnlyComponent } from './order/intake/pain-dme-only/pain-dme-only
 import { PainRxOnlyComponent } from './order/intake/pain-rx-only/pain-rx-only.component';
 import { RashSkinRxOnlyComponent } from './order/intake/rash-skin-rx-only/rash-skin-rx-only.component';
 import { ScarRxOnlyComponent } from './order/intake/scar-rx-only/scar-rx-only.component';
-import { MedicalInformationComponent } from './order/medical-information/medical-information.component';
 import { OrderComponent } from './order/order/order.component';
-import { PatientInformationComponent } from './order/patient-information/patient-information.component';
 import { CreatePatientComponent } from './patient/create/create-patient.component';
 
 @NgModule({
@@ -31,8 +29,6 @@ import { CreatePatientComponent } from './patient/create/create-patient.componen
     AgentDashboardComponent,
     AgentAccountFormComponent,
     DmaDialogComponent,
-    PatientInformationComponent,
-    MedicalInformationComponent,
     OrderComponent,
     GeneralRxOnlyComponent,
     GeneralDmeAndRxComponent,

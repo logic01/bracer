@@ -1,7 +1,7 @@
 ﻿using PR.Business.Interfaces;
+using PR.Constants.Enums;
 using PR.Data.Models;
 using System;
-using static PR.Data.Models.Log;
 
 namespace PR.Business.Business
 {
