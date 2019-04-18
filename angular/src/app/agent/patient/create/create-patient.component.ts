@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { DmaDialogComponent } from '../../order/dma-dialog/dma-dialog.component';
+import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Address } from 'src/app/models/address.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -77,7 +77,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       .post(patient)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newPatient: Patient) => {
-        this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
+        this.router.navigateByUrl(RouteUrls.IntakeFormComponent);
       });
   }
 
