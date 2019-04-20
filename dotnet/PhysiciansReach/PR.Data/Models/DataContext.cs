@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace PR.Data.Models
 {
@@ -25,6 +24,12 @@ namespace PR.Data.Models
 
         public DbSet<Patient> Patient { get; set; }
 
+        public DbSet<IntakeForm> IntakeForm { get; set; }
+
+        public DbSet<Question> Question { get; set; }
+
+        public DbSet<Answer> Answer { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             UserAccountBuilder(modelBuilder);
@@ -34,6 +39,9 @@ namespace PR.Data.Models
             PatientBuilder(modelBuilder);
             AddressBuilder(modelBuilder);
             LogBuilder(modelBuilder);
+            IntakeFormBuilder(modelBuilder);
+            QuestionBuilder(modelBuilder);
+            AnswerBuilder(modelBuilder);
         }
 
         protected void UserAccountBuilder(ModelBuilder modelBuilder)
@@ -279,6 +287,72 @@ namespace PR.Data.Models
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+            });
+        }
+
+        protected void IntakeFormBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IntakeForm>(entity =>
+            {
+                entity.ToTable("IntakeForm", "dbo");
+
+                entity.Property(e => e.IntakeFormType).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.HasKey(e => e.IntakeFormId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Patient)
+                     .WithMany(p => p.IntakeForms)
+                     .HasForeignKey(b => b.IntakeFormId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_IntakeForms");
+            });
+        }
+
+        protected void QuestionBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.ToTable("Question", "dbo");
+
+                entity.HasKey(e => e.QuestionId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Text).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.IntakeForm)
+                     .WithMany(p => p.Questions)
+                     .HasForeignKey(b => b.QuestionId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_IntakeForm_Questions");
+            });
+        }
+
+        protected void AnswerBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.ToTable("Answer", "dbo");
+
+                entity.HasKey(e => e.AnswerId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Text).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Question)
+                     .WithMany(p => p.Answers)
+                     .HasForeignKey(b => b.AnswerId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Questions_Answers");
             });
         }
     }

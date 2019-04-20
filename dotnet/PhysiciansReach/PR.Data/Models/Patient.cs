@@ -1,5 +1,6 @@
 ﻿using PR.Constants.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace PR.Data.Models
 {
@@ -54,6 +55,8 @@ namespace PR.Data.Models
         public Address Address { get; set; }
 
         public Address PhysiciansAddress { get; set; }
+
+        public List<IntakeForm> IntakeForms { get; set; }
     }
 
 }
