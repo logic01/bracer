@@ -2,9 +2,15 @@
 {
     public enum IntakeFormType
     {
-        Admin,
-        Agent,
-        Physician,
-        None
+        AntiFungalRxOnly,
+        FootbathRxOnly,
+        GeneralDmeAndRx,
+        GeneralDmeOnly,
+        GeneralRxOnly,
+        HeartburnAcidRxOnly,
+        PainDmeOnly,
+        PainRxOnly,
+        RashSkinRxOnly,
+        ScarRxOnly
     }
 }

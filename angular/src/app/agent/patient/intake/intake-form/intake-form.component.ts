@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { IntakeForm } from 'src/app/models/intake-form.model';
+
 @Component({
   selector: 'app-intake-form',
   templateUrl: './intake-form.component.html',
@@ -12,8 +14,9 @@ export class IntakeFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(){
-    
+  onSubmit(intakeForm: IntakeForm) {
+
+    console.warn(intakeForm);
   }
 
 }
