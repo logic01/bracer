@@ -78,13 +78,14 @@ namespace PhysiciansReach
         private void ConfigureDatabase(IServiceCollection services)
         {
 
-            string connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
+            var connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
         }
 
         private void ConfigureDependecyInjection(IServiceCollection services)
         {
             services.AddTransient<IAdminBusiness, AdminBusiness>();
+            services.AddTransient<IIntakeFormBusiness, IntakeFormBusiness>();
             services.AddTransient<IAgentBusiness, AgentBusiness>();
             services.AddTransient<IPhysicianBusiness, PhysicianBusiness>();
             services.AddTransient<IVendorBusiness, VendorBusiness>();

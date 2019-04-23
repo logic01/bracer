@@ -27,7 +27,7 @@ namespace PR.Business
 
         public IntakeFormModel Get(int id)
         {
-            var intakeForm = _context.IntakeForm
+            IntakeForm intakeForm = _context.IntakeForm
                 .Include(p => p.Questions.Select(q => q.Answers))
                 .FirstOrDefault(u => u.IntakeFormId == id);
 
@@ -36,9 +36,19 @@ namespace PR.Business
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
-            var intakeForm = intakeFormModel.ToEntity();
-
+            IntakeForm intakeForm = intakeFormModel.ToEntity();
             _context.IntakeForm.Add(intakeForm);
+
+           /* foreach (QuestionModel q in intakeFormModel.Questions)
+            {
+                _context.Question.Add(q.ToEntity());
+
+                foreach (AnswerModel a in q.Answers)
+                {
+                    _context.Answer.Add(a.ToEntity());
+                }
+            }
+            */
             _context.SaveChanges();
 
             return intakeForm.ToModel();
@@ -46,7 +56,7 @@ namespace PR.Business
 
         public IntakeFormModel Update(IntakeFormModel intakeFormModel)
         {
-            var intakeForm = _context.IntakeForm.FirstOrDefault(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
+            IntakeForm intakeForm = _context.IntakeForm.FirstOrDefault(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
 
             intakeForm = intakeFormModel.ToEntity();
             _context.IntakeForm.Add(intakeForm);

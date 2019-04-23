@@ -8,7 +8,7 @@ namespace PR.Data.Models
     {
         public int IntakeFormId { get; set; }
 
-        public string PatientId { get; set; }
+        public int PatientId { get; set; }
 
         public IntakeFormType IntakeFormType { get; set; }
 

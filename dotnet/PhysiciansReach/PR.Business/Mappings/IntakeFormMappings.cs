@@ -26,9 +26,9 @@ namespace PR.Business.Mappings
             var entity = new IntakeForm
             {
                 IntakeFormId = model.IntakeFormId,
-                PatientId = model.PatientId,
+                PatientId = 1,
                 IntakeFormType = model.IntakeFormType,
-                Questions = model.Questions.Select(q => q.ToEntity()).ToList(),
+                //Questions = model.Questions.Select(q => q.ToEntity()).ToList(),
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };
@@ -56,7 +56,7 @@ namespace PR.Business.Mappings
             {
                 QuestionId = model.QuestionId,
                 Text = model.Text,
-                Answers = model.Answers.Select(a => a.ToEntity()).ToList(),
+                // Answers = model.Answers.Select(a => a.ToEntity()).ToList(),
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };

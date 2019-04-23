@@ -44,20 +44,24 @@ export class AntiFungalRxOnlyComponent implements OnInit {
     const answer1 = new Answer();
     answer1.text = this.form.controls['q1'].value;
     question1.answers = [answer1];
+    question1.text =  this.form.controls['q1'].value;
 
     const question2 = new Question();
     const answer2 = new Answer();
     answer2.text = this.form.controls['q2'].value;
     question2.answers = [answer2];
+    question2.text =  this.form.controls['q2'].value;
 
     const question3 = new Question();
     const answer3 = new Answer();
     answer3.text = this.form.controls['q3'].value;
     question3.answers = [answer3];
+    question3.text =  this.form.controls['q3'].value;
 
     const intake = new IntakeForm();
     intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
     intake.questions = [question1, question2, question3];
+    intake.patientId = '1';
 
     return intake;
   }
