@@ -121,7 +121,9 @@ namespace PR.Data.Migrations
 
             modelBuilder.Entity("PR.Data.Models.Answer", b =>
                 {
-                    b.Property<int>("AnswerId");
+                    b.Property<int>("AnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -142,12 +144,16 @@ namespace PR.Data.Migrations
                     b.HasKey("AnswerId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
+                    b.HasIndex("QuestionId");
+
                     b.ToTable("Answer","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>
                 {
-                    b.Property<int>("IntakeFormId");
+                    b.Property<int>("IntakeFormId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -163,10 +169,12 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("PatientId");
+                    b.Property<int>("PatientId");
 
                     b.HasKey("IntakeFormId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("IntakeForm","dbo");
                 });
@@ -344,7 +352,9 @@ namespace PR.Data.Migrations
 
             modelBuilder.Entity("PR.Data.Models.Question", b =>
                 {
-                    b.Property<int>("QuestionId");
+                    b.Property<int>("QuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
@@ -352,6 +362,8 @@ namespace PR.Data.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("IntakeFormId");
+
+                    b.Property<string>("Key");
 
                     b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -364,6 +376,8 @@ namespace PR.Data.Migrations
 
                     b.HasKey("QuestionId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("IntakeFormId");
 
                     b.ToTable("Question","dbo");
                 });
@@ -459,7 +473,7 @@ namespace PR.Data.Migrations
                 {
                     b.HasOne("PR.Data.Models.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("AnswerId")
+                        .HasForeignKey("QuestionId")
                         .HasConstraintName("FK_Questions_Answers");
                 });
 
@@ -467,7 +481,7 @@ namespace PR.Data.Migrations
                 {
                     b.HasOne("PR.Data.Models.Patient", "Patient")
                         .WithMany("IntakeForms")
-                        .HasForeignKey("IntakeFormId")
+                        .HasForeignKey("PatientId")
                         .HasConstraintName("FK_Patient_IntakeForms");
                 });
 
@@ -501,7 +515,7 @@ namespace PR.Data.Migrations
                 {
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionId")
+                        .HasForeignKey("IntakeFormId")
                         .HasConstraintName("FK_IntakeForm_Questions");
                 });
 #pragma warning restore 612, 618

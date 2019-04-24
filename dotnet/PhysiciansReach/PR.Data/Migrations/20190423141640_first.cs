@@ -228,11 +228,98 @@ namespace PR.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "IntakeForm",
+                schema: "dbo",
+                columns: table => new
+                {
+                    IntakeFormId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PatientId = table.Column<int>(nullable: false),
+                    IntakeFormType = table.Column<string>(maxLength: 100, nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IntakeForm", x => x.IntakeFormId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Patient_IntakeForms",
+                        column: x => x.PatientId,
+                        principalSchema: "dbo",
+                        principalTable: "Patient",
+                        principalColumn: "PatientId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Question",
+                schema: "dbo",
+                columns: table => new
+                {
+                    QuestionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IntakeFormId = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(maxLength: 100, nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Question", x => x.QuestionId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_IntakeForm_Questions",
+                        column: x => x.IntakeFormId,
+                        principalSchema: "dbo",
+                        principalTable: "IntakeForm",
+                        principalColumn: "IntakeFormId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answer",
+                schema: "dbo",
+                columns: table => new
+                {
+                    AnswerId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(maxLength: 100, nullable: false),
+                    QuestionId = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answer", x => x.AnswerId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Questions_Answers",
+                        column: x => x.QuestionId,
+                        principalSchema: "dbo",
+                        principalTable: "Question",
+                        principalColumn: "QuestionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Agent_VendorId",
                 schema: "dbo",
                 table: "Agent",
                 column: "VendorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answer_QuestionId",
+                schema: "dbo",
+                table: "Answer",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IntakeForm_PatientId",
+                schema: "dbo",
+                table: "IntakeForm",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patient_AddressId",
@@ -256,6 +343,12 @@ namespace PR.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Question_IntakeFormId",
+                schema: "dbo",
+                table: "Question",
+                column: "IntakeFormId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserAccount_UserName",
                 schema: "dbo",
                 table: "UserAccount",
@@ -274,11 +367,11 @@ namespace PR.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Log",
+                name: "Answer",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Patient",
+                name: "Log",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -289,11 +382,23 @@ namespace PR.Data.Migrations
                 name: "Vendor");
 
             migrationBuilder.DropTable(
-                name: "Address",
+                name: "Question",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "UserAccount",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "IntakeForm",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Patient",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Address",
                 schema: "dbo");
         }
     }

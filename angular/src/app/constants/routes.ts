@@ -7,7 +7,7 @@ export const RouteUrls = {
   AgentCreateComponent: 'account/create/agent',
 
   PatientCreateComponent: 'agent/patient',
-  IntakeFormComponent: 'agent/intake-form',
+  IntakeFormComponent: 'agent/patient/:id/intake-form',
 
   PhysicianDashboardComponent: 'physician',
   PhysicianCreateComponent: 'account/create/physician',

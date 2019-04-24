@@ -24,7 +24,7 @@ export class HeartburnAcidRxOnlyComponent implements OnInit {
     });
   }
 
-  onSubmit(){
-    
+  onSubmit() {
+
   }
 }

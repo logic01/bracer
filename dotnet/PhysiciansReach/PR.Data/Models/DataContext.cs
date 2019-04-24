@@ -306,7 +306,7 @@ namespace PR.Data.Models
 
                 entity.HasOne(d => d.Patient)
                      .WithMany(p => p.IntakeForms)
-                     .HasForeignKey(b => b.IntakeFormId)
+                     .HasForeignKey(b => b.PatientId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Patient_IntakeForms");
             });
@@ -328,7 +328,7 @@ namespace PR.Data.Models
 
                 entity.HasOne(d => d.IntakeForm)
                      .WithMany(p => p.Questions)
-                     .HasForeignKey(b => b.QuestionId)
+                     .HasForeignKey(b => b.IntakeFormId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_IntakeForm_Questions");
             });
@@ -350,7 +350,7 @@ namespace PR.Data.Models
 
                 entity.HasOne(d => d.Question)
                      .WithMany(p => p.Answers)
-                     .HasForeignKey(b => b.AnswerId)
+                     .HasForeignKey(b => b.QuestionId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Questions_Answers");
             });

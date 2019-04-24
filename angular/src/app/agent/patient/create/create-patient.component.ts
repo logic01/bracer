@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
-import { RouteUrls } from 'src/app/constants/routes';
 import { Address } from 'src/app/models/address.model';
 import { Patient } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/api/patient.service';
@@ -77,7 +76,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       .post(patient)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newPatient: Patient) => {
-        this.router.navigateByUrl(RouteUrls.IntakeFormComponent);
+        this.router.navigate(['agent/patient/', newPatient.patientId, 'intake-form']);
       });
   }
 

@@ -11,6 +11,8 @@ namespace PR.Data.Models
 
         public string Text { get; set; }
 
+        public string Key { get; set; }
+
         public List<Answer> Answers { get; set; }
 
         public IntakeForm IntakeForm { get; set; }

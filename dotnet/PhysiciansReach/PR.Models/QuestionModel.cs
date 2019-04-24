@@ -9,6 +9,8 @@ namespace PR.Models
 
         public string Text { get; set; }
 
+        public string Key { get; set; }
+
         public List<AnswerModel> Answers { get; set; }
 
         public DateTime CreatedOn { get; set; }
