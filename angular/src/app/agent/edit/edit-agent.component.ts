@@ -1,16 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AgentService } from 'src/app/api/agent.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/agent.model';
-import { UserAccount } from 'src/app/models/user-account.model';
 import { Vendor } from 'src/app/models/vendor.model';
-import { VendorService } from 'src/app/api/vendor.service';
+import { AgentService } from 'src/app/services/api/agent.service';
+import { VendorService } from 'src/app/services/api/vendor.service';
 
 
 @Component({

@@ -9,8 +9,8 @@ namespace PR.Business.Interfaces
 
         AdminModel Get(int id);
 
-        AdminModel Create(AdminModel userModel);
+        AdminModel Create(AdminModel adminModel);
 
-        AdminModel Update(AdminModel userModel);
+        AdminModel Update(AdminModel adminModel);
     }
 }

@@ -5,8 +5,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../../constants/routes';
-import { PhysicianService } from 'src/app/api/physician.service';
 import { Physician } from 'src/app/models/physician.model';
+import { PhysicianService } from 'src/app/services/api/physician.service';
 
 
 @Component({

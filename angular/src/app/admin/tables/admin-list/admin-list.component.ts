@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AdminService } from 'src/app/api/admin.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Admin } from 'src/app/models/admin.model';
+import { AdminService } from 'src/app/services/api/admin.service';
 
 @Component({
   selector: 'app-admin-list',

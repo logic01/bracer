@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { PhysicianService } from 'src/app/api/physician.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Physician } from 'src/app/models/physician.model';
+import { PhysicianService } from 'src/app/services/api/physician.service';
 
 @Component({
   selector: 'app-physician-list',

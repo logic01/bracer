@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'https://bracer-dev.azurewebsites.net/api'
-  // api_url: 'https://localhost:44327'
+  api_url: 'https://localhost:44327'
 };
 
 /*

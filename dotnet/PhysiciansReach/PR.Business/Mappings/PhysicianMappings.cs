@@ -1,5 +1,6 @@
-﻿using PR.Models;
+﻿using PR.Constants.Enums;
 using PR.Data.Models;
+using PR.Models;
 
 namespace PR.Business.Mappings
 {
@@ -7,7 +8,7 @@ namespace PR.Business.Mappings
     {
         public static PhysicianModel ToModel(this Physician entity)
         {
-            PhysicianModel model = new PhysicianModel
+            var model = new PhysicianModel
             {
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
@@ -23,9 +24,9 @@ namespace PR.Business.Mappings
 
         public static Physician ToEntity(this PhysicianModel model)
         {
-            Physician entity = new Physician
+            var entity = new Physician
             {
-              
+
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
@@ -35,7 +36,7 @@ namespace PR.Business.Mappings
                 Address = model.Address.ToEntity()
             };
 
-            entity.UserAccount.Type = UserAccount.AccountType.Physician;
+            entity.UserAccount.Type = AccountType.Physician;
 
             return entity;
         }

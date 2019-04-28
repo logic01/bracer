@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { AccountType } from '../models/Enums/account.type.enum';
+import { AccountType } from '../models/enums/account-type.enum';
 
 @Injectable({
   providedIn: 'root'

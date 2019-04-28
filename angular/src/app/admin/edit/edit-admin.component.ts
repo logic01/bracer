@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../../constants/routes';
-import { AdminService } from 'src/app/api/admin.service';
 import { Admin } from 'src/app/models/admin.model';
+import { AdminService } from 'src/app/services/api/admin.service';
 
 @Component({
   selector: 'app-edit-admin',

@@ -2,33 +2,41 @@
 
   <mat-form-field>
     <input matInput placeholder="Company Name" type="text" formControlName="companyName">
-    <mat-error *ngIf="accountForm.get('companyName').hasError('required')">Please enter the company name.</mat-error>
+    <mat-error *ngIf="accountForm.get('companyName').hasError('required')">Please enter a value.</mat-error>
+    <mat-error *ngIf="accountForm.get('companyName').hasError('minlength')">Minimum of 2 characters.</mat-error>
+    <mat-error *ngIf="accountForm.get('companyName').hasError('maxlength')">Maximum of 100 characters.</mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <input matInput placeholder="Doing Business As" type="text" formControlName="doingBusinessAs">
-    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('required')">Please enter your the doing business as
-      name.
-    </mat-error>
+    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('required')">Please enter a value.</mat-error>
+    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('minlength')">Minimum of 2 characters.</mat-error>
+    <mat-error *ngIf="accountForm.get('doingBusinessAs').hasError('maxlength')">Maximum of 100 characters.</mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber">
-    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please enter the company phone number.
+    <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber"
+      [textMask]="{mask: maskService.phonenumber}">
+    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('required')">Please enter a valid phone number.
+    </mat-error>
+    <mat-error *ngIf="accountForm.get('phoneNumber').hasError('invalidPhoneNumber')">Please enter a valid phone number.
     </mat-error>
   </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>
       <input matInput placeholder="Contact First Name" type="text" formControlName="contactFirstName">
-      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('required')">Please enter your contact first name.
+      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('required')">Please enter a value.</mat-error>
+      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('minlength')">Minimum of 2 characters.</mat-error>
+      <mat-error *ngIf="accountForm.get('contactFirstName').hasError('maxlength')">Maximum of 100 characters.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <input matInput placeholder="Contact Last Name" type="text" formControlName="contactLastName">
-      <mat-error *ngIf="accountForm.get('contactLastName').hasError('required')">Please enter your contact last name.
-      </mat-error>
+      <mat-error *ngIf="accountForm.get('contactLastName').hasError('required')">Please enter a value.</mat-error>
+      <mat-error *ngIf="accountForm.get('contactLastName').hasError('minlength')">Minimum of 2 characters.</mat-error>
+      <mat-error *ngIf="accountForm.get('contactLastName').hasError('maxlength')">Maximum of 100 characters.</mat-error>
     </mat-form-field>
   </div>
 

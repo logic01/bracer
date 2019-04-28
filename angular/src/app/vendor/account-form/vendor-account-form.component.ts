@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { VendorService } from 'src/app/api/vendor.service';
-import { Router } from '@angular/router';
-import { Vendor } from 'src/app/models/vendor.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Observable } from 'rxjs';
+
+import { Vendor } from 'src/app/models/vendor.model';
+import { MaskService } from 'src/app/services/mask.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-vendor-account-form',
@@ -17,15 +19,15 @@ export class VendorAccountFormComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor() { }
+  constructor(public readonly maskService: MaskService) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      companyName: new FormControl('', Validators.required),
-      doingBusinessAs: new FormControl('', Validators.required),
-      phoneNumber: new FormControl('', Validators.required),
-      contactFirstName: new FormControl('', Validators.required),
-      contactLastName: new FormControl('', Validators.required),
+      companyName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      doingBusinessAs: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      phoneNumber: new FormControl('', [Validators.required, CustomValidators.phonenumber]),
+      contactFirstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      contactLastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
     });
 
     // populate form if we have a vendor bound to the form

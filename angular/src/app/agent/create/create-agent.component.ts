@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AgentService } from 'src/app/api/agent.service';
-import { VendorService } from 'src/app/api/vendor.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/agent.model';
 import { Vendor } from 'src/app/models/vendor.model';
+import { AgentService } from 'src/app/services/api/agent.service';
+import { VendorService } from 'src/app/services/api/vendor.service';
 
 @Component({
   selector: 'app-create-agent',

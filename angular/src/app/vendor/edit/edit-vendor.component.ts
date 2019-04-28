@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from 'src/app/constants/routes';
-import { Subject, Observable } from 'rxjs';
 import { Vendor } from 'src/app/models/vendor.model';
-import { VendorService } from 'src/app/api/vendor.service';
-import { takeUntil } from 'rxjs/operators';
+import { VendorService } from 'src/app/services/api/vendor.service';
 
 @Component({
   selector: 'app-edit-vendor',

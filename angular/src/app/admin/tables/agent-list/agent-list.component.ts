@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AgentService } from 'src/app/api/agent.service';
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/Agent.model';
+import { AgentService } from 'src/app/services/api/agent.service';
 
 @Component({
   selector: 'app-agent-list',

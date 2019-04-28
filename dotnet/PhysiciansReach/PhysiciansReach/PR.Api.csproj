@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>1e19294f-05eb-40b5-b830-acfbd5e1e090</UserSecretsId>
+    <Description>Physicians Reach API</Description>
   </PropertyGroup>
 
   <ItemGroup>

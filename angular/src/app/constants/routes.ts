@@ -2,9 +2,12 @@ export const RouteUrls = {
   LoginComponent: 'login',
 
   AgentDashboardComponent: 'agent',
-  AgentOrderComponent: 'agent/order',
+
   AgentEditComponent: 'agent/edit/:id',
   AgentCreateComponent: 'account/create/agent',
+
+  PatientCreateComponent: 'agent/patient',
+  IntakeFormComponent: 'agent/patient/:id/intake-form',
 
   PhysicianDashboardComponent: 'physician',
   PhysicianCreateComponent: 'account/create/physician',

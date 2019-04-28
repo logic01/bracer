@@ -1,0 +1,44 @@
+<form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
+
+  <div mat-dialog-content fxLayout="column" fxLayoutGap="20px">
+    <mat-form-field>
+      <mat-select placeholder="Main pain area:" formControlName="mainPainArea">
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('mainPainArea').hasError('required')">Please select an area of pain
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout="column" fxLayoutGap="20px">
+      <mat-label>Have you ever had a brace for this area of pain?</mat-label>
+      <mat-radio-group formControlName="hadBraceBefore" fxLayout="row" fxLayoutGap="30px">
+        <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
+        <mat-radio-button value="false" color="primary"> No </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <mat-form-field>
+      <mat-select placeholder="Secondary pain area:" formControlName="secondPainArea">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div fxLayout="column" fxLayoutGap="20px">
+      <mat-label style="max-width: 300px">Our doctors offer different pain relief creams to help with your pain. If a
+        doctor believes it would help your problem would you be intersted in that if your insurance covers it?
+      </mat-label>
+      <mat-radio-group formControlName="painCream" fxLayout="row" fxLayoutGap="30px">
+        <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
+        <mat-radio-button value="false" color="primary"> No </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="accent" cdkFocusInitial>Ok</button>
+  </div>
+
+</form>

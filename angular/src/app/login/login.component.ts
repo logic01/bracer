@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { LoginService } from '../api/login.service';
 import { RouteUrls } from '../constants/routes';
-import { AccountType } from '../models/Enums/account.type.enum';
+import { AccountType } from '../models/enums/account-type.enum';
 import { UserAccount } from '../models/user-account.model';
+import { LoginService } from '../services/api/login.service';
 import { SessionService } from '../services/session.service';
 
 @Component({

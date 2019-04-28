@@ -1,0 +1,31 @@
+
+physician dashboard-> intake form -> patient information, name of form.
+
+intake (scan) sign -> form 1 , sign -> form 2, sign
+
+* docusign type interface
+
+ability to enable/disable agents
+
+Ion2018!
+
+orders -> status -> open/closed
+
+vendor -> agent -> order -> documents
+
+mechanism for admins to close orders after they do a manual verification process.
+
+per vendor patient list billing report (open closed) (maybe both)
+billed/paid next to paintent 
+
+
+physician report in admin (documents paid)
+
+DME NOT DMA!
+
+1) Agent add-patient order form partial complete
+2) Each Tab is it's own Intake Form / Physcian Document for signature.
+3) Pain Image (Drop Down or Image?)
+4) 
+	a) once the physic signs (form complete) 
+	b) the forms need to be emailed to DME or Pharmacy (send email)

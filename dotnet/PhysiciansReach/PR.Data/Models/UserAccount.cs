@@ -1,17 +1,10 @@
-﻿using System;
+﻿using PR.Constants.Enums;
+using System;
 
 namespace PR.Data.Models
 {
     public class UserAccount
     {
-        public enum AccountType
-        {
-            Admin = 0,
-            Agent = 1,
-            Physician = 2,
-            None = 10
-        }
-
         public int UserAccountId { get; set; }
 
         public AccountType Type { get; set; }

@@ -20,6 +20,6 @@ namespace PR.Models
 
         public DateTime ModifiedOn { get; set; }
 
-        public ErrorModel error { get; set; }
+        public ErrorModel Error { get; set; }
     }
 }
