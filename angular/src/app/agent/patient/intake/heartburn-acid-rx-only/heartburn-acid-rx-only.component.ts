@@ -67,34 +67,38 @@ export class HeartburnAcidRxOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], [this.form.controls['q1'].value, this.form.controls['q1_other'].value]);
+    this.addAnswer(this.questions[0], this.form.controls['q1'].value);
+    this.addAnswer(this.questions[0], this.form.controls['q1_other'].value);
 
-    this.addAnswer(
-      this.questions[1],
-      [
-        this.form.controls['q2_1'].value,
-        this.form.controls['q2_2'].value,
-        this.form.controls['q2_3'].value,
-        this.form.controls['q2_4'].value,
-        this.form.controls['q2_other'].value
-      ]
-    );
+    // Question 4
+    if (this.form.controls['q2_1'].value === true) {
+      this.addAnswer(this.questions[1], 'Diet Changes');
+    }
+    if (this.form.controls['q2_2'].value === true) {
+      this.addAnswer(this.questions[1], 'OTC Meds');
+    }
+    if (this.form.controls['q2_3'].value === true) {
+      this.addAnswer(this.questions[1], 'Prescribed Meds');
+    }
+    if (this.form.controls['q2_4'].value === true) {
+      this.addAnswer(this.questions[1], 'Rest');
+    }
+    if (this.form.controls['q2_other'].value) {
+      this.addAnswer(this.questions[1], this.form.controls['q2_other'].value);
+    }
 
     const intake = new IntakeForm();
-    intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
+    intake.intakeFormType = IntakeFormType.HeartburnAcidRxOnly;
     intake.questions = this.questions;
     intake.patientId = this.patientId;
 
     return intake;
   }
 
-  addAnswer(question: Question, values: string[]) {
-
-    values.forEach(function (value) {
-      const answer = new Answer();
-      answer.text = value;
-      question.answers.push(answer);
-    });
+  addAnswer(question: Question, value: string) {
+    const answer = new Answer();
+    answer.text = value;
+    question.answers.push(answer);
   }
 
 }

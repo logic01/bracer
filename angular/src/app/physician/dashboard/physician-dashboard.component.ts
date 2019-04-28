@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { DocumentService } from 'src/app/services/api/document.service';
+import { Document } from '../../models/document.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -7,36 +12,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PhysicianDashboardComponent implements OnInit {
 
-  columnsToDisplay = ['documentId', 'userName', 'firstName', 'lastName', 'view'];
+  private unsubscribe$ = new Subject();
 
-  data = [
-    {
-      documentId: '1001',
-      userName: 'bpohl',
-      firstName: 'brandon',
-      lastName: 'pohl',
-      view: 'true'
-    },
-    {
-      documentId: '1002',
-      userName: 'lpohl',
-      firstName: 'leabeth',
-      lastName: 'pohl',
-      view: 'true'
-    },
-    {
-      documentId: '1003',
-      userName: 'lpohl',
-      firstName: 'leabeth',
-      lastName: 'pohl',
-      view: 'true'
-    }
-  ];
+  physicianId = '1';
+  columnsToDisplay = ['documentId'];
 
-  constructor() { }
+  documents: Document[];
+
+  constructor(
+    private readonly documentApi: DocumentService,
+    private readonly router: Router) { }
 
   ngOnInit() {
-    // renderRows() - to update table
+
+
+    this.documentApi
+      .get(this.physicianId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((documentList: Document[]) => {
+        this.documents = documentList;
+      });
   }
 
   view(id: number) {

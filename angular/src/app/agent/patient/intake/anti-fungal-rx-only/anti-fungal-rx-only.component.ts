@@ -56,10 +56,10 @@ export class AntiFungalRxOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], [this.form.controls['q1'].value]);
-    this.addAnswer(this.questions[1], [this.form.controls['q2'].value]);
-    this.addAnswer(this.questions[2], [this.form.controls['q3'].value]);
-    this.addAnswer(this.questions[3], [this.form.controls['q4'].value]);
+    this.addAnswer(this.questions[0], this.form.controls['q1'].value);
+    this.addAnswer(this.questions[1], this.form.controls['q2'].value);
+    this.addAnswer(this.questions[2], this.form.controls['q3'].value);
+    this.addAnswer(this.questions[3], this.form.controls['q4'].value);
 
     const intake = new IntakeForm();
     intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
@@ -78,13 +78,10 @@ export class AntiFungalRxOnlyComponent implements OnInit {
     return question;
   }
 
-  addAnswer(question: Question, values: string[]) {
-
-    values.forEach(function (value) {
-      const answer = new Answer();
-      answer.text = value;
-      question.answers.push(answer);
-    });
+  addAnswer(question: Question, value: string) {
+    const answer = new Answer();
+    answer.text = value;
+    question.answers.push(answer);
   }
 
 }

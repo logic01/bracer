@@ -78,31 +78,28 @@ export class GeneralDmeOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], [this.form.controls['q1'].value]);
-    this.addAnswer(this.questions[1], [this.form.controls['q2'].value]);
-    this.addAnswer(this.questions[2], [this.form.controls['q3'].value]);
-    this.addAnswer(this.questions[3], [this.form.controls['q4'].value]);
-    this.addAnswer(this.questions[4], [this.form.controls['q5'].value]);
-    this.addAnswer(this.questions[5], [this.form.controls['q6'].value]);
-    this.addAnswer(this.questions[6], [this.form.controls['q7'].value]);
-    this.addAnswer(this.questions[7], [this.form.controls['q8'].value]);
-    this.addAnswer(this.questions[8], [this.form.controls['q9'].value]);
-    this.addAnswer(this.questions[9], [this.form.controls['q10'].value]);
+    this.addAnswer(this.questions[0], this.form.controls['q1'].value);
+    this.addAnswer(this.questions[1], this.form.controls['q2'].value);
+    this.addAnswer(this.questions[2], this.form.controls['q3'].value);
+    this.addAnswer(this.questions[3], this.form.controls['q4'].value);
+    this.addAnswer(this.questions[4], this.form.controls['q5'].value);
+    this.addAnswer(this.questions[5], this.form.controls['q6'].value);
+    this.addAnswer(this.questions[6], this.form.controls['q7'].value);
+    this.addAnswer(this.questions[7], this.form.controls['q8'].value);
+    this.addAnswer(this.questions[8], this.form.controls['q9'].value);
+    this.addAnswer(this.questions[9], this.form.controls['q10'].value);
 
     const intake = new IntakeForm();
-    intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
+    intake.intakeFormType = IntakeFormType.GeneralDmeOnly;
     intake.questions = this.questions;
     intake.patientId = this.patientId;
 
     return intake;
   }
 
-  addAnswer(question: Question, values: string[]) {
-
-    values.forEach(function (value) {
-      const answer = new Answer();
-      answer.text = value;
-      question.answers.push(answer);
-    });
+  addAnswer(question: Question, value: string) {
+    const answer = new Answer();
+    answer.text = value;
+    question.answers.push(answer);
   }
 }

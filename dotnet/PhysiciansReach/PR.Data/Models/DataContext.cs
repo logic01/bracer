@@ -320,7 +320,7 @@ namespace PR.Data.Models
 
                 entity.HasKey(e => e.QuestionId).ForSqlServerIsClustered(false);
 
-                entity.Property(e => e.Text).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Text).IsRequired();
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
@@ -342,7 +342,7 @@ namespace PR.Data.Models
 
                 entity.HasKey(e => e.AnswerId).ForSqlServerIsClustered(false);
 
-                entity.Property(e => e.Text).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Text).IsRequired();
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 

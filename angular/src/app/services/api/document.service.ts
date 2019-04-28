@@ -11,19 +11,17 @@ import { Document } from '../../models/document.model';
 })
 export class DocumentService {
 
-  private url = `${environment.api_url}/document`;
-
   constructor(private http: HttpClient) { }
 
-  get() {
-    return this.http.get(this.url);
+  get(physicianId: string) {
+    return this.http.get(`${environment.api_url}/${physicianId}/document`);
   }
 
-  post(admin: Document): Observable<Document> {
-    return this.http.post<Document>(this.url, admin);
+  post(physicianId: string, document: Document): Observable<Document> {
+    return this.http.post<Document>(`${environment.api_url}/${physicianId}/document`, document);
   }
 
-  put(admin: Document): Observable<Document> {
-    return this.http.put<Document>(this.url, admin);
+  put(physicianId: string, document: Document): Observable<Document> {
+    return this.http.put<Document>(`${environment.api_url}/${physicianId}/document`, document);
   }
 }

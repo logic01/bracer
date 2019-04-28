@@ -99,66 +99,96 @@ export class PainRxOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], [this.form.controls['q1'].value]);
-    this.addAnswer(this.questions[1], [this.form.controls['q2'].value]);
-    this.addAnswer(this.questions[2], [this.form.controls['q3'].value]);
-    this.addAnswer(this.questions[3], [this.form.controls['q4'].value]);
-    this.addAnswer(
-      this.questions[4],
-      [
-        this.form.controls['q5_1'].value,
-        this.form.controls['q5_2'].value,
-        this.form.controls['q5_3'].value,
-        this.form.controls['q5_4'].value,
-        this.form.controls['q5_5'].value,
-        this.form.controls['q5_6'].value,
-        this.form.controls['q5_7'].value
-      ]
-    );
-    this.addAnswer(
-      this.questions[5],
-      [
-        this.form.controls['q6_1'].value,
-        this.form.controls['q6_2'].value,
-        this.form.controls['q6_3'].value,
-        this.form.controls['q6_4'].value,
-        this.form.controls['q6_5'].value,
-        this.form.controls['q6_6'].value,
-        this.form.controls['q6_7'].value
-      ]
-    );
-    this.addAnswer(
-      this.questions[6],
-      [
-        this.form.controls['q7_1'].value,
-        this.form.controls['q7_2'].value,
-        this.form.controls['q7_3'].value,
-        this.form.controls['q7_4'].value,
-        this.form.controls['q7_5'].value,
-        this.form.controls['q7_6'].value
-      ]
-    );
-    this.addAnswer(this.questions[7], [this.form.controls['q8'].value]);
-    this.addAnswer(this.questions[8], [this.form.controls['q9'].value]);
-    this.addAnswer(this.questions[9], [this.form.controls['q10'].value]);
-    this.addAnswer(this.questions[10], [this.form.controls['q11'].value]);
-    this.addAnswer(this.questions[11], [this.form.controls['q12'].value]);
+    this.addAnswer(this.questions[0], this.form.controls['q1'].value);
+    this.addAnswer(this.questions[1], this.form.controls['q2'].value);
+    this.addAnswer(this.questions[2], this.form.controls['q3'].value);
+    this.addAnswer(this.questions[3], this.form.controls['q4'].value);
+
+    // Question 5
+    if (this.form.controls['q5_1'].value === true) {
+      this.addAnswer(this.questions[4], 'Sharp/Stabbing');
+    }
+    if (this.form.controls['q5_2'].value === true) {
+      this.addAnswer(this.questions[4], 'Dull Ache');
+    }
+    if (this.form.controls['q5_3'].value === true) {
+      this.addAnswer(this.questions[4], 'Throbbing/Pulsating');
+    }
+    if (this.form.controls['q5_4'].value === true) {
+      this.addAnswer(this.questions[4], 'Stiffness/Tightness');
+    }
+    if (this.form.controls['q5_5'].value === true) {
+      this.addAnswer(this.questions[4], 'Weak feeling/Unstable');
+    }
+    if (this.form.controls['q5_6'].value === true) {
+      this.addAnswer(this.questions[4], 'Radiating/Traveling');
+    }
+    if (this.form.controls['q5_7'].value === true) {
+      this.addAnswer(this.questions[4], 'Pins & Needles');
+    }
+
+    // Question 6
+    if (this.form.controls['q6_1'].value === true) {
+      this.addAnswer(this.questions[5], 'Heat');
+    }
+    if (this.form.controls['q6_2'].value === true) {
+      this.addAnswer(this.questions[5], 'Ice');
+    }
+    if (this.form.controls['q6_3'].value === true) {
+      this.addAnswer(this.questions[5], 'Lying Down');
+    }
+    if (this.form.controls['q6_4'].value === true) {
+      this.addAnswer(this.questions[5], 'Rest');
+    }
+    if (this.form.controls['q6_5'].value === true) {
+      this.addAnswer(this.questions[5], 'Hot shower');
+    }
+    if (this.form.controls['q6_6'].value === true) {
+      this.addAnswer(this.questions[5], 'Medication');
+    }
+    if (this.form.controls['q6_7'].value === true) {
+      this.addAnswer(this.questions[5], 'Nothing Specific');
+    }
+
+    // Question 7
+    if (this.form.controls['q7_1'].value === true) {
+      this.addAnswer(this.questions[6], 'Standing/Sitting');
+    }
+    if (this.form.controls['q7_2'].value === true) {
+      this.addAnswer(this.questions[6], 'Bending/Stooping');
+    }
+    if (this.form.controls['q7_3'].value === true) {
+      this.addAnswer(this.questions[6], 'Twisting');
+    }
+    if (this.form.controls['q7_4'].value === true) {
+      this.addAnswer(this.questions[6], 'Walking');
+    }
+    if (this.form.controls['q7_5'].value === true) {
+      this.addAnswer(this.questions[6], 'Driving');
+    }
+    if (this.form.controls['q7_6'].value === true) {
+      this.addAnswer(this.questions[6], 'Lifting');
+    }
+
+    this.addAnswer(this.questions[7], this.form.controls['q8'].value);
+    this.addAnswer(this.questions[8], this.form.controls['q9'].value);
+    this.addAnswer(this.questions[9], this.form.controls['q10'].value);
+    this.addAnswer(this.questions[10], this.form.controls['q11'].value);
+    this.addAnswer(this.questions[11], this.form.controls['q12'].value);
 
     const intake = new IntakeForm();
-    intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
+    intake.intakeFormType = IntakeFormType.PainRxOnly;
     intake.questions = this.questions;
     intake.patientId = this.patientId;
 
     return intake;
   }
 
-  addAnswer(question: Question, values: string[]) {
+  addAnswer(question: Question, value: string) {
 
-    values.forEach(function (value) {
-      const answer = new Answer();
-      answer.text = value;
-      question.answers.push(answer);
-    });
+    const answer = new Answer();
+    answer.text = value;
+    question.answers.push(answer);
   }
 
 }
