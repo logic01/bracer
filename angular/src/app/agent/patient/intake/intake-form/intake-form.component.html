@@ -1,25 +1,25 @@
 <h3>Intake Survey</h3>
 <mat-tab-group>
   <mat-tab label="General (Rx Only)">
-    <app-general-rx-only></app-general-rx-only>
+    <app-general-rx-only (formSubmitEvent)="onSubmit($event)"></app-general-rx-only>
   </mat-tab>
   <mat-tab label="General (DME Only)">
-    <app-general-dme-only></app-general-dme-only>
+    <app-general-dme-only (formSubmitEvent)="onSubmit($event)"></app-general-dme-only>
   </mat-tab>
   <mat-tab label="General (DME & Rx)">
-    <app-general-dme-and-rx></app-general-dme-and-rx>
+    <app-general-dme-and-rx (formSubmitEvent)="onSubmit($event)"></app-general-dme-and-rx>
   </mat-tab>
   <mat-tab label="Pain (DME Only)">
     <app-pain-dme-only></app-pain-dme-only>
   </mat-tab>
   <mat-tab label="Pain (Rx Only)">
-    <app-pain-rx-only></app-pain-rx-only>
+    <app-pain-rx-only (formSubmitEvent)="onSubmit($event)"></app-pain-rx-only>
   </mat-tab>
   <mat-tab label="Scar (Rx Only)">
-    <app-scar-rx-only></app-scar-rx-only>
+    <app-scar-rx-only (formSubmitEvent)="onSubmit($event)"></app-scar-rx-only>
   </mat-tab>
   <mat-tab label="Heartburn / Acid Reflux (Rx Only)">
-    <app-heartburn-acid-rx-only></app-heartburn-acid-rx-only>
+    <app-heartburn-acid-rx-only (formSubmitEvent)="onSubmit($event)"></app-heartburn-acid-rx-only>
   </mat-tab>
   <mat-tab label="Rash / Skin (Rx Only)">
     <app-rash-skin-rx-only (formSubmitEvent)="onSubmit($event)"></app-rash-skin-rx-only>

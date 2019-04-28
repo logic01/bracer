@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IntakeForm } from 'src/app/models/intake-form.model';
+import { Question } from 'src/app/models/question.model';
+import { ActivatedRoute } from '@angular/router';
+import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
+import { Answer } from 'src/app/models/answer.model';
 
 @Component({
   selector: 'app-general-rx-only',
@@ -8,11 +13,22 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class GeneralRxOnlyComponent implements OnInit {
 
-  form: FormGroup;
+  @Output() formSubmitEvent = new EventEmitter<IntakeForm>();
 
-  constructor() { }
+  form: FormGroup;
+  patientId: string;
+  questions: Question[] = [];
+
+  constructor(private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.patientId = this.route.snapshot.paramMap.get('id');
+
+    this.initQuestions();
+    this.initForm();
+  }
+
+  initForm() {
     this.form = new FormGroup({
       q1: new FormControl('', Validators.required),
       q2: new FormControl('', Validators.required),
@@ -32,10 +48,84 @@ export class GeneralRxOnlyComponent implements OnInit {
       q16: new FormControl('', Validators.required),
       q17: new FormControl('', Validators.required)
     });
-
   }
 
-  onSubmit(){
-    
+  initQuestions() {
+
+    this.questions.push(this.initQuestion('1', 'How tall are you?'));
+    this.questions.push(this.initQuestion('2', 'How much do you weigh?'));
+    this.questions.push(this.initQuestion('3', 'Location of pain?'));
+    this.questions.push(this.initQuestion('4', 'What current medications are you taking?'));
+    this.questions.push(this.initQuestion('5', 'Do you have any allergies?'));
+    this.questions.push(this.initQuestion('6', 'Recent medical issues related to heart, liver, or kidneys?'));
+    this.questions.push(this.initQuestion('7', 'Do you get migraine or sinus headaches?'));
+    this.questions.push(this.initQuestion('8', 'Do you have any rashes or scars on your body?'));
+    this.questions.push(this.initQuestion('9', 'Do you have chronic heartburn or acid reflux?'));
+    this.questions.push(this.initQuestion('10', 'Do you experience dry mouth?'));
+    this.questions.push(this.initQuestion('11', 'Are you diabetic?'));
+    this.questions.push(this.initQuestion('12', 'Do you take oral or insulin to treat diabetes?'));
+    this.questions.push(this.initQuestion('13', 'Have you seen a doctor in the last 12 months?'));
+    this.questions.push(this.initQuestion('14', 'Have you had a liver test or liver function test?'));
+    this.questions.push(this.initQuestion('15', 'Do you have a history of coronary heart disease?'));
+    this.questions.push(this.initQuestion('16', `Have you in the past or currently have a fungal infection such as athlete's foot or general fungus between your toes?`));
+    this.questions.push(this.initQuestion('17', 'Do you suffer from any of the following fungal infections of the skin?'));
   }
+
+  initQuestion(key: string, text: string): Question {
+    const question = new Question();
+    question.key = key;
+    question.text = text;
+    question.answers = [];
+
+    return question;
+  }
+
+  onSubmit() {
+
+    if (!this.form.valid) {
+      return;
+    }
+
+    const intakeForm = this.buildIntake();
+
+    this.formSubmitEvent.emit(intakeForm);
+  }
+
+  buildIntake(): IntakeForm {
+
+    this.addAnswer(this.questions[0], [this.form.controls['q1'].value]);
+    this.addAnswer(this.questions[1], [this.form.controls['q2'].value]);
+    this.addAnswer(this.questions[2], [this.form.controls['q3'].value]);
+    this.addAnswer(this.questions[3], [this.form.controls['q4'].value]);
+    this.addAnswer(this.questions[4], [this.form.controls['q5'].value]);
+    this.addAnswer(this.questions[5], [this.form.controls['q6'].value]);
+    this.addAnswer(this.questions[6], [this.form.controls['q7'].value]);
+    this.addAnswer(this.questions[7], [this.form.controls['q8'].value]);
+    this.addAnswer(this.questions[8], [this.form.controls['q9'].value]);
+    this.addAnswer(this.questions[9], [this.form.controls['q10'].value]);
+    this.addAnswer(this.questions[10], [this.form.controls['q11'].value]);
+    this.addAnswer(this.questions[11], [this.form.controls['q12'].value]);
+    this.addAnswer(this.questions[12], [this.form.controls['q13'].value]);
+    this.addAnswer(this.questions[13], [this.form.controls['q14'].value]);
+    this.addAnswer(this.questions[14], [this.form.controls['q15'].value]);
+    this.addAnswer(this.questions[15], [this.form.controls['q16'].value]);
+    this.addAnswer(this.questions[16], [this.form.controls['q17'].value]);
+
+    const intake = new IntakeForm();
+    intake.intakeFormType = IntakeFormType.AntiFungalRxOnly;
+    intake.questions = this.questions;
+    intake.patientId = this.patientId;
+
+    return intake;
+  }
+
+  addAnswer(question: Question, values: string[]) {
+
+    values.forEach(function (value) {
+      const answer = new Answer();
+      answer.text = value;
+      question.answers.push(answer);
+    });
+  }
+
 }

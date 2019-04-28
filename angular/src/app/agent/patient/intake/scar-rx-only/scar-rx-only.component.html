@@ -17,7 +17,7 @@
 
     <div fxLayout="column" fxLayoutGap="10px">
       <mat-label>3. What is the cause of your scar?</mat-label>
-      <mat-radio-group formControlName="q3" (change)="q3_change()" fxLayout="row" fxLayoutGap="10px">
+      <mat-radio-group formControlName="q3" (change)="q3_change($event)" fxLayout="row" fxLayoutGap="10px">
         <mat-radio-button value="accident_injury" color="primary"> Accident/Injury </mat-radio-button>
         <mat-radio-button value="surgery" color="primary"> Surgery </mat-radio-button>
         <mat-radio-button value="eczema" color="primary"> Eczema </mat-radio-button>
