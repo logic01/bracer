@@ -6,6 +6,7 @@ import { map, take } from 'rxjs/operators';
 
 import { RouteUrls } from '../constants/routes';
 import { AccountType } from '../models/enums/account-type.enum';
+import { UserAccount } from '../models/user-account.model';
 import { SessionService } from './session.service';
 
 @Injectable({
@@ -22,12 +23,12 @@ export class RoleGuardService implements CanActivate {
 
     const expectedRole = next.data.expectedRole as AccountType;
 
-    return this.session.accountType$
+    return this.session.userAccount$
       .pipe(
         take(1),
-        map((type: AccountType) => {
+        map((account: UserAccount) => {
 
-          if (type === expectedRole) {
+          if (account.type === expectedRole) {
             return true;
           }
 

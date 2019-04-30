@@ -30,6 +30,8 @@ namespace PR.Data.Models
 
         public DbSet<Answer> Answer { get; set; }
 
+        public DbSet<Document> Document { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             UserAccountBuilder(modelBuilder);
@@ -42,6 +44,7 @@ namespace PR.Data.Models
             IntakeFormBuilder(modelBuilder);
             QuestionBuilder(modelBuilder);
             AnswerBuilder(modelBuilder);
+            DocumentBuilder(modelBuilder);
         }
 
         protected void UserAccountBuilder(ModelBuilder modelBuilder)
@@ -353,6 +356,38 @@ namespace PR.Data.Models
                      .HasForeignKey(b => b.QuestionId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Questions_Answers");
+            });
+        }
+
+        protected void DocumentBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Document>(entity =>
+            {
+                entity.ToTable("Document", "dbo");
+
+                entity.Property(e => e.Type).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.HasKey(e => e.DocumentId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.IntakeForm)
+                     .WithMany(p => p.Documents)
+                     .HasForeignKey(b => b.IntakeFormId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_IntakeForm_Documents");
+
+                entity.HasOne(d => d.Physician)
+                     .WithMany(p => p.Documents)
+                     .HasForeignKey(b => b.PhysicianId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Physician_Documents");
             });
         }
     }

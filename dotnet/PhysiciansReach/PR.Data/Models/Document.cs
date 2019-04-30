@@ -1,9 +1,9 @@
 ﻿using PR.Constants.Enums;
 using System;
 
-namespace PR.Models
+namespace PR.Data.Models
 {
-    public class DocumentModel
+    public class Document
     {
         public int DocumentId { get; set; }
 
@@ -22,5 +22,9 @@ namespace PR.Models
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public IntakeForm IntakeForm { get; set; }
+
+        public Physician Physician { get; set; }
     }
 }

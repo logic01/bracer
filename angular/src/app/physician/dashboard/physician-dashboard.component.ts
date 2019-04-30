@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { DocumentService } from 'src/app/services/api/document.service';
-import { Document } from '../../models/document.model';
+
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Document } from '../../models/document.model';
+import { UserAccount } from 'src/app/models/user-account.model';
+import { DocumentService } from 'src/app/services/api/document.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -15,23 +19,28 @@ export class PhysicianDashboardComponent implements OnInit {
   private unsubscribe$ = new Subject();
 
   physicianId = '1';
-  columnsToDisplay = ['documentId'];
+  columnsToDisplay = ['documentId', 'type', 'status'];
 
   documents: Document[];
 
   constructor(
+    private readonly session: SessionService,
     private readonly documentApi: DocumentService,
     private readonly router: Router) { }
 
   ngOnInit() {
 
+    this.session.userAccount$.subscribe((account: UserAccount) => {
 
-    this.documentApi
-      .get(this.physicianId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((documentList: Document[]) => {
-        this.documents = documentList;
-      });
+      this.documentApi
+        .getAll(account.userId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((documentList: Document[]) => {
+          this.documents = documentList;
+        });
+
+    });
+
   }
 
   view(id: number) {

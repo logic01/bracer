@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PR.Data.Models
 {
@@ -21,5 +22,7 @@ namespace PR.Data.Models
         public UserAccount UserAccount { get; set; }
 
         public Address Address { get; set; }
+
+        public List<Document> Documents { get; set; }
     }
 }

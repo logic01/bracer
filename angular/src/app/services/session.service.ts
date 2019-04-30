@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { AccountType } from '../models/enums/account-type.enum';
+import { UserAccount } from '../models/user-account.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-
-  public accountType$: BehaviorSubject<AccountType> = new BehaviorSubject<AccountType>(AccountType.None);
-
+  public userAccount$: BehaviorSubject<UserAccount> = new BehaviorSubject<UserAccount>(new UserAccount());
 }
