@@ -16,12 +16,11 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class PhysicianDashboardComponent implements OnInit {
 
+  columnsToDisplay = ['documentId', 'type', 'status', 'sign'];
+
+  data: Document[];
+
   private unsubscribe$ = new Subject();
-
-  physicianId = '1';
-  columnsToDisplay = ['documentId', 'type', 'status'];
-
-  documents: Document[];
 
   constructor(
     private readonly session: SessionService,
@@ -36,7 +35,7 @@ export class PhysicianDashboardComponent implements OnInit {
         .getByPhysician(account.userAccountId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((documentList: Document[]) => {
-          this.documents = documentList;
+          this.data = documentList;
         });
 
     });
