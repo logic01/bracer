@@ -19,38 +19,18 @@ namespace PhysiciansReach.Controllers
         }
 
         [HttpGet("Physician/{physicianId}/Document")]
-        public ActionResult<List<DocumentModel>> Get(int physicianId)
+        public ActionResult<List<DocumentModel>> GetByPhysician(int physicianId)
         {
             _logging.Log(LogSeverity.Info, "Get All Document");
-            return _business.Get(physicianId);
+            return _business.GetByPhysician(physicianId);
         }
 
-        [HttpGet("Physician/{physicianId}/Document/{documentId}")]
-        public ActionResult<DocumentModel> Get(int physicianId, int documentId)
+        [HttpGet("Document/{documentId}")]
+        public ActionResult<DocumentModel> Get(int documentId)
         {
             _logging.Log(LogSeverity.Info, "Get Document");
-            return _business.Get(physicianId, documentId);
+            return _business.Get(documentId);
         }
 
-        [HttpPost("Physician/{physicianId}/Document/")]
-        public ActionResult<DocumentModel> Post(int physicianId, [FromBody] DocumentModel document)
-        {
-            _logging.Log(LogSeverity.Info, "Post Document");
-
-            document.PhysicianId = physicianId;
-
-            return _business.Create(document);
-        }
-
-        [HttpPut("Physician/{physicianId}/Document/{documentId}")]
-        public ActionResult<DocumentModel> Put(int physicianId, int documentId, [FromBody] DocumentModel document)
-        {
-            _logging.Log(LogSeverity.Info, "Put Document");
-
-            document.PhysicianId = physicianId;
-            document.DocumentId = documentId;
-
-            return _business.Update(document);
-        }
     }
 }

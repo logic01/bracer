@@ -5,9 +5,9 @@ namespace PR.Business.Interfaces
 {
     public interface IDocumentBusiness
     {
-        List<DocumentModel> Get(int physicianId);
+        List<DocumentModel> GetByPhysician(int physicianId);
 
-        DocumentModel Get(int physicianId, int documentId);
+        DocumentModel Get(int documentId);
 
         DocumentModel Create(DocumentModel adminModel);
 

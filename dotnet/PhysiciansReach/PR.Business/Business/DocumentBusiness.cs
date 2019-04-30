@@ -16,7 +16,7 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<DocumentModel> Get(int physicianId)
+        public List<DocumentModel> GetByPhysician(int physicianId)
         {
             return _context.Document
                     .Where(d => d.PhysicianId == physicianId)
@@ -24,14 +24,13 @@ namespace PR.Business
                     .ToList();
         }
 
-        public DocumentModel Get(int physicianId, int documentId)
+        public DocumentModel Get(int documentId)
         {
-            var document = _context.Document.FirstOrDefault(u => u.PhysicianId == physicianId && u.DocumentId == documentId);
+            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
 
             return document.ToModel();
         }
-
-
+        
         public DocumentModel Create(DocumentModel documentModel)
         {
             var document = documentModel.ToEntity();
@@ -44,7 +43,7 @@ namespace PR.Business
 
         public DocumentModel Update(DocumentModel documentModel)
         {
-            var document = _context.Document.FirstOrDefault(u => u.PhysicianId == documentModel.PhysicianId && u.DocumentId == documentModel.DocumentId);
+            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
 
             document = documentModel.ToEntity();
             _context.Document.Add(document);

@@ -33,7 +33,7 @@ export class PhysicianDashboardComponent implements OnInit {
     this.session.userAccount$.subscribe((account: UserAccount) => {
 
       this.documentApi
-        .getAll(account.userId)
+        .getByPhysician(account.userAccountId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((documentList: Document[]) => {
           this.documents = documentList;

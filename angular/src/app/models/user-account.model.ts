@@ -2,7 +2,7 @@ import { AccountType } from './enums/account-type.enum';
 import { ErrorModel } from './error.model';
 
 export class UserAccount {
-    userId: string;
+    userAccountId: string;
     type: AccountType;
     userName: string;
     password: string;
