@@ -47,6 +47,26 @@ namespace PR.Data.Models
             DocumentBuilder(modelBuilder);
         }
 
+        protected void LogBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("Log", "dbo");
+
+                entity.Property(e => e.Severity).IsRequired().HasMaxLength(100).HasConversion<string>();
+
+                entity.HasKey(e => e.LogId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.Property(e => e.StackTrace).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+            });
+        }
+
         protected void UserAccountBuilder(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserAccount>(entity =>
@@ -259,6 +279,12 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
+                entity.HasOne(d => d.Agent)
+                     .WithMany(p => p.Patients)
+                     .HasForeignKey(b => b.AgentId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_Agent");
+
                 entity.HasOne(d => d.Address)
                      .WithOne(p => p.Patient)
                      .HasForeignKey<Patient>(b => b.AddressId)
@@ -270,26 +296,6 @@ namespace PR.Data.Models
                      .HasForeignKey<Patient>(b => b.PhysiciansAddressId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Patient_Physicians_Address");
-            });
-        }
-
-        protected void LogBuilder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Log>(entity =>
-            {
-                entity.ToTable("Log", "dbo");
-
-                entity.Property(e => e.Severity).IsRequired().HasMaxLength(100).HasConversion<string>();
-
-                entity.HasKey(e => e.LogId).ForSqlServerIsClustered(false);
-
-                entity.Property(e => e.Message).IsRequired();
-
-                entity.Property(e => e.StackTrace).IsRequired();
-
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
             });
         }
 

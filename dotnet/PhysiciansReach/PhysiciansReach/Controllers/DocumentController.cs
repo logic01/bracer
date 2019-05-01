@@ -25,6 +25,14 @@ namespace PhysiciansReach.Controllers
             return _business.GetByPhysician(physicianId);
         }
 
+
+        [HttpGet("Vendor/{vendorId}/Document")]
+        public ActionResult<List<DocumentModel>> GetByVendor(int vendorId)
+        {
+            _logging.Log(LogSeverity.Info, "Get All Document");
+            return _business.GetByVendor(vendorId);
+        }
+
         [HttpGet("Document/{documentId}")]
         public ActionResult<DocumentModel> Get(int documentId)
         {

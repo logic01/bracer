@@ -10,6 +10,7 @@ namespace PR.Business.Mappings
             var model = new PatientModel
             {
                 PatientId = entity.PatientId,
+                AgentId = entity.AgentId,
                 Language = entity.Language,
                 Sex = entity.Sex,
                 BestTimeToCallBack = entity.BestTimeToCallBack,
@@ -42,6 +43,7 @@ namespace PR.Business.Mappings
             var entity = new Patient
             {
                 PatientId = model.PatientId,
+                AgentId = model.AgentId,
                 Language = model.Language,
                 Sex = model.Sex,
                 BestTimeToCallBack = model.BestTimeToCallBack,

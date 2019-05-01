@@ -36,19 +36,9 @@ namespace PR.Business
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
-            IntakeForm intakeForm = intakeFormModel.ToEntity();
+            var intakeForm = intakeFormModel.ToEntity();
             _context.IntakeForm.Add(intakeForm);
 
-           /* foreach (QuestionModel q in intakeFormModel.Questions)
-            {
-                _context.Question.Add(q.ToEntity());
-
-                foreach (AnswerModel a in q.Answers)
-                {
-                    _context.Answer.Add(a.ToEntity());
-                }
-            }
-            */
             _context.SaveChanges();
 
             return intakeForm.ToModel();

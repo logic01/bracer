@@ -16,6 +16,7 @@ import { PhysicianDashboardComponent } from './physician/dashboard/physician-das
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
+import { ViewVendorComponent } from './vendor/view/view-vendor.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -41,6 +42,7 @@ const routes: Routes = [
     // data: { expectedRole: AccountType.Admin }
   },
   { path: RouteUrls.VendorCreateComponent, component: CreateVendorComponent },
+  { path: RouteUrls.VendorViewComponent, component: ViewVendorComponent },
   { path: RouteUrls.AdminEditComponent, component: EditAdminComponent },
   { path: RouteUrls.AgentEditComponent, component: EditAgentComponent },
   { path: RouteUrls.PhysicianEditComponent, component: EditPhysicianComponent },

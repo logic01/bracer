@@ -261,6 +261,8 @@ namespace PR.Data.Migrations
 
                     b.Property<int>("AddressId");
 
+                    b.Property<int>("AgentId");
+
                     b.Property<string>("BestTimeToCallBack")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -348,6 +350,8 @@ namespace PR.Data.Migrations
 
                     b.HasIndex("AddressId")
                         .IsUnique();
+
+                    b.HasIndex("AgentId");
 
                     b.HasIndex("PhysiciansAddressId")
                         .IsUnique();
@@ -545,6 +549,11 @@ namespace PR.Data.Migrations
                         .WithOne("Patient")
                         .HasForeignKey("PR.Data.Models.Patient", "AddressId")
                         .HasConstraintName("FK_Patient_Address");
+
+                    b.HasOne("PR.Data.Models.Agent", "Agent")
+                        .WithMany("Patients")
+                        .HasForeignKey("AgentId")
+                        .HasConstraintName("FK_Patient_Agent");
 
                     b.HasOne("PR.Data.Models.Address", "PhysiciansAddress")
                         .WithOne("PatientsPhysician")

@@ -7,6 +7,8 @@ namespace PR.Business.Interfaces
     {
         List<DocumentModel> GetByPhysician(int physicianId);
 
+        List<DocumentModel> GetByVendor(int vendorId);
+
         DocumentModel Get(int documentId);
 
         DocumentModel Create(DocumentModel adminModel);

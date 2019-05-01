@@ -17,7 +17,7 @@ export class VendorListComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
 
-  public columnsToDisplay = ['vendorId', 'companyName', 'doingBusinessAs', 'phoneNumber', 'edit'];
+  public columnsToDisplay = ['vendorId', 'companyName', 'doingBusinessAs', 'phoneNumber', 'edit', 'view'];
 
   public data: Vendor[];
 
@@ -39,7 +39,11 @@ export class VendorListComponent implements OnInit, OnDestroy {
   }
 
   edit(id: number) {
-    this.router.navigate(['/vendor/edit', id]);
+    this.router.navigate(['/vendor', id, 'edit']);
+  }
+
+  view(id: number) {
+    this.router.navigate(['/vendor', id, 'view']);
   }
 
   add() {

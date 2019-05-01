@@ -24,13 +24,27 @@ namespace PR.Business
                     .ToList();
         }
 
+        public List<DocumentModel> GetByVendor(int vendorId)
+        {
+            var documents = from agent in _context.Agent
+                            join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
+                            join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
+                            join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
+                            where agent.VendorId == vendorId
+                            select document.ToModel();
+
+
+            return documents.ToList();
+        }
+
+
         public DocumentModel Get(int documentId)
         {
             var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
 
             return document.ToModel();
         }
-        
+
         public DocumentModel Create(DocumentModel documentModel)
         {
             var document = documentModel.ToEntity();

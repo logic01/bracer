@@ -19,5 +19,6 @@ export const RouteUrls = {
   AdminEditComponent: 'admin/edit/:id',
 
   VendorCreateComponent: 'admin/create/vendor',
-  VendorEditComponent: 'vendor/edit/:id'
+  VendorEditComponent: 'vendor/:id/edit',
+  VendorViewComponent: 'vendor/:id/view'
 };

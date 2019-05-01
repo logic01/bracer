@@ -17,6 +17,10 @@ export class DocumentService {
     return this.http.get<Document[]>(`${environment.api_url}/physician/${physicianId}/document`);
   }
 
+  getByVendor(vendorId: string): Observable<Document[]> {
+    return this.http.get<Document[]>(`${environment.api_url}/vendor/${vendorId}/document`);
+  }
+
   get(documentId: string): Observable<Document[]> {
     return this.http.get<Document[]>(`${environment.api_url}/document/${documentId}`);
   }

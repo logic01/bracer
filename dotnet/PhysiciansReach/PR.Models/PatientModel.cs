@@ -7,6 +7,8 @@ namespace PR.Models
     {
         public int PatientId { get; set; }
 
+        public int AgentId { get; set; }
+
         public LanguageType Language { get; set; }
 
         public SexType Sex { get; set; }
@@ -46,7 +48,7 @@ namespace PR.Models
         public string PhysiciansPhoneNumber { get; set; }
 
         public AddressModel PhysiciansAddress { get; set; }
- 
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
