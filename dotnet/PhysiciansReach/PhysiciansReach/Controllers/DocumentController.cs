@@ -25,7 +25,6 @@ namespace PhysiciansReach.Controllers
             return _business.GetByPhysician(physicianId);
         }
 
-
         [HttpGet("Vendor/{vendorId}/Document")]
         public ActionResult<List<DocumentModel>> GetByVendor(int vendorId)
         {
@@ -38,6 +37,19 @@ namespace PhysiciansReach.Controllers
         {
             _logging.Log(LogSeverity.Info, "Get Document");
             return _business.Get(documentId);
+        }
+
+        [HttpPut("Document/{documentId}")]
+        public ActionResult<DocumentModel> Put(int documentId, [FromBody] DocumentModel document)
+        {
+            _logging.Log(LogSeverity.Info, "Pu Document");
+
+            if (document.DocumentId != documentId)
+            {
+                throw new System.Exception("Invalid Request.");
+            }
+
+            return _business.Update(document);
         }
 
     }

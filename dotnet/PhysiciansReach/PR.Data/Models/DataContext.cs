@@ -392,6 +392,7 @@ namespace PR.Data.Models
                 entity.HasOne(d => d.Physician)
                      .WithMany(p => p.Documents)
                      .HasForeignKey(b => b.PhysicianId)
+                     .IsRequired(false)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Physician_Documents");
             });

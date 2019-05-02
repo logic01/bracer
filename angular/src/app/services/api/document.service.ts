@@ -21,7 +21,11 @@ export class DocumentService {
     return this.http.get<Document[]>(`${environment.api_url}/vendor/${vendorId}/document`);
   }
 
-  get(documentId: string): Observable<Document[]> {
-    return this.http.get<Document[]>(`${environment.api_url}/document/${documentId}`);
+  get(documentId: string): Observable<Document> {
+    return this.http.get<Document>(`${environment.api_url}/document/${documentId}`);
+  }
+
+  put(document: Document): Observable<Document> {
+    return this.http.put<Document>(`${environment.api_url}/document/${document.documentId}`, document);
   }
 }

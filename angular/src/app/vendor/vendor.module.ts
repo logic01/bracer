@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DesignModule } from '../design/design.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { VendorAccountFormComponent } from './account-form/vendor-account-form.component';
+import { AssignmentDialogComponent } from './assignment-dialog/assignment-dialog.component';
 import { CreateVendorComponent } from './create/create-vendor.component';
 import { EditVendorComponent } from './edit/edit-vendor.component';
 import { ViewVendorComponent } from './view/view-vendor.component';
@@ -14,13 +15,17 @@ import { ViewVendorComponent } from './view/view-vendor.component';
     EditVendorComponent,
     CreateVendorComponent,
     VendorAccountFormComponent,
-    ViewVendorComponent
+    ViewVendorComponent,
+    AssignmentDialogComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     DesignModule,
     PipesModule
+  ],
+  entryComponents: [
+    AssignmentDialogComponent
   ]
 })
 export class VendorModule { }

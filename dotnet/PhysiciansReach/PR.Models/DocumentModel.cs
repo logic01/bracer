@@ -9,7 +9,7 @@ namespace PR.Models
 
         public int IntakeFormId { get; set; }
 
-        public int PhysicianId { get; set; }
+        public int? PhysicianId { get; set; }
 
         public DocumentType Type { get; set; }
 

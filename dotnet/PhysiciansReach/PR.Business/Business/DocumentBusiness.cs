@@ -37,7 +37,6 @@ namespace PR.Business
             return documents.ToList();
         }
 
-
         public DocumentModel Get(int documentId)
         {
             var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
@@ -57,12 +56,16 @@ namespace PR.Business
 
         public DocumentModel Update(DocumentModel documentModel)
         {
+            // get original
             var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
 
-            document = documentModel.ToEntity();
-            _context.Document.Add(document);
+            // populate with model data
+            document = documentModel.MapToEntity(document);
+
+            // save
             _context.SaveChanges();
 
+            // return new
             return document.ToModel();
         }
 

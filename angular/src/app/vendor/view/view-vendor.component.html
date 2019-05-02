@@ -12,13 +12,6 @@
   <div fxLayout="column" fxLayoutGap="10px">
     <table mat-table class="mat-elevation-z8" [dataSource]="data">
 
-      <ng-container matColumnDef="billed">
-        <th mat-header-cell *matHeaderCellDef> Billed </th>
-        <td mat-cell *matCellDef="let result"> 
-            <mat-checkbox></mat-checkbox>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="documentId">
         <th mat-header-cell *matHeaderCellDef> ID </th>
         <td mat-cell *matCellDef="let result"> {{result.documentId}} </td>
@@ -26,12 +19,12 @@
 
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef> Type </th>
-        <td mat-cell *matCellDef="let result"> {{result.type}} </td>
+        <td mat-cell *matCellDef="let result"> {{result.type | documentType}} </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let result"> {{result.status}} </td>
+        <td mat-cell *matCellDef="let result"> {{result.status | documentStatus}} </td>
       </ng-container>
 
       <ng-container matColumnDef="sign">

@@ -11,8 +11,8 @@ namespace PR.Business.Interfaces
 
         DocumentModel Get(int documentId);
 
-        DocumentModel Create(DocumentModel adminModel);
+        DocumentModel Create(DocumentModel documentModel);
 
-        DocumentModel Update(DocumentModel adminModel);
+        DocumentModel Update(DocumentModel documentModel);
     }
 }
