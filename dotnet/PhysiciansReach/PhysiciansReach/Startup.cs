@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PR.Api.Configurations;
 using PR.Business;
 using PR.Business.Business;
 using PR.Business.Interfaces;
+using PR.Constants.Configurations;
 using PR.Data.Models;
 
 namespace PhysiciansReach
@@ -45,6 +45,7 @@ namespace PhysiciansReach
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             ConfigureDatabase(services);
+            ConfigureAppSettings(services);
             ConfigureDependecyInjection(services);
         }
 
@@ -55,6 +56,7 @@ namespace PhysiciansReach
 
             // Add our Config object so it can be injected
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +79,6 @@ namespace PhysiciansReach
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-
             var connection = Configuration.GetValue<string>("ConnectionStrings:PRContext");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
         }
@@ -93,6 +94,7 @@ namespace PhysiciansReach
             services.AddTransient<IPatientBusiness, PatientBusiness>();
             services.AddTransient<ILoggingBusiness, LoggingBusiness>();
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();
+            services.AddTransient<IEmailBusiness, EmailBusiness>();
         }
     }
 }

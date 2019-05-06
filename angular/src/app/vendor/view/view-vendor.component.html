@@ -27,6 +27,11 @@
         <td mat-cell *matCellDef="let result"> {{result.status | documentStatus}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="physicianName">
+        <th mat-header-cell *matHeaderCellDef> Physician's Name </th>
+        <td mat-cell *matCellDef="let result"> {{result.physicianName}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="sign">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let result" fxLayoutGap="10px">

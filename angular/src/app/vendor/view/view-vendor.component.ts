@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { MatDialog, MatTable } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
 import { forkJoin, Observable, Subject } from 'rxjs';
@@ -28,7 +28,9 @@ export class TableRow {
   templateUrl: './view-vendor.component.html',
   styleUrls: ['./view-vendor.component.scss']
 })
-export class ViewVendorComponent implements OnInit {
+export class ViewVendorComponent implements OnInit, OnDestroy {
+
+  @ViewChild(MatTable) table: MatTable<TableRow>;
 
   public vendor$: Observable<Vendor>;
   public physicians$: Observable<Physician[]>;
@@ -73,18 +75,34 @@ export class ViewVendorComponent implements OnInit {
 
             this.data.push(row);
           });
+
+          this.table.renderRows();
         }))
       .subscribe();
 
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
+
+
   getPhysicianName(physicianId: string, physicians: Physician[]): string {
+
     const physician = physicians.find(x => x.userAccount.userAccountId === physicianId);
 
-    return `${physician.firstName} ${physician.lastName}`;
+    if (physician) {
+      return `${physician.firstName} ${physician.lastName}`;
+    }
+
+    return '';
   }
 
   assign(documentId: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { documentId: documentId } });
+  }
+
+  email(documentId: string): void {
     const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { documentId: documentId } });
   }
 

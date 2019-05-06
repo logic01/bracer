@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
@@ -9,6 +9,7 @@ import { Document } from 'src/app/models/document.model';
 import { Physician } from 'src/app/models/physician.model';
 import { DocumentService } from 'src/app/services/api/document.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
+import { DocumentStatus } from 'src/app/models/enums/document-status.enum';
 
 export class AssignmentDialogData {
   documentId: string;
@@ -19,7 +20,8 @@ export class AssignmentDialogData {
   templateUrl: './assignment-dialog.component.html',
   styleUrls: ['./assignment-dialog.component.scss']
 })
-export class AssignmentDialogComponent implements OnInit {
+export class AssignmentDialogComponent implements OnInit, OnDestroy {
+
 
   public form: FormGroup;
   public physicians$: Observable<Physician[]>;
@@ -43,6 +45,11 @@ export class AssignmentDialogComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
+
+
   cancel(): void {
     this.dialogRef.close();
   }
@@ -57,6 +64,7 @@ export class AssignmentDialogComponent implements OnInit {
         flatMap((document: Document) => {
 
           document.physicianId = physicianId;
+          document.status = DocumentStatus.Assigned;
           return this.documentApi.put(document);
 
         }))

@@ -12,9 +12,6 @@ export class DocumentStatusPipe implements PipeTransform {
       case DocumentStatus.New: {
         return 'New';
       }
-      case DocumentStatus.Approved: {
-        return 'Approved';
-      }
       case DocumentStatus.Assigned: {
         return 'Assigned';
       }

@@ -1,7 +1,6 @@
 export enum DocumentStatus {
     New = 0,
-    Approved = 1,
-    Assigned = 2,
-    Signed = 3,
-    Closed = 4
+    Assigned = 1,
+    Signed = 2,
+    Closed = 3
 }
