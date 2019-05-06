@@ -4,7 +4,7 @@
 
     <mat-form-field>
       <input matInput placeholder="Email" type="text" formControlName="emailAddress">
-      <mat-error *ngIf="accountForm.get('emailAddress').hasError('required')">Please enter a value.</mat-error>
+      <mat-error *ngIf="form.get('emailAddress').hasError('required')">Please enter a value.</mat-error>
     </mat-form-field>
 
   </div>
