@@ -18,6 +18,8 @@ namespace PR.Data.Models
 
         public List<Question> Questions { get; set; }
 
+        public List<Document> Documents { get; set; }
+
         public Patient Patient { get; set; }
     }
 }

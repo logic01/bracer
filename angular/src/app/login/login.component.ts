@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
           return;
         }
 
-        this.session.accountType$.next(result.type);
+        this.session.userAccount$.next(result);
 
         if (result.type === AccountType.Admin) {
           this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);

@@ -8,6 +8,8 @@ namespace PR.Data.Models
     {
         public int PatientId { get; set; }
 
+        public int AgentId { get; set; }
+
         public LanguageType Language { get; set; }
 
         public SexType Sex { get; set; }
@@ -57,6 +59,8 @@ namespace PR.Data.Models
         public Address PhysiciansAddress { get; set; }
 
         public List<IntakeForm> IntakeForms { get; set; }
+
+        public Agent Agent { get; set; }
     }
 
 }

@@ -91,56 +91,6 @@ namespace PR.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Patient",
-                schema: "dbo",
-                columns: table => new
-                {
-                    PatientId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Language = table.Column<string>(maxLength: 100, nullable: false),
-                    Sex = table.Column<string>(maxLength: 100, nullable: false),
-                    Therapy = table.Column<string>(maxLength: 100, nullable: false),
-                    Insurance = table.Column<string>(maxLength: 100, nullable: false),
-                    Pharmacy = table.Column<string>(maxLength: 100, nullable: false),
-                    FirstName = table.Column<string>(maxLength: 100, nullable: false),
-                    MiddleName = table.Column<string>(maxLength: 100, nullable: true),
-                    LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
-                    CallBackImmediately = table.Column<bool>(nullable: false, defaultValue: true),
-                    BestTimeToCallBack = table.Column<string>(maxLength: 100, nullable: false),
-                    IsDme = table.Column<bool>(nullable: false, defaultValue: false),
-                    Medications = table.Column<string>(maxLength: 100, nullable: false),
-                    Notes = table.Column<string>(maxLength: 100, nullable: false),
-                    OtherProducts = table.Column<string>(maxLength: 100, nullable: false),
-                    PhysiciansName = table.Column<string>(maxLength: 10, nullable: false),
-                    PhysiciansPhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
-                    AddressId = table.Column<int>(nullable: false),
-                    PhysiciansAddressId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patient", x => x.PatientId)
-                        .Annotation("SqlServer:Clustered", false);
-                    table.ForeignKey(
-                        name: "FK_Patient_Address",
-                        column: x => x.AddressId,
-                        principalSchema: "dbo",
-                        principalTable: "Address",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Patient_Physicians_Address",
-                        column: x => x.PhysiciansAddressId,
-                        principalSchema: "dbo",
-                        principalTable: "Address",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Admin",
                 schema: "dbo",
                 columns: table => new
@@ -229,6 +179,64 @@ namespace PR.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Patient",
+                schema: "dbo",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AgentId = table.Column<int>(nullable: false),
+                    Language = table.Column<string>(maxLength: 100, nullable: false),
+                    Sex = table.Column<string>(maxLength: 100, nullable: false),
+                    Therapy = table.Column<string>(maxLength: 100, nullable: false),
+                    Insurance = table.Column<string>(maxLength: 100, nullable: false),
+                    Pharmacy = table.Column<string>(maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 100, nullable: false),
+                    MiddleName = table.Column<string>(maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(maxLength: 100, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
+                    CallBackImmediately = table.Column<bool>(nullable: false, defaultValue: true),
+                    BestTimeToCallBack = table.Column<string>(maxLength: 100, nullable: false),
+                    IsDme = table.Column<bool>(nullable: false, defaultValue: false),
+                    Medications = table.Column<string>(maxLength: 100, nullable: false),
+                    Notes = table.Column<string>(maxLength: 100, nullable: false),
+                    OtherProducts = table.Column<string>(maxLength: 100, nullable: false),
+                    PhysiciansName = table.Column<string>(maxLength: 10, nullable: false),
+                    PhysiciansPhoneNumber = table.Column<string>(maxLength: 10, nullable: false),
+                    AddressId = table.Column<int>(nullable: false),
+                    PhysiciansAddressId = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.PatientId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Patient_Address",
+                        column: x => x.AddressId,
+                        principalSchema: "dbo",
+                        principalTable: "Address",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Patient_Agent",
+                        column: x => x.AgentId,
+                        principalSchema: "dbo",
+                        principalTable: "Agent",
+                        principalColumn: "UserAccountId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Patient_Physicians_Address",
+                        column: x => x.PhysiciansAddressId,
+                        principalSchema: "dbo",
+                        principalTable: "Address",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IntakeForm",
                 schema: "dbo",
                 columns: table => new
@@ -254,6 +262,42 @@ namespace PR.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Document",
+                schema: "dbo",
+                columns: table => new
+                {
+                    DocumentId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IntakeFormId = table.Column<int>(nullable: false),
+                    PhysicianId = table.Column<int>(nullable: false),
+                    Type = table.Column<string>(maxLength: 100, nullable: false),
+                    Status = table.Column<string>(maxLength: 100, nullable: false),
+                    Content = table.Column<byte[]>(nullable: false),
+                    Signature = table.Column<byte[]>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Document", x => x.DocumentId)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_IntakeForm_Documents",
+                        column: x => x.IntakeFormId,
+                        principalSchema: "dbo",
+                        principalTable: "IntakeForm",
+                        principalColumn: "IntakeFormId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Physician_Documents",
+                        column: x => x.PhysicianId,
+                        principalSchema: "dbo",
+                        principalTable: "Physician",
+                        principalColumn: "UserAccountId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Question",
                 schema: "dbo",
                 columns: table => new
@@ -261,7 +305,8 @@ namespace PR.Data.Migrations
                     QuestionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IntakeFormId = table.Column<int>(nullable: false),
-                    Text = table.Column<string>(maxLength: 100, nullable: false),
+                    Text = table.Column<string>(nullable: false),
+                    Key = table.Column<string>(nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
                 },
@@ -285,7 +330,7 @@ namespace PR.Data.Migrations
                 {
                     AnswerId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Text = table.Column<string>(maxLength: 100, nullable: false),
+                    Text = table.Column<string>(nullable: false),
                     QuestionId = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getdate())")
@@ -316,6 +361,18 @@ namespace PR.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Document_IntakeFormId",
+                schema: "dbo",
+                table: "Document",
+                column: "IntakeFormId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Document_PhysicianId",
+                schema: "dbo",
+                table: "Document",
+                column: "PhysicianId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IntakeForm_PatientId",
                 schema: "dbo",
                 table: "IntakeForm",
@@ -327,6 +384,12 @@ namespace PR.Data.Migrations
                 table: "Patient",
                 column: "AddressId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patient_AgentId",
+                schema: "dbo",
+                table: "Patient",
+                column: "AgentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patient_PhysiciansAddressId",
@@ -363,11 +426,11 @@ namespace PR.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Agent",
+                name: "Answer",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Answer",
+                name: "Document",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -375,18 +438,11 @@ namespace PR.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Physician",
-                schema: "dbo");
-
-            migrationBuilder.DropTable(
-                name: "Vendor");
-
-            migrationBuilder.DropTable(
                 name: "Question",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "UserAccount",
+                name: "Physician",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -400,6 +456,17 @@ namespace PR.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Address",
                 schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Agent",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "UserAccount",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Vendor");
         }
     }
 }

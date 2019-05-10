@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PR.Data.Models
 {
@@ -19,5 +20,7 @@ namespace PR.Data.Models
         public UserAccount UserAccount { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        public List<Patient> Patients { get; set; }
     }
 }

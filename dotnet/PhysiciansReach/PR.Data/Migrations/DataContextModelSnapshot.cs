@@ -138,8 +138,7 @@ namespace PR.Data.Migrations
                     b.Property<int>("QuestionId");
 
                     b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                        .IsRequired();
 
                     b.HasKey("AnswerId")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -147,6 +146,49 @@ namespace PR.Data.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answer","dbo");
+                });
+
+            modelBuilder.Entity("PR.Data.Models.Document", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("IntakeFormId");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int?>("PhysicianId");
+
+                    b.Property<byte[]>("Signature");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("DocumentId")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("IntakeFormId");
+
+                    b.HasIndex("PhysicianId");
+
+                    b.ToTable("Document","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>
@@ -218,6 +260,8 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AddressId");
+
+                    b.Property<int>("AgentId");
 
                     b.Property<string>("BestTimeToCallBack")
                         .IsRequired()
@@ -307,6 +351,8 @@ namespace PR.Data.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
+                    b.HasIndex("AgentId");
+
                     b.HasIndex("PhysiciansAddressId")
                         .IsUnique();
 
@@ -371,8 +417,7 @@ namespace PR.Data.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                        .IsRequired();
 
                     b.HasKey("QuestionId")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -477,6 +522,19 @@ namespace PR.Data.Migrations
                         .HasConstraintName("FK_Questions_Answers");
                 });
 
+            modelBuilder.Entity("PR.Data.Models.Document", b =>
+                {
+                    b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
+                        .WithMany("Documents")
+                        .HasForeignKey("IntakeFormId")
+                        .HasConstraintName("FK_IntakeForm_Documents");
+
+                    b.HasOne("PR.Data.Models.Physician", "Physician")
+                        .WithMany("Documents")
+                        .HasForeignKey("PhysicianId")
+                        .HasConstraintName("FK_Physician_Documents");
+                });
+
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>
                 {
                     b.HasOne("PR.Data.Models.Patient", "Patient")
@@ -491,6 +549,11 @@ namespace PR.Data.Migrations
                         .WithOne("Patient")
                         .HasForeignKey("PR.Data.Models.Patient", "AddressId")
                         .HasConstraintName("FK_Patient_Address");
+
+                    b.HasOne("PR.Data.Models.Agent", "Agent")
+                        .WithMany("Patients")
+                        .HasForeignKey("AgentId")
+                        .HasConstraintName("FK_Patient_Agent");
 
                     b.HasOne("PR.Data.Models.Address", "PhysiciansAddress")
                         .WithOne("PatientsPhysician")

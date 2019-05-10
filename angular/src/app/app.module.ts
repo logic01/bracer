@@ -10,7 +10,9 @@ import { AppComponent } from './app.component';
 import { DesignModule } from './design/design.module';
 import { LoginModule } from './login/login.module';
 import { PhysicianModule } from './physician/physician.module';
+import { PipesModule } from './pipes/pipes.module';
 import { VendorModule } from './vendor/vendor.module';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { VendorModule } from './vendor/vendor.module';
     VendorModule,
     AdminModule,
     AgentModule,
-    PhysicianModule
+    PhysicianModule,
+    PipesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

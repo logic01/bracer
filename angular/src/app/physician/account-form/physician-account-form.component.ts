@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Address } from 'src/app/models/address.model';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
+import { FormatHelperService } from 'src/app/services/format-helper.service';
 import { MaskService } from 'src/app/services/mask.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -21,7 +22,11 @@ export class PhysicianAccountFormComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor(public readonly maskService: MaskService) { }
+  constructor(
+    public readonly maskService: MaskService,
+    public readonly formatHelper: FormatHelperService) {
+
+  }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
@@ -82,7 +87,7 @@ export class PhysicianAccountFormComponent implements OnInit {
 
     physician.firstName = this.accountForm.controls['firstName'].value;
     physician.lastName = this.accountForm.controls['lastName'].value;
-    physician.phoneNumber = this.accountForm.controls['phoneNumber'].value;
+    physician.phoneNumber = this.formatHelper.toNumbersOnly(this.accountForm.controls['phoneNumber'].value);
 
     physician.address.addressLineOne = this.accountForm.controls['addressLineOne'].value;
     physician.address.addressLineTwo = this.accountForm.controls['addressLineTwo'].value;
