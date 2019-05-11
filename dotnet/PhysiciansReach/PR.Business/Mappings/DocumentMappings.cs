@@ -12,7 +12,7 @@ namespace PR.Business.Mappings
                 DocumentId = entity.DocumentId,
                 PhysicianId = entity.PhysicianId,
                 IntakeFormId = entity.IntakeFormId,
-                Content = entity.Content,
+                Content = entity.Content, //Consider dropping this since it will be huge
                 Signature = entity.Signature,
                 Type = entity.Type,
                 Status = entity.Status,

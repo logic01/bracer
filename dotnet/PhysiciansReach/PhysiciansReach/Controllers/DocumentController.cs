@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
+using PR.Export;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
@@ -11,11 +13,13 @@ namespace PhysiciansReach.Controllers
     {
         private readonly IDocumentBusiness _business;
         private readonly ILoggingBusiness _logging;
+        private readonly IIntakeFormExporter _exporter;
 
-        public DocumentController(IDocumentBusiness business, ILoggingBusiness logging)
+        public DocumentController(IDocumentBusiness business, ILoggingBusiness logging, IIntakeFormExporter exporter)
         {
             _business = business;
             _logging = logging;
+            _exporter = exporter;
         }
 
         [HttpGet("Physician/{physicianId}/Document")]
@@ -50,6 +54,23 @@ namespace PhysiciansReach.Controllers
             }
 
             return _business.Update(document);
+        }
+
+        [HttpGet("Document/{documentId}/Download")]
+        public FileResult GetWord(int documentId)
+        {
+            var wordBytes = _exporter.CreateNewIntakeForm(new List<IntakeFormModel>
+            {
+                new IntakeFormModel
+                {
+                    IntakeFormId = 12
+                }
+            });
+            FileResult fr = new FileContentResult(wordBytes, "application/vnd.ms-word")
+            {
+                FileDownloadName = string.Format("Exam_{0}_{1}.docx", DateTime.Now.ToString("yyMMdd"), "Doc")
+            };
+            return fr;
         }
 
     }

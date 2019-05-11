@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PR.Data\PR.Data.csproj" />
+    <ProjectReference Include="..\PR.Export\PR.Export.csproj" />
     <ProjectReference Include="..\PR.Models\PR.Models.csproj" />
   </ItemGroup>
 
