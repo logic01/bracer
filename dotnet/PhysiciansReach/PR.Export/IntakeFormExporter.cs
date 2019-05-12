@@ -18,37 +18,26 @@ namespace PR.Export
 
     public class IntakeFormExporter : IIntakeFormExporter
     {
-        private const string ExamNote = "PR.Export.Documents.BLANK_EXAM_NOTE.docx";
-        private MemoryStream ExamNoteMemoryStream = new MemoryStream();
+        private const string ExamNote = "PR.Export.Documents.BLANK_EXAM_NOTE.docx";      
 
+        /// <summary>
+        /// Take all of the intake forms and replace the properties on the word doc, then append all of the
+        /// intake forms
+        /// </summary>
+        /// <param name="intakeForms"></param>
+        /// <returns></returns>
         public byte[] CreateNewIntakeForm(IList<IntakeFormFullModel> intakeForms)
         {
 
-            return UpdateReport(intakeForms);
-        }
+            var examNoteMemoryStream = LoadMemoryStream();
 
-
-        private byte[] UpdateReport(IList<IntakeFormFullModel> intakeForms)
-        {
-            LoadMemoryStream();
-
-            using (var doc = WordprocessingDocument.Open(ExamNoteMemoryStream, true))
+            using (var doc = WordprocessingDocument.Open(examNoteMemoryStream, true))
             {
-
-                //TODO TEST, I am pretty sure loading the values into InnerXml isn't correct, also I have only set it up for one
-                //intake form, there are a few more that need to be added
-                //TODO take all of the IntakeForms and loop over each individual add it's title and add them directly to the doc.
-                // I think that means I need to figure out how to create the elements I need. An example of how to handle the loop
                 var docBody = doc.MainDocumentPart.Document.Body;
 
                 // Create and add the character style with the style id, style name, and
                 // aliases specified.
-                var answerFormatStyleId = "AnswerStyleChar";
-                Color grayText = new Color() { Val = "888888" };
-                Formatting.CreateAndAddCharacterStyle(doc,
-                    answerFormatStyleId,
-                    "Answer Style Char",
-                    "Answer Gray", "AnswerStylePar", new List<OpenXmlElement> { grayText });
+                var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
 
                 //Create title and add the subsequent question answers
                 foreach (var intakeForm in intakeForms)
@@ -56,86 +45,143 @@ namespace PR.Export
 
                     if (intakeForm.IntakeFormType == IntakeFormType.PatientInfo)
                         continue;
-                    docBody.AppendChild(new Paragraph());
-
-                    var titleParagraph = CreateIntakeFormTitle(intakeForm.IntakeFormType);
-                    if (titleParagraph != null)
-                    {
-                        Formatting.AddNewStyle(doc, "PRTitle1", "PRTitle", titleParagraph);
-                        var paragraphProperties = titleParagraph.PrependChild(new ParagraphProperties());
-                        docBody.AppendChild(titleParagraph);
-                    }
-                    docBody.AppendChild(new Paragraph());
+                    AppendTitleForIntakeForm(doc, docBody, intakeForm);
 
                     var count = 1;
                     foreach (var question in intakeForm.Questions)
                     {
-                        var answerText = string.Join(',', question.Answers.Select(x => x.Text == "" ? "Not Applicable" : x.Text));
-                        var questionText = $"{count++}. {question.Text} ";
-                        var answerParagraph = new Paragraph(new Run(new Text(questionText) { Space = SpaceProcessingModeValues.Preserve }));
-                        var answerRun = answerParagraph.AppendChild<Run>(new Run(new Text(answerText) { Space = SpaceProcessingModeValues.Preserve }));
-
-                        // If the Run has no RunProperties object, create one.
-                        if (answerRun.Elements<RunProperties>().Count() == 0)
-                        {
-                            answerRun.PrependChild<RunProperties>(new RunProperties());
-                        }
-
-                        // Get a reference to the RunProperties.
-                        RunProperties rPr = answerRun.RunProperties;
-
-                        // Set the character style of the run.
-                        if (rPr.RunStyle == null)
-                            rPr.RunStyle = new RunStyle();
-                        rPr.RunStyle.Val = answerFormatStyleId;
-                        docBody.AppendChild(answerParagraph);
+                        count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
                     }
                     docBody.AppendChild(new Paragraph());
                 }
 
-                //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
-                var properties = doc.CustomFilePropertiesPart.Properties;
-                               
-                // Get all question's with a key, then gather the value as all answers comma delimited              
-                var intakeFromKeys = intakeForms.SelectMany(x => x.Questions.Where(r => !string.IsNullOrEmpty(r.Key)))
-                    .Select(y => new KeyValuePair<string, string>(y.Key, y.Answers.Select(z => z.Text).Aggregate((c, n) => $"{c},{n}"))).ToList();
-                intakeFromKeys.AddRange(GetPatientKeys(intakeForms.First().Patient));
-                
-                //This will update all of the custom properties that are used in the word doc.
-                //Again, the fields are update in the document settings, but the downloading user
-                //will need to approve the update for any fields.
-                foreach (var propertyEnum in Enum.GetValues(typeof(MappingEnums)))
-                {
-                    CustomDocumentProperty item = (CustomDocumentProperty)properties
-                        .FirstOrDefault(x => ((CustomDocumentProperty)x).Name.Value.Equals(propertyEnum.ToString()));
-                    if (item != null)
-                    {                       
-                        //If a key doesn't exist, you could see an empty value stuffed into the word doc
-                        var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString()).Value;                       
-                        item.VTLPWSTR = new VTLPWSTR(val);
-                    }
-                }
-
-                properties.Save();
-
-                //The docx is using Custom Properties and above we are updating the custom property values,
-                //however there is no way (that I have found) to programatically updated all of the fields
-                //that are using the custom properties without requiring the downloader to 
-                DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
-                UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
-                updateFields.Val = new DocumentFormat.OpenXml.OnOffValue(true);
-                settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
-                settingsPart.Settings.Save();
-                doc.Save();
+                UpdateValuesInWordDocsCustomProperties(intakeForms, doc);
 
             }
-            var result = ExamNoteMemoryStream.ToArray();
-            ExamNoteMemoryStream.Flush();
-            ExamNoteMemoryStream.Close();
+            var result = examNoteMemoryStream.ToArray();
+            examNoteMemoryStream.Flush();
+            examNoteMemoryStream.Close();
 
             return result;
         }
+      
+        /// <summary>
+        /// The field values in the word doc need to be update in the property settings object of the word doc. The questions
+        /// have 'keys' which we are using with MappingsEnum to know how update with the value from the IntakeForms. Then we
+        /// explicitly ask the user to verify the fields are to be updated when opening the word doc.
+        /// </summary>
+        /// <param name="intakeForms"></param>
+        /// <param name="doc"></param>
+        private void UpdateValuesInWordDocsCustomProperties(IList<IntakeFormFullModel> intakeForms, WordprocessingDocument doc)
+        {
+            //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
+            var properties = doc.CustomFilePropertiesPart.Properties;
 
+            // Get all question's with a key, then gather the value as all answers comma delimited              
+            var intakeFromKeys = intakeForms.SelectMany(x => x.Questions.Where(r => !string.IsNullOrEmpty(r.Key)))
+                .Select(y => new KeyValuePair<string, string>(y.Key, y.Answers.Select(z => z.Text).Aggregate((c, n) => $"{c},{n}"))).ToList();
+            intakeFromKeys.AddRange(GetPatientKeys(intakeForms.First().Patient));
+
+            //This will update all of the custom properties that are used in the word doc.
+            //Again, the fields are update in the document settings, but the downloading user
+            //will need to approve the update for any fields.
+            foreach (var propertyEnum in Enum.GetValues(typeof(MappingEnums)))
+            {
+                CustomDocumentProperty item = (CustomDocumentProperty)properties
+                    .FirstOrDefault(x => ((CustomDocumentProperty)x).Name.Value.Equals(propertyEnum.ToString()));
+                if (item != null)
+                {
+                    //If a key doesn't exist, you could see an empty value stuffed into the word doc
+                    var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString()).Value ?? "N/A";
+                    item.VTLPWSTR = new VTLPWSTR(val);
+                }
+            }
+
+            properties.Save();
+
+            //The docx is using Custom Properties and above we are updating the custom property values,
+            //however there is no way (that I have found) to programatically updated all of the fields
+            //that are using the custom properties without requiring the downloader to 
+            DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
+            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
+            updateFields.Val = new DocumentFormat.OpenXml.OnOffValue(true);
+            settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
+            settingsPart.Settings.Save();
+            doc.Save();
+        }
+
+        /// <summary>
+        /// The word doc has a different font color for the answers to questions
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        private static string CreateIntakeFormAnswersCharStyle(WordprocessingDocument doc)
+        {
+            var answerFormatStyleId = "AnswerStyleChar";
+            Color grayText = new Color() { Val = "888888" };
+            Formatting.CreateAndAddCharacterStyle(doc,
+                answerFormatStyleId,
+                "Answer Style Char",
+                "Answer Gray", "AnswerStylePar", new List<OpenXmlElement> { grayText });
+            return answerFormatStyleId;
+        }
+
+        /// <summary>
+        /// This will create the question answer pair and append it to the doc
+        /// 
+        /// It will write something like below
+        /// What is your Height? 5'7
+        /// </summary>
+        /// <param name="docBody"></param>
+        /// <param name="answerFormatStyleId"></param>
+        /// <param name="count"></param>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        private static int AppendQuestionAnswerPair(Body docBody, string answerFormatStyleId, int count, QuestionModel question)
+        {
+            // Get the answer text from the question, then create how they will be displayed and create the paragraphs
+            var answerText = string.Join(',', question.Answers.Select(x => x.Text == "" ? "Not Applicable" : x.Text));
+            var questionText = $"{count++}. {question.Text} ";
+            var answerParagraph = new Paragraph(new Run(new Text(questionText) { Space = SpaceProcessingModeValues.Preserve }));
+            var answerRun = answerParagraph.AppendChild<Run>(new Run(new Text(answerText) { Space = SpaceProcessingModeValues.Preserve }));
+
+            // If the Run has no RunProperties object, create one.
+            if (answerRun.Elements<RunProperties>().Count() == 0)
+            {
+                answerRun.PrependChild<RunProperties>(new RunProperties());
+            }
+
+            // Get a reference to the RunProperties.
+            RunProperties rPr = answerRun.RunProperties;
+
+            // Set the character style of the run.
+            if (rPr.RunStyle == null)
+                rPr.RunStyle = new RunStyle();
+            rPr.RunStyle.Val = answerFormatStyleId;
+            docBody.AppendChild(answerParagraph);
+            return count;
+        }
+
+        private void AppendTitleForIntakeForm(WordprocessingDocument doc, Body docBody, IntakeFormFullModel intakeForm)
+        {
+            docBody.AppendChild(new Paragraph());
+
+            var titleParagraph = CreateIntakeFormTitle(intakeForm.IntakeFormType);
+            if (titleParagraph != null)
+            {
+                Formatting.AddNewStyle(doc, "PRTitle1", "PRTitle", titleParagraph);
+                var paragraphProperties = titleParagraph.PrependChild(new ParagraphProperties());
+                docBody.AppendChild(titleParagraph);
+            }
+            docBody.AppendChild(new Paragraph());
+        }
+
+        /// <summary>
+        /// Some of the values in the forms are populated directly from the patient object. That is where
+        /// these mapping keys are being loaded from
+        /// </summary>
+        /// <param name="patient"></param>
+        /// <returns></returns>
         private List<KeyValuePair<string, string>> GetPatientKeys(PatientModel patient)
         {
             var kvps = new List<KeyValuePair<string, string>>();
@@ -151,37 +197,28 @@ namespace PR.Export
             return kvps;
         }
 
-
         /// <summary>
-        /// Again the resource stream from the assembly doesn't work when opening
+        /// The resource stream from the assembly doesn't work when opening
         /// the document with the OpenXML library so I had to load it into a memory
         /// stream. Also this will help to reduce the time the resource file itself is
         /// going to be locked.
         /// </summary>
-        private void LoadMemoryStream()
+        private MemoryStream LoadMemoryStream()
         {
             var assembly = Assembly.GetAssembly(typeof(IntakeFormExporter));
+            var memStream = new MemoryStream();
             using (var stream = assembly.GetManifestResourceStream(ExamNote))
             {
-                CopyStream(stream);
+                byte[] buffer = new byte[16 * 1024];
+                int read;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    memStream.Write(buffer, 0, read);
+                }
             }
+            return memStream;
         }
-
-        /// <summary>
-        /// Copying the Stream from the assembly resource stream to a memory stream. There was an issue when
-        /// trying to use the stream from the resource manifest.
-        /// </summary>
-        /// <param name="input"></param>
-        private void CopyStream(Stream input)
-        {
-            byte[] buffer = new byte[16 * 1024];
-            int read;
-            while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                ExamNoteMemoryStream.Write(buffer, 0, read);
-            }
-        }
-
+        
         /// <summary>
         /// Since we are dynamically adding the sections each intake form needs a different
         /// title that isn't exactly the same as the enum name
@@ -234,7 +271,5 @@ namespace PR.Export
             }
             return new Paragraph(new Run(new Text(title)));
         }
-
-
     }
 }
