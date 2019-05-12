@@ -14,5 +14,7 @@ namespace PR.Business.Interfaces
         DocumentModel Create(DocumentModel documentModel);
 
         DocumentModel Update(DocumentModel documentModel);
+
+        byte[] GetDoc();
     }
 }

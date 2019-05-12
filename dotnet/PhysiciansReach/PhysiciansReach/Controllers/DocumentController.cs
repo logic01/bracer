@@ -13,13 +13,12 @@ namespace PhysiciansReach.Controllers
     {
         private readonly IDocumentBusiness _business;
         private readonly ILoggingBusiness _logging;
-        private readonly IIntakeFormExporter _exporter;
 
-        public DocumentController(IDocumentBusiness business, ILoggingBusiness logging, IIntakeFormExporter exporter)
+
+        public DocumentController(IDocumentBusiness business, ILoggingBusiness logging)
         {
             _business = business;
             _logging = logging;
-            _exporter = exporter;
         }
 
         [HttpGet("Physician/{physicianId}/Document")]
@@ -59,14 +58,7 @@ namespace PhysiciansReach.Controllers
         [HttpGet("Document/{documentId}/Download")]
         public FileResult GetWord(int documentId)
         {
-            var wordBytes = _exporter.CreateNewIntakeForm(new List<IntakeFormModel>
-            {
-                new IntakeFormModel
-                {
-                    IntakeFormId = 12
-                }
-            });
-            FileResult fr = new FileContentResult(wordBytes, "application/vnd.ms-word")
+            FileResult fr = new FileContentResult(_business.GetDoc(), "application/vnd.ms-word")
             {
                 FileDownloadName = string.Format("Exam_{0}_{1}.docx", DateTime.Now.ToString("yyMMdd"), "Doc")
             };

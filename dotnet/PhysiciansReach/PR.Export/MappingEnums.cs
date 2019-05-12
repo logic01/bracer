@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PR.Export
+﻿namespace PR.Export
 {
     /// <summary>
     /// The ids of these enums map the CustomPropertyName on the embedded word doc BLANK_EXAM_NOTE to
@@ -34,6 +30,7 @@ namespace PR.Export
         EffectsDaily = 21,
         Surgies = 22,
         PainLevel = 23,
-        ServiceDate = 24
+        ServiceDate = 24,
+        Insurance = 25
     }
 }

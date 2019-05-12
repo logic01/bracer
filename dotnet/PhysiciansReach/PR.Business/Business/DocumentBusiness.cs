@@ -1,6 +1,7 @@
 ﻿using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;
+using PR.Export;
 using PR.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,14 @@ namespace PR.Business
     public class DocumentBusiness : IDocumentBusiness
     {
         private DataContext _context;
+        private readonly IIntakeFormBusiness _intakeFormBusiness;
+        private readonly IIntakeFormExporter _exporter;
 
-        public DocumentBusiness(DataContext context)
+        public DocumentBusiness(DataContext context, IIntakeFormBusiness intakeFormBusiness, IIntakeFormExporter exporter)
         {
             _context = context;
+            _intakeFormBusiness = intakeFormBusiness;
+            _exporter = exporter;
         }
 
         public List<DocumentModel> GetByPhysician(int physicianId)
@@ -67,6 +72,24 @@ namespace PR.Business
 
             // return new
             return document.ToModel();
+        }
+
+        public byte[] GetDoc()
+        {
+            //TODO remove hard coding. I need to fix the script I created
+            //to have all questions/answers from the pdf and then figure out
+            //the relationship for a document to all intake form models
+            var intakeForms = new List<IntakeFormModel>();
+            intakeForms.Add(_intakeFormBusiness.Get(11));
+            intakeForms.Add(_intakeFormBusiness.Get(12));
+            intakeForms.Add(_intakeFormBusiness.Get(13));
+            intakeForms.Add(_intakeFormBusiness.Get(14));
+
+            // After the doc is created this needs to be persisted. I think
+            // the update/create of Documents should avoid dealing with content
+            // outside the usage of export
+            var documentContent = _exporter.CreateNewIntakeForm(intakeForms);
+            return documentContent;
         }
     }
 }

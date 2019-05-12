@@ -6,10 +6,22 @@
 
   <ItemGroup>
     <None Remove="Documents\BLANK_EXAM_NOTE.docx" />
+    <None Remove="Documents\BLANK_EXAM_NOTE_ONLY.docx" />
+    <None Remove="Documents\BLANK_PATIENT.docx" />
+    <None Remove="Documents\BLANK_PATIENT_IMAGE.docx" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Documents\BLANK_EXAM_NOTE.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\BLANK_EXAM_NOTE_ONLY.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\BLANK_PATIENT.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Documents\BLANK_PATIENT_IMAGE.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
