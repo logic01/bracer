@@ -74,16 +74,15 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public byte[] GetDoc()
+        public byte[] GetDocByPatient(int patientId)
         {
+            var intakeFormIds = _context.IntakeForm.Where(x => x.PatientId == patientId).Select(x => x.IntakeFormId).ToList();
             //TODO remove hard coding. I need to fix the script I created
             //to have all questions/answers from the pdf and then figure out
             //the relationship for a document to all intake form models
-            var intakeForms = new List<IntakeFormModel>();
-            intakeForms.Add(_intakeFormBusiness.Get(11));
-            intakeForms.Add(_intakeFormBusiness.Get(12));
-            intakeForms.Add(_intakeFormBusiness.Get(13));
-            intakeForms.Add(_intakeFormBusiness.Get(14));
+
+
+            var intakeForms = _intakeFormBusiness.GetFullIntakeForms(intakeFormIds);
 
             // After the doc is created this needs to be persisted. I think
             // the update/create of Documents should avoid dealing with content

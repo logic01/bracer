@@ -15,6 +15,6 @@ namespace PR.Business.Interfaces
 
         DocumentModel Update(DocumentModel documentModel);
 
-        byte[] GetDoc();
+        byte[] GetDocByPatient(int patientId);
     }
 }

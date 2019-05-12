@@ -19,19 +19,22 @@ namespace PR.Business
 
         public List<IntakeFormModel> Get()
         {
-            return _context.IntakeForm
-                    .Include(p => p.Questions.Select(q => q.Answers))
-                    .Select(i => i.ToModel())
-                    .ToList();
+            var intakeFormModels = _context.IntakeForm.Include("Questions.Answers");
+            return intakeFormModels.Select(x => x.ToModel()).ToList();
         }
 
         public IntakeFormModel Get(int id)
         {
-            IntakeForm intakeForm = _context.IntakeForm
-                .Include(p => p.Questions.Select(q => q.Answers))
-                .FirstOrDefault(u => u.IntakeFormId == id);
+            var intakeFormModels = _context.IntakeForm.Where(x => x.IntakeFormId == id).Include("Questions.Answers");
 
-            return intakeForm.ToModel();
+            return intakeFormModels.Select(x => x.ToModel()).FirstOrDefault();
+        }
+
+        public IList<IntakeFormFullModel> GetFullIntakeForms(IEnumerable<int> ids)
+        {
+            var intakeFormModels = _context.IntakeForm.Where(x => ids.Contains(x.IntakeFormId)).Include("Questions.Answers").Include("Patient.Address");
+
+            return intakeFormModels.Select(x => x.ToFullModel()).ToList();
         }
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)

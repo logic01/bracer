@@ -12,5 +12,14 @@ namespace PR.Models
         public string ZipCode { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
+
+        /// <summary>
+        /// Will return the line 1 line 2, city, state, zipcode
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{AddressLineOne} {AddressLineTwo}, {City}, {State}, {ZipCode}";
+        }
     }
 }

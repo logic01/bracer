@@ -55,10 +55,10 @@ namespace PhysiciansReach.Controllers
             return _business.Update(document);
         }
 
-        [HttpGet("Document/{documentId}/Download")]
-        public FileResult GetWord(int documentId)
+        [HttpGet("Document/{patientId}/Download")]
+        public FileResult GetWordByPatient(int patientId)
         {
-            FileResult fr = new FileContentResult(_business.GetDoc(), "application/vnd.ms-word")
+            FileResult fr = new FileContentResult(_business.GetDocByPatient(patientId), "application/vnd.ms-word")
             {
                 FileDownloadName = string.Format("Exam_{0}_{1}.docx", DateTime.Now.ToString("yyMMdd"), "Doc")
             };

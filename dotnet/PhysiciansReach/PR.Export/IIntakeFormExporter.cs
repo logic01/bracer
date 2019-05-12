@@ -5,6 +5,6 @@ namespace PR.Export
 {
     public interface IIntakeFormExporter
     {
-        byte[] CreateNewIntakeForm(IEnumerable<IntakeFormModel> intakeForms);
+        byte[] CreateNewIntakeForm(IList<IntakeFormFullModel> intakeForms);
     }
 }
