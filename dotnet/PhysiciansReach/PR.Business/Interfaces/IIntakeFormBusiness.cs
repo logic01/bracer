@@ -11,5 +11,7 @@ namespace PR.Business.Interfaces
         IntakeFormModel Create(IntakeFormModel intakeFormModel);
 
         IntakeFormModel Update(IntakeFormModel intakeFormModel);
+
+        IList<IntakeFormFullModel> GetFullIntakeForms(IEnumerable<int> ids);
     }
 }

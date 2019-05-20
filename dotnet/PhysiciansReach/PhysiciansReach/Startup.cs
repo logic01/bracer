@@ -9,6 +9,7 @@ using PR.Business.Business;
 using PR.Business.Interfaces;
 using PR.Constants.Configurations;
 using PR.Data.Models;
+using PR.Export;
 
 namespace PhysiciansReach
 {
@@ -95,6 +96,8 @@ namespace PhysiciansReach
             services.AddTransient<ILoggingBusiness, LoggingBusiness>();
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();
             services.AddTransient<IEmailBusiness, EmailBusiness>();
+            services.AddTransient<IIntakeFormExporter, IntakeFormExporter>();
+            
         }
     }
 }

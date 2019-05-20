@@ -11,6 +11,9 @@
         PainDmeOnly,
         PainRxOnly,
         RashSkinRxOnly,
-        ScarRxOnly
+        ScarRxOnly,
+        MigraineRxOnly,
+        DryMouthRxOnly,
+        PatientInfo,
     }
 }
