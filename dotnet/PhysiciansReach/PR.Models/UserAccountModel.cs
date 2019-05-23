@@ -14,6 +14,8 @@ namespace PR.Models
 
         public string Password { get; set; }
 
+        public string EmailAddress { get; set; }
+
         public string ConfirmationPassword { get; set; }
 
         public bool Active { get; set; }

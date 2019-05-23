@@ -25,6 +25,7 @@ export class AdminAccountFormComponent implements OnInit {
     this.accountForm = new FormGroup({
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       confirmationPassword: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)])
@@ -70,6 +71,7 @@ export class AdminAccountFormComponent implements OnInit {
     admin.userAccount.userName = this.accountForm.controls['userName'].value;
     admin.userAccount.password = this.accountForm.controls['password'].value;
     admin.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
+    admin.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     admin.firstName = this.accountForm.controls['firstName'].value;
     admin.lastName = this.accountForm.controls['lastName'].value;
 

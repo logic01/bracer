@@ -13,6 +13,7 @@ namespace PR.Business.Mappings
             {
                 UserAccountId = entity.UserAccountId,
                 UserName = entity.UserName,
+                EmailAddress = entity.EmailAddress,
                 Type = entity.Type,
                 Active = entity.Active,
                 CreatedOn = entity.CreatedOn,
@@ -33,6 +34,7 @@ namespace PR.Business.Mappings
             {
                 UserAccountId = model.UserAccountId,
                 UserName = model.UserName,
+                EmailAddress = model.EmailAddress,
                 Password = hashBytes,
                 Active = model.Active,
                 CreatedOn = model.CreatedOn,
