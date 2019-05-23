@@ -1,5 +1,6 @@
 ﻿using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
@@ -49,16 +50,6 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public DocumentModel Create(DocumentModel documentModel)
-        {
-            var document = documentModel.ToEntity();
-
-            _context.Document.Add(document);
-            _context.SaveChanges();
-
-            return document.ToModel();
-        }
-
         public DocumentModel Update(DocumentModel documentModel)
         {
             // get original
@@ -74,21 +65,24 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public byte[] GetDocByPatient(int patientId)
+        public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
         {
-            var intakeFormIds = _context.IntakeForm.Where(x => x.PatientId == patientId).Select(x => x.IntakeFormId).ToList();
-            //TODO remove hard coding. I need to fix the script I created
-            //to have all questions/answers from the pdf and then figure out
-            //the relationship for a document to all intake form models
+            var patient = _context.Patient.First(p => p.PatientId == patientId);
+            var intakeForm = _context.IntakeForm.First(i => i.IntakeFormId == intakeFormId);
+            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel());
 
+            var document = new Document
+            {
+                IntakeFormId = intakeFormId,
+                Status = DocumentStatus.New,
+                Type = DocumentType.IntakeForm,
+                Content = documentContent
+            };
 
-            var intakeForms = _intakeFormBusiness.GetFullIntakeForms(intakeFormIds);
+            _context.Document.Add(document);
+            _context.SaveChanges();
 
-            // After the doc is created this needs to be persisted. I think
-            // the update/create of Documents should avoid dealing with content
-            // outside the usage of export
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForms);
-            return documentContent;
+            return document.ToModel();
         }
     }
 }

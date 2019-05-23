@@ -8,6 +8,7 @@ import { TherapyType } from './enums/therapy-type.enum';
 
 export class Patient {
     public patientId: string;
+    public agentId: string;
     public firstName: string;
     public middleName: string;
     public lastName: string;

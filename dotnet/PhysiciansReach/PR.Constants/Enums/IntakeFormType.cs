@@ -13,7 +13,6 @@
         RashSkinRxOnly,
         ScarRxOnly,
         MigraineRxOnly,
-        DryMouthRxOnly,
-        PatientInfo,
+        DryMouthRxOnly
     }
 }

@@ -11,10 +11,8 @@ namespace PR.Business.Interfaces
 
         DocumentModel Get(int documentId);
 
-        DocumentModel Create(DocumentModel documentModel);
+        DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId);
 
         DocumentModel Update(DocumentModel documentModel);
-
-        byte[] GetDocByPatient(int patientId);
     }
 }

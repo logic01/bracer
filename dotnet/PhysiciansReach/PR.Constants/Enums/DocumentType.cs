@@ -2,7 +2,6 @@
 {
     public enum DocumentType
     {
-        IntakeForm,
-        PatientForm
+        IntakeForm
     }
 }

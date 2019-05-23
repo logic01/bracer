@@ -16,17 +16,24 @@ namespace PR.Business.Business
 
         public void Log(LogSeverity severity, string message, string stacktrace = "")
         {
-            var log = new Log
+            try
             {
-                Message = message,
-                StackTrace = stacktrace,
-                Severity = severity,
-                CreatedOn = DateTime.Now,
-                ModifiedOn = DateTime.Now
-            };
+                var log = new Log
+                {
+                    Message = message,
+                    StackTrace = stacktrace,
+                    Severity = severity,
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now
+                };
 
-            _context.Log.Add(log);
-            _context.SaveChanges();
+                _context.Log.Add(log);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var e = ex;
+            }
         }
     }
 }

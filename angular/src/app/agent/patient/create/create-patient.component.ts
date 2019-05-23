@@ -9,7 +9,9 @@ import { takeUntil } from 'rxjs/operators';
 import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 import { Address } from 'src/app/models/address.model';
 import { Patient } from 'src/app/models/patient.model';
+import { UserAccount } from 'src/app/models/user-account.model';
 import { PatientService } from 'src/app/services/api/patient.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-create-patient',
@@ -20,13 +22,21 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   private unsubscribe$ = new Subject();
+  private agentId: string;
 
   constructor(
+    private readonly session: SessionService,
     private readonly dialog: MatDialog,
     private readonly patientApi: PatientService,
     private readonly router: Router) { }
 
   ngOnInit() {
+
+    /* only an agent can access this page */
+    this.session.userAccount$.subscribe((result: UserAccount) => {
+      this.agentId = result.userAccountId;
+    });
+
     this.form = new FormGroup({
       firstName: new FormControl('', Validators.required),
       middleName: new FormControl(''),
@@ -70,7 +80,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const patient = this.buildAgent();
+    const patient = this.buildPatient();
 
     this.patientApi
       .post(patient)
@@ -84,9 +94,10 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DmaDialogComponent);
   }
 
-  private buildAgent(): Patient {
+  private buildPatient(): Patient {
 
     const patient = new Patient();
+    patient.agentId = this.agentId;
     patient.firstName = this.form.controls['firstName'].value;
     patient.middleName = this.form.controls['middleName'].value;
     patient.lastName = this.form.controls['lastName'].value;

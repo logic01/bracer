@@ -10,12 +10,14 @@ namespace PhysiciansReach.Controllers
     [ApiController]
     public class IntakeFormController : ControllerBase
     {
-        private readonly IIntakeFormBusiness _business;
+        private readonly IIntakeFormBusiness _intakeBusiness;
+        private readonly IDocumentBusiness _documentBusiness;
         private readonly ILoggingBusiness _logging;
 
-        public IntakeFormController(IIntakeFormBusiness business, ILoggingBusiness logging)
+        public IntakeFormController(IIntakeFormBusiness intakeBusiness, IDocumentBusiness documentBusiness, ILoggingBusiness logging)
         {
-            _business = business;
+            _intakeBusiness = intakeBusiness;
+            _documentBusiness = documentBusiness;
             _logging = logging;
         }
 
@@ -23,28 +25,33 @@ namespace PhysiciansReach.Controllers
         public ActionResult<List<IntakeFormModel>> Get()
         {
             _logging.Log(LogSeverity.Info, "Get All IntakeForm");
-            return _business.Get();
+            return _intakeBusiness.Get();
         }
 
         [HttpGet("{id}")]
         public ActionResult<IntakeFormModel> Get(int id)
         {
             _logging.Log(LogSeverity.Info, "Get IntakeForm");
-            return _business.Get(id);
+            return _intakeBusiness.Get(id);
         }
 
         [HttpPost]
         public ActionResult<IntakeFormModel> Post([FromBody] IntakeFormModel intakeForm)
         {
             _logging.Log(LogSeverity.Info, "Post IntakeForm");
-            return _business.Create(intakeForm);
+
+            var newIntakeForm = _intakeBusiness.Create(intakeForm);
+
+            _documentBusiness.CreateIntakeFormDocument(intakeForm.PatientId, intakeForm.IntakeFormId);
+
+            return newIntakeForm;
         }
 
         [HttpPut("{id}")]
         public ActionResult<IntakeFormModel> Put(int id, [FromBody] IntakeFormModel intakeForm)
         {
             _logging.Log(LogSeverity.Info, "Put IntakeForm");
-            return _business.Update(intakeForm);
+            return _intakeBusiness.Update(intakeForm);
         }
     }
 }

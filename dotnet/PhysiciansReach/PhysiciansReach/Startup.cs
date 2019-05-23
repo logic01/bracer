@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PR.Api.Filters;
 using PR.Business;
 using PR.Business.Business;
 using PR.Business.Interfaces;
@@ -72,6 +73,8 @@ namespace PhysiciansReach
                 app.UseHsts();
             }
 
+            app.UseMiddleware(typeof(ExceptionMiddleware));
+
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
@@ -97,7 +100,7 @@ namespace PhysiciansReach
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();
             services.AddTransient<IEmailBusiness, EmailBusiness>();
             services.AddTransient<IIntakeFormExporter, IntakeFormExporter>();
-            
+
         }
     }
 }

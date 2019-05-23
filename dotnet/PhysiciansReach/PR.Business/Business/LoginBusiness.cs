@@ -54,7 +54,8 @@ namespace PR.Business.Business
                 {
                     new ErrorModel
                     {
-                        Code = "001",
+                        StatusCode = System.Net.HttpStatusCode.UnprocessableEntity,
+                        ErrorCode = "001",
                         Message = "Login Failed"
                     }
                 }
