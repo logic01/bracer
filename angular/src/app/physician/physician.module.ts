@@ -9,6 +9,7 @@ import { PhysicianDashboardComponent } from './dashboard/physician-dashboard.com
 import { DocumentComponent } from './document/document.component';
 import { EditPhysicianComponent } from './edit/edit-physician.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { SignComponent } from './sign/sign.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     PhysicianDashboardComponent,
     PhysicianAccountFormComponent,
     DocumentComponent,
+    SignComponent,
   ],
   imports: [
     CommonModule,

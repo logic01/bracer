@@ -42,7 +42,7 @@ namespace PhysiciansReach.Controllers
 
             var newIntakeForm = _intakeBusiness.Create(intakeForm);
 
-            _documentBusiness.CreateIntakeFormDocument(intakeForm.PatientId, intakeForm.IntakeFormId);
+            _documentBusiness.CreateIntakeFormDocument(newIntakeForm.PatientId, newIntakeForm.IntakeFormId);
 
             return newIntakeForm;
         }

@@ -1,4 +1,5 @@
-﻿using PR.Business.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Constants.Enums;
 using PR.Data.Models;
@@ -32,12 +33,12 @@ namespace PR.Business
 
         public List<DocumentModel> GetByVendor(int vendorId)
         {
-            var documents = from agent in _context.Agent
-                            join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
-                            join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
-                            join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
-                            where agent.VendorId == vendorId
-                            select document.ToModel();
+            IQueryable<DocumentModel> documents = from agent in _context.Agent
+                                                  join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
+                                                  join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
+                                                  join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
+                                                  where agent.VendorId == vendorId
+                                                  select document.ToModel();
 
 
             return documents.ToList();
@@ -45,7 +46,7 @@ namespace PR.Business
 
         public DocumentModel Get(int documentId)
         {
-            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
+            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
 
             return document.ToModel();
         }
@@ -53,7 +54,7 @@ namespace PR.Business
         public DocumentModel Update(DocumentModel documentModel)
         {
             // get original
-            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
+            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
 
             // populate with model data
             document = documentModel.MapToEntity(document);
@@ -67,8 +68,15 @@ namespace PR.Business
 
         public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
         {
-            var patient = _context.Patient.First(p => p.PatientId == patientId);
-            var intakeForm = _context.IntakeForm.First(i => i.IntakeFormId == intakeFormId);
+            Patient patient = _context.Patient
+                .Include(p => p.PhysiciansAddress)
+                .Include(p => p.Address)
+                .First(p => p.PatientId == patientId);
+
+            IntakeForm intakeForm = _context.IntakeForm
+                .Include("Questions.Answers")
+                .First(i => i.IntakeFormId == intakeFormId);
+
             var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel());
 
             var document = new Document

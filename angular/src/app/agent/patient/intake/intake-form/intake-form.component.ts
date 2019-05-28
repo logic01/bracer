@@ -4,6 +4,8 @@ import { IntakeForm } from 'src/app/models/intake-form.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { RouteUrls } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-intake-form',
@@ -14,7 +16,10 @@ export class IntakeFormComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
 
-  constructor(private readonly intakeApi: IntakeFormService) { }
+  constructor(
+    private readonly intakeApi: IntakeFormService,
+    private readonly router: Router
+  ) { }
 
   ngOnInit() {
   }
@@ -32,7 +37,7 @@ export class IntakeFormComponent implements OnInit, OnDestroy {
       .post(intakeForm)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((results: IntakeForm) => {
-
+        this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
       });
   }
 
