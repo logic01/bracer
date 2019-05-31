@@ -1,8 +1,12 @@
-﻿namespace PR.Models
+﻿using System.Net;
+
+namespace PR.Models
 {
     public class ErrorModel
     {
-        public string Code { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public string ErrorCode { get; set; }
         public string Message { get; set; }
+        public string StackTrace { get; set; }
     }
 }

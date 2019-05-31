@@ -1,8 +1,10 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Observable } from 'rxjs';
+
 import { Agent } from 'src/app/models/Agent.model';
 import { UserAccount } from 'src/app/models/user-account.model';
-import { Observable } from 'rxjs';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Vendor } from 'src/app/models/vendor.model';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -26,6 +28,7 @@ export class AgentAccountFormComponent implements OnInit {
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
       confirmationPassword: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       vendor: new FormControl('', Validators.required)
@@ -71,6 +74,7 @@ export class AgentAccountFormComponent implements OnInit {
     agent.userAccount.userName = this.accountForm.controls['userName'].value;
     agent.userAccount.password = this.accountForm.controls['password'].value;
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
+    agent.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     agent.firstName = this.accountForm.controls['firstName'].value;
     agent.lastName = this.accountForm.controls['lastName'].value;
     agent.vendorId = this.accountForm.controls['vendor'].value;

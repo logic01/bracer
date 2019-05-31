@@ -1,4 +1,6 @@
 export class ErrorModel {
-    code: string;
+    statusCode: string;
+    errorCode: string;
     message: string;
+    stackTrace: string;
 }

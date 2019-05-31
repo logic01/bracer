@@ -16,7 +16,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class PhysicianDashboardComponent implements OnInit {
 
-  columnsToDisplay = ['documentId', 'type', 'status', 'sign'];
+  columnsToDisplay = ['documentId', 'type', 'status', 'view', 'sign'];
 
   data: Document[];
 
@@ -42,7 +42,24 @@ export class PhysicianDashboardComponent implements OnInit {
 
   }
 
-  view(id: number) {
+  view(id: string) {
+
+    this.documentApi.download(id).subscribe((res: any) => {
+      console.log('start download:', res);
+      const url = window.URL.createObjectURL(res);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = res.filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove(); // remove the element
+    });
+
+  }
+
+  sign(id: string) {
     console.log(id);
   }
 }

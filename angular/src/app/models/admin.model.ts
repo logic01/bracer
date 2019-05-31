@@ -1,9 +1,9 @@
-import { ErrorModel } from './error.model';
 import { UserAccount } from './user-account.model';
 
 export class Admin {
-    firstName: string;
-    lastName: string;
-    userAccount: UserAccount;
-    error: ErrorModel;
+    public firstName: string;
+    public lastName: string;
+    public userAccount: UserAccount;
+    public createdOn: Date;
+    public modifiedOn: Date;
 }

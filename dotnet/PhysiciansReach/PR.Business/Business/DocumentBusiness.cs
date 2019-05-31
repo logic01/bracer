@@ -1,5 +1,7 @@
-﻿using PR.Business.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
@@ -31,12 +33,12 @@ namespace PR.Business
 
         public List<DocumentModel> GetByVendor(int vendorId)
         {
-            var documents = from agent in _context.Agent
-                            join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
-                            join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
-                            join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
-                            where agent.VendorId == vendorId
-                            select document.ToModel();
+            IQueryable<DocumentModel> documents = from agent in _context.Agent
+                                                  join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
+                                                  join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
+                                                  join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
+                                                  where agent.VendorId == vendorId
+                                                  select document.ToModel();
 
 
             return documents.ToList();
@@ -44,17 +46,7 @@ namespace PR.Business
 
         public DocumentModel Get(int documentId)
         {
-            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
-
-            return document.ToModel();
-        }
-
-        public DocumentModel Create(DocumentModel documentModel)
-        {
-            var document = documentModel.ToEntity();
-
-            _context.Document.Add(document);
-            _context.SaveChanges();
+            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
 
             return document.ToModel();
         }
@@ -62,7 +54,7 @@ namespace PR.Business
         public DocumentModel Update(DocumentModel documentModel)
         {
             // get original
-            var document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
+            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
 
             // populate with model data
             document = documentModel.MapToEntity(document);
@@ -74,21 +66,31 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public byte[] GetDocByPatient(int patientId)
+        public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
         {
-            var intakeFormIds = _context.IntakeForm.Where(x => x.PatientId == patientId).Select(x => x.IntakeFormId).ToList();
-            //TODO remove hard coding. I need to fix the script I created
-            //to have all questions/answers from the pdf and then figure out
-            //the relationship for a document to all intake form models
+            Patient patient = _context.Patient
+                .Include(p => p.PhysiciansAddress)
+                .Include(p => p.Address)
+                .First(p => p.PatientId == patientId);
 
+            IntakeForm intakeForm = _context.IntakeForm
+                .Include("Questions.Answers")
+                .First(i => i.IntakeFormId == intakeFormId);
 
-            var intakeForms = _intakeFormBusiness.GetFullIntakeForms(intakeFormIds);
+            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel());
 
-            // After the doc is created this needs to be persisted. I think
-            // the update/create of Documents should avoid dealing with content
-            // outside the usage of export
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForms);
-            return documentContent;
+            var document = new Document
+            {
+                IntakeFormId = intakeFormId,
+                Status = DocumentStatus.New,
+                Type = DocumentType.IntakeForm,
+                Content = documentContent
+            };
+
+            _context.Document.Add(document);
+            _context.SaveChanges();
+
+            return document.ToModel();
         }
     }
 }

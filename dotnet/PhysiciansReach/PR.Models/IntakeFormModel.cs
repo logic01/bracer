@@ -19,9 +19,4 @@ namespace PR.Models
         public List<QuestionModel> Questions { get; set; }
 
     }
-
-    public class IntakeFormFullModel : IntakeFormModel
-    {
-        public PatientModel Patient { get; set; }
-    }
 }

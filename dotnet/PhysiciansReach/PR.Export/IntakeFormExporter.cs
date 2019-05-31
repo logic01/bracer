@@ -18,7 +18,7 @@ namespace PR.Export
 
     public class IntakeFormExporter : IIntakeFormExporter
     {
-        private const string ExamNote = "PR.Export.Documents.BLANK_EXAM_NOTE.docx";      
+        private const string ExamNote = "PR.Export.Documents.BLANK_EXAM_NOTE.docx";
 
         /// <summary>
         /// Take all of the intake forms and replace the properties on the word doc, then append all of the
@@ -26,9 +26,8 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <returns></returns>
-        public byte[] CreateNewIntakeForm(IList<IntakeFormFullModel> intakeForms)
+        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient)
         {
-
             var examNoteMemoryStream = LoadMemoryStream();
 
             using (var doc = WordprocessingDocument.Open(examNoteMemoryStream, true))
@@ -40,31 +39,26 @@ namespace PR.Export
                 var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
 
                 //Create title and add the subsequent question answers
-                foreach (var intakeForm in intakeForms)
+
+                AppendTitleForIntakeForm(doc, docBody, intakeForm);
+
+                var count = 1;
+                foreach (var question in intakeForm.Questions)
                 {
-
-                    if (intakeForm.IntakeFormType == IntakeFormType.PatientInfo)
-                        continue;
-                    AppendTitleForIntakeForm(doc, docBody, intakeForm);
-
-                    var count = 1;
-                    foreach (var question in intakeForm.Questions)
-                    {
-                        count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
-                    }
-                    docBody.AppendChild(new Paragraph());
+                    count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
                 }
+                docBody.AppendChild(new Paragraph());
 
-                UpdateValuesInWordDocsCustomProperties(intakeForms, doc);
-
+                UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc);
             }
+
             var result = examNoteMemoryStream.ToArray();
             examNoteMemoryStream.Flush();
             examNoteMemoryStream.Close();
 
             return result;
         }
-      
+
         /// <summary>
         /// The field values in the word doc need to be update in the property settings object of the word doc. The questions
         /// have 'keys' which we are using with MappingsEnum to know how update with the value from the IntakeForms. Then we
@@ -72,15 +66,18 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <param name="doc"></param>
-        private void UpdateValuesInWordDocsCustomProperties(IList<IntakeFormFullModel> intakeForms, WordprocessingDocument doc)
+        private void UpdateValuesInWordDocsCustomProperties(IntakeFormModel intakeForm, PatientModel patient, WordprocessingDocument doc)
         {
             //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
             var properties = doc.CustomFilePropertiesPart.Properties;
 
             // Get all question's with a key, then gather the value as all answers comma delimited              
-            var intakeFromKeys = intakeForms.SelectMany(x => x.Questions.Where(r => !string.IsNullOrEmpty(r.Key)))
-                .Select(y => new KeyValuePair<string, string>(y.Key, y.Answers.Select(z => z.Text).Aggregate((c, n) => $"{c},{n}"))).ToList();
-            intakeFromKeys.AddRange(GetPatientKeys(intakeForms.First().Patient));
+            var intakeFromKeys = intakeForm.Questions
+                .Where(r => !string.IsNullOrEmpty(r.Key))
+                .Select(y => new KeyValuePair<string, string>(y.Key, y.Answers.Select(z => z.Text)
+                .Aggregate((c, n) => $"{c},{n}"))).ToList();
+
+            intakeFromKeys.AddRange(GetPatientKeys(patient));
 
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
@@ -103,8 +100,10 @@ namespace PR.Export
             //however there is no way (that I have found) to programatically updated all of the fields
             //that are using the custom properties without requiring the downloader to 
             DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
-            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
-            updateFields.Val = new DocumentFormat.OpenXml.OnOffValue(true);
+            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen
+            {
+                Val = new DocumentFormat.OpenXml.OnOffValue(true)
+            };
             settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
             settingsPart.Settings.Save();
             doc.Save();
@@ -156,13 +155,16 @@ namespace PR.Export
 
             // Set the character style of the run.
             if (rPr.RunStyle == null)
+            {
                 rPr.RunStyle = new RunStyle();
+            }
+
             rPr.RunStyle.Val = answerFormatStyleId;
             docBody.AppendChild(answerParagraph);
             return count;
         }
 
-        private void AppendTitleForIntakeForm(WordprocessingDocument doc, Body docBody, IntakeFormFullModel intakeForm)
+        private void AppendTitleForIntakeForm(WordprocessingDocument doc, Body docBody, IntakeFormModel intakeForm)
         {
             docBody.AppendChild(new Paragraph());
 
@@ -184,16 +186,18 @@ namespace PR.Export
         /// <returns></returns>
         private List<KeyValuePair<string, string>> GetPatientKeys(PatientModel patient)
         {
-            var kvps = new List<KeyValuePair<string, string>>();
-            kvps.Add(new KeyValuePair<string,string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("d")));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.Age.ToString(), patient.DateOfBirth.GetAge()));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.PatientName.ToString(), $"{patient.FirstName} {patient.LastName}"));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.Phone.ToString(), patient.PhoneNumber));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.Gender.ToString(), patient.Sex.ToString()));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()));
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d")));
-           
+            var kvps = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.Age.ToString(), patient.DateOfBirth.GetAge()),
+                new KeyValuePair<string, string>(MappingEnums.PatientName.ToString(), $"{patient.FirstName} {patient.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.Phone.ToString(), patient.PhoneNumber),
+                new KeyValuePair<string, string>(MappingEnums.Gender.ToString(), patient.Sex.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d"))
+            };
+
             return kvps;
         }
 
@@ -218,7 +222,7 @@ namespace PR.Export
             }
             return memStream;
         }
-        
+
         /// <summary>
         /// Since we are dynamically adding the sections each intake form needs a different
         /// title that isn't exactly the same as the enum name
@@ -266,8 +270,6 @@ namespace PR.Export
                 case IntakeFormType.FootbathRxOnly:
                     title = "Footbath (Rx Only)";
                     break;
-                case IntakeFormType.PatientInfo:
-                    return null;
             }
             return new Paragraph(new Run(new Text(title)));
         }

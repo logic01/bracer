@@ -21,22 +21,6 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static IntakeFormFullModel ToFullModel(this IntakeForm entity)
-        {
-            var model = new IntakeFormFullModel
-            {
-                IntakeFormId = entity.IntakeFormId,
-                PatientId = entity.PatientId,
-                IntakeFormType = entity.IntakeFormType,
-                Questions = entity.Questions.Select(q => q.ToModel()).ToList(),
-                Patient = entity.Patient.ToModel(),
-                CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn
-            };
-
-            return model;
-        }
-
         public static IntakeForm ToEntity(this IntakeFormModel model)
         {
             var entity = new IntakeForm
@@ -89,7 +73,7 @@ namespace PR.Business.Mappings
                 AnswerId = entity.AnswerId,
                 Text = entity.Text,
                 CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn                
+                ModifiedOn = entity.ModifiedOn
             };
 
             return model;

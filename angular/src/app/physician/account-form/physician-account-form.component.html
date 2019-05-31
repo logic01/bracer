@@ -46,6 +46,14 @@
     </mat-form-field>
   </div>
 
+  <mat-form-field>
+    <input matInput placeholder="Email Address" type="text" formControlName="emailAddress">
+    <mat-error *ngIf="accountForm.get('emailAddress').hasError('required')">Please enter a value.</mat-error>
+    <mat-error *ngIf="accountForm.get('emailAddress').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+    <mat-error *ngIf="accountForm.get('emailAddress').hasError('invalidEmail')">Please enter a valid email address.
+    </mat-error>
+  </mat-form-field>
+
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>
       <input matInput placeholder="First Name" type="text" formControlName="firstName">

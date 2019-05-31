@@ -30,13 +30,6 @@ namespace PR.Business
             return intakeFormModels.Select(x => x.ToModel()).FirstOrDefault();
         }
 
-        public IList<IntakeFormFullModel> GetFullIntakeForms(IEnumerable<int> ids)
-        {
-            var intakeFormModels = _context.IntakeForm.Where(x => ids.Contains(x.IntakeFormId)).Include("Questions.Answers").Include("Patient.Address");
-
-            return intakeFormModels.Select(x => x.ToFullModel()).ToList();
-        }
-
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
             var intakeForm = intakeFormModel.ToEntity();

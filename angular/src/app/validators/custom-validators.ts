@@ -3,6 +3,7 @@ import { AbstractControl, AbstractControlOptions, ValidationErrors, ValidatorFn 
 import { containsAlphaLowerValidator } from './contains-alpha-lower.validator';
 import { containsAlphaUpperValidator } from './contains-alpha-upper.validator';
 import { containsNumberValidator } from './contains-number.validator';
+import { emailValidator } from './email.validator';
 import { equalValidator } from './equal.validator';
 import { noSpaceAllowedValidator } from './no-space-allowed';
 import { passwordValidator } from './password.validator';
@@ -12,7 +13,9 @@ import { zipMaskedValidator } from './zip-masked.validator';
 
 // a class to expose all the reactive validations
 export class CustomValidators {
+
     static zipMasked: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
+
 
     static password(minLength: number, maxLength: number): ValidatorFn {
         return passwordValidator(minLength, maxLength);
@@ -32,6 +35,10 @@ export class CustomValidators {
 
     static phonenumber(control: AbstractControl): ValidationErrors {
         return phonenumberValidator(control);
+    }
+
+    static emailAddress(control: AbstractControl): ValidationErrors {
+        return emailValidator(control);
     }
 
     static noSpaceAllowed(control: AbstractControl): ValidationErrors {

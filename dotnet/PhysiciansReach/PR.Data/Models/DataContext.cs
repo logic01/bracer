@@ -81,6 +81,8 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.Password).IsRequired().HasMaxLength(200);
 
+                entity.Property(e => e.EmailAddress).IsRequired().HasMaxLength(100).HasDefaultValue("test@test.com");
+
                 entity.Property(e => e.Active).IsRequired().HasDefaultValue(true);
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
