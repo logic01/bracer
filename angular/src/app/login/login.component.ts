@@ -16,7 +16,6 @@ import { SessionService } from '../services/session.service';
 export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup;
-
   constructor(
     private readonly router: Router,
     private readonly loginApi: LoginService,
@@ -48,6 +47,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.session.userAccount$.next(result);
+        this.session.loggedIn$.next(true);
 
         if (result.type === AccountType.Admin) {
           this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
