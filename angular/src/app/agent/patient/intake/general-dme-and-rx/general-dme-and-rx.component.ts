@@ -5,6 +5,8 @@ import { Question } from 'src/app/models/question.model';
 import { ActivatedRoute } from '@angular/router';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { Answer } from 'src/app/models/answer.model';
+import { SelectValueService } from 'src/app/services/select-value.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-general-dme-and-rx',
@@ -17,6 +19,8 @@ export class GeneralDmeAndRxComponent implements OnInit {
   form: FormGroup;
   patientId: string;
   questions: Question[] = [];
+  shoeSizes: number[] = SelectValueService.shoeSizes;
+  heights: string[] = SelectValueService.heights;
 
   constructor(private readonly route: ActivatedRoute) { }
 
@@ -30,10 +34,10 @@ export class GeneralDmeAndRxComponent implements OnInit {
   initForm() {
     this.form = new FormGroup({
       q1: new FormControl('', Validators.required),
-      q2: new FormControl('', Validators.required),
+      q2: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
       q3: new FormControl('', Validators.required),
       q4: new FormControl('', Validators.required),
-      q5: new FormControl('', Validators.required),
+      q5: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
       q6: new FormControl('', Validators.required),
       q7: new FormControl('', Validators.required),
       q8: new FormControl('', Validators.required),
@@ -51,13 +55,13 @@ export class GeneralDmeAndRxComponent implements OnInit {
   }
 
   initQuestions() {
-    this.questions.push(this.initQuestion('1', 'How tall are you?'));
-    this.questions.push(this.initQuestion('2', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('3', 'Location of pain?'));
-    this.questions.push(this.initQuestion('4', 'What is your shoe size?'));
-    this.questions.push(this.initQuestion('5', 'What is your waist size?'));
+    this.questions.push(this.initQuestion('Height', 'How tall are you?'));
+    this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
+    this.questions.push(this.initQuestion('PainChart', 'Location of pain?'));
+    this.questions.push(this.initQuestion('ShoeSize', 'What is your shoe size?'));
+    this.questions.push(this.initQuestion('Waist', 'What is your waist size?'));
     this.questions.push(this.initQuestion('6', 'What current medications are you taking?'));
-    this.questions.push(this.initQuestion('7', 'Do you have any allergies?'));
+    this.questions.push(this.initQuestion('Allergies', 'Do you have any allergies?'));
     this.questions.push(this.initQuestion('8', 'Recent medical issues related to heart, liver, or kidneys?'));
     this.questions.push(this.initQuestion('9', 'Do you get migraine or sinus headaches?'));
     this.questions.push(this.initQuestion('10', 'Do you have any rashes or scars on your body?'));
@@ -97,7 +101,7 @@ export class GeneralDmeAndRxComponent implements OnInit {
     this.addAnswer(this.questions[1], this.form.controls['q2'].value);
     this.addAnswer(this.questions[2], this.form.controls['q3'].value);
     this.addAnswer(this.questions[3], this.form.controls['q4'].value);
-    this.addAnswer(this.questions[4], this.form.controls['q5'].value);
+    this.addAnswer(this.questions[4], this.form.controls['q5'].value + " inches");
     this.addAnswer(this.questions[5], this.form.controls['q6'].value);
     this.addAnswer(this.questions[6], this.form.controls['q7'].value);
     this.addAnswer(this.questions[7], this.form.controls['q8'].value);

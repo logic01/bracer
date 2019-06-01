@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { Answer } from 'src/app/models/answer.model';
 
+import { SelectValueService } from 'src/app/services/select-value.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
 @Component({
   selector: 'app-general-rx-only',
   templateUrl: './general-rx-only.component.html',
@@ -18,6 +20,7 @@ export class GeneralRxOnlyComponent implements OnInit {
   form: FormGroup;
   patientId: string;
   questions: Question[] = [];
+  heights: string[] = SelectValueService.heights;
 
   constructor(private readonly route: ActivatedRoute) { }
 
@@ -31,7 +34,7 @@ export class GeneralRxOnlyComponent implements OnInit {
   initForm() {
     this.form = new FormGroup({
       q1: new FormControl('', Validators.required),
-      q2: new FormControl('', Validators.required),
+      q2: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
       q3: new FormControl('', Validators.required),
       q4: new FormControl('', Validators.required),
       q5: new FormControl('', Validators.required),
@@ -52,11 +55,11 @@ export class GeneralRxOnlyComponent implements OnInit {
 
   initQuestions() {
 
-    this.questions.push(this.initQuestion('1', 'How tall are you?'));
-    this.questions.push(this.initQuestion('2', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('3', 'Location of pain?'));
+    this.questions.push(this.initQuestion('Height', 'How tall are you?'));
+    this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
+    this.questions.push(this.initQuestion('PainChart', 'Location of pain?'));
     this.questions.push(this.initQuestion('4', 'What current medications are you taking?'));
-    this.questions.push(this.initQuestion('5', 'Do you have any allergies?'));
+    this.questions.push(this.initQuestion('Allergies', 'Do you have any allergies?'));
     this.questions.push(this.initQuestion('6', 'Recent medical issues related to heart, liver, or kidneys?'));
     this.questions.push(this.initQuestion('7', 'Do you get migraine or sinus headaches?'));
     this.questions.push(this.initQuestion('8', 'Do you have any rashes or scars on your body?'));
