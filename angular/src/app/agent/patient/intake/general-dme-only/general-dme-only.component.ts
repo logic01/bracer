@@ -6,6 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { Answer } from 'src/app/models/answer.model';
 
+import { SelectValueService } from 'src/app/services/select-value.service';
+import { CustomValidators } from 'src/app/validators/custom-validators';
+
 @Component({
   selector: 'app-general-dme-only',
   templateUrl: './general-dme-only.component.html',
@@ -18,6 +21,8 @@ export class GeneralDmeOnlyComponent implements OnInit {
   form: FormGroup;
   patientId: string;
   questions: Question[] = [];
+  shoeSizes: number[] = SelectValueService.shoeSizes;
+  heights: string[] = SelectValueService.heights;
 
   constructor(private readonly route: ActivatedRoute) { }
 
@@ -31,9 +36,9 @@ export class GeneralDmeOnlyComponent implements OnInit {
   initForm() {
     this.form = new FormGroup({
       q1: new FormControl('', Validators.required),
-      q2: new FormControl('', Validators.required),
+      q2: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
       q3: new FormControl('', Validators.required),
-      q4: new FormControl('', Validators.required),
+      q4: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
       q5: new FormControl('', Validators.required),
       q6: new FormControl('', Validators.required),
       q7: new FormControl('', Validators.required),
@@ -44,12 +49,12 @@ export class GeneralDmeOnlyComponent implements OnInit {
   }
 
   initQuestions() {
-    this.questions.push(this.initQuestion('1', 'How tall are you?'));
-    this.questions.push(this.initQuestion('2', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('3', 'What is your shoe size?'));
-    this.questions.push(this.initQuestion('4', 'What is your waist size?'));
+    this.questions.push(this.initQuestion('Height', 'How tall are you?'));
+    this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
+    this.questions.push(this.initQuestion('ShoeSize', 'What is your shoe size?'));
+    this.questions.push(this.initQuestion('Waist', 'What is your waist size?'));
     this.questions.push(this.initQuestion('5', 'What current medications are you taking?'));
-    this.questions.push(this.initQuestion('6', 'Do you have any allergies?'));
+    this.questions.push(this.initQuestion('Allergies', 'Do you have any allergies?'));
     this.questions.push(this.initQuestion('7', 'Have you seen your primary care physician within the last year?'));
     this.questions.push(this.initQuestion('8', 'Have you been prescribed any type of brace within the last 5 years?'));
     this.questions.push(this.initQuestion('9', 'Are you diabetic?'));
@@ -81,7 +86,7 @@ export class GeneralDmeOnlyComponent implements OnInit {
     this.addAnswer(this.questions[0], this.form.controls['q1'].value);
     this.addAnswer(this.questions[1], this.form.controls['q2'].value);
     this.addAnswer(this.questions[2], this.form.controls['q3'].value);
-    this.addAnswer(this.questions[3], this.form.controls['q4'].value);
+    this.addAnswer(this.questions[3], this.form.controls['q4'].value + " inches");
     this.addAnswer(this.questions[4], this.form.controls['q5'].value);
     this.addAnswer(this.questions[5], this.form.controls['q6'].value);
     this.addAnswer(this.questions[6], this.form.controls['q7'].value);

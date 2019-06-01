@@ -10,6 +10,8 @@ import { passwordValidator } from './password.validator';
 import { phonenumberValidator } from './phone-number.validator';
 import { stateValidator } from './state.validator';
 import { zipMaskedValidator } from './zip-masked.validator';
+import { onlyNumericValidator } from './only-numeric.validator';
+import { answerValidator } from './answer.validator';
 
 // a class to expose all the reactive validations
 export class CustomValidators {
@@ -55,6 +57,14 @@ export class CustomValidators {
 
     static containsNumber(control: AbstractControl): ValidationErrors {
         return containsNumberValidator(control);
+    }
+
+    static onlyNumeric(control: AbstractControl): ValidationErrors{
+        return onlyNumericValidator(control);
+    }
+
+    static answer(control: AbstractControl): ValidationErrors{
+        return answerValidator(control);
     }
 }
 

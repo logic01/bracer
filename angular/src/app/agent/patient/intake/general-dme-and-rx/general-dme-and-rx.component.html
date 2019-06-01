@@ -5,9 +5,13 @@
 
             <div fxLayout="column">
 
+
                 <mat-label>1. How tall are you?</mat-label>
                 <mat-form-field>
-                    <input matInput placeholder="Height" type="text" formControlName="q1">
+                    <select matNativeControl placeholder="Height" formControlName="q1"  >
+                        <option *ngFor="let height of heights" [value]="height">{{height}}</option>
+                        
+                    </select>
                     <mat-error *ngIf="form.get('q1').hasError('required') && form.get('q1').touched">Please enter the
                         height.
                     </mat-error>
@@ -16,8 +20,8 @@
                 <mat-label>2. How much do you weigh?</mat-label>
                 <mat-form-field>
                     <input matInput placeholder="Weight" type="text" formControlName="q2">
-                    <mat-error *ngIf="form.get('q2').hasError('required') && form.get('q2').touched">Please enter the
-                        weight.
+                    <mat-error *ngIf="form.get('q2').errors != null && form.get('q2').touched">Please enter the
+                        weight, only numeric values.
                     </mat-error>
                 </mat-form-field>
 
@@ -29,22 +33,26 @@
                         pain.</mat-error>
                 </mat-form-field>
 
-
                 <mat-label>4. What is your shoe size?</mat-label>
                 <mat-form-field>
-                    <input matInput placeholder="Shoe Size" type="text" formControlName="q4">
+                    <select matNativeControl placeholder="Shoe Size" formControlName="q4">
+                            <option *ngFor="let shoeSize of shoeSizes" [value]="shoeSize">{{shoeSize}}</option>
+                        
+
+                    </select>
                     <mat-error *ngIf="form.get('q4').hasError('required') && form.get('q4').touched">Please enter the
                         shoe
                         size.
                     </mat-error>
                 </mat-form-field>
 
+
                 <mat-label>5. What is your waist size?</mat-label>
                 <mat-form-field>
                     <input matInput placeholder="Waist Size" type="text" formControlName="q5">
-                    <mat-error *ngIf="form.get('q5').hasError('required') && form.get('q5').touched">Please enter the
+                    <mat-error *ngIf="form.get('q5').errors != null && form.get('q5').touched">Please enter the
                         waist
-                        size.
+                        size, only numeric values.
                     </mat-error>
                 </mat-form-field>
 
@@ -197,6 +205,6 @@
         </div>
 
         <button type="submit" mat-raised-button color="accent">Submit</button>
-        
+
     </form>
 </div>

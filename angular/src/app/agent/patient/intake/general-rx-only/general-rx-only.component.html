@@ -1,17 +1,21 @@
-<div class="margin-30" fxLayout="row" fxLayoutAlign="center start" >
+<div class="margin-30" fxLayout="row" fxLayoutAlign="center start">
   <form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="30px" (ngSubmit)="onSubmit()">
+
 
     <mat-label>1. How tall are you?</mat-label>
     <mat-form-field>
-      <input matInput placeholder="Height" type="text" formControlName="q1">
-      <mat-error *ngIf="form.get('q1').hasError('required') && form.get('q1').touched">Please enter the height.
+      <select matNativeControl placeholder="Height" formControlName="q1">
+          <option *ngFor="let height of heights" [value]="height">{{height}}</option>
+      </select>
+      <mat-error *ngIf="form.get('q1').hasError('required') && form.get('q1').touched">Please enter the
+        height.
       </mat-error>
     </mat-form-field>
 
     <mat-label>2. How much do you weigh?</mat-label>
     <mat-form-field>
       <input matInput placeholder="Weight" type="text" formControlName="q2">
-      <mat-error *ngIf="form.get('q2').hasError('required') && form.get('q2').touched">Please enter the weight.
+      <mat-error *ngIf="form.get('q2').errors != null && form.get('q2').touched">Please enter the weight, only numeric values.
       </mat-error>
     </mat-form-field>
 
@@ -159,6 +163,6 @@
     </div>
 
     <button type="submit" mat-raised-button color="accent">Submit</button>
-    
+
   </form>
 </div>

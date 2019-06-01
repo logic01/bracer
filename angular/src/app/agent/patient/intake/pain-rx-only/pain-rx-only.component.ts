@@ -5,6 +5,7 @@ import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
+import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-pain-rx-only',
@@ -63,14 +64,14 @@ export class PainRxOnlyComponent implements OnInit {
   }
 
   initQuestions() {
-    this.questions.push(this.initQuestion('1', 'Location(s) of pain?'));
-    this.questions.push(this.initQuestion('2', 'When was the onset of pain?'));
-    this.questions.push(this.initQuestion('3', 'What was the cause of pain?'));
-    this.questions.push(this.initQuestion('4', 'What is the duration of pain?'));
-    this.questions.push(this.initQuestion('5', 'What is the duration of pain?'));
-    this.questions.push(this.initQuestion('6', 'What is the duration of pain?'));
+    this.questions.push(this.initQuestion('PainChart', 'Location(s) of pain?'));
+    this.questions.push(this.initQuestion('PainBegan', 'When was the onset of pain?'));
+    this.questions.push(this.initQuestion('PainCause', 'What was the cause of pain?'));
+    this.questions.push(this.initQuestion('PainDuration', 'What is the duration of pain?'));
+    this.questions.push(this.initQuestion('PainDescription', 'Can you describe the pain?'));
+    this.questions.push(this.initQuestion('6', 'What makes your pain feel better?'));
     this.questions.push(this.initQuestion('7', 'What makes your pain feel worst?'));
-    this.questions.push(this.initQuestion('8', 'Rate your pain 0 (none) - 10 (excruciating)?'));
+    this.questions.push(this.initQuestion('PainLevel', 'Rate your pain 0 (none) - 10 (excruciating)?'));
     this.questions.push(this.initQuestion('9', 'Have you recently experienced pain due to muscle spasms, body tesnion or tight muscles that you would like treated?'));
     this.questions.push(this.initQuestion('10', 'Have you recently experienced discomfort due to muscle pain or tightness you would like treated?'));
     this.questions.push(this.initQuestion('11', 'Do you have arthritis, joint pain, or any other pain do to inflammation that you wouldl like treated?'));
