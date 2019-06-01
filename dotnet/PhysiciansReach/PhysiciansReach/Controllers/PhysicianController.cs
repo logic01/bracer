@@ -43,6 +43,8 @@ namespace PhysiciansReach.Controllers
         public ActionResult<PhysicianModel> Put(int id, [FromBody] PhysicianModel physician)
         {
             _logging.Log(LogSeverity.Info, "Put Physician");
+
+            physician.UserAccount.UserAccountId = id;
             return _business.Update(physician);
         }
     }

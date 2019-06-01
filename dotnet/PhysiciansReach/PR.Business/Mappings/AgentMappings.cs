@@ -21,21 +21,21 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Agent ToEntity(this AgentModel model)
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Agent entity, AgentModel model)
         {
-            var entity = new Agent
-            {
-                UserAccount = model.UserAccount.ToEntity(),
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                VendorId = model.VendorId,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
-
-            entity.UserAccount.Type = AccountType.Agent;
-
-            return entity;
+            // userAccountId primary key not mapped
+            entity.FirstName = model.FirstName;
+            entity.LastName = model.LastName;
+            entity.VendorId = model.VendorId;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+            entity.UserAccount.MapFromModel(model.UserAccount);
         }
     }
 }

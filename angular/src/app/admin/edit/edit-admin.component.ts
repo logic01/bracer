@@ -17,6 +17,7 @@ export class EditAdminComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public admin$: Observable<Admin>;
+  public id: string;
 
   constructor(
     private readonly adminApi: AdminService,
@@ -24,9 +25,8 @@ export class EditAdminComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    this.admin$ = this.adminApi.get(id);
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.admin$ = this.adminApi.get(this.id );
   }
 
   ngOnDestroy(): void {
@@ -35,7 +35,7 @@ export class EditAdminComponent implements OnInit, OnDestroy {
 
   onSubmit(admin: Admin) {
     this.adminApi
-      .post(admin)
+      .put(this.id, admin)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newAdmin: Admin) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);

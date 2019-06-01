@@ -2,6 +2,7 @@
 using PR.Business.Mappings;
 using PR.Data.Models;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +31,8 @@ namespace PR.Business
 
         public VendorModel Create(VendorModel vendorModel)
         {
-            Vendor vendor = vendorModel.ToEntity();
+            var vendor = new Vendor();
+            vendor.MapFromModel(vendorModel);
 
             _context.Vendor.Add(vendor);
             _context.SaveChanges();
@@ -42,8 +44,9 @@ namespace PR.Business
         {
             Vendor vendor = _context.Vendor.FirstOrDefault(v => v.VendorId == vendorModel.VendorId);
 
-            vendor = vendorModel.ToEntity();
-            _context.Vendor.Add(vendor);
+            vendor.MapFromModel(vendorModel);
+            vendor.ModifiedOn = DateTime.Now;
+
             _context.SaveChanges();
 
             return vendor.ToModel();

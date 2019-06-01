@@ -27,7 +27,7 @@ export class AdminService {
     return this.http.post<Admin>(this.url, admin);
   }
 
-  put(admin: Admin): Observable<Admin> {
-    return this.http.put<Admin>(this.url, admin);
+  put(id: string, admin: Admin): Observable<Admin> {
+    return this.http.put<Admin>(`${this.url}/${id}`, admin);
   }
 }

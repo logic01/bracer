@@ -41,7 +41,7 @@ export class PhysicianAccountFormComponent implements OnInit {
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       state: new FormControl('', [CustomValidators.state, Validators.required]),
-      zip: new FormControl('', [CustomValidators.zip, Validators.required])
+      zipCode: new FormControl('', [CustomValidators.zip, Validators.required])
     });
 
     this.accountForm.get('password').validator = Validators.compose([
@@ -95,7 +95,7 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.address.addressLineTwo = this.accountForm.controls['addressLineTwo'].value;
     physician.address.city = this.accountForm.controls['city'].value;
     physician.address.state = this.accountForm.controls['state'].value;
-    physician.address.zipCode = this.accountForm.controls['zip'].value;
+    physician.address.zipCode = this.accountForm.controls['zipCode'].value;
 
     return physician;
   }

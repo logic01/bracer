@@ -20,20 +20,20 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Admin ToEntity(this AdminModel model)
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Admin entity, AdminModel model)
         {
-            var entity = new Admin
-            {
-                UserAccount = model.UserAccount.ToEntity(),
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
-
-            entity.UserAccount.Type = AccountType.Admin;
-
-            return entity;
+            // userAccountId primary key not mapped
+            entity.FirstName = model.FirstName;
+            entity.LastName = model.LastName;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+            entity.UserAccount.MapFromModel(model.UserAccount);
         }
     }
 }

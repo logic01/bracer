@@ -44,5 +44,29 @@ namespace PR.Business.Mappings
             return entity;
         }
 
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this UserAccount entity, UserAccountModel model)
+        {
+            if (model.Password != string.Empty)
+            {
+                var hash = new PasswordHash(model.Password);
+                var hashBytes = hash.ToArray();
+
+                entity.Password = hashBytes;
+            }
+
+            // userId primary key not mapped
+            entity.UserName = model.UserName;
+            entity.EmailAddress = model.EmailAddress;
+            entity.Active = model.Active;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+        }
+
     }
 }
