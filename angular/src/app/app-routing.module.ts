@@ -23,10 +23,6 @@ import { SignInGuardService } from './services/sign-in-guard.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: '**',
-    redirectTo: RouteUrls.LoginComponent,
-    pathMatch: 'full'
-  },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
   {
     path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent,
@@ -97,7 +93,12 @@ const routes: Routes = [
     path: RouteUrls.VendorEditComponent, component: EditVendorComponent,
     canActivate: [RoleGuardService, SignInGuardService],
     data: { expectedRole: AccountType.Admin }
-  }
+  },
+  {
+    path: '**',
+    redirectTo: RouteUrls.LoginComponent,
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
