@@ -17,36 +17,87 @@ import { EditPhysicianComponent } from './physician/edit/edit-physician.componen
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 import { ViewVendorComponent } from './vendor/view/view-vendor.component';
+import { RoleGuardService } from './services/role-guard.service';
+import { AccountType } from './models/enums/account-type.enum';
+import { SignInGuardService } from './services/sign-in-guard.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
+  { path: '**',
+    redirectTo: RouteUrls.LoginComponent,
+    pathMatch: 'full'
+  },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
-  { path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent },
-  { path: RouteUrls.PhysicianCreateComponent, component: CreatePhysicianComponent },
-  { path: RouteUrls.AgentCreateComponent, component: CreateAgentComponent },
-  { path: RouteUrls.IntakeFormComponent, component: IntakeFormComponent },
-  { path: RouteUrls.PatientCreateComponent, component: CreatePatientComponent },
+  {
+    path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.PhysicianCreateComponent, component: CreatePhysicianComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.AgentCreateComponent, component: CreateAgentComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.IntakeFormComponent, component: IntakeFormComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Agent }
+  },
+  {
+    path: RouteUrls.PatientCreateComponent, component: CreatePatientComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Agent }
+  },
   {
     path: RouteUrls.AgentDashboardComponent, component: AgentDashboardComponent,
-    // canActivate: [RoleGuardService],
-    //  data: { expectedRole: AccountType.Agent }
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Agent }
   },
   {
     path: RouteUrls.PhysicianDashboardComponent, component: PhysicianDashboardComponent,
-    // canActivate: [RoleGuardService],
-    // data: { expectedRole: AccountType.Physician }
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Physician }
   },
   {
     path: RouteUrls.AdminDashboardComponent, component: AdminDashboardComponent,
-    //  canActivate: [RoleGuardService],
-    // data: { expectedRole: AccountType.Admin }
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
   },
-  { path: RouteUrls.VendorCreateComponent, component: CreateVendorComponent },
-  { path: RouteUrls.VendorViewComponent, component: ViewVendorComponent },
-  { path: RouteUrls.AdminEditComponent, component: EditAdminComponent },
-  { path: RouteUrls.AgentEditComponent, component: EditAgentComponent },
-  { path: RouteUrls.PhysicianEditComponent, component: EditPhysicianComponent },
-  { path: RouteUrls.VendorEditComponent, component: EditVendorComponent }
+  {
+    path: RouteUrls.VendorCreateComponent, component: CreateVendorComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.VendorViewComponent, component: ViewVendorComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.AdminEditComponent, component: EditAdminComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.AgentEditComponent, component: EditAgentComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.PhysicianEditComponent, component: EditPhysicianComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  },
+  {
+    path: RouteUrls.VendorEditComponent, component: EditVendorComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRole: AccountType.Admin }
+  }
 ];
 
 @NgModule({

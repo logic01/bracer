@@ -10,6 +10,7 @@ import { DocumentComponent } from './document/document.component';
 import { EditPhysicianComponent } from './edit/edit-physician.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { SignComponent } from './sign/sign.component';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SignComponent } from './sign/sign.component';
     CommonModule,
     DesignModule,
     ReactiveFormsModule,
-    SignaturePadModule
+    SignaturePadModule,
+    PipesModule
   ]
 })
 export class PhysicianModule { }
