@@ -8,6 +8,7 @@ import { Document } from '../../models/document.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { DocumentService } from 'src/app/services/api/document.service';
 import { SessionService } from 'src/app/services/session.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -16,7 +17,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class PhysicianDashboardComponent implements OnInit {
 
-  columnsToDisplay = ['documentId', 'type', 'status', 'view', 'sign'];
+  columnsToDisplay = ['documentId', 'type', 'status', 'download', 'sign'];
 
   data: Document[];
 
@@ -42,8 +43,11 @@ export class PhysicianDashboardComponent implements OnInit {
 
   }
 
-  view(id: string) {
+  download(id: string) {
 
+    window.location.href = `${environment.api_url}/document/${id}/download`;
+
+    /*
     this.documentApi.download(id).subscribe((res: any) => {
       console.log('start download:', res);
       const url = window.URL.createObjectURL(res);
@@ -55,7 +59,7 @@ export class PhysicianDashboardComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(url);
       a.remove(); // remove the element
-    });
+    });*/
 
   }
 
