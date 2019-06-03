@@ -32,7 +32,8 @@ namespace PR.Business.Mappings
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn,
                 Address = entity.Address.ToModel(),
-                PhysiciansAddress = entity.PhysiciansAddress.ToModel()
+                PhysiciansAddress = entity.PhysiciansAddress?.ToModel()
+               
             };
 
             return model;
@@ -65,7 +66,8 @@ namespace PR.Business.Mappings
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn,
                 Address = model.Address.ToEntity(),
-                PhysiciansAddress = model.PhysiciansAddress.ToEntity()
+                PhysiciansAddress = model.PhysiciansAddress?.ToEntity(),
+                PhysiciansAddressId = model.PhysiciansAddress?.AddressId
             };
 
             return entity;

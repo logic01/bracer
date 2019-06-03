@@ -21,6 +21,7 @@ import { PainRxOnlyComponent } from './patient/intake/pain-rx-only/pain-rx-only.
 import { RashSkinRxOnlyComponent } from './patient/intake/rash-skin-rx-only/rash-skin-rx-only.component';
 import { ScarRxOnlyComponent } from './patient/intake/scar-rx-only/scar-rx-only.component';
 
+
 @NgModule({
   declarations: [
     CreateAgentComponent,

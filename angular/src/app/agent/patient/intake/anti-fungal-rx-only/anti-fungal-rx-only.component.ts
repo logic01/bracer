@@ -6,7 +6,6 @@ import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-anti-fungal-rx-only',
@@ -38,9 +37,9 @@ export class AntiFungalRxOnlyComponent implements OnInit {
 
   initForm() {
     this.form = new FormGroup({
-      q1: new FormControl('', CustomValidators.answer),
-      q2: new FormControl('', CustomValidators.answer),
-      q3: new FormControl('', CustomValidators.answer)
+      q1: new FormControl('', Validators.required),
+      q2: new FormControl('', Validators.required),
+      q3: new FormControl('', Validators.required)
     });
   }
 

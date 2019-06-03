@@ -1,6 +1,7 @@
 ﻿using PR.Constants.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PR.Data.Models
 {
@@ -35,20 +36,21 @@ namespace PR.Data.Models
         public CallbackTime BestTimeToCallBack { get; set; }
 
         public bool IsDme { get; set; }
-
+               
         public string Medications { get; set; }
 
         public string Notes { get; set; }
 
         public string OtherProducts { get; set; }
 
+        [MaxLength(100)]
         public string PhysiciansName { get; set; }
 
         public string PhysiciansPhoneNumber { get; set; }
 
         public int AddressId { get; set; }
 
-        public int PhysiciansAddressId { get; set; }
+        public int? PhysiciansAddressId { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

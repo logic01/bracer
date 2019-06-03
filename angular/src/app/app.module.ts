@@ -12,6 +12,7 @@ import { LoginModule } from './login/login.module';
 import { PhysicianModule } from './physician/physician.module';
 import { PipesModule } from './pipes/pipes.module';
 import { VendorModule } from './vendor/vendor.module';
+import { MaskService } from './services/mask.service';
 
 
 @NgModule({
@@ -31,7 +32,7 @@ import { VendorModule } from './vendor/vendor.module';
     PhysicianModule,
     PipesModule
   ],
-  providers: [],
+  providers: [MaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
