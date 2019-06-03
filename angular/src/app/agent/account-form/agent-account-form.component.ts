@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Observable } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 import { Agent } from 'src/app/models/Agent.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { Vendor } from 'src/app/models/vendor.model';
@@ -24,6 +23,7 @@ export class AgentAccountFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
     this.accountForm = new FormGroup({
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
@@ -31,7 +31,8 @@ export class AgentAccountFormComponent implements OnInit {
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      vendor: new FormControl('', Validators.required)
+      vendor: new FormControl('', Validators.required),
+      active: new FormControl(true),
     });
 
     this.accountForm.get('password').validator = Validators.compose([
@@ -44,7 +45,7 @@ export class AgentAccountFormComponent implements OnInit {
       CustomValidators.equal(this.accountForm.get('password'))
     ]);
 
-    // populate form if we have a vendor bound to the form
+    // populate form if we have a agent bound to the form
     if (this.agent$) {
       this.agent$.subscribe((result: Agent) => {
         this.accountForm.patchValue(result);
@@ -52,6 +53,9 @@ export class AgentAccountFormComponent implements OnInit {
         this.accountForm.patchValue({ vendor: result.vendorId });
       });
     }
+
+    // only display vendors that are active.
+    this.vendors$ = this.vendors$.pipe(map(vendors => vendors.filter(v => v.active)));
 
   }
 
@@ -75,9 +79,12 @@ export class AgentAccountFormComponent implements OnInit {
     agent.userAccount.password = this.accountForm.controls['password'].value;
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     agent.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
+    agent.userAccount.active = this.accountForm.controls['active'].value;
+
     agent.firstName = this.accountForm.controls['firstName'].value;
     agent.lastName = this.accountForm.controls['lastName'].value;
     agent.vendorId = this.accountForm.controls['vendor'].value;
+
     return agent;
   }
 

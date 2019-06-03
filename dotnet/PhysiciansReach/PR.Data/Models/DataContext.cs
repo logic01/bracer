@@ -225,6 +225,8 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.ContactLastName).IsRequired().HasMaxLength(100);
 
+                entity.Property(e => e.Active).IsRequired().HasDefaultValue(true);
+
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");

@@ -16,6 +16,8 @@ namespace PR.Models
 
         public string ContactLastName { get; set; }
 
+        public bool Active { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }

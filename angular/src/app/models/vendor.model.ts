@@ -4,6 +4,7 @@ export class Vendor {
     public phoneNumber: string;
     public contactFirstName: string;
     public contactLastName: string;
+    public active: boolean;
     public createdOn: Date;
     public modifiedOn: Date;
 }

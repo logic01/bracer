@@ -44,6 +44,9 @@ namespace PhysiciansReach.Controllers
         public ActionResult<AgentModel> Put(int id, [FromBody] AgentModel agent)
         {
             _logging.Log(LogSeverity.Info, "Put Agent");
+
+            agent.UserAccount.UserAccountId = id;
+
             return _business.Update(agent);
         }
     }

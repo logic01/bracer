@@ -44,6 +44,9 @@ namespace PhysiciansReach.Controllers
         public ActionResult<AdminModel> Put(int id, [FromBody] AdminModel admin)
         {
             _logging.Log(LogSeverity.Info, "Put Admin");
+
+            admin.UserAccount.UserAccountId = id;
+
             return _business.Update(admin);
         }
     }

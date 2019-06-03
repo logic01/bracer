@@ -73,7 +73,6 @@
     </mat-form-field>
   </div>
 
-
   <mat-form-field>
     <mat-select placeholder="Vendor" formControlName="vendor">
       <mat-option>--</mat-option>
@@ -83,6 +82,8 @@
     </mat-select>
     <mat-error *ngIf="accountForm.get('vendor').hasError('required')">Please select a vendor.</mat-error>
   </mat-form-field>
+
+  <mat-checkbox formControlName="active" labelPosition="before" color="primary" fxFlexAlign="end">Active </mat-checkbox>
 
   <button type="submit" mat-raised-button color="accent">Submit</button>
 

@@ -44,6 +44,9 @@ namespace PhysiciansReach.Controllers
         public ActionResult<PatientModel> Put(int id, [FromBody] PatientModel patient)
         {
             _logging.Log(LogSeverity.Info, "Put Patient");
+
+            patient.PatientId = id;
+
             return _business.Update(patient);
         }
     }
