@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Signature } from 'src/app/models/signature.model';
 
 import { environment } from '../../../environments/environment';
 import { Document } from '../../models/document.model';
@@ -29,7 +28,4 @@ export class DocumentService {
     return this.http.put<Document>(`${environment.api_url}/document/${document.documentId}`, document);
   }
 
-  sign(documentId: string, signature: Signature): Observable<void> {
-    return this.http.post<void>(`${environment.api_url}/document/${documentId}/signature`, signature);
-  }
 }

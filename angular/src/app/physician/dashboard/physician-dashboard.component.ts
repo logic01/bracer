@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Signature } from 'src/app/models/signature.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { DocumentService } from 'src/app/services/api/document.service';
+import { SignatureService } from 'src/app/services/api/signature.service';
 import { SessionService } from 'src/app/services/session.service';
 import { environment } from 'src/environments/environment';
 
@@ -28,8 +28,8 @@ export class PhysicianDashboardComponent implements OnInit {
   constructor(
     private readonly session: SessionService,
     private readonly documentApi: DocumentService,
-    private readonly dialog: MatDialog,
-    private readonly router: Router) { }
+    private readonly signatureApi: SignatureService,
+    private readonly dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -58,7 +58,7 @@ export class PhysicianDashboardComponent implements OnInit {
       const signature = new Signature();
       signature.signature = result;
 
-      this.documentApi.sign(id, signature).subscribe();
+      this.signatureApi.sign(id, signature).subscribe();
     });
   }
 }
