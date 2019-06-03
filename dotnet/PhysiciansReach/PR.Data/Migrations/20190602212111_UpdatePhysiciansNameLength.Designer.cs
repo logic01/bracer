@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190602212111_UpdatePhysiciansNameLength")]
+    partial class UpdatePhysiciansNameLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,6 +302,7 @@ namespace PR.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Medications")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("MiddleName")
@@ -311,9 +314,11 @@ namespace PR.Data.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("OtherProducts")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("Pharmacy")
@@ -324,12 +329,14 @@ namespace PR.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.Property<int?>("PhysiciansAddressId");
+                    b.Property<int>("PhysiciansAddressId");
 
                     b.Property<string>("PhysiciansName")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("PhysiciansPhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<string>("Sex")
@@ -349,8 +356,7 @@ namespace PR.Data.Migrations
                     b.HasIndex("AgentId");
 
                     b.HasIndex("PhysiciansAddressId")
-                        .IsUnique()
-                        .HasFilter("[PhysiciansAddressId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Patient","dbo");
                 });

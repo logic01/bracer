@@ -12,6 +12,7 @@ import { stateValidator } from './state.validator';
 import { zipMaskedValidator } from './zip-masked.validator';
 import { onlyNumericValidator } from './only-numeric.validator';
 import { answerValidator } from './answer.validator';
+import { dateValidator } from './date.validator';
 
 // a class to expose all the reactive validations
 export class CustomValidators {
@@ -65,6 +66,10 @@ export class CustomValidators {
 
     static answer(control: AbstractControl): ValidationErrors{
         return answerValidator(control);
+    }
+
+    static date(control: AbstractControl): ValidationErrors{
+        return dateValidator(control);
     }
 }
 

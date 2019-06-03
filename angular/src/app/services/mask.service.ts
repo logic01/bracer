@@ -16,4 +16,8 @@ export class MaskService {
 
   // 80112
   public zip = [/\d/, /\d/, /\d/, /\d/, /\d/];
+
+  // 02-15-1985
+  public date = { mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/], showMask: true, guide: true };
+ 
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190602222323_UpdatePatientNullableColumns")]
+    partial class UpdatePatientNullableColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,9 +329,11 @@ namespace PR.Data.Migrations
                     b.Property<int?>("PhysiciansAddressId");
 
                     b.Property<string>("PhysiciansName")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("PhysiciansPhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<string>("Sex")

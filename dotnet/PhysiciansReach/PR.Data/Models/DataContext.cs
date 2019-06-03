@@ -267,15 +267,15 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.BestTimeToCallBack).IsRequired().HasMaxLength(100).HasConversion<string>();
 
-                entity.Property(e => e.Medications).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Medications).HasMaxLength(100);
 
-                entity.Property(e => e.Notes).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Notes).HasMaxLength(100);
 
-                entity.Property(e => e.OtherProducts).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.OtherProducts).HasMaxLength(100);
 
-                entity.Property(e => e.PhysiciansName).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.PhysiciansName).HasMaxLength(100);
 
-                entity.Property(e => e.PhysiciansPhoneNumber).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.PhysiciansPhoneNumber).HasMaxLength(10);
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
