@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { Document } from '../../models/document.model';
+import { Signature } from 'src/app/models/signature.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { DocumentService } from 'src/app/services/api/document.service';
 import { SessionService } from 'src/app/services/session.service';
 import { environment } from 'src/environments/environment';
+
+import { Document } from '../../models/document.model';
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -26,6 +28,7 @@ export class PhysicianDashboardComponent implements OnInit {
   constructor(
     private readonly session: SessionService,
     private readonly documentApi: DocumentService,
+    private readonly dialog: MatDialog,
     private readonly router: Router) { }
 
   ngOnInit() {
@@ -44,26 +47,18 @@ export class PhysicianDashboardComponent implements OnInit {
   }
 
   download(id: string) {
-
     window.location.href = `${environment.api_url}/document/${id}/download`;
-
-    /*
-    this.documentApi.download(id).subscribe((res: any) => {
-      console.log('start download:', res);
-      const url = window.URL.createObjectURL(res);
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.href = url;
-      a.download = res.filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove(); // remove the element
-    });*/
-
   }
 
   sign(id: string) {
-    console.log(id);
+    const dialogRef = this.dialog.open(SignatureDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      const signature = new Signature();
+      signature.signature = result;
+
+      this.documentApi.sign(id, signature).subscribe();
+    });
   }
 }

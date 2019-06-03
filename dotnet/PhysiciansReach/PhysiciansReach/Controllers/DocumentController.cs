@@ -47,8 +47,12 @@ namespace PhysiciansReach.Controllers
 
             if (document.DocumentId != documentId)
             {
-                throw new System.Exception("Invalid Request.");
+                throw new Exception("Invalid Request.");
             }
+
+            // this api is only used by the 'assignment' in the Admin.
+            // if we need it for something else then we should re-consider seeting this status here.
+            document.Status = DocumentStatus.Assigned;
 
             return _business.Update(document);
         }
@@ -58,7 +62,7 @@ namespace PhysiciansReach.Controllers
         {
             _logging.Log(LogSeverity.Info, $"Get Document {documentId}");
 
-            var document = _business.Get(documentId);
+            DocumentModel document = _business.Get(documentId);
 
             if (document == null)
             {

@@ -5,8 +5,10 @@ using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PR.Business
 {
@@ -64,6 +66,23 @@ namespace PR.Business
 
             // return new
             return document.ToModel();
+        }
+
+        public void SaveSignature(int documentId, SignatureModel signatureModel)
+        {
+            // get original
+            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
+
+            var base64Data = Regex.Match(signatureModel.Signature, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+            var signatureBytes = Convert.FromBase64String(base64Data);
+
+            // populate with model data
+            document.Signature = signatureBytes;
+            document.Status = DocumentStatus.Signed;
+            document.ModifiedOn = DateTime.Now;
+
+            // save
+            _context.SaveChanges();
         }
 
         public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)

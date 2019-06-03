@@ -14,5 +14,7 @@ namespace PR.Business.Interfaces
         DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId);
 
         DocumentModel Update(DocumentModel documentModel);
+
+        void SaveSignature(int documentId, SignatureModel signatureModel);
     }
 }
