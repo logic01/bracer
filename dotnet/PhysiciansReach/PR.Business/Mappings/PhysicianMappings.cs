@@ -22,23 +22,22 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Physician ToEntity(this PhysicianModel model)
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Physician entity, PhysicianModel model)
         {
-            var entity = new Physician
-            {
-
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn,
-                UserAccount = model.UserAccount.ToEntity(),
-                Address = model.Address.ToEntity()
-            };
-
-            entity.UserAccount.Type = AccountType.Physician;
-
-            return entity;
+            // userAccountId primary key not mapped
+            entity.FirstName = model.FirstName;
+            entity.LastName = model.LastName;
+            entity.PhoneNumber = model.PhoneNumber;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+            entity.UserAccount.MapFromModel(model.UserAccount);
+            entity.Address.MapFromModel(model.Address);
         }
     }
 }

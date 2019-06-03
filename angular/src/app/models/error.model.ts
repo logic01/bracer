@@ -1,6 +1,6 @@
 export class ErrorModel {
-    statusCode: string;
-    errorCode: string;
-    message: string;
-    stackTrace: string;
+    public statusCode: string;
+    public errorCode: string;
+    public message: string;
+    public stackTrace: string;
 }

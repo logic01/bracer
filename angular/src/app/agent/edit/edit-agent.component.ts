@@ -21,6 +21,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   public vendors$: Observable<Vendor[]>;
   public agent$: Observable<Agent>;
+  private id: string;
 
   constructor(
     private readonly agentApi: AgentService,
@@ -29,10 +30,10 @@ export class EditAgentComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('id');
 
     this.vendors$ = this.vendorApi.getAll();
-    this.agent$ = this.agentApi.get(id);
+    this.agent$ = this.agentApi.get(this.id);
   }
 
   ngOnDestroy(): void {
@@ -41,7 +42,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
 
   onSubmit(agent: Agent) {
     this.agentApi
-      .post(agent)
+      .put(this.id, agent)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newAgent: Agent) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);

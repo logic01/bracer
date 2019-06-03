@@ -18,6 +18,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public physician$: Observable<Physician>;
+  private id: string;
 
   constructor(
     private readonly physicianApi: PhysicianService,
@@ -25,8 +26,8 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.physician$ = this.physicianApi.get(id);
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.physician$ = this.physicianApi.get(this.id);
   }
 
   ngOnDestroy(): void {
@@ -35,7 +36,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
 
   onSubmit(physician: Physician) {
     this.physicianApi
-      .post(physician)
+      .put(this.id, physician)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newPhysician: Physician) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);

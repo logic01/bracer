@@ -14,6 +14,7 @@ namespace PR.Business.Mappings
                 PhoneNumber = entity.PhoneNumber,
                 ContactFirstName = entity.ContactFirstName,
                 ContactLastName = entity.ContactLastName,
+                Active = entity.Active,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -21,21 +22,24 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Vendor ToEntity(this VendorModel model)
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Vendor entity, VendorModel model)
         {
-            var entity = new Vendor
-            {
-                VendorId = model.VendorId,
-                CompanyName = model.CompanyName,
-                DoingBusinessAs = model.DoingBusinessAs,
-                PhoneNumber = model.PhoneNumber,
-                ContactFirstName = model.ContactFirstName,
-                ContactLastName = model.ContactLastName,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
+            // vendorId primary key not mapped
+            entity.CompanyName = model.CompanyName;
+            entity.DoingBusinessAs = model.DoingBusinessAs;
+            entity.PhoneNumber = model.PhoneNumber;
+            entity.ContactFirstName = model.ContactFirstName;
+            entity.ContactLastName = model.ContactLastName;
+            entity.Active = model.Active;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
 
-            return entity;
         }
     }
 }

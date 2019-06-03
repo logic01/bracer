@@ -27,7 +27,7 @@ export class AgentService {
     return this.http.post<Agent>(this.url, agent);
   }
 
-  put(agent: Agent): Observable<Agent> {
-    return this.http.put<Agent>(this.url, agent);
+  put(id: string, agent: Agent): Observable<Agent> {
+    return this.http.put<Agent>(`${this.url}/${id}`, agent);
   }
 }

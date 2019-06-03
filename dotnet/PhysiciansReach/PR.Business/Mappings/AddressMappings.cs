@@ -7,7 +7,7 @@ namespace PR.Business.Mappings
     {
         public static AddressModel ToModel(this Address entity)
         {
-            AddressModel model = new AddressModel
+            var model = new AddressModel
             {
                 AddressId = entity.AddressId,
                 AddressLineOne = entity.AddressLineOne,
@@ -24,7 +24,7 @@ namespace PR.Business.Mappings
 
         public static Address ToEntity(this AddressModel model)
         {
-            Address entity = new Address
+            var entity = new Address
             {
                 AddressId = model.AddressId,
                 AddressLineOne = model.AddressLineOne,
@@ -37,6 +37,24 @@ namespace PR.Business.Mappings
             };
 
             return entity;
+        }
+
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Address entity, AddressModel model)
+        {
+            // addressId primary key not mapped
+            entity.AddressLineOne = model.AddressLineOne;
+            entity.AddressLineTwo = model.AddressLineTwo;
+            entity.City = model.City;
+            entity.State = model.State;
+            entity.ZipCode = model.ZipCode;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
         }
     }
 }

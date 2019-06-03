@@ -9,7 +9,8 @@ import { PhysicianDashboardComponent } from './dashboard/physician-dashboard.com
 import { DocumentComponent } from './document/document.component';
 import { EditPhysicianComponent } from './edit/edit-physician.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { SignComponent } from './sign/sign.component';
+import { PipesModule } from '../pipes/pipes.module';
+import { SignatureDialogComponent } from './signature-dialog/signature-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,17 @@ import { SignComponent } from './sign/sign.component';
     PhysicianDashboardComponent,
     PhysicianAccountFormComponent,
     DocumentComponent,
-    SignComponent,
+    SignatureDialogComponent,
   ],
   imports: [
     CommonModule,
     DesignModule,
     ReactiveFormsModule,
-    SignaturePadModule
+    SignaturePadModule,
+    PipesModule
+  ],
+  entryComponents: [
+    SignatureDialogComponent
   ]
 })
 export class PhysicianModule { }

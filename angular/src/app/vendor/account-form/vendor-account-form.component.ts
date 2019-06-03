@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Observable } from 'rxjs';
-
 import { Vendor } from 'src/app/models/vendor.model';
 import { MaskService } from 'src/app/services/mask.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
@@ -28,6 +26,7 @@ export class VendorAccountFormComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.required, CustomValidators.phonenumber]),
       contactFirstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       contactLastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      active: new FormControl(true)
     });
 
     // populate form if we have a vendor bound to the form
@@ -53,7 +52,7 @@ export class VendorAccountFormComponent implements OnInit {
   private buildVendor(): Vendor {
 
     const vendor = new Vendor();
-
+    vendor.active  = this.accountForm.controls['active'].value;
     vendor.companyName = this.accountForm.controls['companyName'].value;
     vendor.doingBusinessAs = this.accountForm.controls['doingBusinessAs'].value;
     vendor.phoneNumber = this.accountForm.controls['phoneNumber'].value;

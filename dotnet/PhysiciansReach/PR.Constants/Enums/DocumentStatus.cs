@@ -3,9 +3,9 @@
     public enum DocumentStatus
     {
         New,
-        Approved,
         Assigned,
         Signed,
+        Emailed,
         Closed
     }
 }

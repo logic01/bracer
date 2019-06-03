@@ -9,4 +9,10 @@ import { UserAccount } from '../models/user-account.model';
 })
 export class SessionService {
   public userAccount$: BehaviorSubject<UserAccount> = new BehaviorSubject<UserAccount>(new UserAccount());
+  public loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  clear() {
+    this.userAccount$.next(new UserAccount());
+    this.loggedIn$.next(false);
+  }
 }

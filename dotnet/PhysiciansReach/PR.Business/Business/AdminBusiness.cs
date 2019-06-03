@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PR.Business.Business;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +28,7 @@ namespace PR.Business
 
         public AdminModel Get(int userAccountId)
         {
-            var admin = _context.Admin
+            Admin admin = _context.Admin
                 .Include(a => a.UserAccount)
                 .FirstOrDefault(u => u.UserAccountId == userAccountId);
 
@@ -37,7 +37,8 @@ namespace PR.Business
 
         public AdminModel Create(AdminModel adminModel)
         {
-            Admin admin = adminModel.ToEntity();
+            var admin = new Admin();
+            admin.MapFromModel(adminModel);
 
             _context.Admin.Add(admin);
             _context.SaveChanges();
@@ -47,15 +48,17 @@ namespace PR.Business
 
         public AdminModel Update(AdminModel adminModel)
         {
-            Admin admin = _context.Admin.FirstOrDefault(u => u.UserAccountId == adminModel.UserAccount.UserAccountId);
+            Admin admin = _context.Admin
+                .Include(a => a.UserAccount)
+                .FirstOrDefault(u => u.UserAccountId == adminModel.UserAccount.UserAccountId);
 
-            admin = adminModel.ToEntity();
-            _context.Admin.Add(admin);
+            admin.MapFromModel(adminModel);
+            admin.UserAccount.ModifiedOn = DateTime.Now;
+            admin.ModifiedOn = DateTime.Now;
+
             _context.SaveChanges();
 
             return admin.ToModel();
         }
-
-
     }
 }

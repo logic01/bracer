@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { MatDialog } from '@angular/material';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { Document } from '../../models/document.model';
+import { Signature } from 'src/app/models/signature.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { DocumentService } from 'src/app/services/api/document.service';
+import { SignatureService } from 'src/app/services/api/signature.service';
 import { SessionService } from 'src/app/services/session.service';
+import { environment } from 'src/environments/environment';
+
+import { Document } from '../../models/document.model';
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -16,7 +19,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class PhysicianDashboardComponent implements OnInit {
 
-  columnsToDisplay = ['documentId', 'type', 'status', 'view', 'sign'];
+  columnsToDisplay = ['documentId', 'type', 'status', 'download', 'sign'];
 
   data: Document[];
 
@@ -25,7 +28,8 @@ export class PhysicianDashboardComponent implements OnInit {
   constructor(
     private readonly session: SessionService,
     private readonly documentApi: DocumentService,
-    private readonly router: Router) { }
+    private readonly signatureApi: SignatureService,
+    private readonly dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -42,24 +46,19 @@ export class PhysicianDashboardComponent implements OnInit {
 
   }
 
-  view(id: string) {
-
-    this.documentApi.download(id).subscribe((res: any) => {
-      console.log('start download:', res);
-      const url = window.URL.createObjectURL(res);
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.href = url;
-      a.download = res.filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove(); // remove the element
-    });
-
+  download(id: string) {
+    window.location.href = `${environment.api_url}/document/${id}/download`;
   }
 
   sign(id: string) {
-    console.log(id);
+    const dialogRef = this.dialog.open(SignatureDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      const signature = new Signature();
+      signature.signature = result;
+
+      this.signatureApi.sign(id, signature).subscribe();
+    });
   }
 }

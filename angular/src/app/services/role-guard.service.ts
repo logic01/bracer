@@ -23,19 +23,18 @@ export class RoleGuardService implements CanActivate {
 
     const expectedRole = next.data.expectedRole as AccountType;
 
-    return this.session.userAccount$
-      .pipe(
-        take(1),
-        map((account: UserAccount) => {
+    return this.session.userAccount$.pipe(
+      take(1),
+      map((account: UserAccount) => {
 
-          if (account.type === expectedRole) {
-            return true;
-          }
+        if (account.type === expectedRole) {
+          return true;
+        }
 
-          this.router.navigateByUrl(RouteUrls.LoginComponent);
-          return false;
-        })
-      );
+        this.router.navigateByUrl(RouteUrls.LoginComponent);
+        return false;
+      })
+    );
 
   }
 }

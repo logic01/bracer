@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PR.Models;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;
+using PR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +35,7 @@ namespace PR.Business
 
         public AgentModel Get(int userAccountId)
         {
-            var agent = _context.Agent
+            Agent agent = _context.Agent
                 .Include(a => a.UserAccount)
                 .FirstOrDefault(u => u.UserAccountId == userAccountId);
 
@@ -43,7 +44,8 @@ namespace PR.Business
 
         public AgentModel Create(AgentModel agentModel)
         {
-            var agent = agentModel.ToEntity();
+            var agent = new Agent();
+            agent.MapFromModel(agentModel);
 
             _context.Agent.Add(agent);
             _context.SaveChanges();
@@ -53,17 +55,19 @@ namespace PR.Business
 
         public AgentModel Update(AgentModel agentModel)
         {
-            var agent = _context.Agent
+            Agent agent = _context.Agent
                 .Include(a => a.UserAccount)
                 .FirstOrDefault(u => u.UserAccountId == agentModel.UserAccount.UserAccountId);
 
-            agent = agentModel.ToEntity();
-            _context.Agent.Add(agent);
+            agent.MapFromModel(agentModel);
+
+            agent.UserAccount.ModifiedOn = DateTime.Now;
+            agent.ModifiedOn = DateTime.Now;
+
             _context.SaveChanges();
 
             return agent.ToModel();
         }
-
 
     }
 }

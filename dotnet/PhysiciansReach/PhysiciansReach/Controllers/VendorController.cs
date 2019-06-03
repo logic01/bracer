@@ -44,6 +44,9 @@ namespace PhysiciansReach.Controllers
         public ActionResult<VendorModel> Put(int id, [FromBody] VendorModel vendor)
         {
             _logging.Log(LogSeverity.Info, "Put Vendor");
+
+            vendor.VendorId = id;
+
             return _business.Update(vendor);
         }
     }

@@ -23,11 +23,11 @@ export class VendorService {
     return this.http.get<Vendor>(`${this.url}/${id}`);
   }
 
-  post(admin: Vendor): Observable<Vendor> {
-    return this.http.post<Vendor>(this.url, admin);
+  post(vendor: Vendor): Observable<Vendor> {
+    return this.http.post<Vendor>(this.url, vendor);
   }
 
-  put(admin: Vendor): Observable<Vendor> {
-    return this.http.put<Vendor>(this.url, admin);
+  put(id: string, vendor: Vendor): Observable<Vendor> {
+    return this.http.put<Vendor>(`${this.url}/${id}`, vendor);
   }
 }

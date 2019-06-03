@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Observable } from 'rxjs';
-
 import { Address } from 'src/app/models/address.model';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
@@ -41,7 +39,8 @@ export class PhysicianAccountFormComponent implements OnInit {
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       state: new FormControl('', [CustomValidators.state, Validators.required]),
-      zip: new FormControl('', [CustomValidators.zip, Validators.required])
+      zipCode: new FormControl('', [CustomValidators.zip, Validators.required]),
+      active: new FormControl(true)
     });
 
     this.accountForm.get('password').validator = Validators.compose([
@@ -86,6 +85,7 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.userAccount.password = this.accountForm.controls['password'].value;
     physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     physician.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
+    physician.userAccount.active = this.accountForm.controls['active'].value;
 
     physician.firstName = this.accountForm.controls['firstName'].value;
     physician.lastName = this.accountForm.controls['lastName'].value;
@@ -95,7 +95,7 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.address.addressLineTwo = this.accountForm.controls['addressLineTwo'].value;
     physician.address.city = this.accountForm.controls['city'].value;
     physician.address.state = this.accountForm.controls['state'].value;
-    physician.address.zipCode = this.accountForm.controls['zip'].value;
+    physician.address.zipCode = this.accountForm.controls['zipCode'].value;
 
     return physician;
   }

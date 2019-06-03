@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PR.Models;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
 using PR.Data.Models;
+using PR.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +39,8 @@ namespace PR.Business
 
         public PhysicianModel Create(PhysicianModel physicianModel)
         {
-            Physician physician = physicianModel.ToEntity();
+            var physician = new Physician();
+            physician.MapFromModel(physicianModel);
 
             _context.Physician.Add(physician);
             _context.SaveChanges();
@@ -48,10 +50,17 @@ namespace PR.Business
 
         public PhysicianModel Update(PhysicianModel physicianModel)
         {
-            Physician physician = _context.Physician.FirstOrDefault(u => u.UserAccountId == physicianModel.UserAccount.UserAccountId);
+            Physician physician = _context.Physician
+                .Include(p => p.UserAccount)
+                .Include(p => p.Address)
+                .FirstOrDefault(u => u.UserAccountId == physicianModel.UserAccount.UserAccountId);
 
-            physician = physicianModel.ToEntity();
-            _context.Physician.Add(physician);
+            physician.MapFromModel(physicianModel);
+
+            physician.UserAccount.ModifiedOn = DateTime.Now;
+            physician.ModifiedOn = DateTime.Now;
+            physician.Address.ModifiedOn = DateTime.Now;
+
             _context.SaveChanges();
 
             return physician.ToModel();

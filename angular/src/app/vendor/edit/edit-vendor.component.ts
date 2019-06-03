@@ -17,6 +17,7 @@ export class EditVendorComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public vendor$: Observable<Vendor>;
+  public id: string;
 
   constructor(
     private readonly vendorApi: VendorService,
@@ -24,8 +25,8 @@ export class EditVendorComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.vendor$ = this.vendorApi.get(id);
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.vendor$ = this.vendorApi.get(this.id);
   }
 
   ngOnDestroy(): void {
@@ -34,7 +35,7 @@ export class EditVendorComponent implements OnInit, OnDestroy {
 
   onSubmit(vendor: Vendor) {
     this.vendorApi
-      .post(vendor)
+      .put(this.id, vendor)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newVendor: Vendor) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);

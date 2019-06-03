@@ -28,7 +28,7 @@ export class PatientService {
     return this.http.post<Patient>(this.url, patient);
   }
 
-  put(patient: Patient): Observable<Patient> {
-    return this.http.put<Patient>(this.url, patient);
+  put(id: string, patient: Patient): Observable<Patient> {
+    return this.http.put<Patient>(`${this.url}/${id}`, patient);
   }
 }
