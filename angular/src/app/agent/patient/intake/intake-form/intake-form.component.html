@@ -10,7 +10,7 @@
     <app-general-dme-and-rx (formSubmitEvent)="onSubmit($event)"></app-general-dme-and-rx>
   </mat-tab>
   <mat-tab label="Pain (DME Only)">
-    <app-pain-dme-only></app-pain-dme-only>
+    <app-pain-dme-only (formSubmitEvent)="onSubmit($event)"></app-pain-dme-only>
   </mat-tab>
   <mat-tab label="Pain (Rx Only)">
     <app-pain-rx-only (formSubmitEvent)="onSubmit($event)"></app-pain-rx-only>
