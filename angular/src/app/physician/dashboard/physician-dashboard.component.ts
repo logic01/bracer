@@ -6,6 +6,7 @@ import { Signature } from 'src/app/models/signature.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { DocumentService } from 'src/app/services/api/document.service';
 import { SignatureService } from 'src/app/services/api/signature.service';
+import { IPAddressService } from 'src/app/services/ip-address.service';
 import { SessionService } from 'src/app/services/session.service';
 import { environment } from 'src/environments/environment';
 
@@ -29,7 +30,8 @@ export class PhysicianDashboardComponent implements OnInit {
     private readonly session: SessionService,
     private readonly documentApi: DocumentService,
     private readonly signatureApi: SignatureService,
-    private readonly dialog: MatDialog) { }
+    private readonly dialog: MatDialog,
+    private readonly ipAddressService: IPAddressService) { }
 
   ngOnInit() {
 
@@ -56,9 +58,16 @@ export class PhysicianDashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
 
       const signature = new Signature();
-      signature.signature = result;
-
+      signature.content = result;
+      signature.ipAddress = '71.205.117.185';
       this.signatureApi.sign(id, signature).subscribe();
+
+      // to do -> find better pattern
+      //  this.ipAddressService.getIpAddress().subscribe((ip: string) => {
+
+      // });
+
     });
   }
+
 }

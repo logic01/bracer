@@ -11,6 +11,8 @@ namespace PR.Models
 
         public int? PhysicianId { get; set; }
 
+        public int? SignatureId { get; set; }
+
         public DocumentType Type { get; set; }
 
         public DocumentStatus Status { get; set; }

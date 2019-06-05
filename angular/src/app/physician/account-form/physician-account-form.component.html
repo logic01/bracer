@@ -70,6 +70,22 @@
     </mat-form-field>
   </div>
 
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field>
+      <input matInput placeholder="DEA" type="text" formControlName="dea">
+      <mat-error *ngIf="accountForm.get('dea').hasError('required')">Please enter a value.</mat-error>
+      <mat-error *ngIf="accountForm.get('dea').hasError('minlength')">Minimum of 2 characters.</mat-error>
+      <mat-error *ngIf="accountForm.get('dea').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="NPI" type="text" formControlName="npi">
+      <mat-error *ngIf="accountForm.get('npi').hasError('required')">Please enter a value.</mat-error>
+      <mat-error *ngIf="accountForm.get('npi').hasError('minlength')">Minimum of 2 characters.</mat-error>
+      <mat-error *ngIf="accountForm.get('npi').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+    </mat-form-field>
+  </div>
+
   <mat-form-field>
     <input matInput placeholder="Phone Number" type="text" formControlName="phoneNumber"
       [textMask]="{mask: maskService.phonenumber}">
@@ -88,7 +104,7 @@
 
   <mat-form-field>
     <input matInput placeholder="Address Line Two" type="text" formControlName="addressLineTwo">
-  </mat-form-field> 
+  </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>

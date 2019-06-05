@@ -15,74 +15,89 @@
         <mat-form-field>
           <input matInput placeholder="First Name*" type="text" formControlName="firstName">
           <mat-error *ngIf="form.get('firstName').hasError('required')">Please enter the first name.</mat-error>
-          <mat-error *ngIf="form.get('firstName').hasError('required') == false && form.get('firstName').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
+          <mat-error
+            *ngIf="form.get('firstName').hasError('required') == false && form.get('firstName').hasError('maxlength')">
+            Field cannot be longer than 100 chars.</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput placeholder="Middle Name" type="text" formControlName="middleName">
-          <mat-error *ngIf="form.get('middleName').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
+          <mat-error *ngIf="form.get('middleName').hasError('maxlength')">Field cannot be longer than 100 chars.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput placeholder="Last Name*" type="text" formControlName="lastName">
           <mat-error *ngIf="form.get('lastName').hasError('required')">Please enter the last name.</mat-error>
-          <mat-error *ngIf="form.get('lastName').hasError('required') == false && form.get('lastName').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
+          <mat-error
+            *ngIf="form.get('lastName').hasError('required') == false && form.get('lastName').hasError('maxlength')">
+            Field cannot be longer than 100 chars.</mat-error>
         </mat-form-field>
       </div>
 
       <mat-form-field>
-        <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth"  placeholder="Date of Birth*">
+        <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" placeholder="Date of Birth*">
         <mat-datepicker #dobPicker></mat-datepicker>
         <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
         <mat-error *ngIf="form.get('dateOfBirth').hasError('required')">Please enter the birthdate.</mat-error>
-        <mat-error *ngIf="form.get('dateOfBirth').hasError('required') == false && form.get('dateOfBirth').hasError('invalidDateFormat')">Date must be in the format of mm/dd/yyyy.</mat-error>
+        <mat-error
+          *ngIf="form.get('dateOfBirth').hasError('required') == false && form.get('dateOfBirth').hasError('invalidDateFormat')">
+          Date must be in the format of mm/dd/yyyy.</mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput placeholder="Phone Number*" type="text" [textMask]="{mask: maskService.phonenumber}" formControlName="phoneNumber">
+        <input matInput placeholder="Phone Number*" type="text" [textMask]="{mask: maskService.phonenumber}"
+          formControlName="phoneNumber">
         <mat-error *ngIf="form.get('phoneNumber').hasError('required')">Please enter the phone number.</mat-error>
-        <mat-error *ngIf="form.get('phoneNumber').hasError('required') == false && form.get('phoneNumber').hasError('invalidPhoneNumber')">Phone Number must be 9 digits.</mat-error>
-        
+        <mat-error
+          *ngIf="form.get('phoneNumber').hasError('required') == false && form.get('phoneNumber').hasError('invalidPhoneNumber')">
+          Phone Number must be 9 digits.</mat-error>
+
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Address Line One*" type="text" formControlName="addressLineOne">
         <mat-error *ngIf="form.get('addressLineOne').hasError('required')">Please enter an address.
-        </mat-error>  
-        <mat-error *ngIf="form.get('addressLineOne').hasError('required') == false && form.get('addressLineOne').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
-        
+        </mat-error>
+        <mat-error
+          *ngIf="form.get('addressLineOne').hasError('required') == false && form.get('addressLineOne').hasError('maxlength')">
+          Field cannot be longer than 100 chars.</mat-error>
+
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Address Line Two" type="text" formControlName="addressLineTwo">
       </mat-form-field>
-      <mat-error *ngIf="form.get('addressLineTwo').hasError('required') == false && form.get('addressLineTwo').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
-        
+      <mat-error
+        *ngIf="form.get('addressLineTwo').hasError('required') == false && form.get('addressLineTwo').hasError('maxlength')">
+        Field cannot be longer than 100 chars.</mat-error>
+
       <div fxLayout="row" fxLayoutGap="10px">
         <mat-form-field>
           <input matInput placeholder="City*" type="text" formControlName="city">
           <mat-error *ngIf="form.get('city').hasError('required')">Please enter a city.
           </mat-error>
-          <mat-error *ngIf="form.get('city').hasError('required') == false && form.get('city').hasError('maxlength')">Field cannot be longer than 30 chars.</mat-error>
-        
+          <mat-error *ngIf="form.get('city').hasError('required') == false && form.get('city').hasError('maxlength')">
+            Field cannot be longer than 30 chars.</mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
-
-          <select matNativeControl placeholder="State*" formControlName="state">
-            <option *ngFor="let currentState of statesList" [value]="currentState">{{currentState}}</option>
-
-          </select>
-          <mat-error *ngIf="form.get('state').hasError('required')">Please enter a state.
-          </mat-error>
+          <input matInput placeholder="State" type="text" formControlName="state"
+            [textMask]="{mask: maskService.state}">
+          <mat-error *ngIf="accountForm.get('state').hasError('required')">Please enter a value.</mat-error>
+          <mat-error *ngIf="accountForm.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
+          <mat-error *ngIf="accountForm.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="Zip Code*" type="text" [textMask]="{mask: maskService.zip}"  formControlName="zip">
+          <input matInput placeholder="Zip Code*" type="text" [textMask]="{mask: maskService.zip}"
+            formControlName="zip">
           <mat-error *ngIf="form.get('zip').hasError('required')">Please enter a zip code.
           </mat-error>
-          <mat-error *ngIf="form.get('zip').hasError('required') == false && form.get('zip').hasError('invalidLength')">Zip code must be 5 digits.</mat-error>
-        
+          <mat-error *ngIf="form.get('zip').hasError('required') == false && form.get('zip').hasError('invalidLength')">
+            Zip code must be 5 digits.</mat-error>
+
         </mat-form-field>
       </div>
 
@@ -129,7 +144,8 @@
 
       <mat-form-field>
         <input matInput placeholder="Medications" type="text" formControlName="medications">
-        <mat-error *ngIf="form.get('medications').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
+        <mat-error *ngIf="form.get('medications').hasError('maxlength')">Field cannot be longer than 100 chars.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -139,46 +155,53 @@
 
       <mat-form-field>
         <input matInput placeholder="Primary Care Physician Name" type="text" formControlName="physicianName">
-        <mat-error *ngIf="form.get('physicianName').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
+        <mat-error *ngIf="form.get('physicianName').hasError('maxlength')">Field cannot be longer than 100 chars.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput placeholder="Phone Number" type="text" [textMask]="{mask: maskService.phonenumber}" formControlName="physicianPhoneNumber">
-        <mat-error *ngIf="form.get('physicianPhoneNumber').hasError('invalidPhoneNumber')">Phone Number must be 9 digits.</mat-error>
+        <input matInput placeholder="Phone Number" type="text" [textMask]="{mask: maskService.phonenumber}"
+          formControlName="physicianPhoneNumber">
+        <mat-error *ngIf="form.get('physicianPhoneNumber').hasError('invalidPhoneNumber')">Phone Number must be 9
+          digits.</mat-error>
 
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Address Line One" type="text" formControlName="physicianAddressLineOne">
-        <mat-error *ngIf="form.get('physicianAddressLineOne').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
-      
+        <mat-error *ngIf="form.get('physicianAddressLineOne').hasError('maxlength')">Field cannot be longer than 100
+          chars.</mat-error>
+
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Address Line Two" type="text" formControlName="physicianAddressLineTwo">
-        <mat-error *ngIf="form.get('physicianAddressLineTwo').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
-      
+        <mat-error *ngIf="form.get('physicianAddressLineTwo').hasError('maxlength')">Field cannot be longer than 100
+          chars.</mat-error>
+
       </mat-form-field>
 
       <div fxLayout="row" fxLayoutGap="10px">
         <mat-form-field>
           <input matInput placeholder="City" type="text" formControlName="physicianCity">
-          <mat-error *ngIf="form.get('physicianCity').hasError('maxlength')">Field cannot be longer than 30 chars.</mat-error>
-      
-        </mat-form-field>
-
-        <mat-form-field>
-          <select matNativeControl placeholder="State" formControlName="physicianState">
-              <option *ngFor="let currentState of statesList" [value]="currentState">{{currentState}}</option>
-            </select>
-          <mat-error *ngIf="form.get('physicianState').hasError('required')">Please enter a state.
+          <mat-error *ngIf="form.get('physicianCity').hasError('maxlength')">Field cannot be longer than 30 chars.
           </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="Zip Code" type="text" [textMask]="{mask: maskService.zip}"  formControlName="physicianZip">
+          <input matInput placeholder="State" type="text" formControlName="physicianState"
+            [textMask]="{mask: maskService.state}">
+          <mat-error *ngIf="accountForm.get('state').hasError('required')">Please enter a value.</mat-error>
+          <mat-error *ngIf="accountForm.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
+          <mat-error *ngIf="accountForm.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Zip Code" type="text" [textMask]="{mask: maskService.zip}"
+            formControlName="physicianZip">
           <mat-error *ngIf="form.get('physicianZip').hasError('invalidLength')">Zip code must be 5 digits.</mat-error>
-      
+
         </mat-form-field>
       </div>
 
@@ -204,8 +227,9 @@
 
       <mat-form-field>
         <input matInput placeholder="Other Product" type="text" formControlName="otherProduct">
-        <mat-error *ngIf="form.get('otherProduct').hasError('maxlength')">Field cannot be longer than 100 chars.</mat-error>
-      
+        <mat-error *ngIf="form.get('otherProduct').hasError('maxlength')">Field cannot be longer than 100 chars.
+        </mat-error>
+
       </mat-form-field>
 
     </div>

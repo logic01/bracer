@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
-import { RouteUrls } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-intake-form',
@@ -15,6 +14,7 @@ import { RouteUrls } from 'src/app/constants/routes';
 export class IntakeFormComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
+  public hidden = true;
 
   constructor(
     private readonly intakeApi: IntakeFormService,

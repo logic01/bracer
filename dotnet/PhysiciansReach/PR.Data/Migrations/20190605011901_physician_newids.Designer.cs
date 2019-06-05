@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190605011901_physician_newids")]
+    partial class physician_newids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +173,7 @@ namespace PR.Data.Migrations
 
                     b.Property<int?>("PhysicianId");
 
-                    b.Property<int?>("SignatureId");
+                    b.Property<byte[]>("Signature");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -187,10 +189,6 @@ namespace PR.Data.Migrations
                     b.HasIndex("IntakeFormId");
 
                     b.HasIndex("PhysicianId");
-
-                    b.HasIndex("SignatureId")
-                        .IsUnique()
-                        .HasFilter("[SignatureId] IS NOT NULL");
 
                     b.ToTable("Document","dbo");
                 });
@@ -433,33 +431,6 @@ namespace PR.Data.Migrations
                     b.ToTable("Question","dbo");
                 });
 
-            modelBuilder.Entity("PR.Data.Models.Signature", b =>
-                {
-                    b.Property<int>("SignatureId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<byte[]>("Content")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<string>("IpAddress");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.HasKey("SignatureId")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.ToTable("Signature","dbo");
-                });
-
             modelBuilder.Entity("PR.Data.Models.UserAccount", b =>
                 {
                     b.Property<int>("UserAccountId")
@@ -574,11 +545,6 @@ namespace PR.Data.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("PhysicianId")
                         .HasConstraintName("FK_Physician_Documents");
-
-                    b.HasOne("PR.Data.Models.Signature", "Signature")
-                        .WithOne("Document")
-                        .HasForeignKey("PR.Data.Models.Document", "SignatureId")
-                        .HasConstraintName("FK_Document_Signature");
                 });
 
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>

@@ -1,12 +1,8 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTable } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-
-import { Document } from '../../models/document.model';
-import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 import { DocumentStatus } from 'src/app/models/enums/document-status.enum';
 import { DocumentType } from 'src/app/models/enums/document-type.enum';
 import { Physician } from 'src/app/models/physician.model';
@@ -15,10 +11,14 @@ import { DocumentService } from 'src/app/services/api/document.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
+import { Document } from '../../models/document.model';
+import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
+
 export class TableRow {
   documentId: string;
   intakeFormId: string;
   physicianName: string;
+  physicianState: string;
   type: DocumentType;
   status: DocumentStatus;
 }
@@ -37,7 +37,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   public documents$: Observable<Document[]>;
 
   public data: TableRow[] = [];
-  public columnsToDisplay = ['documentId', 'type', 'status', 'physicianName', 'sign'];
+  public columnsToDisplay = ['documentId', 'type', 'status', 'physicianName', 'physicianState', 'sign'];
 
   private unsubscribe$ = new Subject();
 
@@ -72,7 +72,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
             row.type = doc.type;
             row.status = doc.status;
             row.physicianName = this.getPhysicianName(doc.physicianId, physicians);
-
+            row.physicianState = this.getPhysicianState(doc.physicianId, physicians);
             this.data.push(row);
           });
 
@@ -93,6 +93,17 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
     if (physician) {
       return `${physician.firstName} ${physician.lastName}`;
+    }
+
+    return '';
+  }
+
+  getPhysicianState(physicianId: string, physicians: Physician[]): string {
+
+    const physician = physicians.find(x => x.userAccount.userAccountId === physicianId);
+
+    if (physician) {
+      return physician.address.state;
     }
 
     return '';

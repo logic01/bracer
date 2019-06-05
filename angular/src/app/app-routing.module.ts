@@ -11,15 +11,15 @@ import { CreatePatientComponent } from './agent/patient/create/create-patient.co
 import { IntakeFormComponent } from './agent/patient/intake/intake-form/intake-form.component';
 import { RouteUrls } from './constants/routes';
 import { LoginComponent } from './login/login.component';
+import { AccountType } from './models/enums/account-type.enum';
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
+import { RoleGuardService } from './services/role-guard.service';
+import { SignInGuardService } from './services/sign-in-guard.service';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
 import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 import { ViewVendorComponent } from './vendor/view/view-vendor.component';
-import { RoleGuardService } from './services/role-guard.service';
-import { AccountType } from './models/enums/account-type.enum';
-import { SignInGuardService } from './services/sign-in-guard.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
