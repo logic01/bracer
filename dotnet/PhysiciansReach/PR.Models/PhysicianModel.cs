@@ -12,6 +12,10 @@ namespace PR.Models
 
         public string PhoneNumber { get; set; }
 
+        public string NPI { get; set; }
+
+        public string DEA { get; set; }
+
         public AddressModel Address { get; set; }
 
         public DateTime CreatedOn { get; set; }

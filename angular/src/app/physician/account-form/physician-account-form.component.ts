@@ -34,6 +34,8 @@ export class PhysicianAccountFormComponent implements OnInit {
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      dea: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      npi: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       phoneNumber: new FormControl('', [CustomValidators.phonenumber, Validators.required]),
       addressLineOne: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
@@ -85,10 +87,13 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.userAccount.password = this.accountForm.controls['password'].value;
     physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     physician.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
+    physician.dea = this.accountForm.controls['dea'].value;
+    physician.npi = this.accountForm.controls['npi'].value;
     physician.userAccount.active = this.accountForm.controls['active'].value;
 
     physician.firstName = this.accountForm.controls['firstName'].value;
     physician.lastName = this.accountForm.controls['lastName'].value;
+
     physician.phoneNumber = this.formatHelper.toNumbersOnly(this.accountForm.controls['phoneNumber'].value);
 
     physician.address.addressLineOne = this.accountForm.controls['addressLineOne'].value;

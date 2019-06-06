@@ -2,19 +2,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 import { Address } from 'src/app/models/address.model';
 import { Patient } from 'src/app/models/patient.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { PatientService } from 'src/app/services/api/patient.service';
+import { FormatHelperService } from 'src/app/services/format-helper.service';
+import { MaskService } from 'src/app/services/mask.service';
+import { SelectValueService } from 'src/app/services/select-value.service';
 import { SessionService } from 'src/app/services/session.service';
-import { SelectValueService } from 'src/app/services/select-value.service'
-import { MaskService } from 'src/app/services/mask.service'
 import { CustomValidators } from 'src/app/validators/custom-validators';
+
+import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 
 @Component({
   selector: 'app-create-patient',
@@ -32,7 +32,8 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     private readonly dialog: MatDialog,
     private readonly patientApi: PatientService,
     private readonly router: Router,
-    public readonly maskService: MaskService) { }
+    public readonly maskService: MaskService,
+    public readonly formatHelper: FormatHelperService) { }
 
   ngOnInit() {
 
@@ -106,7 +107,8 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.middleName = this.form.controls['middleName'].value;
     patient.lastName = this.form.controls['lastName'].value;
     patient.dateOfBirth = this.form.controls['dateOfBirth'].value;
-    patient.phoneNumber = this.form.controls['phoneNumber'].value;
+    patient.phoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['phoneNumber'].value);
+
     patient.language = this.form.controls['language'].value;
     patient.callBackImmediately = this.form.controls['callBackImmediately'].value;
     patient.bestTimeToCallBack = this.form.controls['bestTimeToCallBack'].value;
@@ -115,7 +117,8 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.notes = this.form.controls['notes'].value;
     patient.otherProducts = this.form.controls['otherProduct'].value;
     patient.physiciansName = this.form.controls['physicianName'].value;
-    patient.physiciansPhoneNumber = this.form.controls['physicianPhoneNumber'].value;
+    patient.physiciansPhoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['physicianPhoneNumber'].value);
+
     patient.therapy = this.form.controls['therapy'].value;
     patient.insurance = this.form.controls['insurance'].value;
     patient.pharmacy = this.form.controls['pharmacy'].value;
@@ -128,7 +131,6 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.address.state = this.form.controls['state'].value;
     patient.address.zipCode = this.form.controls['zip'].value;
 
-
     patient.physiciansAddress = new Address();
     patient.physiciansAddress.addressLineOne = this.form.controls['physicianAddressLineOne'].value;
     patient.physiciansAddress.addressLineTwo = this.form.controls['physicianAddressLineTwo'].value;
@@ -136,14 +138,13 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.physiciansAddress.state = this.form.controls['physicianState'].value;
     patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
 
-    if (patient.physiciansAddress.addressLineOne.length == 0 
-      || patient.physiciansAddress.zipCode.length == 0
-      || patient.physiciansAddress.city.length == 0
-      || patient.physiciansAddress.state.length == 0) {
+    if (patient.physiciansAddress.addressLineOne.length === 0
+      || patient.physiciansAddress.zipCode.length === 0
+      || patient.physiciansAddress.city.length === 0
+      || patient.physiciansAddress.state.length === 0) {
       patient.physiciansAddress = null;
     }
 
-    patient.phoneNumber = patient.phoneNumber.replace("(", "").replace(")", "").replace(" ","").replace("-", "");
     return patient;
   }
 

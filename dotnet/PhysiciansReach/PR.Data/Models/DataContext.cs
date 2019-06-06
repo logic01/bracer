@@ -45,6 +45,7 @@ namespace PR.Data.Models
             QuestionBuilder(modelBuilder);
             AnswerBuilder(modelBuilder);
             DocumentBuilder(modelBuilder);
+            SignatureBuilder(modelBuilder);
         }
 
         protected void LogBuilder(ModelBuilder modelBuilder)
@@ -154,6 +155,12 @@ namespace PR.Data.Models
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
 
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
+
+                // maybe this should be required?
+                entity.Property(e => e.DEA).HasMaxLength(100);
+
+                // maybe this should be required?
+                entity.Property(e => e.NPI).HasMaxLength(100);
 
                 entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(10);
 
@@ -399,6 +406,27 @@ namespace PR.Data.Models
                      .IsRequired(false)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Physician_Documents");
+
+                entity.HasOne(doc => doc.Signature)
+                     .WithOne(sig => sig.Document)
+                     .HasForeignKey<Document>(doc => doc.SignatureId)
+                     .HasConstraintName("FK_Document_Signature");
+            });
+        }
+
+        protected void SignatureBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Signature>(entity =>
+            {
+                entity.ToTable("Signature", "dbo");
+
+                entity.HasKey(e => e.SignatureId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
             });
         }
     }

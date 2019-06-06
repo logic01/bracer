@@ -11,13 +11,13 @@ namespace PR.Data.Models
 
         public int? PhysicianId { get; set; }
 
+        public int? SignatureId { get; set; }
+
         public DocumentType Type { get; set; }
 
         public DocumentStatus Status { get; set; }
 
         public byte[] Content { get; set; }
-
-        public byte[] Signature { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
@@ -26,5 +26,7 @@ namespace PR.Data.Models
         public IntakeForm IntakeForm { get; set; }
 
         public Physician Physician { get; set; }
+
+        public Signature Signature { get; set; }
     }
 }

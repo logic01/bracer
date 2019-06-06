@@ -8,7 +8,6 @@ using PR.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace PR.Business
 {
@@ -70,14 +69,12 @@ namespace PR.Business
 
         public void SaveSignature(int documentId, SignatureModel signatureModel)
         {
-            // get original
             Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
 
-            var base64Data = Regex.Match(signatureModel.Signature, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-            var signatureBytes = Convert.FromBase64String(base64Data);
+            var sig = new Signature();
+            sig.MapFromModel(signatureModel);
 
-            // populate with model data
-            document.Signature = signatureBytes;
+            document.Signature = sig;
             document.Status = DocumentStatus.Signed;
             document.ModifiedOn = DateTime.Now;
 

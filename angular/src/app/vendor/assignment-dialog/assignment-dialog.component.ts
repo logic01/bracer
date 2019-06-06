@@ -1,15 +1,13 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-
 import { Observable, Subject } from 'rxjs';
-import { flatMap, takeUntil } from 'rxjs/operators';
-
+import { flatMap, map, takeUntil } from 'rxjs/operators';
 import { Document } from 'src/app/models/document.model';
+import { DocumentStatus } from 'src/app/models/enums/document-status.enum';
 import { Physician } from 'src/app/models/physician.model';
 import { DocumentService } from 'src/app/services/api/document.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
-import { DocumentStatus } from 'src/app/models/enums/document-status.enum';
 
 export class AssignmentDialogData {
   documentId: string;
@@ -36,7 +34,8 @@ export class AssignmentDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.physicians$ = this.physicianApi.getAll();
+    // get physicians and filter them so only active show.
+    this.physicians$ = this.physicianApi.getAll().pipe(map(physician => physician.filter(p => p.userAccount.active)));
 
     this.document$ = this.documentApi.get(this.data.documentId);
 
@@ -48,7 +47,6 @@ export class AssignmentDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
-
 
   cancel(): void {
     this.dialogRef.close();

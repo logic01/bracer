@@ -1,5 +1,4 @@
-﻿using PR.Constants.Enums;
-using PR.Data.Models;
+﻿using PR.Data.Models;
 using PR.Models;
 
 namespace PR.Business.Mappings
@@ -13,6 +12,8 @@ namespace PR.Business.Mappings
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 PhoneNumber = entity.PhoneNumber,
+                NPI = entity.NPI,
+                DEA = entity.DEA,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn,
                 UserAccount = entity.UserAccount.ToModel(),
@@ -34,6 +35,8 @@ namespace PR.Business.Mappings
             entity.FirstName = model.FirstName;
             entity.LastName = model.LastName;
             entity.PhoneNumber = model.PhoneNumber;
+            entity.NPI = model.NPI;
+            entity.DEA = model.DEA;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
             entity.UserAccount.MapFromModel(model.UserAccount);

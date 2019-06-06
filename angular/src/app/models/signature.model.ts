@@ -1,3 +1,7 @@
 export class Signature {
-    public signature: string;
+    public signatureId: string;
+    public content: string;
+    public ipAddress: string;
+    public createdOn: Date;
+    public modifiedOn: Date;
 }

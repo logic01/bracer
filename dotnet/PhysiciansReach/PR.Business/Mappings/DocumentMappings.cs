@@ -13,7 +13,7 @@ namespace PR.Business.Mappings
                 PhysicianId = entity.PhysicianId,
                 IntakeFormId = entity.IntakeFormId,
                 Content = entity.Content, //Consider dropping this since it will be huge
-                Signature = entity.Signature,
+                SignatureId = entity.SignatureId,
                 Type = entity.Type,
                 Status = entity.Status,
                 CreatedOn = entity.CreatedOn,
@@ -40,7 +40,7 @@ namespace PR.Business.Mappings
             entity.PhysicianId = model.PhysicianId;
             entity.IntakeFormId = model.IntakeFormId;
             entity.Content = model.Content;
-            entity.Signature = model.Signature;
+            entity.SignatureId = entity.SignatureId;
             entity.Type = model.Type;
             entity.Status = model.Status;
             entity.CreatedOn = model.CreatedOn;
