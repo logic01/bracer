@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatRadioChange } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Address } from 'src/app/models/address.model';
+import { Medicare } from 'src/app/models/medicare.model';
 import { Patient } from 'src/app/models/patient.model';
+import { PrivateInsurance } from 'src/app/models/private-insurance.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { PatientService } from 'src/app/services/api/patient.service';
 import { FormatHelperService } from 'src/app/services/format-helper.service';
@@ -27,6 +29,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   private agentId: string;
   statesList: string[] = SelectValueService.states;
+  privateInsurance: boolean;
+  medicareInsurance: boolean;
+  bothInsurance: boolean;
+  selectedInsurance: string;
+
   constructor(
     private readonly session: SessionService,
     private readonly dialog: MatDialog,
@@ -71,7 +78,23 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       isDme: new FormControl(false),
       therapy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       otherProduct: new FormControl('', Validators.maxLength(100)),
-      insurance: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      insurance: new FormControl('', Validators.maxLength(100)),
+      insuranceId: new FormControl('', Validators.maxLength(100)),
+      privateGroup: new FormControl('', Validators.maxLength(100)),
+      privatePcn: new FormControl('', Validators.maxLength(100)),
+      bin: new FormControl('', Validators.maxLength(100)),
+      insuranceStreet: new FormControl('',Validators.maxLength(100)),
+      insuranceCity: new FormControl('', Validators.maxLength(30)),
+      insuranceState: new FormControl('', Validators.maxLength(100)),
+      insuranceZip: new FormControl('', CustomValidators.zip),
+      insurancePhone: new FormControl('', CustomValidators.phonenumber),
+      memberId: new FormControl('', Validators.maxLength(100)),
+      medicareGroup: new FormControl('', Validators.maxLength(100)),
+      medicarePcn: new FormControl('',Validators.maxLength(100) ),
+      subscriberNumber: new FormControl('', Validators.maxLength(100)),
+      secondaryInsurance: new FormControl('', Validators.maxLength(100)),
+      secondarySubscriberNumber: new FormControl('', Validators.maxLength(100)),
+      insuranceType: new FormControl('', Validators.required)
     });
   }
 
@@ -120,7 +143,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.physiciansPhoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['physicianPhoneNumber'].value);
 
     patient.therapy = this.form.controls['therapy'].value;
-    patient.insurance = this.form.controls['insurance'].value;
+    patient.insurance = this.form.controls['insuranceType'].value;
     patient.pharmacy = this.form.controls['pharmacy'].value;
     patient.isDme = this.form.controls['isDme'].value;
 
@@ -138,6 +161,30 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.physiciansAddress.state = this.form.controls['physicianState'].value;
     patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
 
+    if (this.privateInsurance || this.bothInsurance) {
+      patient.privateInsurance = new PrivateInsurance();
+      patient.privateInsurance.bin = this.form.controls['bin'].value;
+      patient.privateInsurance.insurance = this.form.controls['insurance'].value;
+      patient.privateInsurance.insuranceId = this.form.controls['insuranceId'].value;
+      patient.privateInsurance.group = this.form.controls['privateGroup'].value;
+      patient.privateInsurance.pcn = this.form.controls['privatePcn'].value;
+      patient.privateInsurance.street = this.form.controls['insuranceStreet'].value;
+      patient.privateInsurance.city = this.form.controls['insuranceCity'].value;
+      patient.privateInsurance.state = this.form.controls['insuranceState'].value;
+      patient.privateInsurance.zip = this.form.controls['insuranceZip'].value;
+      patient.privateInsurance.phone = this.formatHelper.toNumbersOnly(this.form.controls['insurancePhone'].value);
+    }
+
+    if (this.medicareInsurance || this.bothInsurance) {
+      patient.medicare = new Medicare();
+      patient.medicare.memberId = this.form.controls['memberId'].value;
+      patient.medicare.patientGroup = this.form.controls['medicareGroup'].value;
+      patient.medicare.pcn = this.form.controls['medicarePcn'].value;
+      patient.medicare.subscriberNumber = this.form.controls['subscriberNumber'].value;
+      patient.medicare.secondaryCarrier = this.form.controls['secondaryInsurance'].value;
+      patient.medicare.secondarySubscriberNumber = this.form.controls['secondarySubscriberNumber'].value;
+    }
+
     if (patient.physiciansAddress.addressLineOne.length === 0
       || patient.physiciansAddress.zipCode.length === 0
       || patient.physiciansAddress.city.length === 0
@@ -147,5 +194,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
 
     return patient;
   }
+
+  radioChange(event: MatRadioChange) {
+   this.privateInsurance = event.value === 'PRIVATE';
+   this.medicareInsurance = event.value === 'MEDICARE';
+   this.bothInsurance = event.value === 'BOTH';
+}
 
 }

@@ -205,15 +205,7 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field>
-        <mat-select placeholder="Insurance Type*" formControlName="insurance">
-          <mat-option value="PRIVATE"> PRIVATE </mat-option>
-          <mat-option value="MEDICARE"> MEDICARE </mat-option>
-          <mat-option value="BOTH"> BOTH </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('insurance').hasError('required')">Please select a type of insurance.
-        </mat-error>
-      </mat-form-field>
+
 
       <mat-form-field>
         <mat-select placeholder="Therapy Type*" formControlName="therapy">
@@ -232,9 +224,92 @@
 
       </mat-form-field>
 
+
+      <h4>Insurance Type:</h4>
+      <mat-radio-group [(ngModel)]="selectedInsurance" formControlName="insuranceType" fxLayout="row"
+        fxLayoutGap="10px">
+        <mat-radio-button value="PRIVATE" color="primary" (change)="radioChange($event)"> PRIVATE </mat-radio-button>
+        <mat-radio-button value="MEDICARE" color="primary" (change)="radioChange($event)"> MEDICARE </mat-radio-button>
+        <mat-radio-button value="BOTH" color="primary" (change)="radioChange($event)"> BOTH </mat-radio-button>
+      </mat-radio-group>
+
+
+
+
+
+      <div fxLayout="row" fxLayoutGap="10px">
+
+        <div *ngIf="privateInsurance || bothInsurance" fxLayout="column" fxFlex="50">
+          <mat-card>
+            <mat-card-title>Private Insurance</mat-card-title>
+
+            <mat-form-field>
+              <input matInput placeholder="Insurance" type="text" formControlName="insurance" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance ID" type="text" formControlName="insuranceId" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Group" type="text" formControlName="privateGroup" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="PCN" type="text" formControlName="privatePcn" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Bin" type="text" formControlName="bin" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance Street" type="text" formControlName="insuranceStreet"
+                maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance City" type="text" formControlName="insuranceCity" maxlength="30">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance State" type="text" [textMask]="{mask: maskService.state}"
+                formControlName="insuranceState">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance Zip" type="text" [textMask]="{mask: maskService.zip}"
+                formControlName="insuranceZip" >
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Insurance Phone" [textMask]="{mask: maskService.phonenumber}" type="text"
+                formControlName="insurancePhone">
+            </mat-form-field>
+          </mat-card>
+        </div>
+
+
+        <div *ngIf="medicareInsurance || bothInsurance" fxLayout="column" fxFlex="50">
+          <mat-card>
+            <mat-card-title>Medicare</mat-card-title>
+
+            <mat-form-field>
+              <input matInput placeholder="Member ID" type="text" formControlName="memberId" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Patient Group" type="text" formControlName="medicareGroup" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="PCN" type="text" formControlName="medicarePcn" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Subscriber #" type="text" formControlName="subscriberNumber" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Secondary/Supplement Insurance Carrier" type="text"
+                formControlName="secondaryInsurance" maxlength="100">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Secondary Subscriber #" type="text"
+                formControlName="secondarySubscriberNumber" maxlength="100">
+            </mat-form-field>
+          </mat-card>
+
+        </div>
+      </div>
     </div>
-
   </div>
-
   <button type="submit" mat-raised-button color="accent">Submit</button>
 </form>

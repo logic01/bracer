@@ -3,16 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PR.Constants.Enums;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190607001211_AddPrivateInsurance")]
+    partial class AddPrivateInsurance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,11 +171,28 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int?>("PhysicianId");
+
+                    b.Property<int?>("SignatureId");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
                     b.HasKey("DocumentId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
-                    b.HasIndex("IntakeFormId")
-                        .IsUnique();
+                    b.HasIndex("IntakeFormId");
+
+                    b.HasIndex("PhysicianId");
+
+                    b.HasIndex("SignatureId")
+                        .IsUnique()
+                        .HasFilter("[SignatureId] IS NOT NULL");
 
                     b.ToTable("Document","dbo");
                 });
@@ -190,10 +208,6 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("HCPCS");
-
-                    b.Property<string>("ICD10");
-
                     b.Property<string>("IntakeFormType")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -205,20 +219,10 @@ namespace PR.Data.Migrations
 
                     b.Property<int>("PatientId");
 
-                    b.Property<int?>("PhysicianId");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasDefaultValue("New");
-
                     b.HasKey("IntakeFormId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("PhysicianId");
 
                     b.ToTable("IntakeForm","dbo");
                 });
@@ -253,35 +257,6 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("Log","dbo");
-                });
-
-            modelBuilder.Entity("PR.Data.Models.Medicare", b =>
-                {
-                    b.Property<int>("MedicareId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MemberId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("PatientGroup")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Pcn")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SecondaryCarrier")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SecondarySubscriberNumber")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SubscriberNumber")
-                        .HasMaxLength(100);
-
-                    b.HasKey("MedicareId");
-
-                    b.ToTable("Medicare");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Patient", b =>
@@ -329,8 +304,6 @@ namespace PR.Data.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100);
-
-                    b.Property<int?>("MedicareId");
 
                     b.Property<string>("Medications")
                         .HasMaxLength(100);
@@ -382,8 +355,6 @@ namespace PR.Data.Migrations
                         .IsUnique();
 
                     b.HasIndex("AgentId");
-
-                    b.HasIndex("MedicareId");
 
                     b.HasIndex("PhysiciansAddressId")
                         .IsUnique()
@@ -642,10 +613,19 @@ namespace PR.Data.Migrations
             modelBuilder.Entity("PR.Data.Models.Document", b =>
                 {
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
+                        .WithMany("Documents")
+                        .HasForeignKey("IntakeFormId")
+                        .HasConstraintName("FK_IntakeForm_Documents");
+
+                    b.HasOne("PR.Data.Models.Physician", "Physician")
+                        .WithMany("Documents")
+                        .HasForeignKey("PhysicianId")
+                        .HasConstraintName("FK_Physician_Documents");
+
+                    b.HasOne("PR.Data.Models.Signature", "Signature")
                         .WithOne("Document")
-                        .HasForeignKey("PR.Data.Models.Document", "IntakeFormId")
-                        .HasConstraintName("FK_IntakeForm_Document")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PR.Data.Models.Document", "SignatureId")
+                        .HasConstraintName("FK_Document_Signature");
                 });
 
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>
@@ -654,11 +634,6 @@ namespace PR.Data.Migrations
                         .WithMany("IntakeForms")
                         .HasForeignKey("PatientId")
                         .HasConstraintName("FK_Patient_IntakeForms");
-
-                    b.HasOne("PR.Data.Models.Physician", "Physician")
-                        .WithMany("IntakeForms")
-                        .HasForeignKey("PhysicianId")
-                        .HasConstraintName("FK_Physician_IntakeForms");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Patient", b =>
@@ -672,10 +647,6 @@ namespace PR.Data.Migrations
                         .WithMany("Patients")
                         .HasForeignKey("AgentId")
                         .HasConstraintName("FK_Patient_Agent");
-
-                    b.HasOne("PR.Data.Models.Medicare", "Medicare")
-                        .WithMany()
-                        .HasForeignKey("MedicareId");
 
                     b.HasOne("PR.Data.Models.Address", "PhysiciansAddress")
                         .WithOne("PatientsPhysician")

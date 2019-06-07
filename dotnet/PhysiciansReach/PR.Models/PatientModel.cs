@@ -52,6 +52,9 @@ namespace PR.Models
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
-        
+
+        public PrivateInsuranceModel PrivateInsurance { get; set; }
+
+        public MedicareModel Medicare { get; set; }        
     }
 }
