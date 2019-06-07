@@ -18,6 +18,8 @@ namespace PR.Data.Models
 
         public int? HCPCSId { get; set; }
 
+        public int? DocumentId { get; set; }
+
         public IntakeFormType IntakeFormType { get; set; }
 
         public DateTime CreatedOn { get; set; }
