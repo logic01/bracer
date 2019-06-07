@@ -8,11 +8,12 @@ import { AgentModule } from './agent/agent.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DesignModule } from './design/design.module';
+import { DocumentModule } from './document/document.module';
 import { LoginModule } from './login/login.module';
 import { PhysicianModule } from './physician/physician.module';
 import { PipesModule } from './pipes/pipes.module';
-import { VendorModule } from './vendor/vendor.module';
 import { MaskService } from './services/mask.service';
+import { VendorModule } from './vendor/vendor.module';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MaskService } from './services/mask.service';
     AdminModule,
     AgentModule,
     PhysicianModule,
+    DocumentModule,
     PipesModule
   ],
   providers: [MaskService],

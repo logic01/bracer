@@ -5,8 +5,6 @@ using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PR.Business
@@ -22,27 +20,6 @@ namespace PR.Business
             _context = context;
             _intakeFormBusiness = intakeFormBusiness;
             _exporter = exporter;
-        }
-
-        public List<DocumentModel> GetByPhysician(int physicianId)
-        {
-            return _context.Document
-                    .Where(d => d.PhysicianId == physicianId)
-                    .Select(i => i.ToModel())
-                    .ToList();
-        }
-
-        public List<DocumentModel> GetByVendor(int vendorId)
-        {
-            IQueryable<DocumentModel> documents = from agent in _context.Agent
-                                                  join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
-                                                  join intake in _context.IntakeForm on patient.PatientId equals intake.PatientId
-                                                  join document in _context.Document on intake.IntakeFormId equals document.IntakeFormId
-                                                  where agent.VendorId == vendorId
-                                                  select document.ToModel();
-
-
-            return documents.ToList();
         }
 
         public DocumentModel Get(int documentId)
@@ -67,21 +44,6 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public void SaveSignature(int documentId, SignatureModel signatureModel)
-        {
-            Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentId);
-
-            var sig = new Signature();
-            sig.MapFromModel(signatureModel);
-
-            document.Signature = sig;
-            document.Status = DocumentStatus.Signed;
-            document.ModifiedOn = DateTime.Now;
-
-            // save
-            _context.SaveChanges();
-        }
-
         public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
         {
             Patient patient = _context.Patient
@@ -98,8 +60,6 @@ namespace PR.Business
             var document = new Document
             {
                 IntakeFormId = intakeFormId,
-                Status = DocumentStatus.New,
-                Type = DocumentType.IntakeForm,
                 Content = documentContent
             };
 

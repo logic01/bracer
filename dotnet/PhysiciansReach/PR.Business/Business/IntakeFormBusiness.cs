@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Models;
 using System.Collections.Generic;
@@ -17,24 +18,48 @@ namespace PR.Business
             _context = context;
         }
 
+        public List<IntakeFormModel> GetByPhysician(int physicianId)
+        {
+            return _context.IntakeForm
+                    .Include("Questions.Answers")
+                    .Where(d => d.PhysicianId == physicianId)
+                    .Select(i => i.ToModel())
+                    .ToList();
+        }
+
+        public List<IntakeFormModel> GetByVendor(int vendorId)
+        {
+            IQueryable<IntakeFormModel> forms = from agent in _context.Agent
+                                                join patient in _context.Patient on agent.UserAccountId equals patient.AgentId
+                                                join intake in _context.IntakeForm.Include("Questions.Answers") on patient.PatientId equals intake.PatientId
+                                                where agent.VendorId == vendorId
+                                                select intake.ToModel();
+
+            return forms.ToList();
+        }
+
         public List<IntakeFormModel> Get()
         {
-            var intakeFormModels = _context.IntakeForm.Include("Questions.Answers");
+            IQueryable<IntakeForm> intakeFormModels = _context.IntakeForm.Include("Questions.Answers");
             return intakeFormModels.Select(x => x.ToModel()).ToList();
         }
 
         public IntakeFormModel Get(int id)
         {
-            var intakeFormModels = _context.IntakeForm.Where(x => x.IntakeFormId == id).Include("Questions.Answers");
+            IQueryable<IntakeForm> intakeFormModels = _context.IntakeForm.Where(x => x.IntakeFormId == id).Include("Questions.Answers");
 
             return intakeFormModels.Select(x => x.ToModel()).FirstOrDefault();
         }
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
-            var intakeForm = intakeFormModel.ToEntity();
-            _context.IntakeForm.Add(intakeForm);
+            var intakeForm = new IntakeForm();
 
+            intakeForm.MapFromModel(intakeFormModel);
+
+            intakeForm.Status = IntakeFormStatus.New;
+
+            _context.IntakeForm.Add(intakeForm);
             _context.SaveChanges();
 
             return intakeForm.ToModel();
@@ -44,8 +69,8 @@ namespace PR.Business
         {
             IntakeForm intakeForm = _context.IntakeForm.FirstOrDefault(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
 
-            intakeForm = intakeFormModel.ToEntity();
-            _context.IntakeForm.Add(intakeForm);
+            intakeForm.MapFromModel(intakeFormModel);
+
             _context.SaveChanges();
 
             return intakeForm.ToModel();

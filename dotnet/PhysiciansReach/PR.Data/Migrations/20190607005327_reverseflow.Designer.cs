@@ -3,16 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PR.Constants.Enums;
 using PR.Data.Models;
 
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190607005327_reverseflow")]
+    partial class reverseflow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,6 +171,10 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
                     b.HasKey("DocumentId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
@@ -209,9 +214,7 @@ namespace PR.Data.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasDefaultValue("New");
+                        .HasMaxLength(100);
 
                     b.HasKey("IntakeFormId")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -253,35 +256,6 @@ namespace PR.Data.Migrations
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("Log","dbo");
-                });
-
-            modelBuilder.Entity("PR.Data.Models.Medicare", b =>
-                {
-                    b.Property<int>("MedicareId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MemberId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("PatientGroup")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Pcn")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SecondaryCarrier")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SecondarySubscriberNumber")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("SubscriberNumber")
-                        .HasMaxLength(100);
-
-                    b.HasKey("MedicareId");
-
-                    b.ToTable("Medicare");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Patient", b =>
@@ -330,8 +304,6 @@ namespace PR.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int?>("MedicareId");
-
                     b.Property<string>("Medications")
                         .HasMaxLength(100);
 
@@ -365,8 +337,6 @@ namespace PR.Data.Migrations
                     b.Property<string>("PhysiciansPhoneNumber")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("PrivateInsuranceId");
-
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -383,13 +353,9 @@ namespace PR.Data.Migrations
 
                     b.HasIndex("AgentId");
 
-                    b.HasIndex("MedicareId");
-
                     b.HasIndex("PhysiciansAddressId")
                         .IsUnique()
                         .HasFilter("[PhysiciansAddressId] IS NOT NULL");
-
-                    b.HasIndex("PrivateInsuranceId");
 
                     b.ToTable("Patient","dbo");
                 });
@@ -435,47 +401,6 @@ namespace PR.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Physician","dbo");
-                });
-
-            modelBuilder.Entity("PR.Data.Models.PrivateInsurance", b =>
-                {
-                    b.Property<int>("PrivateInsuranceId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Bin")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("City")
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Group")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Insurance")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("InsuranceId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("PCN")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(10);
-
-                    b.Property<string>("State")
-                        .HasMaxLength(2);
-
-                    b.Property<string>("Street")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Zip")
-                        .HasMaxLength(10);
-
-                    b.HasKey("PrivateInsuranceId");
-
-                    b.ToTable("PrivateInsurance");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Question", b =>
@@ -673,18 +598,10 @@ namespace PR.Data.Migrations
                         .HasForeignKey("AgentId")
                         .HasConstraintName("FK_Patient_Agent");
 
-                    b.HasOne("PR.Data.Models.Medicare", "Medicare")
-                        .WithMany()
-                        .HasForeignKey("MedicareId");
-
                     b.HasOne("PR.Data.Models.Address", "PhysiciansAddress")
                         .WithOne("PatientsPhysician")
                         .HasForeignKey("PR.Data.Models.Patient", "PhysiciansAddressId")
                         .HasConstraintName("FK_Patient_Physicians_Address");
-
-                    b.HasOne("PR.Data.Models.PrivateInsurance", "PrivateInsurance")
-                        .WithMany()
-                        .HasForeignKey("PrivateInsuranceId");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Physician", b =>

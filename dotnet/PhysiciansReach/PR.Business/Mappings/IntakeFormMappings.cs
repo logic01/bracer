@@ -12,8 +12,13 @@ namespace PR.Business.Mappings
             {
                 IntakeFormId = entity.IntakeFormId,
                 PatientId = entity.PatientId,
+                PhysicianId = entity.PhysicianId,
+                SignatureId = entity.SignatureId,
+                ICD10 = entity.ICD10.ToModel(),
+                HCPCS = entity.HCPCS.ToModel(),
                 IntakeFormType = entity.IntakeFormType,
-                Questions = entity.Questions.Select(q => q.ToModel()).ToList(),
+                Status = entity.Status,
+                Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -21,19 +26,69 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static IntakeForm ToEntity(this IntakeFormModel model)
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this IntakeForm entity, IntakeFormModel model)
         {
-            var entity = new IntakeForm
-            {
-                IntakeFormId = model.IntakeFormId,
-                PatientId = model.PatientId,
-                IntakeFormType = model.IntakeFormType,
-                Questions = model.Questions.Select(q => q.ToEntity()).ToList(),
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
+            //IntakeFormId = model.IntakeFormId don't map primary key from the model
+            entity.PatientId = model.PatientId;
+            entity.PhysicianId = model.PhysicianId;
+            entity.SignatureId = model.SignatureId;
+            entity.Status = model.Status;
+            entity.IntakeFormType = model.IntakeFormType;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
 
-            return entity;
+            entity.ICD10.MapFromModel(model.ICD10);
+            entity.HCPCS.MapFromModel(model.HCPCS);
+        }
+
+        public static ICD10Model ToModel(this ICD10 entity)
+        {
+            return new ICD10Model
+            {
+                Id = entity.Id,
+                Code = entity.Code,
+                Description = entity.Description,
+                CreatedOn = entity.CreatedOn,
+                ModifiedOn = entity.ModifiedOn
+            };
+        }
+
+        public static HCPCSModel ToModel(this HCPCS entity)
+        {
+            return new HCPCSModel
+            {
+                Id = entity.Id,
+                Code = entity.Code,
+                Product = entity.Product,
+                Description = entity.Description,
+                CreatedOn = entity.CreatedOn,
+                ModifiedOn = entity.ModifiedOn
+            };
+        }
+
+        public static void MapFromModel(this ICD10 entity, ICD10Model model)
+        {
+            model.Id = entity.Id;
+            model.Code = entity.Code;
+            model.Description = entity.Description;
+            model.CreatedOn = entity.CreatedOn;
+            model.ModifiedOn = entity.ModifiedOn;
+        }
+
+        public static void MapFromModel(this HCPCS entity, HCPCSModel model)
+        {
+            entity.Id = model.Id;
+            entity.Code = model.Code;
+            entity.Product = model.Product;
+            entity.Description = model.Description;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
         }
 
         public static QuestionModel ToModel(this Question entity)
@@ -51,21 +106,6 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Question ToEntity(this QuestionModel model)
-        {
-            var entity = new Question
-            {
-                QuestionId = model.QuestionId,
-                Text = model.Text,
-                Key = model.Key,
-                Answers = model.Answers.Select(a => a.ToEntity()).ToList(),
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
-
-            return entity;
-        }
-
         public static AnswerModel ToModel(this Answer entity)
         {
             var model = new AnswerModel
@@ -77,19 +117,6 @@ namespace PR.Business.Mappings
             };
 
             return model;
-        }
-
-        public static Answer ToEntity(this AnswerModel model)
-        {
-            var entity = new Answer
-            {
-                AnswerId = model.AnswerId,
-                Text = model.Text,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
-
-            return entity;
         }
 
     }

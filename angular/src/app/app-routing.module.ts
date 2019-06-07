@@ -10,6 +10,7 @@ import { EditAgentComponent } from './agent/edit/edit-agent.component';
 import { CreatePatientComponent } from './agent/patient/create/create-patient.component';
 import { IntakeFormComponent } from './agent/patient/intake/intake-form/intake-form.component';
 import { RouteUrls } from './constants/routes';
+import { DocumentComponent } from './document/document.component';
 import { LoginComponent } from './login/login.component';
 import { AccountType } from './models/enums/account-type.enum';
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
@@ -24,6 +25,7 @@ import { ViewVendorComponent } from './vendor/view/view-vendor.component';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
+  { path: RouteUrls.DocumentComponent, component: DocumentComponent },
   {
     path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent,
     canActivate: [RoleGuardService, SignInGuardService],

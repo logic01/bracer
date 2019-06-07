@@ -1,6 +1,8 @@
 export const RouteUrls = {
   LoginComponent: 'login',
 
+  DocumentComponent: 'document',
+
   AgentDashboardComponent: 'agent',
 
   AgentEditComponent: 'agent/edit/:id',

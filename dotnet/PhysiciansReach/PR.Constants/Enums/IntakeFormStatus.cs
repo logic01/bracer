@@ -1,6 +1,6 @@
 ﻿namespace PR.Constants.Enums
 {
-    public enum DocumentStatus
+    public enum IntakeFormStatus
     {
         New,
         Assigned,

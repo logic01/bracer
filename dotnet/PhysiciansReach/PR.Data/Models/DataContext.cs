@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PR.Constants.Enums;
 
 namespace PR.Data.Models
 {
@@ -374,6 +375,8 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.IntakeFormType).IsRequired().HasMaxLength(100).HasConversion<string>();
 
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(100).HasConversion<string>().HasDefaultValue(IntakeFormStatus.New);
+
                 entity.HasKey(e => e.IntakeFormId).ForSqlServerIsClustered(false);
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
@@ -385,6 +388,74 @@ namespace PR.Data.Models
                      .HasForeignKey(b => b.PatientId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Patient_IntakeForms");
+
+                entity.HasOne(d => d.Physician)
+                     .WithMany(p => p.IntakeForms)
+                     .HasForeignKey(b => b.PhysicianId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Physician_IntakeForms");
+
+                entity.HasOne(intake => intake.Signature)
+                     .WithOne(sig => sig.IntakeForm)
+                     .HasForeignKey<IntakeForm>(intake => intake.SignatureId)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasConstraintName("FK_IntakeForm_Signature");
+
+                entity.HasOne(intake => intake.Document)
+                     .WithOne(doc => doc.IntakeForm)
+                     .HasForeignKey<IntakeForm>(intake => intake.Document)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasConstraintName("FK_IntakeForm_Document");
+
+                entity.HasOne(intake => intake.HCPCS)
+                     .WithOne(h => h.IntakeForm)
+                     .HasForeignKey<IntakeForm>(intake => intake.HCPCSId)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasConstraintName("FK_IntakeForm_HCPCS");
+
+                entity.HasOne(intake => intake.ICD10)
+                     .WithOne(h => h.IntakeForm)
+                     .HasForeignKey<IntakeForm>(intake => intake.ICD10Id)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasConstraintName("FK_IntakeForm_ICD10");
+            });
+        }
+
+
+        protected void DocumentBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Document>(entity =>
+            {
+                entity.ToTable("Document", "dbo");
+
+                entity.HasKey(e => e.DocumentId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(doc => doc.IntakeForm)
+                     .WithOne(intake => intake.Document)
+                     .HasForeignKey<Document>(doc => doc.IntakeFormId)
+                     .HasConstraintName("FK_IntakeForm_Document");
+            });
+        }
+
+        protected void SignatureBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Signature>(entity =>
+            {
+                entity.ToTable("Signature", "dbo");
+
+                entity.HasKey(e => e.SignatureId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
             });
         }
 
@@ -432,58 +503,5 @@ namespace PR.Data.Models
             });
         }
 
-        protected void DocumentBuilder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Document>(entity =>
-            {
-                entity.ToTable("Document", "dbo");
-
-                entity.Property(e => e.Type).IsRequired().HasMaxLength(100).HasConversion<string>();
-
-                entity.Property(e => e.Status).IsRequired().HasMaxLength(100).HasConversion<string>();
-
-                entity.HasKey(e => e.DocumentId).ForSqlServerIsClustered(false);
-
-                entity.Property(e => e.Content).IsRequired();
-
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.IntakeForm)
-                     .WithMany(p => p.Documents)
-                     .HasForeignKey(b => b.IntakeFormId)
-                     .OnDelete(DeleteBehavior.ClientSetNull)
-                     .HasConstraintName("FK_IntakeForm_Documents");
-
-                entity.HasOne(d => d.Physician)
-                     .WithMany(p => p.Documents)
-                     .HasForeignKey(b => b.PhysicianId)
-                     .IsRequired(false)
-                     .OnDelete(DeleteBehavior.ClientSetNull)
-                     .HasConstraintName("FK_Physician_Documents");
-
-                entity.HasOne(doc => doc.Signature)
-                     .WithOne(sig => sig.Document)
-                     .HasForeignKey<Document>(doc => doc.SignatureId)
-                     .HasConstraintName("FK_Document_Signature");
-            });
-        }
-
-        protected void SignatureBuilder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Signature>(entity =>
-            {
-                entity.ToTable("Signature", "dbo");
-
-                entity.HasKey(e => e.SignatureId).ForSqlServerIsClustered(false);
-
-                entity.Property(e => e.Content).IsRequired();
-
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-            });
-        }
     }
 }

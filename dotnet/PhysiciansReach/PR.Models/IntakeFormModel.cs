@@ -10,7 +10,17 @@ namespace PR.Models
 
         public int PatientId { get; set; }
 
+        public int? PhysicianId { get; set; }
+
+        public int? SignatureId { get; set; }
+
         public IntakeFormType IntakeFormType { get; set; }
+
+        public ICD10Model ICD10 { get; set; }
+
+        public HCPCSModel HCPCS { get; set; }
+
+        public IntakeFormStatus Status { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

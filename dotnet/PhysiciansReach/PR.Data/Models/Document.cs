@@ -9,14 +9,6 @@ namespace PR.Data.Models
 
         public int IntakeFormId { get; set; }
 
-        public int? PhysicianId { get; set; }
-
-        public int? SignatureId { get; set; }
-
-        public DocumentType Type { get; set; }
-
-        public DocumentStatus Status { get; set; }
-
         public byte[] Content { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -24,9 +16,5 @@ namespace PR.Data.Models
         public DateTime ModifiedOn { get; set; }
 
         public IntakeForm IntakeForm { get; set; }
-
-        public Physician Physician { get; set; }
-
-        public Signature Signature { get; set; }
     }
 }

@@ -19,20 +19,6 @@ namespace PhysiciansReach.Controllers
             _logging = logging;
         }
 
-        [HttpGet("Physician/{physicianId}/Document")]
-        public ActionResult<List<DocumentModel>> GetByPhysician(int physicianId)
-        {
-            _logging.Log(LogSeverity.Info, "Get All Document");
-            return _business.GetByPhysician(physicianId);
-        }
-
-        [HttpGet("Vendor/{vendorId}/Document")]
-        public ActionResult<List<DocumentModel>> GetByVendor(int vendorId)
-        {
-            _logging.Log(LogSeverity.Info, "Get All Document");
-            return _business.GetByVendor(vendorId);
-        }
-
         [HttpGet("Document/{documentId}")]
         public ActionResult<DocumentModel> Get(int documentId)
         {
@@ -49,10 +35,6 @@ namespace PhysiciansReach.Controllers
             {
                 throw new Exception("Invalid Request.");
             }
-
-            // this api is only used by the 'assignment' in the Admin.
-            // if we need it for something else then we should re-consider seeting this status here.
-            document.Status = DocumentStatus.Assigned;
 
             return _business.Update(document);
         }

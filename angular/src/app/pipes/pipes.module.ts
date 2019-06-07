@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { DocumentStatusPipe } from './document-status.pipe';
-import { DocumentTypePipe } from './document-type.pipe';
+import { IntakeStatusPipe } from './intake-status.pipe';
 import { PhonePipe } from './phone.pipe';
+import { SexPipe } from './sex-pipe';
 
 @NgModule({
   declarations: [
     PhonePipe,
-    DocumentStatusPipe,
-    DocumentTypePipe],
+    IntakeStatusPipe,
+    SexPipe
+  ],
   imports: [CommonModule],
   exports: [
     PhonePipe,
-    DocumentStatusPipe,
-    DocumentTypePipe]
+    IntakeStatusPipe,
+    SexPipe
+  ]
 })
 export class PipesModule { }

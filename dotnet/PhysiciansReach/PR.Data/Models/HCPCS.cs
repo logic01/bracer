@@ -2,19 +2,20 @@
 
 namespace PR.Data.Models
 {
-    public class Signature
+    public class HCPCS
     {
-        public int SignatureId { get; set; }
+        public int Id { get; set; }
 
-        public byte[] Content { get; set; }
+        public string Code { get; set; }
 
-        public string IpAddress { get; set; }
+        public string Product { get; set; }
+
+        public string Description { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 
         public IntakeForm IntakeForm { get; set; }
-
     }
 }

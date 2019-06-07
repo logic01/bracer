@@ -10,12 +10,8 @@ namespace PR.Business.Mappings
             var model = new DocumentModel
             {
                 DocumentId = entity.DocumentId,
-                PhysicianId = entity.PhysicianId,
                 IntakeFormId = entity.IntakeFormId,
-                Content = entity.Content, //Consider dropping this since it will be huge
-                SignatureId = entity.SignatureId,
-                Type = entity.Type,
-                Status = entity.Status,
+                Content = entity.Content,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -37,12 +33,8 @@ namespace PR.Business.Mappings
         public static Document MapToEntity(this DocumentModel model, Document entity)
         {
             entity.DocumentId = model.DocumentId;
-            entity.PhysicianId = model.PhysicianId;
             entity.IntakeFormId = model.IntakeFormId;
             entity.Content = model.Content;
-            entity.SignatureId = entity.SignatureId;
-            entity.Type = model.Type;
-            entity.Status = model.Status;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 

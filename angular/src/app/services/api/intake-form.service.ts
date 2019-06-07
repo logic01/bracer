@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -15,8 +14,12 @@ export class IntakeFormService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<IntakeForm[]> {
-    return this.http.get<IntakeForm[]>(this.url);
+  getByPhysician(physicianId: string): Observable<IntakeForm[]> {
+    return this.http.get<IntakeForm[]>(`${environment.api_url}/physician/${physicianId}/intakeform`);
+  }
+
+  getByVendor(vendorId: string): Observable<IntakeForm[]> {
+    return this.http.get<IntakeForm[]>(`${environment.api_url}/vendor/${vendorId}/intakeform`);
   }
 
   get(id: string): Observable<IntakeForm> {
@@ -27,7 +30,7 @@ export class IntakeFormService {
     return this.http.post<IntakeForm>(this.url, intakeForm);
   }
 
-  put(intakeForm: IntakeForm): Observable<IntakeForm> {
-    return this.http.put<IntakeForm>(this.url, intakeForm);
+  put(id: string, intakeForm: IntakeForm): Observable<IntakeForm> {
+    return this.http.put<IntakeForm>(`${this.url}/${id}`, intakeForm);
   }
 }
