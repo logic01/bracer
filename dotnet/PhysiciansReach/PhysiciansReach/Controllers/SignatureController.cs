@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
@@ -22,9 +23,13 @@ namespace PhysiciansReach.Controllers
         {
             _logging.Log(LogSeverity.Info, "Sign Document");
 
-           // _business.SaveSignature(documentId, signature);
+            // get the client ip address
+            signature.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+
+            // _business.SaveSignature(documentId, signature);
 
             return Ok();
         }
+
     }
 }
