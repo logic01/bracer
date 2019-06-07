@@ -27,6 +27,6 @@ namespace PR.Data.Models
 
         public Address Address { get; set; }
 
-        public List<Document> Documents { get; set; }
+        public List<IntakeForm> IntakeForms { get; set; }
     }
 }

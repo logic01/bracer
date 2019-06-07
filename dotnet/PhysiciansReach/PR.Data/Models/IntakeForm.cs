@@ -10,6 +10,8 @@ namespace PR.Data.Models
 
         public int PatientId { get; set; }
 
+        public int? PhysicianId { get; set; }
+
         public IntakeFormType IntakeFormType { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -18,8 +20,16 @@ namespace PR.Data.Models
 
         public List<Question> Questions { get; set; }
 
-        public List<Document> Documents { get; set; }
+        public string ICD10 { get; set; }
+
+        public string HCPCS { get; set; }
+
+        public IntakeFormStatus Status { get; set; }
+
+        public Document Document { get; set; }
 
         public Patient Patient { get; set; }
+
+        public Physician Physician { get; set; }
     }
 }

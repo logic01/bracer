@@ -85,9 +85,9 @@
         <mat-form-field>
           <input matInput placeholder="State" type="text" formControlName="state"
             [textMask]="{mask: maskService.state}">
-          <mat-error *ngIf="accountForm.get('state').hasError('required')">Please enter a value.</mat-error>
-          <mat-error *ngIf="accountForm.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
-          <mat-error *ngIf="accountForm.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('required')">Please enter a value.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
         </mat-form-field>
 
         <mat-form-field>
@@ -192,9 +192,9 @@
         <mat-form-field>
           <input matInput placeholder="State" type="text" formControlName="physicianState"
             [textMask]="{mask: maskService.state}">
-          <mat-error *ngIf="accountForm.get('state').hasError('required')">Please enter a value.</mat-error>
-          <mat-error *ngIf="accountForm.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
-          <mat-error *ngIf="accountForm.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('required')">Please enter a value.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
+          <mat-error *ngIf="form.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
         </mat-form-field>
 
         <mat-form-field>

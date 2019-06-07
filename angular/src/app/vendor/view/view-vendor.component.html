@@ -1,29 +1,24 @@
-<div *ngIf="(vendor$ | async) as vendor">
-
-  <h1> {{ vendor.companyName }} </h1>
-  <h4> Doing Business As: {{ vendor.doingBusinessAs }} </h4>
-  <h4> Phone Number: {{ vendor.phoneNumber | phone }} </h4>
-  <h4> Contact: {{ vendor.contactFirstName }} {{ vendor.contactLastName }} </h4>
-
+<div *ngIf="(vendor$ | async) as vendor" fxLayout="row" fxLayoutAlign="center start">
+  <div fxLayout="column" fxLayoutGap="10px">
+    <h1> {{ vendor.companyName }} </h1>
+    <h4> Doing Business As: {{ vendor.doingBusinessAs }} </h4>
+    <h4> Phone Number: {{ vendor.phoneNumber | phone }} </h4>
+    <h4> Contact: {{ vendor.contactFirstName }} {{ vendor.contactLastName }} </h4>
+  </div>
 </div>
 
 <div fxLayout="row" fxLayoutAlign="center start">
   <div fxLayout="column" fxLayoutGap="10px">
     <table mat-table class="mat-elevation-z8" [dataSource]="data">
 
-      <ng-container matColumnDef="documentId">
+      <ng-container matColumnDef="intakeFormId">
         <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let result"> {{result.documentId}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef> Type </th>
-        <td mat-cell *matCellDef="let result"> {{result.type | documentType}} </td>
+        <td mat-cell *matCellDef="let result"> {{result.intakeFormId}} </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let result"> {{result.status | documentStatus}} </td>
+        <td mat-cell *matCellDef="let result"> {{result.status | intakeStatus}} </td>
       </ng-container>
 
       <ng-container matColumnDef="physicianName">
@@ -39,9 +34,9 @@
       <ng-container matColumnDef="sign">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let result" fxLayoutGap="10px">
-          <button mat-raised-button color="accent" (click)="view(result.documentId)">View</button>
-          <button mat-raised-button color="accent" (click)="assign(result.documentId)">Assign</button>
-          <button mat-raised-button color="accent" (click)="email(result.documentId)">Email</button>
+          <button mat-raised-button color="accent" (click)="view(result.intakeFormId)">View</button>
+          <button mat-raised-button color="accent" (click)="assign(result.intakeFormId)">Assign</button>
+          <button mat-raised-button color="accent" (click)="email(result.intakeFormId)">Email</button>
         </td>
       </ng-container>
 

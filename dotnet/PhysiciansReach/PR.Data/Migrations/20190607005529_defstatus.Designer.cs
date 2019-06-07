@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Constants.Enums;
 using PR.Data.Models;
@@ -10,9 +11,10 @@ using PR.Data.Models;
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190607005529_defstatus")]
+    partial class defstatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,6 +171,10 @@ namespace PR.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("DocumentId")
                         .HasAnnotation("SqlServer:Clustered", false);

@@ -14,7 +14,5 @@ namespace PR.Data.Models
 
         public DateTime ModifiedOn { get; set; }
 
-        public Document Document { get; set; }
-
     }
 }

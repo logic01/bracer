@@ -22,7 +22,7 @@ namespace PhysiciansReach.Controllers
         {
             _logging.Log(LogSeverity.Info, "Sign Document");
 
-            _business.SaveSignature(documentId, signature);
+           // _business.SaveSignature(documentId, signature);
 
             return Ok();
         }

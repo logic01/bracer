@@ -3,24 +3,21 @@ import { MatDialog, MatTable } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { DocumentStatus } from 'src/app/models/enums/document-status.enum';
-import { DocumentType } from 'src/app/models/enums/document-type.enum';
+import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
+import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Physician } from 'src/app/models/physician.model';
 import { Vendor } from 'src/app/models/vendor.model';
-import { DocumentService } from 'src/app/services/api/document.service';
+import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
-import { Document } from '../../models/document.model';
 import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 
 export class TableRow {
-  documentId: string;
   intakeFormId: string;
   physicianName: string;
   physicianState: string;
-  type: DocumentType;
-  status: DocumentStatus;
+  status: IntakeStatus;
 }
 
 @Component({
@@ -34,17 +31,17 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   public vendor$: Observable<Vendor>;
   public physicians$: Observable<Physician[]>;
-  public documents$: Observable<Document[]>;
+  public intake$: Observable<IntakeForm[]>;
 
   public data: TableRow[] = [];
-  public columnsToDisplay = ['documentId', 'type', 'status', 'physicianName', 'physicianState', 'sign'];
+  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'sign'];
 
   private unsubscribe$ = new Subject();
 
   constructor(
     private readonly physicianApi: PhysicianService,
     private readonly vendorApi: VendorService,
-    private readonly documentApi: DocumentService,
+    private readonly intakeApi: IntakeFormService,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog) {
   }
@@ -55,24 +52,23 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
     this.vendor$ = this.vendorApi.get(vendorId);
     this.physicians$ = this.physicianApi.getAll();
-    this.documents$ = this.documentApi.getByVendor(vendorId);
+    this.intake$ = this.intakeApi.getByVendor(vendorId);
 
-    forkJoin([this.documents$, this.physicians$])
+    forkJoin([this.intake$, this.physicians$])
       .pipe(
         takeUntil(this.unsubscribe$),
         map(responses => {
 
-          const documents = responses[0];
+          const intakeForms = responses[0];
           const physicians = responses[1];
 
-          documents.forEach((doc: Document) => {
+          intakeForms.forEach((intake: IntakeForm) => {
 
             const row = new TableRow();
-            row.documentId = doc.documentId;
-            row.type = doc.type;
-            row.status = doc.status;
-            row.physicianName = this.getPhysicianName(doc.physicianId, physicians);
-            row.physicianState = this.getPhysicianState(doc.physicianId, physicians);
+            row.intakeFormId = intake.intakeFormId;
+            row.status = intake.status;
+            row.physicianName = this.getPhysicianName(intake.physicianId, physicians);
+            row.physicianState = this.getPhysicianState(intake.physicianId, physicians);
             this.data.push(row);
           });
 
@@ -85,7 +81,6 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
-
 
   getPhysicianName(physicianId: string, physicians: Physician[]): string {
 
@@ -109,12 +104,12 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  assign(documentId: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { documentId: documentId } });
+  assign(intakeFormId: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
   }
 
-  email(documentId: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { documentId: documentId } });
+  email(intakeFormId: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
   }
 
 }

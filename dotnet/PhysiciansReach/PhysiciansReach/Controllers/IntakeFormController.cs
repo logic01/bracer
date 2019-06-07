@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     public class IntakeFormController : ControllerBase
     {
@@ -21,36 +20,57 @@ namespace PhysiciansReach.Controllers
             _logging = logging;
         }
 
-        [HttpGet]
+        [HttpGet("IntakeForm")]
         public ActionResult<List<IntakeFormModel>> Get()
         {
             _logging.Log(LogSeverity.Info, "Get All IntakeForm");
             return _intakeBusiness.Get();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("IntakeForm/{id}")]
         public ActionResult<IntakeFormModel> Get(int id)
         {
             _logging.Log(LogSeverity.Info, "Get IntakeForm");
             return _intakeBusiness.Get(id);
         }
 
-        [HttpPost]
+        [HttpGet("Physician/{physicianId}/IntakeForm")]
+        public ActionResult<List<IntakeFormModel>> GetByPhysician(int physicianId)
+        {
+            _logging.Log(LogSeverity.Info, "Get All Document");
+            return _intakeBusiness.GetByPhysician(physicianId);
+        }
+
+        [HttpGet("Vendor/{vendorId}/IntakeForm")]
+        public ActionResult<List<IntakeFormModel>> GetByVendor(int vendorId)
+        {
+            _logging.Log(LogSeverity.Info, "Get All Document");
+            return _intakeBusiness.GetByVendor(vendorId);
+        }
+
+        [HttpPost("IntakeForm")]
         public ActionResult<IntakeFormModel> Post([FromBody] IntakeFormModel intakeForm)
         {
             _logging.Log(LogSeverity.Info, "Post IntakeForm");
 
-            var newIntakeForm = _intakeBusiness.Create(intakeForm);
+            IntakeFormModel newIntakeForm = _intakeBusiness.Create(intakeForm);
 
             _documentBusiness.CreateIntakeFormDocument(newIntakeForm.PatientId, newIntakeForm.IntakeFormId);
 
             return newIntakeForm;
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("IntakeForm/{id}")]
         public ActionResult<IntakeFormModel> Put(int id, [FromBody] IntakeFormModel intakeForm)
         {
             _logging.Log(LogSeverity.Info, "Put IntakeForm");
+
+            intakeForm.IntakeFormId = id;
+
+            // for now we only call this method during assignment process
+            // if that changes we need to figure out a better way to set the status
+            intakeForm.Status = IntakeFormStatus.Assigned;
+
             return _intakeBusiness.Update(intakeForm);
         }
     }

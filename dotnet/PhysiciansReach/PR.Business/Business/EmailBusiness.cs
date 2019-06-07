@@ -23,7 +23,7 @@ namespace PR.Business.Business
 
         public bool SendEmail(int documentId, string emailAddress)
         {
-            Document document = _context.Document
+        /*    Document document = _context.Document
                 .Include(d => d.Physician)
                 .FirstOrDefault(d => d.DocumentId == documentId);
 
@@ -43,7 +43,7 @@ namespace PR.Business.Business
             client.Send(message);
 
 
-        /*    var smtp = new SmtpClient
+            var smtp = new SmtpClient
             {
                 EnableSsl = false,
                 UseDefaultCredentials = false,

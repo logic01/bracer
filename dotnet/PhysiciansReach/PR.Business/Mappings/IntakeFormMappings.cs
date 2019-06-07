@@ -12,8 +12,12 @@ namespace PR.Business.Mappings
             {
                 IntakeFormId = entity.IntakeFormId,
                 PatientId = entity.PatientId,
+                PhysicianId = entity.PhysicianId,
+                ICD10 = entity.ICD10,
+                HCPCS = entity.HCPCS,
                 IntakeFormType = entity.IntakeFormType,
-                Questions = entity.Questions.Select(q => q.ToModel()).ToList(),
+                Status = entity.Status,
+                Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
@@ -27,6 +31,10 @@ namespace PR.Business.Mappings
             {
                 IntakeFormId = model.IntakeFormId,
                 PatientId = model.PatientId,
+                PhysicianId = model.PhysicianId,
+                ICD10 = model.ICD10,
+                HCPCS = model.HCPCS,
+                Status = model.Status,
                 IntakeFormType = model.IntakeFormType,
                 Questions = model.Questions.Select(q => q.ToEntity()).ToList(),
                 CreatedOn = model.CreatedOn,
@@ -34,6 +42,25 @@ namespace PR.Business.Mappings
             };
 
             return entity;
+        }
+
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this IntakeForm entity, IntakeFormModel model)
+        {
+            //IntakeFormId = model.IntakeFormId don't map primary key from the model
+            entity.PatientId = model.PatientId;
+            entity.PhysicianId = model.PhysicianId;
+            entity.ICD10 = model.ICD10;
+            entity.HCPCS = model.HCPCS;
+            entity.Status = model.Status;
+            entity.IntakeFormType = model.IntakeFormType;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
         }
 
         public static QuestionModel ToModel(this Question entity)
