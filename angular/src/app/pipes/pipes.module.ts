@@ -3,16 +3,19 @@ import { NgModule } from '@angular/core';
 
 import { IntakeStatusPipe } from './intake-status.pipe';
 import { PhonePipe } from './phone.pipe';
+import { SexPipe } from './sex-pipe';
 
 @NgModule({
   declarations: [
     PhonePipe,
-    IntakeStatusPipe
+    IntakeStatusPipe,
+    SexPipe
   ],
   imports: [CommonModule],
   exports: [
     PhonePipe,
-    IntakeStatusPipe
+    IntakeStatusPipe,
+    SexPipe
   ]
 })
 export class PipesModule { }

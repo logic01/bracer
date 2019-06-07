@@ -1,0 +1,145 @@
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+
+  <div *ngIf="(patient$ | async) as patient">
+    <div *ngIf="(physician$ | async) as physician" fxLayout="column" fxLayoutGap="20px">
+
+      <div fxLayout="row" fxLayoutGap="20px">
+
+        <div fxLayout="column" fxLayoutGap="20px">
+
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <h4>Patient Information</h4>
+            <div>Patient: {{patient.firstName}} {{patient.lastName}}</div>
+            <div>Address: {{patient.address.addressLineOne}}</div>
+            <div>{{patient.address.addressLineTwo}}</div>
+            <div>{{patient.address.city}}, {{patient.address.state}} {{patient.address.zip}}</div>
+            <div>Phone: {{patient.phoneNumber | phone}}</div>
+            <div>Weight: NA lbs.</div>
+            <div>Height: NA Shoe Size: NA Age: NA Years</div>
+            <div>Date of Birth: {{patient.dateOfBirth | date}}</div>
+            <div>Gender: {{patient.sex | sex }}</div>
+
+          </div>
+
+          <div>
+            <h4>DIAGNOSIS</h4>
+            <mat-form-field>
+              <mat-select placeholder="Diagnosis*" formControlName="ICD10">
+                <mat-option value="1"> m19.071 primary osteoarthritis, right ankle and foot </mat-option>
+                <mat-option value="2"> m25.579 pain in joint, ankle </mat-option>
+                <mat-option value="3"> m25.571 pain in right ankle and joints of right foot </mat-option>
+                <mat-option value="4"> m25.371 instability in right ankle </mat-option>
+                <mat-option value="5"> m19.071 primary osteoarthritis, right ankle and foot </mat-option>
+                <mat-option value="6"> m25.579 pain in joint, ankle </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('ICD10').hasError('required')">Please select a time for the call.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <h4>STATEMENT OF MEDICAL NECESSITY</h4>
+            <div>
+              The orthotic device or devices ordered as of the result of this examination is being prescribed as
+              adjunctive
+              therapy to assist in reducing the level of pain and symptoms associated with the patient’s identiﬁed
+              diagnosis,
+              and for overall improvement in the patient’s quality of life.
+            </div>
+          </div>
+
+          <h4>PREVIOUSLY TRIED TREATMENTS</h4>
+          <div>_17_</div>
+
+          <h4>PAIN LEVEL DESCRIBED BY PATIENT</h4>
+          <div>_23_ on a 0-10 scale</div>
+
+          <div>I, Dr. Colleen Browne, verify and conﬁrm this order for the above-named patient, and certify that I have
+            personally performed the assessment of the patient for the prescribed treatment and device and verify that
+            it
+            is
+            reasonably and medically necessary, according to accepted standards of medical practice within the
+            community,
+            for
+            this patient’s medical condition. I hereby aﬃrm this documentation as part of this patient’s medical record.
+          </div>
+
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="20px">
+
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <h4>------Detailed Written Order------</h4>
+            <div>Date of Service: {{dateOfService | date}}</div>
+            <div>Physician: {{physician.firstName}} {{physician.lastName}} </div>
+            <div>NPI: {{physician.npi}}</div>
+            <div>DEA: {{physician.dea}}</div>
+            <div>Address: {{physician.address.addressLineOne}}</div>
+            <div>{{physician.address.addressLineTwo}}</div>
+            <div>{{physician.address.city}}, {{physician.address.state}} {{physician.address.zip}}</div>
+            <div>Phone: {{physician.phoneNumber}}</div>
+          </div>
+
+          <h4>Insurance Information</h4>
+          <div>Member ID:
+            <!--{{patient.insurance.memberId}}-->
+          </div>
+          <div>Insurance Type:
+            <!--{{patient.insurance.insuranceType}}-->
+          </div>
+
+          <h4>ORTHOSIS DEVICE(S) PRESCRIBED</h4>
+          <div>
+            Based on my examination of this patient, I am ordering the following orthosis for the Lower Back:
+            L0650 (Lumbar-sacral orthosis. Sagittal control with rigid anterior and posterior panels, posterior panels,
+            posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, with rigid lateral
+            panels,
+            prefabricated and oﬀ the shelf. Custom ﬁtting of the orthosis is not required and the patient or an
+            assisting
+            care giver can apply the prescribed orthotic device with minimal self- adjusting.)
+
+            Patient should begin using the orthosis as needed. Length of need:
+            99 months/lifetime.
+          </div>
+
+          <div>First date patient is authorized to begin using Back Brace : 24</div>
+
+          <h4>My treatment goal(s) for the use of the prescribed orthosis are:</h4>
+
+          <div>• Support weak musculature </div>
+          <div>• Improvement in Patient’s function </div>
+          <div>• Decrease in Patient’s pain </div>
+          <div>• To assist the patient or improve activities of daily living </div>
+          <div>• To aid in the stabilization of the Lower Back </div>
+          <div>• To aid in controlling unwanted movements in the area of pain </div>
+          <div>• Slow degenerative changes </div>
+          <div>• Reduce potential inﬂammation </div>
+
+          <h4>Additional Doctor Notes:</h4>
+          <div>
+            Thoroughly reviewed all available medical information on record and listened to survey recording. Contacted
+            patient today, 24, today for further evaluation and remote examination. Patient advised to f/u with PCP
+            regarding
+            this and other ongoing medical issues. Consultant's n/n provided for future reference, as needed. Patient
+            with
+            understanding of and agreement with plan of care. cdb. 24.
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div> x________________ {{dateOfService | date}}</div>
+        <div>{{physician.firstName}} {{physician.lastName}}</div>
+        <div>Electronically Signed and Dated: {{dateOfService | date:'short'}}.</div>
+        <div>NPI: {{physician.npi}}</div>
+        <div>DEA: {{physician.dea}}</div>
+        <div>From IP Address: {{ipAddress}} </div>
+      </div>
+
+    </div>
+  </div>
+</form>
