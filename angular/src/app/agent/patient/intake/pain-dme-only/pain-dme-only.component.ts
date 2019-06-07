@@ -1,13 +1,12 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IntakeForm } from 'src/app/models/intake-form.model';
-import { SelectValueService } from 'src/app/services/select-value.service';
-import { Question, PainQuestion } from 'src/app/models/question.model';
-import { CustomValidators } from 'src/app/validators/custom-validators';
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { MaskService } from 'src/app/services/mask.service'
+import { IntakeForm } from 'src/app/models/intake-form.model';
+import { PainQuestion, Question } from 'src/app/models/question.model';
+import { MaskService } from 'src/app/services/mask.service';
+import { SelectValueService } from 'src/app/services/select-value.service';
 
 @Component({
   selector: 'app-pain-dme-only',
@@ -58,14 +57,14 @@ export class PainDmeOnlyComponent implements OnInit {
   }
 
   initForm() {
-    //dynamically adding the formGroups by the pain question possiblities
+    // dynamically adding the formGroups by the pain question possiblities
     this.form = new FormGroup({});
     for (let i = 0; i < this.painQuestions.length; i++) {
-      let painQuestionSet: PainQuestion[] = this.painQuestions[i];
-      let checkBoxId = i + '_check';
+      const painQuestionSet: PainQuestion[] = this.painQuestions[i];
+      const checkBoxId = i + '_check';
       this.form.addControl(checkBoxId, new FormControl());
       for (let p = 0; p < painQuestionSet.length; p++) {
-        let painQuestion = painQuestionSet[p];
+        const painQuestion = painQuestionSet[p];
         this.form.addControl(painQuestion.getId(), new FormControl());
       };
     };
@@ -79,14 +78,15 @@ export class PainDmeOnlyComponent implements OnInit {
 
     const intakeForms = this.buildIntakeForms();
 
-    //TODO submit ALL of the intake forms and not just the first one
+    // TODO submit ALL of the intake forms and not just the first one
     this.formSubmitEvent.emit(intakeForms[0]);
   }
 
   initQuestions() {
     this.painQuestions = [];
-    for (let painPoint in this.painPoints) {
-      let painArray: PainQuestion[] = [];
+// tslint:disable-next-line: forin
+    for (const painPoint in this.painPoints) {
+      const painArray: PainQuestion[] = [];
 
       painArray.push(this.initPainQuestion('PainFeeling', 'Cause of Patients Pain?', painPoint, 1));
       painArray.push(this.initPainQuestion('PainChart', 'Location(s) of Pain?', painPoint, 2));
@@ -120,38 +120,38 @@ export class PainDmeOnlyComponent implements OnInit {
 
   buildIntakeForms(): IntakeForm[] {
 
-    let intakeForms: IntakeForm[] = [];
-    let painPointIds: number[] = [];
+    const intakeForms: IntakeForm[] = [];
+    const painPointIds: number[] = [];
 
-    //For the checkboxes that are checked select
-    //which array from the painPointQuestions need to be
-    //added as an intake form
-    if (this.LeftWrist) painPointIds.push(0);
-    if (this.RightWrist) painPointIds.push(1);
-    if (this.LeftElbow) painPointIds.push(2);
-    if (this.RightElbow) painPointIds.push(3);
-    if (this.LeftAnteriorShoulder) painPointIds.push(4);
-    if (this.RightAnteriorShoulder) painPointIds.push(5);
-    if (this.LeftHip) painPointIds.push(6);
-    if (this.RightHip) painPointIds.push(7);
-    if (this.LeftKnee) painPointIds.push(8);
-    if (this.RightKnee) painPointIds.push(9);
-    if (this.PosteriorLeftShoulder) painPointIds.push(10);
-    if (this.PosteriorRightShoulder) painPointIds.push(11);
-    if (this.Neck) painPointIds.push(12);
-    if (this.UpperMiddleBack) painPointIds.push(13);
-    if (this.MiddleBack) painPointIds.push(14);
-    if (this.LowerBack) painPointIds.push(15);
-    if (this.LeftOccipital) painPointIds.push(16);
-    if (this.RightOccipital) painPointIds.push(17);
-    if (this.FrontalorForehead) painPointIds.push(18);
-    if (this.LeftAnkle) painPointIds.push(19);
-    if (this.RightAnkle) painPointIds.push(20);
+    // For the checkboxes that are checked select
+    // which array from the painPointQuestions need to be
+    // added as an intake form
+    if (this.LeftWrist) { painPointIds.push(0); }
+    if (this.RightWrist) { painPointIds.push(1); }
+    if (this.LeftElbow) { painPointIds.push(2); }
+    if (this.RightElbow) { painPointIds.push(3); }
+    if (this.LeftAnteriorShoulder) { painPointIds.push(4); }
+    if (this.RightAnteriorShoulder) { painPointIds.push(5); }
+    if (this.LeftHip) { painPointIds.push(6); }
+    if (this.RightHip) { painPointIds.push(7); }
+    if (this.LeftKnee) { painPointIds.push(8); }
+    if (this.RightKnee) { painPointIds.push(9); }
+    if (this.PosteriorLeftShoulder) { painPointIds.push(10); }
+    if (this.PosteriorRightShoulder) { painPointIds.push(11); }
+    if (this.Neck) { painPointIds.push(12); }
+    if (this.UpperMiddleBack) { painPointIds.push(13); }
+    if (this.MiddleBack) { painPointIds.push(14); }
+    if (this.LowerBack) { painPointIds.push(15); }
+    if (this.LeftOccipital) { painPointIds.push(16); }
+    if (this.RightOccipital) { painPointIds.push(17); }
+    if (this.FrontalorForehead) { painPointIds.push(18); }
+    if (this.LeftAnkle) { painPointIds.push(19); }
+    if (this.RightAnkle) { painPointIds.push(20); }
 
 
     for (let pi = 0; pi < painPointIds.length; pi++) {
       const painPointId = painPointIds[pi];
-      let intake = new IntakeForm();
+      const intake = new IntakeForm();
       intake.patientId = this.patientId;
       intake.questions = [];
       intake.intakeFormType = IntakeFormType.PainDmeOnly;
@@ -170,7 +170,7 @@ export class PainDmeOnlyComponent implements OnInit {
     }
 
 
-    //need to return each set of PainQuestion/Answers as individual intake forms
+    // need to return each set of PainQuestion/Answers as individual intake forms
     return intakeForms;
 
   }
@@ -185,28 +185,28 @@ export class PainDmeOnlyComponent implements OnInit {
   }
 
   getPainCheckboxBinding(painPointText: string) {
-    //On the UI this will set the value of the dynamic Pain DME Intake Forms
-    //with the proper model boolean that maps to the checkbox
-    if (painPointText === 'LeftWrist') return this.LeftWrist;
-    else if (painPointText === 'RightWrist') return this.RightWrist;
-    else if (painPointText === 'LeftElbow') return this.LeftElbow;
-    else if (painPointText === 'RightElbow') return this.RightElbow;
-    else if (painPointText === 'LeftAnteriorShoulder') return this.LeftAnteriorShoulder;
-    else if (painPointText === 'RightAnteriorShoulder') return this.RightAnteriorShoulder;
-    else if (painPointText === 'LeftHip') return this.LeftHip;
-    else if (painPointText === 'RightHip') return this.RightHip;
-    else if (painPointText === 'LeftKnee') return this.LeftKnee;
-    else if (painPointText === 'RightKnee') return this.RightKnee;
-    else if (painPointText === 'PosteriorLeftShoulder') return this.PosteriorLeftShoulder;
-    else if (painPointText === 'PosteriorRightShoulder') return this.PosteriorRightShoulder;
-    else if (painPointText === 'Neck') return this.Neck;
-    else if (painPointText === 'UpperMiddleBack') return this.UpperMiddleBack;
-    else if (painPointText === 'MiddleBack') return this.MiddleBack;
-    else if (painPointText === 'LowerBack') return this.LowerBack;
-    else if (painPointText === 'LeftOccipital') return this.LeftOccipital;
-    else if (painPointText === 'RightOccipital') return this.RightOccipital;
-    else if (painPointText === 'FrontalorForehead') return this.FrontalorForehead;
-    else if (painPointText === 'LeftAnkle') return this.LeftAnkle;
+    // On the UI this will set the value of the dynamic Pain DME Intake Forms
+    // with the proper model boolean that maps to the checkbox
+    if (painPointText === 'LeftWrist') { return this.LeftWrist; }
+    else if (painPointText === 'RightWrist') { return this.RightWrist; }
+    else if (painPointText === 'LeftElbow') { return this.LeftElbow; }
+    else if (painPointText === 'RightElbow') { return this.RightElbow; }
+    else if (painPointText === 'LeftAnteriorShoulder') { return this.LeftAnteriorShoulder; }
+    else if (painPointText === 'RightAnteriorShoulder') { return this.RightAnteriorShoulder; }
+    else if (painPointText === 'LeftHip') { return this.LeftHip; }
+    else if (painPointText === 'RightHip') { return this.RightHip; }
+    else if (painPointText === 'LeftKnee') { return this.LeftKnee; }
+    else if (painPointText === 'RightKnee') { return this.RightKnee; }
+    else if (painPointText === 'PosteriorLeftShoulder') { return this.PosteriorLeftShoulder; }
+    else if (painPointText === 'PosteriorRightShoulder') { return this.PosteriorRightShoulder; }
+    else if (painPointText === 'Neck') { return this.Neck; }
+    else if (painPointText === 'UpperMiddleBack') { return this.UpperMiddleBack; }
+    else if (painPointText === 'MiddleBack') { return this.MiddleBack; }
+    else if (painPointText === 'LowerBack') { return this.LowerBack; }
+    else if (painPointText === 'LeftOccipital') { return this.LeftOccipital; }
+    else if (painPointText === 'RightOccipital') { return this.RightOccipital; }
+    else if (painPointText === 'FrontalorForehead') { return this.FrontalorForehead; }
+    else if (painPointText === 'LeftAnkle') { return this.LeftAnkle; }
     return this.RightAnkle
   }
 

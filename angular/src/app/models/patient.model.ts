@@ -5,6 +5,8 @@ import { LanguageType } from './enums/language-type.enum';
 import { PharmacyType } from './enums/pharmacy-type.enum';
 import { SexType } from './enums/sex-type.enum';
 import { TherapyType } from './enums/therapy-type.enum';
+import { Medicare } from './medicare.model';
+import { PrivateInsurance } from './private-insurance.model';
 
 export class Patient {
     public patientId: string;
@@ -29,6 +31,8 @@ export class Patient {
     public therapy: TherapyType;
     public insurance: InsuranceType;
     public pharmacy: PharmacyType;
+    public medicare: Medicare;
+    public privateInsurance: PrivateInsurance;
     public isDme: boolean;
     public createdOn: Date;
     public modifiedOn: Date;

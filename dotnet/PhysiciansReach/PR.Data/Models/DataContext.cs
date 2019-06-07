@@ -32,6 +32,10 @@ namespace PR.Data.Models
 
         public DbSet<Document> Document { get; set; }
 
+        public DbSet<PrivateInsurance> PrivateInsurance { get; set; }
+
+        public DbSet<Medicare> Medicare { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             UserAccountBuilder(modelBuilder);
@@ -46,6 +50,8 @@ namespace PR.Data.Models
             AnswerBuilder(modelBuilder);
             DocumentBuilder(modelBuilder);
             SignatureBuilder(modelBuilder);
+            PrivateInsuranceBuilder(modelBuilder);
+            MedicareBuilder(modelBuilder);
         }
 
         protected void LogBuilder(ModelBuilder modelBuilder)
@@ -240,6 +246,44 @@ namespace PR.Data.Models
             });
         }
 
+        protected void MedicareBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Medicare>(entity =>
+            {
+                entity.ToTable("Medicare", "dbo");
+
+                entity.HasKey(e => e.MedicareId).ForSqlServerIsClustered(false);
+                entity.Property(e => e.MemberId).HasMaxLength(100);
+                entity.Property(e => e.PatientGroup).HasMaxLength(100);
+                entity.Property(e => e.Pcn).HasMaxLength(100);
+                entity.Property(e => e.SubscriberNumber).HasMaxLength(100);
+                entity.Property(e => e.SecondaryCarrier).HasMaxLength(100);
+                entity.Property(e => e.SecondarySubscriberNumber).HasMaxLength(100);
+
+            });
+        }
+
+        protected void PrivateInsuranceBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PrivateInsurance>(entity =>
+            {
+                entity.ToTable("PrivateInsurance", "dbo");
+
+                entity.HasKey(e => e.PrivateInsuranceId).ForSqlServerIsClustered(false);
+                entity.Property(e => e.Insurance).HasMaxLength(100);
+                entity.Property(e => e.InsuranceId).HasMaxLength(100);
+                entity.Property(e => e.Group).HasMaxLength(100);
+                entity.Property(e => e.PCN).HasMaxLength(100);
+                entity.Property(e => e.Bin).HasMaxLength(100);
+                entity.Property(e => e.Street).HasMaxLength(100);
+                entity.Property(e => e.City).HasMaxLength(30);
+                entity.Property(e => e.State).HasMaxLength(2);
+                entity.Property(e => e.Zip).HasMaxLength(10);
+                entity.Property(e => e.Phone).HasMaxLength(10);
+
+            });
+        }
+
         protected void PatientBuilder(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Patient>(entity =>
@@ -307,6 +351,18 @@ namespace PR.Data.Models
                      .HasForeignKey<Patient>(b => b.PhysiciansAddressId)
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Patient_Physicians_Address");
+
+                entity.HasOne(d => d.PrivateInsurance)
+                     .WithOne(p => p.Patient)
+                     .HasForeignKey<Patient>(b => b.PrivateInsuranceId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_PrivateInsurance_PrivateInsuranceId");
+
+                entity.HasOne(d => d.Medicare)
+                     .WithOne(p => p.Patient)
+                     .HasForeignKey<Patient>(b => b.MedicareId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_Patient_Medicare_MedicareId");
             });
         }
 

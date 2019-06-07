@@ -63,6 +63,13 @@ namespace PR.Data.Models
         public List<IntakeForm> IntakeForms { get; set; }
 
         public Agent Agent { get; set; }
+
+        public int? PrivateInsuranceId { get; set; }
+        public PrivateInsurance PrivateInsurance { get; set; }
+
+        public int? MedicareId { get; set; }
+        public Medicare Medicare { get; set; }
+
     }
 
 }

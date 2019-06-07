@@ -32,7 +32,9 @@ namespace PR.Business.Mappings
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn,
                 Address = entity.Address.ToModel(),
-                PhysiciansAddress = entity.PhysiciansAddress?.ToModel()
+                PhysiciansAddress = entity.PhysiciansAddress?.ToModel(),
+                PrivateInsurance = entity.PrivateInsurance?.ToModel(),
+                Medicare = entity.Medicare?.ToModel()
                
             };
 
@@ -67,7 +69,9 @@ namespace PR.Business.Mappings
                 ModifiedOn = model.ModifiedOn,
                 Address = model.Address.ToEntity(),
                 PhysiciansAddress = model.PhysiciansAddress?.ToEntity(),
-                PhysiciansAddressId = model.PhysiciansAddress?.AddressId
+                PhysiciansAddressId = model.PhysiciansAddress?.AddressId,
+                Medicare = model.Medicare?.ToEntity(),
+                PrivateInsurance = model.PrivateInsurance?.ToEntity()
             };
 
             return entity;
