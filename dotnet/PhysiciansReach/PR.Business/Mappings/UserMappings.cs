@@ -52,6 +52,11 @@ namespace PR.Business.Mappings
         /// <returns></returns>
         public static void MapFromModel(this UserAccount entity, UserAccountModel model)
         {
+            //TODO Is this code needed?
+            if (entity == null)
+            {
+                entity = new UserAccount();
+            }
             if (model.Password != string.Empty)
             {
                 var hash = new PasswordHash(model.Password);

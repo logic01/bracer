@@ -31,6 +31,29 @@
         Surgies = 22,
         PainLevel = 23,
         ServiceDate = 24,
-        Insurance = 25
+        Insurance = 25,
+        PhyName= 26, //Physician First Last w Dr prepended
+        PhyNpi = 27,
+        PhyDea = 28,
+        PhyAddress = 29,
+        PhyPhone = 30,
+        PhyFax = 31, //Default this to 0000000000
+        PhyNameNoDr = 32, //Physican First Last w/o Dr
+        IP = 33,
+        SignatureDate = 34,
+        MedPatientGroup = 35,
+        MedPCN = 36,
+        MedMemberId = 37,
+        MedSubscriber = 38,
+        MedSecondary = 39,
+        MedSecondarySubscriber = 40,
+        GeneralIntakeNotes = 41,
+        HCPCSCode = 42,
+        HCPCSProduct = 43,
+        HCPCSDescription = 44, //Not used in the doc?
+        HCPCSDuration = 45,
+        ICDCode = 46, //M, L codes
+        ICDDescription = 47 //Diagnosis
+
     }
 }

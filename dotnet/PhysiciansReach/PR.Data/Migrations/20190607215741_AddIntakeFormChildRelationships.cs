@@ -28,13 +28,7 @@ namespace PR.Data.Migrations
                 schema: "dbo",
                 table: "Document");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_PrivateInsurance",
-                table: "PrivateInsurance");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Medicare",
-                table: "Medicare");
+           
 
             migrationBuilder.DropColumn(
                 name: "HCPCS",
@@ -80,20 +74,7 @@ namespace PR.Data.Migrations
                 table: "IntakeForm",
                 nullable: true);
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_PrivateInsurance",
-                schema: "dbo",
-                table: "PrivateInsurance",
-                column: "PrivateInsuranceId")
-                .Annotation("SqlServer:Clustered", false);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Medicare",
-                schema: "dbo",
-                table: "Medicare",
-                column: "MedicareId")
-                .Annotation("SqlServer:Clustered", false);
-
+         
             migrationBuilder.CreateTable(
                 name: "HCPCS",
                 columns: table => new
@@ -272,15 +253,7 @@ namespace PR.Data.Migrations
                 schema: "dbo",
                 table: "IntakeForm");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_PrivateInsurance",
-                schema: "dbo",
-                table: "PrivateInsurance");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Medicare",
-                schema: "dbo",
-                table: "Medicare");
+           
 
             migrationBuilder.DropColumn(
                 name: "DocumentId",
@@ -302,16 +275,7 @@ namespace PR.Data.Migrations
                 schema: "dbo",
                 table: "IntakeForm");
 
-            migrationBuilder.RenameTable(
-                name: "PrivateInsurance",
-                schema: "dbo",
-                newName: "PrivateInsurance");
-
-            migrationBuilder.RenameTable(
-                name: "Medicare",
-                schema: "dbo",
-                newName: "Medicare");
-
+          
             migrationBuilder.AddColumn<string>(
                 name: "HCPCS",
                 schema: "dbo",
@@ -324,15 +288,7 @@ namespace PR.Data.Migrations
                 table: "IntakeForm",
                 nullable: true);
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_PrivateInsurance",
-                table: "PrivateInsurance",
-                column: "PrivateInsuranceId");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Medicare",
-                table: "Medicare",
-                column: "MedicareId");
+         
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patient_MedicareId",

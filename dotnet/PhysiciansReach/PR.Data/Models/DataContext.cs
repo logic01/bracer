@@ -8,6 +8,23 @@ namespace PR.Data.Models
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         { }
+        
+        private readonly string connectionString;
+        /// <summary>
+        /// Added this constructor to allow for integration tests
+        /// </summary>
+        /// <param name="connectionString"></param>
+        public DataContext(string connectionString) : base()
+        {
+            this.connectionString = connectionString;
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
 
         public DbSet<UserAccount> UserAccount { get; set; }
 
