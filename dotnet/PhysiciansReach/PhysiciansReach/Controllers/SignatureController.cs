@@ -9,24 +9,24 @@ namespace PhysiciansReach.Controllers
     [ApiController]
     public class SignatureController : ControllerBase
     {
-        private readonly IDocumentBusiness _business;
+        private readonly ISignatureBusiness _business;
         private readonly ILoggingBusiness _logging;
 
-        public SignatureController(IDocumentBusiness business, ILoggingBusiness logging)
+        public SignatureController(ISignatureBusiness business, ILoggingBusiness logging)
         {
             _business = business;
             _logging = logging;
         }
 
-        [HttpPost("Document/{documentId}/Signature")]
-        public ActionResult Post(int documentId, [FromBody] SignatureModel signature)
+        [HttpPost("IntakeForm/{intakeFormId}/Signature")]
+        public ActionResult Post(int intakeFormId, [FromBody] SignatureModel signature)
         {
             _logging.Log(LogSeverity.Info, "Sign Document");
 
             // get the client ip address
             signature.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
 
-            // _business.SaveSignature(documentId, signature);
+            _business.Create(intakeFormId, signature);
 
             return Ok();
         }

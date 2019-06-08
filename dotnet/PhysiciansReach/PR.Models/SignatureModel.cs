@@ -7,6 +7,7 @@ namespace PR.Models
         public int SignatureId { get; set; }
 
         public string Content { get; set; }
+
         public byte[] ContentBytes { get; set; }
 
         public string IpAddress { get; set; }

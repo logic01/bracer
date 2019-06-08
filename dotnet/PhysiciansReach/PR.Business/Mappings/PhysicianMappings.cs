@@ -39,8 +39,21 @@ namespace PR.Business.Mappings
             entity.DEA = model.DEA;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
-            entity.UserAccount.MapFromModel(model.UserAccount);
+
+            if (entity.Address == null)
+            {
+                entity.Address = new Address();
+            }
+
             entity.Address.MapFromModel(model.Address);
+
+            if (entity.UserAccount == null)
+            {
+                entity.UserAccount = new UserAccount();
+            }
+
+            entity.UserAccount.MapFromModel(model.UserAccount);
+
         }
     }
 }

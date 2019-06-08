@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Agent } from 'src/app/models/Agent.model';
+import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { Vendor } from 'src/app/models/vendor.model';
 import { CustomValidators } from 'src/app/validators/custom-validators';
@@ -80,6 +81,7 @@ export class AgentAccountFormComponent implements OnInit {
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     agent.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     agent.userAccount.active = this.accountForm.controls['active'].value;
+    agent.userAccount.type = AccountType.Agent;
 
     agent.firstName = this.accountForm.controls['firstName'].value;
     agent.lastName = this.accountForm.controls['lastName'].value;

@@ -100,7 +100,7 @@ namespace PhysiciansReach
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();
             services.AddTransient<IEmailBusiness, EmailBusiness>();
             services.AddTransient<IIntakeFormExporter, IntakeFormExporter>();
-
+            services.AddTransient<ISignatureBusiness, SignatureBusiness>();
         }
     }
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/models/address.model';
+import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { Physician } from 'src/app/models/physician.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { FormatHelperService } from 'src/app/services/format-helper.service';
@@ -90,6 +91,7 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.dea = this.accountForm.controls['dea'].value;
     physician.npi = this.accountForm.controls['npi'].value;
     physician.userAccount.active = this.accountForm.controls['active'].value;
+    physician.userAccount.type = AccountType.Agent;
 
     physician.firstName = this.accountForm.controls['firstName'].value;
     physician.lastName = this.accountForm.controls['lastName'].value;

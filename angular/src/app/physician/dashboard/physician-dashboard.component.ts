@@ -63,11 +63,6 @@ export class PhysicianDashboardComponent implements OnInit {
       signature.ipAddress = '71.205.117.185';
       this.signatureApi.sign(id, signature).subscribe();
 
-      // to do -> find better pattern
-      //  this.ipAddressService.getIpAddress().subscribe((ip: string) => {
-
-      // });
-
     });
   }
 
