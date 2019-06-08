@@ -182,6 +182,7 @@ namespace PR.Export
             docBody.AppendChild(new Paragraph());
         }
 
+        #region Manual Mappings
         /// <summary>
         /// Some of the values in the forms are populated directly from the patient object. That is where
         /// these mapping keys are being loaded from
@@ -253,8 +254,8 @@ namespace PR.Export
             };
             return kvps;
         }
+        #endregion
 
-       
 
         /// <summary>
         /// The resource stream from the assembly doesn't work when opening
