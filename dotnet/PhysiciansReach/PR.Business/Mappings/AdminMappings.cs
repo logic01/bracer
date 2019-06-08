@@ -33,6 +33,12 @@ namespace PR.Business.Mappings
             entity.LastName = model.LastName;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
+
+            if (entity.UserAccount == null)
+            {
+                entity.UserAccount = new UserAccount();
+            }
+
             entity.UserAccount.MapFromModel(model.UserAccount);
         }
     }

@@ -50,6 +50,8 @@ namespace PR.Data.Models
 
         public DbSet<Document> Document { get; set; }
 
+        public DbSet<Signature> Signature { get; set; }
+
         public DbSet<PrivateInsurance> PrivateInsurance { get; set; }
 
         public DbSet<Medicare> Medicare { get; set; }
@@ -437,7 +439,6 @@ namespace PR.Data.Models
                      .HasConstraintName("FK_IntakeForm_ICD10");
             });
         }
-
 
         protected void DocumentBuilder(ModelBuilder modelBuilder)
         {

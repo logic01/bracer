@@ -1,5 +1,4 @@
-﻿using PR.Constants.Enums;
-using PR.Data.Models;
+﻿using PR.Data.Models;
 using PR.Models;
 
 namespace PR.Business.Mappings
@@ -35,6 +34,12 @@ namespace PR.Business.Mappings
             entity.VendorId = model.VendorId;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
+
+            if (entity.UserAccount == null)
+            {
+                entity.UserAccount = new UserAccount();
+            }
+
             entity.UserAccount.MapFromModel(model.UserAccount);
         }
     }

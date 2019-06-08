@@ -53,10 +53,6 @@ namespace PR.Business.Mappings
         public static void MapFromModel(this UserAccount entity, UserAccountModel model)
         {
             //TODO Is this code needed?
-            if (entity == null)
-            {
-                entity = new UserAccount();
-            }
             if (model.Password != string.Empty)
             {
                 var hash = new PasswordHash(model.Password);
@@ -66,6 +62,7 @@ namespace PR.Business.Mappings
             }
 
             // userId primary key not mapped
+            entity.Type = model.Type;
             entity.UserName = model.UserName;
             entity.EmailAddress = model.EmailAddress;
             entity.Active = model.Active;

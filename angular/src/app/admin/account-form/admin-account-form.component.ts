@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Admin } from 'src/app/models/admin.model';
+import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -72,6 +73,8 @@ export class AdminAccountFormComponent implements OnInit {
     admin.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     admin.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     admin.userAccount.active = this.accountForm.controls['active'].value;
+    admin.userAccount.type = AccountType.Agent;
+
     admin.firstName = this.accountForm.controls['firstName'].value;
     admin.lastName = this.accountForm.controls['lastName'].value;
 
