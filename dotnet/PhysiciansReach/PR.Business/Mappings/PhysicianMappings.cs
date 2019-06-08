@@ -16,7 +16,7 @@ namespace PR.Business.Mappings
                 DEA = entity.DEA,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn,
-                UserAccount = entity.UserAccount.ToModel(),
+                UserAccount = entity.UserAccount?.ToModel(),
                 Address = entity.Address.ToModel()
             };
 

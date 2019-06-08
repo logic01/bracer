@@ -3,7 +3,7 @@
 namespace PR.Data.Models
 {
     public class Signature
-    {
+    {        
         public int SignatureId { get; set; }
 
         public byte[] Content { get; set; }

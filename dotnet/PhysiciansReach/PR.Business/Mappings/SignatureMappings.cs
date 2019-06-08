@@ -20,5 +20,17 @@ namespace PR.Business.Mappings
             entity.Content = signatureBytes;
         }
 
+        public static SignatureModel ToModel(this Signature entity)
+        {
+            return new SignatureModel
+            {
+                SignatureId = entity.SignatureId,
+                IpAddress = entity.IpAddress,
+                ContentBytes = entity.Content,
+                CreatedOn = entity.CreatedOn,
+                ModifiedOn = entity.ModifiedOn
+            };
+        }
+
     }
 }

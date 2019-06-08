@@ -90,7 +90,7 @@ export class PainDmeOnlyComponent implements OnInit {
 
       painArray.push(this.initPainQuestion('PainFeeling', 'Cause of Patients Pain?', painPoint, 1));
       painArray.push(this.initPainQuestion('PainChart', 'Location(s) of Pain?', painPoint, 2));
-      painArray.push(this.initPainQuestion('PainBegin', 'Onset of pain (When did the pain begin?)', painPoint, 3));
+      painArray.push(this.initPainQuestion('PainBegan', 'Onset of pain (When did the pain begin?)', painPoint, 3));
       painArray.push(this.initPainQuestion('PainCause', 'What Provokes Pain', painPoint, 4));
       painArray.push(this.initPainQuestion('PainSelfTreatment', 'What currently relieves the pain', painPoint, 5));
       painArray.push(this.initPainQuestion('PainDescription', 'Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]', painPoint, 6));

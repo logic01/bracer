@@ -8,6 +8,23 @@ namespace PR.Data.Models
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         { }
+        
+        private readonly string connectionString;
+        /// <summary>
+        /// Added this constructor to allow for integration tests
+        /// </summary>
+        /// <param name="connectionString"></param>
+        public DataContext(string connectionString) : base()
+        {
+            this.connectionString = connectionString;
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
 
         public DbSet<UserAccount> UserAccount { get; set; }
 
@@ -403,7 +420,7 @@ namespace PR.Data.Models
 
                 entity.HasOne(intake => intake.Document)
                      .WithOne(doc => doc.IntakeForm)
-                     .HasForeignKey<IntakeForm>(intake => intake.Document)
+                     .HasForeignKey<IntakeForm>(intake => intake.DocumentId)
                      .OnDelete(DeleteBehavior.Cascade)
                      .HasConstraintName("FK_IntakeForm_Document");
 
@@ -436,10 +453,10 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(doc => doc.IntakeForm)
-                     .WithOne(intake => intake.Document)
-                     .HasForeignKey<Document>(doc => doc.IntakeFormId)
-                     .HasConstraintName("FK_IntakeForm_Document");
+                //entity.HasOne(doc => doc.IntakeForm)
+                //     .WithOne(intake => intake.Document)
+                //     .HasForeignKey<Document>(doc => doc.IntakeFormId)
+                //     .HasConstraintName("FK_IntakeForm_Document");
             });
         }
 

@@ -47,6 +47,11 @@ namespace PR.Business.Mappings
         /// <returns></returns>
         public static void MapFromModel(this Address entity, AddressModel model)
         {
+            //TODO Is this code needed?
+            if (entity == null)
+            {
+                entity = new Address();
+            }
             // addressId primary key not mapped
             entity.AddressLineOne = model.AddressLineOne;
             entity.AddressLineTwo = model.AddressLineTwo;

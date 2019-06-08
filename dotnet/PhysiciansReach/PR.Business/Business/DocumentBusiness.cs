@@ -5,6 +5,7 @@ using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
+using System;
 using System.Linq;
 
 namespace PR.Business
@@ -47,15 +48,22 @@ namespace PR.Business
         public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
         {
             Patient patient = _context.Patient
-                .Include(p => p.PhysiciansAddress)
+                .Include(p => p.PhysiciansAddress) //This is the address that comes from the patient screen. Not sure if we should use this
                 .Include(p => p.Address)
+                .Include(p => p.PrivateInsurance)
+                .Include(p => p.Medicare)
                 .First(p => p.PatientId == patientId);
 
             IntakeForm intakeForm = _context.IntakeForm
                 .Include("Questions.Answers")
+                .Include(i => i.ICD10)
+                .Include(i => i.HCPCS)
+                .Include(i => i.Signature)
+                .Include("Physician.Address")
                 .First(i => i.IntakeFormId == intakeFormId);
+                       
 
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel());
+            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel());
 
             var document = new Document
             {

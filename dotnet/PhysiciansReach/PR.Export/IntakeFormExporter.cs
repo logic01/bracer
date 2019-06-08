@@ -26,7 +26,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <returns></returns>
-        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient)
+        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician)
         {
             var examNoteMemoryStream = LoadMemoryStream();
 
@@ -49,7 +49,7 @@ namespace PR.Export
                 }
                 docBody.AppendChild(new Paragraph());
 
-                UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc);
+                UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc, physician, signature);
             }
 
             var result = examNoteMemoryStream.ToArray();
@@ -66,7 +66,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <param name="doc"></param>
-        private void UpdateValuesInWordDocsCustomProperties(IntakeFormModel intakeForm, PatientModel patient, WordprocessingDocument doc)
+        private void UpdateValuesInWordDocsCustomProperties(IntakeFormModel intakeForm, PatientModel patient, WordprocessingDocument doc, PhysicianModel physician, SignatureModel signature)
         {
             //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
             var properties = doc.CustomFilePropertiesPart.Properties;
@@ -78,6 +78,10 @@ namespace PR.Export
                 .Aggregate((c, n) => $"{c},{n}"))).ToList();
 
             intakeFromKeys.AddRange(GetPatientKeys(patient));
+            intakeFromKeys.AddRange(GetAllCodes(intakeForm));
+            intakeFromKeys.AddRange(GetPhysicanKeys(physician));
+            intakeFromKeys.AddRange(GetSignature(signature));
+
 
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
@@ -178,6 +182,7 @@ namespace PR.Export
             docBody.AppendChild(new Paragraph());
         }
 
+        #region Manual Mappings
         /// <summary>
         /// Some of the values in the forms are populated directly from the patient object. That is where
         /// these mapping keys are being loaded from
@@ -195,11 +200,62 @@ namespace PR.Export
                 new KeyValuePair<string, string>(MappingEnums.Gender.ToString(), patient.Sex.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d"))
+                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.MedMemberId.ToString(), patient.Medicare?.MemberId ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedPatientGroup.ToString(), patient.Medicare?.PatientGroup ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedPCN.ToString(), patient.Medicare?.Pcn ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSecondary.ToString(), patient.Medicare?.SecondaryCarrier ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSecondarySubscriber.ToString(), patient.Medicare?.SecondarySubscriberNumber ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSubscriber.ToString(), patient.Medicare?.SubscriberNumber  ?? "N/A")
             };
 
             return kvps;
         }
+
+        private List<KeyValuePair<string, string>> GetPhysicanKeys(PhysicianModel physician)
+        {
+            var kvps = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(MappingEnums.PhyName.ToString(), $"Dr {physician?.FirstName} {physician?.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.PhyNameNoDr.ToString(), $"{physician?.FirstName} {physician?.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.PhyNpi.ToString(), physician?.NPI ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyDea.ToString(), physician?.DEA ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyAddress.ToString(), physician?.Address?.ToString() ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyPhone.ToString(), physician?.PhoneNumber ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyFax.ToString(), physician?.Fax ?? "N/A")
+            };
+
+            return kvps;
+        }
+
+        private List<KeyValuePair<string, string>> GetAllCodes(IntakeFormModel intake)
+        {
+            var kvps = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
+                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), intake.HCPCS?.Code ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCS?.Product  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), intake.HCPCS?.Description  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(), intake.HCPCS?.Duration  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), intake.ICD10?.Code  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
+            };
+            return kvps;
+        }
+
+        private List<KeyValuePair<string, string>> GetSignature(SignatureModel signature)
+        {
+            var kvps = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(MappingEnums.IP.ToString(), signature?.IpAddress  ?? "N/A"),
+                //Format - Wednesday, April 03, 2019 11:58:52 PM
+                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")
+                //what to do with the signature?
+            };
+            return kvps;
+        }
+        #endregion
+
 
         /// <summary>
         /// The resource stream from the assembly doesn't work when opening
