@@ -54,16 +54,17 @@ namespace PR.Business
                 .Include(p => p.Medicare)
                 .First(p => p.PatientId == patientId);
 
-            IntakeForm intakeForm = _context.IntakeForm
+            var intakeForms = _context.IntakeForm
                 .Include("Questions.Answers")
                 .Include("ICD10s")
                 .Include("HCPCSs")
                 .Include(i => i.Signature)
                 .Include("Physician.Address")
-                .First(i => i.IntakeFormId == intakeFormId);
-                       
+                .Where(i => i.PatientId == patientId);
 
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel());
+            var intakeForm = intakeForms.First(x => x.IntakeFormId == intakeFormId);
+
+            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), intakeForms.Select(x => x.ToModel()).ToList());
 
             var document = new Document
             {

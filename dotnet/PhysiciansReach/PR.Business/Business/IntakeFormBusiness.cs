@@ -53,9 +53,7 @@ namespace PR.Business
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
-            var intakeForm = new IntakeForm();
-
-            intakeForm.MapFromModel(intakeFormModel);
+            var intakeForm = intakeFormModel.ToCreateEntity();
 
             intakeForm.Status = IntakeFormStatus.New;
 

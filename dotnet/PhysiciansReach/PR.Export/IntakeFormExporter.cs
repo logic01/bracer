@@ -26,7 +26,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <returns></returns>
-        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician)
+        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician, List<IntakeFormModel> allIntakeForms)
         {
             var examNoteMemoryStream = LoadMemoryStream();
 
@@ -36,9 +36,7 @@ namespace PR.Export
 
                 // Create and add the character style with the style id, style name, and
                 // aliases specified.
-                var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
-
-               
+                var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);               
 
                 // Replace the images with the Signature file
                 var imageCount = 0;
@@ -54,16 +52,20 @@ namespace PR.Export
                     }
                 }
 
-                // Create title and add the subsequent question answers for the questionaire
-                AppendTitleForIntakeForm(doc, docBody, intakeForm);
-                
-                var count = 1;
-                foreach (var question in intakeForm.Questions)
+                // Populate the Questionaire form with all intake forms
+                foreach (var questionaireIntakeForm in allIntakeForms)
                 {
-                    count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
-                }
-                docBody.AppendChild(new Paragraph());
+                    // Create title and add the subsequent question answers for the questionaire
+                    AppendTitleForIntakeForm(doc, docBody, questionaireIntakeForm);
 
+
+                    var count = 1;
+                    foreach (var question in questionaireIntakeForm.Questions)
+                    {
+                        count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
+                    }
+                    docBody.AppendChild(new Paragraph());
+                }
                 // Manual mapping bits
                 UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc, physician, signature);
             }
@@ -209,14 +211,19 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("MM/dd/yyyy")),
                 new KeyValuePair<string, string>(MappingEnums.Age.ToString(), patient.DateOfBirth.GetAge()),
                 new KeyValuePair<string, string>(MappingEnums.PatientName.ToString(), $"{patient.FirstName} {patient.LastName}"),
                 new KeyValuePair<string, string>(MappingEnums.Phone.ToString(), patient.PhoneNumber),
                 new KeyValuePair<string, string>(MappingEnums.Gender.ToString(), patient.Sex.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Waist.ToString(), patient.Waist.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Weight.ToString(), patient.Weight.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Height.ToString(), patient.Height.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.ShoeSize.ToString(), patient.ShoeSize.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Allergies.ToString(), patient.Allergies.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("MM/dd/yyyy")),
                 new KeyValuePair<string, string>(MappingEnums.MedMemberId.ToString(), patient.Medicare?.MemberId ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.MedPatientGroup.ToString(), patient.Medicare?.PatientGroup ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.MedPCN.ToString(), patient.Medicare?.Pcn ?? "N/A"),
@@ -259,17 +266,34 @@ namespace PR.Export
             return kvps;
         }
 
+        /// <summary>
+        /// The diagnosis will be formed by creating comma delimited list of ICD10.Code and ICD10.description
+        /// m24.221 disorder of ligament, right elbow, [Code]  [Description]
+        /// </summary>
+        /// <param name="icds"></param>
+        /// <returns></returns>
         private string GetDiagnosis(List<ICD10Model> icds)
         {
             return string.Join(", ", icds.Select(x => x.Code + " " + x.Description)) ?? "N/A";
         }
 
+        /// <summary>
+        /// The plan and treatment will be formed by creating comma delimited list of HCPCS.Code and HCPCS.description
+        /// L3761 – Elbow Orthosis, With Adjustable Position Locking Joint(s), Prefabricated, [Code]  [Description]
+        /// </summary>
+        /// <param name="icds"></param>
+        /// <returns></returns>
         private string GetOrthoPrescribed(List<HCPCSModel> hCPCs)
         {
             return  string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
         }
 
-        //The Field max length is 255...so when the prescription is too long we need to add the next set
+        /// <summary>
+        /// So the Word Doc replacement for fields, are capped at 255 chars, so this will append the final 255 chars. The Orhtro
+        /// prescription is longer than 255 chars so this is the only replacement that is an issue
+        /// </summary>
+        /// <param name="hCPCs"></param>
+        /// <returns></returns>
         private string GetOrthoPrescribedAfter255(List<HCPCSModel> hCPCs)
         {
             var prescribed = string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
@@ -280,14 +304,18 @@ namespace PR.Export
             return "";
         }
          
+        /// <summary>
+        /// The signature information IP and Signature date are signed
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <returns></returns>
         private List<KeyValuePair<string, string>> GetSignature(SignatureModel signature)
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(MappingEnums.IP.ToString(), signature?.IpAddress  ?? "N/A"),
                 //Format - Wednesday, April 03, 2019 11:58:52 PM
-                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")
-                //what to do with the signature?
+                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")                
             };
             return kvps;
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PR.Business.Business;
+﻿using PR.Business.Business;
 using PR.Business.Mappings;
 using PR.Data.Models;
 using PR.Models;
@@ -9,151 +8,17 @@ using System.Text;
 
 namespace PR.Export.Tests
 {
-    [TestClass]
-    public class IntegrationTests
+    public class IntegrationTestsBase
     {
-        private readonly DataContext dbContext;
-        public IntegrationTests()
+        protected readonly DataContext dbContext;
+        public IntegrationTestsBase()
         {
             var conn = "Data Source=DESKTOP-FD8N113\\sqlexpress;Initial Catalog=PhysicansReach;Integrated Security=True";
             //var conn = "Server=(localdb)\\mssqllocaldb;Database=PhysiciansReach;Trusted_Connection=True;ConnectRetryCount=0";
             dbContext = new Data.Models.DataContext(conn);
         }
 
-        [TestMethod]
-        public void Create_Document_From_Scratch()
-        {
-            // Crate Vendor
-            var vendor = new Vendor
-            {
-                CompanyName = "Wolf Cola",
-                DoingBusinessAs = "Franks Fluids",
-                PhoneNumber = "2606027777",
-                ContactFirstName = "Charlie",
-                ContactLastName = "Kelley",
-                Active = true,
-            };
-            var savedVendor = dbContext.Vendor.Add(vendor);
-            dbContext.SaveChanges();
-            var vendorId = savedVendor.Entity.VendorId;
-
-            // Create Agent
-            var agent = CreateAgent(vendorId);
-            var savedAgent = dbContext.Agent.Add(agent);
-            dbContext.SaveChanges();
-
-            // Create Patient with Address, Medicare, and Private Insurance
-            var patient = CreatePatient(savedAgent.Entity.UserAccountId);
-            var savedPatient = dbContext.Patient.Add(patient);
-            dbContext.SaveChanges();
-            var patientId = savedPatient.Entity.PatientId;
-
-            // Create IntakeForm with ICD, HCPCS, Phsycian, and Signature
-            var intakeForm = CreateIntakeForm(patientId);
-            var savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
-            dbContext.SaveChanges();
-            var intakeFormId = savedIntakeForm.Entity.IntakeFormId;
-
-            // Add Questions
-            intakeForm.Questions = CreateQuestions(intakeFormId);
-            dbContext.IntakeForm.Update(intakeForm);
-            dbContext.SaveChanges();
-
-            // Create Document Byte Array
-            var intakeModel = intakeForm.ToModel();
-            var exporter = new IntakeFormExporter();
-            var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel());
-
-            // Create Document
-            var document = new Document
-            {
-                IntakeFormId = intakeForm.IntakeFormId,
-                Content = documentContent
-            };
-
-            var doc = dbContext.Document.Add(document);
-            var id = dbContext.SaveChanges();
-            Console.WriteLine($"Run project and open your browser to https://localhost:44327/document/{doc.Entity.DocumentId}/download to see the word doc generated from this test");
-
-        }
-
-        //[TestMethod]
-        //public void Populate_Word_Doc()
-        //{
-        //    // This is kind of important that a PainDmeOnly intake form exists
-        //    var intakeForm = dataContext.IntakeForm
-        //        .Include("Questions.Answers")
-        //        .Include("ICD10")
-        //        .Include("HCPCS")
-        //        .Include("Signature")
-        //        .Include("Physician").FirstOrDefault(x => x.IntakeFormType == Constants.Enums.IntakeFormType.PainDmeOnly);
-        //    Assert.IsNotNull(intakeForm, "A Pain DME ONLY intake form needs to be in the db in order for this test to be ran. Create one as an agent");
-
-        //    var patient = dataContext.Patient
-        //        .Include(p => p.PhysiciansAddress)
-        //        .Include(p => p.Address)
-        //        .Include(p => p.PrivateInsurance)
-        //        .Include(p => p.Medicare).FirstOrDefault(x => x.PatientId == intakeForm.PatientId);
-
-        //    var intakeFormModel = intakeForm.ToModel();
-        //    //TODO Delete this testing word 
-        //    var patientModel = patient.ToModel();
-
-        //    var signatureModel = new SignatureModel
-        //    {
-        //        IpAddress = "123.123.32.192",
-        //        CreatedOn = DateTime.Now
-        //    };
-
-        //    var physicianModel = new PhysicianModel
-        //    {
-        //        FirstName = "Mantis",
-        //        LastName = "Toboggan",
-        //        PhoneNumber = "1234857447",
-        //        NPI = "123123123",
-        //        DEA = "57575755",
-        //        Address = new AddressModel
-        //        {
-        //            AddressLineOne = "123 main street",
-        //            State = "CO",
-        //            City = "Denver",
-        //            ZipCode = "802224"
-        //        }
-        //    };
-
-        //    intakeFormModel.HCPCS = new HCPCSModel
-        //    {
-        //        Code = "L293",
-        //        Product = "Back Brace",
-        //        Description = "HCPCS Description",
-        //        Duration = "69 Years"
-        //    };
-
-        //    intakeFormModel.ICD10 = new ICD10Model
-        //    {
-        //        Code = "Lower Back pain m54.5 low back pain, m53.2x7 spinal instabilities, lumbosacral region, g89.4 chronic pain,m51.36 lumbar disc degeneration"
-        //        ,
-        //        Description = "L0650(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
-        //        "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
-        //        "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
-        //        "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)"
-        //    };
-        //    var exporter = new IntakeFormExporter();
-
-        //    var documentContent = exporter.CreateNewIntakeForm(intakeFormModel, patientModel, signatureModel, physicianModel);
-
-        //    var document = new Document
-        //    {
-        //        IntakeFormId = intakeForm.IntakeFormId,
-        //        Content = documentContent
-        //    };
-
-        //    var doc = dataContext.Document.Add(document);
-        //    var id = dataContext.SaveChanges();
-        //    Console.WriteLine(doc.Entity.DocumentId);
-        //}
-
-        private static Agent CreateAgent(int vendorId)
+        protected static Agent CreateAgent(int vendorId)
         {
             return new Agent
             {
@@ -171,9 +36,65 @@ namespace PR.Export.Tests
             };
         }
 
-        private IntakeForm CreateIntakeForm(int patientId)
+        protected IntakeForm CreateIntakeFormLocal(int patientId)
         {
+            // Create IntakeForm with ICD, HCPCS, Phsycian, and Signature
+            var intakeForm = CreateIntakeForm(patientId);
+            var savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
+            dbContext.SaveChanges();
+            var intakeFormId = savedIntakeForm.Entity.IntakeFormId;
 
+            // Add Questions
+            intakeForm.Questions = CreateQuestions(intakeFormId);
+            dbContext.IntakeForm.Update(intakeForm);
+            dbContext.SaveChanges();
+            return intakeForm;
+        }
+
+        protected IntakeForm CreateIntakeForm(int patientId)
+        {
+            var signature = CreateSignature();
+            return new IntakeForm
+            {
+                PatientId = patientId,
+                IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
+                ICD10s = CreateICD10s(),
+                HCPCSs = CreateHCPCSs(),
+                Physician = CreatePhysician(),
+                Signature = signature,
+                Status = Constants.Enums.IntakeFormStatus.New
+            };
+        }
+
+        protected static Physician CreatePhysician()
+        {
+            return new Physician
+            {
+                FirstName = "Mantis",
+                LastName = "Toboggan",
+                PhoneNumber = "1234857447",
+                NPI = "123123123",
+                DEA = "57575755",
+                Address = new Address
+                {
+                    AddressLineOne = "123 main street",
+                    State = "CO",
+                    City = "Denver",
+                    ZipCode = "802224"
+                },
+                UserAccount = new UserAccount
+                {
+                    Active = true,
+                    Type = Constants.Enums.AccountType.Physician,
+                    UserName = "User" + Guid.NewGuid().ToString("N"),
+                    EmailAddress = "temp@test.com",
+                    Password = new PasswordHash("Password1").ToArray()
+                }
+            };
+        }
+
+        protected static Signature CreateSignature()
+        {
             var signatureModel = new SignatureModel
             {
 
@@ -186,11 +107,32 @@ namespace PR.Export.Tests
             var signature = new Signature();
             //Testing the mapper to ensure the data:image/jpeg;base64, gets stripped before being stored
             signature.MapFromModel(signatureModel);
-            return new IntakeForm
-            {
-                PatientId = patientId,
-                IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
-                ICD10s = new List<ICD10> { new ICD10
+            return signature;
+        }
+
+        protected static List<HCPCS> CreateHCPCSs()
+        {
+            return new List<HCPCS>{ new HCPCS
+                {
+                    Code = "L0650",
+                    Product = "Back Brace",
+                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
+                            "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
+                            "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
+                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
+                    Duration = "99/lifetime"
+                }, new HCPCS
+                {
+                    Code = "L111",
+                    Product = "Back Brace",
+                    Description = "The custom description for L111",
+                    Duration = "99/lifetime"
+                } };
+        }
+
+        protected static List<ICD10> CreateICD10s()
+        {
+            return new List<ICD10> { new ICD10
                 {
                     Code = "m54.5",
                     Description = "low back pain"
@@ -206,52 +148,10 @@ namespace PR.Export.Tests
                 {
                     Code = "m51.36",
                     Description = "lumbar disc degeneration"
-                }},
-                HCPCSs = new List<HCPCS>{ new HCPCS
-                {
-                    Code = "L0650",
-                    Product = "Back Brace",
-                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
-                            "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
-                            "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
-                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
-                    Duration = "99/lifetime"
-                }, new HCPCS
-                {
-                    Code = "L111",
-                    Product = "Back Brace",
-                    Description = "The custom description for L111",
-                    Duration = "99/lifetime"
-                } },
-                Physician = new Physician
-                {
-                    FirstName = "Mantis",
-                    LastName = "Toboggan",
-                    PhoneNumber = "1234857447",
-                    NPI = "123123123",
-                    DEA = "57575755",
-                    Address = new Address
-                    {
-                        AddressLineOne = "123 main street",
-                        State = "CO",
-                        City = "Denver",
-                        ZipCode = "802224"
-                    },
-                    UserAccount = new UserAccount
-                    {
-                        Active = true,
-                        Type = Constants.Enums.AccountType.Physician,
-                        UserName = "User" + Guid.NewGuid().ToString("N"),
-                        EmailAddress = "temp@test.com",
-                        Password = new PasswordHash("Password1").ToArray()
-                    }
-                },
-                Signature = signature,
-                Status = Constants.Enums.IntakeFormStatus.New
-            };
+                }};
         }
 
-        private static Patient CreatePatient(int userAccountId)
+        protected static Patient CreatePatient(int userAccountId)
         {
             return new Patient
             {
@@ -268,6 +168,11 @@ namespace PR.Export.Tests
                 CallBackImmediately = true,
                 BestTimeToCallBack = Constants.Enums.CallbackTime.Afternoon,
                 IsDme = true,
+                Weight = "160",
+                Height = "5'7",
+                Waist = "32",
+                ShoeSize = "10.5",
+                Allergies = "Eggs, Shrimp, Fish",
                 Address = new Address
                 {
                     AddressLineOne = "123 Main Street",
@@ -300,7 +205,7 @@ namespace PR.Export.Tests
             };
         }
 
-        private List<Question> CreateQuestions(int intakeFormId)
+        protected List<Question> CreateQuestions(int intakeFormId)
         {
             var questions = new List<Question>();
             questions.Add(CreateQuestionAnswer(intakeFormId, "Cause of Patients Pain?", "PainFeeling", "Pain Causer"));
@@ -314,15 +219,10 @@ namespace PR.Export.Tests
             questions.Add(CreateQuestionAnswer(intakeFormId, "Affects Activities of Daily Living(ADL) (If so, what?)", "EffectsDaily", "All movement effected"));
             questions.Add(CreateQuestionAnswer(intakeFormId, "If yes, what type of surgery?", "Surgies", "Back surgery twice"));
             questions.Add(CreateQuestionAnswer(intakeFormId, "Pain Rating", "PainLevel", "7"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Height", "Height", "5''7"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Weight", "Weight", "160"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Shoe size", "ShoeSize", "10.5"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Waist", "Waist", "32"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Allergies current", "Allergies", "eggs, dairy"));
             return questions;
         }
 
-        private Question CreateQuestionAnswer(int intakeFormId, string question, string key, string answer)
+        protected Question CreateQuestionAnswer(int intakeFormId, string question, string key, string answer)
         {
             return new Question
             {
@@ -331,6 +231,42 @@ namespace PR.Export.Tests
                 Key = key,
                 Answers = new List<Answer> { new Answer { Text = answer } }
             };
+        }
+
+        protected Patient CreateAndPersistPatient(Agent agent)
+        {
+            var patient = CreatePatient(agent.UserAccountId);
+            var savedPatient = dbContext.Patient.Add(patient);
+            dbContext.SaveChanges();
+            return savedPatient.Entity;
+        }
+
+        protected Agent CreateAgent()
+        {
+            var vendor = CreateAndPersistVendor();
+
+            // Create Agent
+            var agent = CreateAgent(vendor.VendorId);
+            var savedAgent = dbContext.Agent.Add(agent);
+            dbContext.SaveChanges();
+            return savedAgent.Entity;
+        }
+
+        protected Vendor CreateAndPersistVendor()
+        {
+            // Crate Vendor
+            var vendor = new Vendor
+            {
+                CompanyName = "Wolf Cola",
+                DoingBusinessAs = "Franks Fluids",
+                PhoneNumber = "2606027777",
+                ContactFirstName = "Charlie",
+                ContactLastName = "Kelley",
+                Active = true,
+            };
+            var savedVendor = dbContext.Vendor.Add(vendor);
+            dbContext.SaveChanges();
+            return savedVendor.Entity;
         }
     }
 }

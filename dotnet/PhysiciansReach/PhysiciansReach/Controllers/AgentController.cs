@@ -36,6 +36,7 @@ namespace PhysiciansReach.Controllers
         [HttpPost]
         public ActionResult<AgentModel> Post([FromBody] AgentModel agent)
         {
+            agent.UserAccount.Type = AccountType.Agent;
             _logging.Log(LogSeverity.Info, "Post Agent");
             return _business.Create(agent);
         }
@@ -43,6 +44,7 @@ namespace PhysiciansReach.Controllers
         [HttpPut("{id}")]
         public ActionResult<AgentModel> Put(int id, [FromBody] AgentModel agent)
         {
+            agent.UserAccount.Type = AccountType.Agent;
             _logging.Log(LogSeverity.Info, "Put Agent");
 
             agent.UserAccount.UserAccountId = id;
