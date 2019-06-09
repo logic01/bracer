@@ -21,6 +21,11 @@ export class Patient {
     public language: LanguageType;
     public sex: SexType;
     public address: Address;
+    public weight: string;
+    public waist: string;
+    public height: string;
+    public shoeSize: string;
+    public allergies: string;
 
     public medications: string;
     public notes: string;

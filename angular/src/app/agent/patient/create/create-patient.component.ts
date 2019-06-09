@@ -29,6 +29,9 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   private agentId: string;
   statesList: string[] = SelectValueService.states;
+  shoeSizes: number[] = SelectValueService.shoeSizes;
+  heights: string[] = SelectValueService.heights;
+
   privateInsurance: boolean;
   medicareInsurance: boolean;
   bothInsurance: boolean;
@@ -64,6 +67,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       language: new FormControl('English', Validators.required),
       callBackImmediately: new FormControl(false, Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
+      allergies: new FormControl('', [Validators.required, Validators.maxLength(300)]),
+      shoes: new FormControl('', Validators.required),
+      height: new FormControl('', Validators.required),
+      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
+      waist: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
 
       pharmacy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       medications: new FormControl('', Validators.maxLength(100)),
@@ -131,6 +139,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.lastName = this.form.controls['lastName'].value;
     patient.dateOfBirth = this.form.controls['dateOfBirth'].value;
     patient.phoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['phoneNumber'].value);
+    patient.allergies = this.form.controls['allergies'].value;
+    patient.waist = this.form.controls['waist'].value;
+    patient.weight = this.form.controls['weight'].value;
+    patient.shoeSize = this.form.controls['shoes'].value;
+    patient.height = this.form.controls['height'].value;
 
     patient.language = this.form.controls['language'].value;
     patient.callBackImmediately = this.form.controls['callBackImmediately'].value;

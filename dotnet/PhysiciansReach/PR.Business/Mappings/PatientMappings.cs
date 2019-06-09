@@ -34,8 +34,13 @@ namespace PR.Business.Mappings
                 Address = entity.Address.ToModel(),
                 PhysiciansAddress = entity.PhysiciansAddress?.ToModel(),
                 PrivateInsurance = entity.PrivateInsurance?.ToModel(),
-                Medicare = entity.Medicare?.ToModel()
-               
+                Medicare = entity.Medicare?.ToModel(),
+                Waist = entity.Waist,
+                Weight = entity.Weight,
+                Height = entity.Height,
+                ShoeSize = entity.ShoeSize,
+                Allergies = entity.Allergies
+
             };
 
             return model;
@@ -71,7 +76,12 @@ namespace PR.Business.Mappings
                 PhysiciansAddress = model.PhysiciansAddress?.ToEntity(),
                 PhysiciansAddressId = model.PhysiciansAddress?.AddressId,
                 Medicare = model.Medicare?.ToEntity(),
-                PrivateInsurance = model.PrivateInsurance?.ToEntity()
+                PrivateInsurance = model.PrivateInsurance?.ToEntity(),
+                Waist = model.Waist,
+                Weight = model.Weight,
+                Height = model.Height,
+                ShoeSize = model.ShoeSize,
+                Allergies = model.Allergies
             };
 
             return entity;

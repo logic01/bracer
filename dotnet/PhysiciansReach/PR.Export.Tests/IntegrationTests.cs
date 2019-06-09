@@ -47,22 +47,14 @@ namespace PR.Export.Tests
             var savedPatient = dbContext.Patient.Add(patient);
             dbContext.SaveChanges();
             var patientId = savedPatient.Entity.PatientId;
-
-            // Create IntakeForm with ICD, HCPCS, Phsycian, and Signature
-            var intakeForm = CreateIntakeForm(patientId);
-            var savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
-            dbContext.SaveChanges();
-            var intakeFormId = savedIntakeForm.Entity.IntakeFormId;
-
-            // Add Questions
-            intakeForm.Questions = CreateQuestions(intakeFormId);
-            dbContext.IntakeForm.Update(intakeForm);
-            dbContext.SaveChanges();
+            IntakeForm intakeForm = CreateIntakeFormLocal(patientId);
+            IntakeForm intakeForm2 = CreateIntakeFormLocal(patientId);
 
             // Create Document Byte Array
             var intakeModel = intakeForm.ToModel();
+            var intakeModel2 = intakeForm2.ToModel();
             var exporter = new IntakeFormExporter();
-            var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel());
+            var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), new List<IntakeFormModel> { intakeModel, intakeModel2 });
 
             // Create Document
             var document = new Document
@@ -75,6 +67,21 @@ namespace PR.Export.Tests
             var id = dbContext.SaveChanges();
             Console.WriteLine($"Run project and open your browser to https://localhost:44327/document/{doc.Entity.DocumentId}/download to see the word doc generated from this test");
 
+        }
+
+        private IntakeForm CreateIntakeFormLocal(int patientId)
+        {
+            // Create IntakeForm with ICD, HCPCS, Phsycian, and Signature
+            var intakeForm = CreateIntakeForm(patientId);
+            var savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
+            dbContext.SaveChanges();
+            var intakeFormId = savedIntakeForm.Entity.IntakeFormId;
+
+            // Add Questions
+            intakeForm.Questions = CreateQuestions(intakeFormId);
+            dbContext.IntakeForm.Update(intakeForm);
+            dbContext.SaveChanges();
+            return intakeForm;
         }
 
         //[TestMethod]
@@ -268,6 +275,11 @@ namespace PR.Export.Tests
                 CallBackImmediately = true,
                 BestTimeToCallBack = Constants.Enums.CallbackTime.Afternoon,
                 IsDme = true,
+                Weight = "160",
+                Height = "5'7",
+                Waist = "32",
+                ShoeSize = "10.5",
+                Allergies = "Eggs, Shrimp, Fish",
                 Address = new Address
                 {
                     AddressLineOne = "123 Main Street",
@@ -314,11 +326,6 @@ namespace PR.Export.Tests
             questions.Add(CreateQuestionAnswer(intakeFormId, "Affects Activities of Daily Living(ADL) (If so, what?)", "EffectsDaily", "All movement effected"));
             questions.Add(CreateQuestionAnswer(intakeFormId, "If yes, what type of surgery?", "Surgies", "Back surgery twice"));
             questions.Add(CreateQuestionAnswer(intakeFormId, "Pain Rating", "PainLevel", "7"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Height", "Height", "5''7"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Weight", "Weight", "160"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Shoe size", "ShoeSize", "10.5"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Waist", "Waist", "32"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Allergies current", "Allergies", "eggs, dairy"));
             return questions;
         }
 

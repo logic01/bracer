@@ -55,8 +55,6 @@ namespace PhysiciansReach.Controllers
 
             IntakeFormModel newIntakeForm = _intakeBusiness.Create(intakeForm);
 
-            _documentBusiness.CreateIntakeFormDocument(newIntakeForm.PatientId, newIntakeForm.IntakeFormId);
-
             return newIntakeForm;
         }
 

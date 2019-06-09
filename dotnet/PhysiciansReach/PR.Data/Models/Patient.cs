@@ -70,6 +70,16 @@ namespace PR.Data.Models
         public int? MedicareId { get; set; }
         public Medicare Medicare { get; set; }
 
+        [MaxLength(3)]
+        public string Waist { get; set; }
+        [MaxLength(6)]
+        public string Height { get; set; }
+        [MaxLength(4)]
+        public string ShoeSize { get; set; }
+        [MaxLength(500)]
+        public string Allergies { get; set; }
+        [MaxLength(3)]
+        public string Weight { get; set; }
     }
 
 }

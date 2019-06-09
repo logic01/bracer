@@ -78,13 +78,14 @@ export class PainDmeOnlyComponent implements OnInit {
 
     const intakeForms = this.buildIntakeForms();
 
-    // TODO submit ALL of the intake forms and not just the first one
-    this.formSubmitEvent.emit(intakeForms[0]);
+    for (let i = 0; i < intakeForms.length; i++) {
+      this.formSubmitEvent.emit(intakeForms[i]);
+    }
   }
 
   initQuestions() {
     this.painQuestions = [];
-// tslint:disable-next-line: forin
+    // tslint:disable-next-line: forin
     for (const painPoint in this.painPoints) {
       const painArray: PainQuestion[] = [];
 
@@ -161,7 +162,7 @@ export class PainDmeOnlyComponent implements OnInit {
       for (let i = 0; i < painPointQuestions.length; i++) {
         const painPointQuestion = painPointQuestions[i];
         let answerText = this.form.controls[painPointQuestion.getId()].value;
-        if(painPointQuestion.elementId === '2'){
+        if (painPointQuestion.elementId === '2') {
           answerText = painPointQuestion.painPointText;
         }
         intake.questions.push(this.addAnswer(painPointQuestion, answerText));
