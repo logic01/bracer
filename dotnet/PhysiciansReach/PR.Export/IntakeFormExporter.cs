@@ -38,10 +38,25 @@ namespace PR.Export
                 // aliases specified.
                 var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
 
-                //Create title and add the subsequent question answers
+               
 
+                // Replace the images with the Signature file
+                var imageCount = 0;
+                foreach (var imagePart in doc.MainDocumentPart.ImageParts)
+                {
+                    if (++imageCount < 2) //The first 2 images are the signature spot
+                        continue;
+                    var newImageBytes = signature.ContentBytes;
+
+                    using (var writer = new BinaryWriter(imagePart.GetStream()))
+                    {
+                        writer.Write(newImageBytes);
+                    }
+                }
+
+                // Create title and add the subsequent question answers for the questionaire
                 AppendTitleForIntakeForm(doc, docBody, intakeForm);
-
+                
                 var count = 1;
                 foreach (var question in intakeForm.Questions)
                 {
@@ -49,6 +64,7 @@ namespace PR.Export
                 }
                 docBody.AppendChild(new Paragraph());
 
+                // Manual mapping bits
                 UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc, physician, signature);
             }
 
