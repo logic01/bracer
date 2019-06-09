@@ -102,7 +102,7 @@ namespace PR.Export
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
             //will need to approve the update for any fields.
-            foreach (var propertyEnum in Enum.GetValues(typeof(MappingEnums)))
+            foreach (MappingEnums propertyEnum in Enum.GetValues(typeof(MappingEnums)))
             {
                 CustomDocumentProperty item = (CustomDocumentProperty)properties
                     .FirstOrDefault(x => ((CustomDocumentProperty)x).Name.Value.Equals(propertyEnum.ToString()));
@@ -110,7 +110,7 @@ namespace PR.Export
                 {
                     //If a key doesn't exist, you could see an empty value stuffed into the word doc
                     var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString()).Value ?? "N/A";
-                    item.VTLPWSTR = new VTLPWSTR(val);
+                    item.VTLPWSTR = new VTLPWSTR(val);                    
                 }
             }
 
@@ -249,16 +249,37 @@ namespace PR.Export
             var kvps = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
-                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), intake.HCPCS?.Code ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCS?.Product  ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), intake.HCPCS?.Description  ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(), intake.HCPCS?.Duration  ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), intake.ICD10?.Code  ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
+                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCS)), 
+                new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCS?.FirstOrDefault()?.Product  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCS)),
+                new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
+                new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10)),
+              //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
             };
             return kvps;
         }
 
+        private string GetDiagnosis(List<ICD10Model> icds)
+        {
+            return string.Join(", ", icds.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+        }
+
+        private string GetOrthoPrescribed(List<HCPCSModel> hCPCs)
+        {
+            return  string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+        }
+
+        //The Field max length is 255...so when the prescription is too long we need to add the next set
+        private string GetOrthoPrescribedAfter255(List<HCPCSModel> hCPCs)
+        {
+            var prescribed = string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+            if(prescribed.Length > 255)
+            {
+                return prescribed.Substring(254, prescribed.Length - 254);
+            }
+            return "";
+        }
+         
         private List<KeyValuePair<string, string>> GetSignature(SignatureModel signature)
         {
             var kvps = new List<KeyValuePair<string, string>>

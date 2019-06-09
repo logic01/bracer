@@ -14,8 +14,8 @@ namespace PR.Business.Mappings
                 PatientId = entity.PatientId,
                 PhysicianId = entity.PhysicianId,
                 SignatureId = entity.SignatureId,
-                ICD10 = entity.ICD10?.ToModel(),
-                HCPCS = entity.HCPCS?.ToModel(),
+                ICD10 = entity.ICD10s?.Select(x => x.ToModel()).ToList(),
+                HCPCS = entity.HCPCSs?.Select(x => x.ToModel()).ToList(),
                 IntakeFormType = entity.IntakeFormType,
                 Status = entity.Status,
                 Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
@@ -48,8 +48,9 @@ namespace PR.Business.Mappings
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 
-            entity.ICD10.MapFromModel(model.ICD10);
-            entity.HCPCS.MapFromModel(model.HCPCS);
+            entity.ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList();
+            entity.HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList();
+            //entity.Questions = model.Questions?.Select( x =>x. )
         }
 
         public static ICD10Model ToModel(this ICD10 entity)
@@ -78,6 +79,20 @@ namespace PR.Business.Mappings
             };
         }
 
+        public static ICD10 ToEntity(this ICD10Model model)
+        {
+            return new ICD10
+            {
+                Id = model.Id,
+                Code = model.Code,
+                Description = model.Description,
+                CreatedOn = model.CreatedOn,
+                ModifiedOn = model.ModifiedOn
+            };
+        }
+
+
+
         public static void MapFromModel(this ICD10 entity, ICD10Model model)
         {
             //TODO Is this code needed?
@@ -94,6 +109,20 @@ namespace PR.Business.Mappings
             model.Description = entity.Description;
             model.CreatedOn = entity.CreatedOn;
             model.ModifiedOn = entity.ModifiedOn;
+        }
+
+        public static HCPCS ToEntity(this HCPCSModel entity)
+        {
+            return new HCPCS
+            {
+                Id = entity.Id,
+                Code = entity.Code,
+                Product = entity.Product,
+                Duration = entity.Duration,
+                Description = entity.Description,
+                CreatedOn = entity.CreatedOn,
+                ModifiedOn = entity.ModifiedOn
+            };
         }
 
         public static void MapFromModel(this HCPCS entity, HCPCSModel model)

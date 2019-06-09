@@ -190,22 +190,39 @@ namespace PR.Export.Tests
             {
                 PatientId = patientId,
                 IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
-                ICD10 = new ICD10
+                ICD10s = new List<ICD10> { new ICD10
                 {
-                    Code = "Lower Back pain m54.5 low back pain, m53.2x7 spinal instabilities, lumbosacral region, g89.4 chronic pain,m51.36 lumbar disc degeneration"
-                            ,
-                    Description = "L0650(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
+                    Code = "m54.5",
+                    Description = "low back pain"
+                },new ICD10
+                {
+                    Code = "m53.2x7",
+                    Description = "spinal instabilities"
+                },new ICD10
+                {
+                    Code = "g89.4",
+                    Description = "chronic pain"
+                },new ICD10
+                {
+                    Code = "m51.36",
+                    Description = "lumbar disc degeneration"
+                }},
+                HCPCSs = new List<HCPCS>{ new HCPCS
+                {
+                    Code = "L0650",
+                    Product = "Back Brace",
+                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
                             "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
                             "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
-                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)"
-                },
-                HCPCS = new HCPCS
+                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
+                    Duration = "99/lifetime"
+                }, new HCPCS
                 {
-                    Code = "L293",
+                    Code = "L111",
                     Product = "Back Brace",
-                    Description = "HCPCS Description",
-                    Duration = "69 Years"
-                },
+                    Description = "The custom description for L111",
+                    Duration = "99/lifetime"
+                } },
                 Physician = new Physician
                 {
                     FirstName = "Mantis",
@@ -231,7 +248,7 @@ namespace PR.Export.Tests
                 },
                 Signature = signature,
                 Status = Constants.Enums.IntakeFormStatus.New
-            };            
+            };
         }
 
         private static Patient CreatePatient(int userAccountId)
