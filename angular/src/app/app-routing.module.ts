@@ -23,7 +23,7 @@ import { EditVendorComponent } from './vendor/edit/edit-vendor.component';
 import { ViewVendorComponent } from './vendor/view/view-vendor.component';
 
 const routes: Routes = [
-  { path: '', component: DocumentComponent },
+  { path: '', component: LoginComponent },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
   { path: RouteUrls.DocumentComponent, component: DocumentComponent },
   {
