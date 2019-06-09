@@ -3,7 +3,6 @@
   <div mat-dialog-content fxLayout="column" fxLayoutGap="20px">
     <mat-form-field>
       <mat-select placeholder="Main pain area:" formControlName="mainPainArea">
-        <mat-option>--</mat-option>
         <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
       </mat-select>
       <mat-error *ngIf="form.get('mainPainArea').hasError('required')">Please select an area of pain
