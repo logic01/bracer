@@ -44,5 +44,27 @@ namespace PR.Export.Tests.BusinessTests
             Assert.IsTrue(questions?.Any() ?? false, "The questions are not being persisted when creating an intake form");
         }
 
+        [TestMethod]
+        public void Complete_Intake_And_Create_Doc()
+        {
+            ////Create a patient and intake form then run this to create a document
+            //var intakeForm = dbContext.IntakeForm.Find(11);
+
+            //intakeForm.HCPCSs = CreateHCPCSs();
+            //intakeForm.ICD10s = CreateICD10s();
+            //intakeForm.Signature = CreateSignature();
+            //intakeForm.Physician = CreatePhysician();
+
+            //var tempIntakeForm = dbContext.IntakeForm.Update(intakeForm);
+            //dbContext.SaveChanges();
+
+            //var intakeFormModel = tempIntakeForm.Entity.ToModel();
+
+            //var documentBiz = new DocumentBusiness(dbContext, intakeFormBiz, new IntakeFormExporter());
+            //var doc = documentBiz.CreateIntakeFormDocument(intakeForm.PatientId, intakeForm.IntakeFormId);
+            //Console.WriteLine($"Run project and open your browser to https://localhost:44327/document/{doc.DocumentId}/download to see the word doc generated from this test");
+
+        }
+
     }
 }

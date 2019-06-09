@@ -36,6 +36,7 @@ namespace PhysiciansReach.Controllers
         [HttpPost]
         public ActionResult<AdminModel> Post([FromBody] AdminModel admin)
         {
+            admin.UserAccount.Type = AccountType.Admin;
             _logging.Log(LogSeverity.Info, "Post Admin");
             return _business.Create(admin);
         }
@@ -43,6 +44,8 @@ namespace PhysiciansReach.Controllers
         [HttpPut("{id}")]
         public ActionResult<AdminModel> Put(int id, [FromBody] AdminModel admin)
         {
+
+            admin.UserAccount.Type = AccountType.Admin;
             _logging.Log(LogSeverity.Info, "Put Admin");
 
             admin.UserAccount.UserAccountId = id;

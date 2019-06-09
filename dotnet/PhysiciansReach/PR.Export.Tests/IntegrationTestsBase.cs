@@ -53,7 +53,48 @@ namespace PR.Export.Tests
 
         protected IntakeForm CreateIntakeForm(int patientId)
         {
+            var signature = CreateSignature();
+            return new IntakeForm
+            {
+                PatientId = patientId,
+                IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
+                ICD10s = CreateICD10s(),
+                HCPCSs = CreateHCPCSs(),
+                Physician = CreatePhysician(),
+                Signature = signature,
+                Status = Constants.Enums.IntakeFormStatus.New
+            };
+        }
 
+        protected static Physician CreatePhysician()
+        {
+            return new Physician
+            {
+                FirstName = "Mantis",
+                LastName = "Toboggan",
+                PhoneNumber = "1234857447",
+                NPI = "123123123",
+                DEA = "57575755",
+                Address = new Address
+                {
+                    AddressLineOne = "123 main street",
+                    State = "CO",
+                    City = "Denver",
+                    ZipCode = "802224"
+                },
+                UserAccount = new UserAccount
+                {
+                    Active = true,
+                    Type = Constants.Enums.AccountType.Physician,
+                    UserName = "User" + Guid.NewGuid().ToString("N"),
+                    EmailAddress = "temp@test.com",
+                    Password = new PasswordHash("Password1").ToArray()
+                }
+            };
+        }
+
+        protected static Signature CreateSignature()
+        {
             var signatureModel = new SignatureModel
             {
 
@@ -66,11 +107,32 @@ namespace PR.Export.Tests
             var signature = new Signature();
             //Testing the mapper to ensure the data:image/jpeg;base64, gets stripped before being stored
             signature.MapFromModel(signatureModel);
-            return new IntakeForm
-            {
-                PatientId = patientId,
-                IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
-                ICD10s = new List<ICD10> { new ICD10
+            return signature;
+        }
+
+        protected static List<HCPCS> CreateHCPCSs()
+        {
+            return new List<HCPCS>{ new HCPCS
+                {
+                    Code = "L0650",
+                    Product = "Back Brace",
+                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
+                            "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
+                            "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
+                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
+                    Duration = "99/lifetime"
+                }, new HCPCS
+                {
+                    Code = "L111",
+                    Product = "Back Brace",
+                    Description = "The custom description for L111",
+                    Duration = "99/lifetime"
+                } };
+        }
+
+        protected static List<ICD10> CreateICD10s()
+        {
+            return new List<ICD10> { new ICD10
                 {
                     Code = "m54.5",
                     Description = "low back pain"
@@ -86,49 +148,7 @@ namespace PR.Export.Tests
                 {
                     Code = "m51.36",
                     Description = "lumbar disc degeneration"
-                }},
-                HCPCSs = new List<HCPCS>{ new HCPCS
-                {
-                    Code = "L0650",
-                    Product = "Back Brace",
-                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
-                            "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
-                            "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
-                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
-                    Duration = "99/lifetime"
-                }, new HCPCS
-                {
-                    Code = "L111",
-                    Product = "Back Brace",
-                    Description = "The custom description for L111",
-                    Duration = "99/lifetime"
-                } },
-                Physician = new Physician
-                {
-                    FirstName = "Mantis",
-                    LastName = "Toboggan",
-                    PhoneNumber = "1234857447",
-                    NPI = "123123123",
-                    DEA = "57575755",
-                    Address = new Address
-                    {
-                        AddressLineOne = "123 main street",
-                        State = "CO",
-                        City = "Denver",
-                        ZipCode = "802224"
-                    },
-                    UserAccount = new UserAccount
-                    {
-                        Active = true,
-                        Type = Constants.Enums.AccountType.Physician,
-                        UserName = "User" + Guid.NewGuid().ToString("N"),
-                        EmailAddress = "temp@test.com",
-                        Password = new PasswordHash("Password1").ToArray()
-                    }
-                },
-                Signature = signature,
-                Status = Constants.Enums.IntakeFormStatus.New
-            };
+                }};
         }
 
         protected static Patient CreatePatient(int userAccountId)

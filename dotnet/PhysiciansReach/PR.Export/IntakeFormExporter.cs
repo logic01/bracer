@@ -211,7 +211,7 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("MM/dd/yyyy")),
                 new KeyValuePair<string, string>(MappingEnums.Age.ToString(), patient.DateOfBirth.GetAge()),
                 new KeyValuePair<string, string>(MappingEnums.PatientName.ToString(), $"{patient.FirstName} {patient.LastName}"),
                 new KeyValuePair<string, string>(MappingEnums.Phone.ToString(), patient.PhoneNumber),
@@ -223,7 +223,7 @@ namespace PR.Export
                 new KeyValuePair<string, string>(MappingEnums.Allergies.ToString(), patient.Allergies.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()),
                 new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("d")),
+                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("MM/dd/yyyy")),
                 new KeyValuePair<string, string>(MappingEnums.MedMemberId.ToString(), patient.Medicare?.MemberId ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.MedPatientGroup.ToString(), patient.Medicare?.PatientGroup ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.MedPCN.ToString(), patient.Medicare?.Pcn ?? "N/A"),

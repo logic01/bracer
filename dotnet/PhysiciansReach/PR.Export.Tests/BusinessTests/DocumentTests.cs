@@ -1,16 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PR.Business.Business;
 using PR.Business.Mappings;
 using PR.Data.Models;
 using PR.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace PR.Export.Tests
+namespace PR.Export.Tests.BusinessTests
 {
-    [TestClass]
-    public class IntegrationTests : IntegrationTestsBase
+    public class DocumentTests : IntegrationTestsBase
     {
         [TestMethod]
         public void Create_Document_From_Scratch()
@@ -42,7 +39,5 @@ namespace PR.Export.Tests
             Console.WriteLine($"Run project and open your browser to https://localhost:44327/document/{doc.Entity.DocumentId}/download to see the word doc generated from this test");
 
         }
-
-        
     }
 }

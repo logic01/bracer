@@ -41,5 +41,59 @@ namespace PR.Export.Tests.BusinessTests
             var accountId = agent.UserAccount?.UserAccountId ?? 0;
             Assert.IsTrue(accountId > 0);
         }
+
+        [TestMethod]
+        public void Create_Admin()
+        {
+            var vendor = CreateAndPersistVendor();
+            var agentModel = new Models.AgentModel
+            {
+                VendorId = vendor.VendorId,
+                FirstName = "Han",
+                LastName = "Solo",
+                CreatedOn = DateTime.Now,
+                ModifiedOn = DateTime.Now,
+                UserAccount = new Models.UserAccountModel
+                {
+                    Type = Constants.Enums.AccountType.Admin,
+                    UserName = "admin2",
+                    Password = "Password1",
+                    EmailAddress = "test@test.com",
+                    ConfirmationPassword = "Password1",
+                    Active = true
+                },
+
+            };
+            var agent = agentBiz.Create(agentModel);
+            var accountId = agent.UserAccount?.UserAccountId ?? 0;
+            Assert.IsTrue(accountId > 0);
+        }
+
+        [TestMethod]
+        public void Create_Physican()
+        {
+            var vendor = CreateAndPersistVendor();
+            var agentModel = new Models.AgentModel
+            {
+                VendorId = vendor.VendorId,
+                FirstName = "Mantis",
+                LastName = "Toaboggan",
+                CreatedOn = DateTime.Now,
+                ModifiedOn = DateTime.Now,
+                UserAccount = new Models.UserAccountModel
+                {
+                    Type = Constants.Enums.AccountType.Physician,
+                    UserName = "doctor2",
+                    Password = "Password1",
+                    EmailAddress = "test@test.com",
+                    ConfirmationPassword = "Password1",
+                    Active = true
+                },
+
+            };
+            var agent = agentBiz.Create(agentModel);
+            var accountId = agent.UserAccount?.UserAccountId ?? 0;
+            Assert.IsTrue(accountId > 0);
+        }
     }
 }
