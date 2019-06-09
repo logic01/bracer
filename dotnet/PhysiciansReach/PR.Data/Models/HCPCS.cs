@@ -12,6 +12,7 @@ namespace PR.Data.Models
         public string Product { get; set; }
 
         public string Description { get; set; }
+        public int IntakeFormId { get; set; }
 
         [MaxLength(100)]
         public string Duration { get; set; }

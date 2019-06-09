@@ -424,19 +424,7 @@ namespace PR.Data.Models
                      .WithOne(doc => doc.IntakeForm)
                      .HasForeignKey<IntakeForm>(intake => intake.DocumentId)
                      .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_IntakeForm_Document");
-
-                entity.HasOne(intake => intake.HCPCS)
-                     .WithOne(h => h.IntakeForm)
-                     .HasForeignKey<IntakeForm>(intake => intake.HCPCSId)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_IntakeForm_HCPCS");
-
-                entity.HasOne(intake => intake.ICD10)
-                     .WithOne(h => h.IntakeForm)
-                     .HasForeignKey<IntakeForm>(intake => intake.ICD10Id)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_IntakeForm_ICD10");
+                     .HasConstraintName("FK_IntakeForm_Document");               
             });
         }
 

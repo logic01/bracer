@@ -16,9 +16,9 @@ namespace PR.Models
 
         public IntakeFormType IntakeFormType { get; set; }
 
-        public ICD10Model ICD10 { get; set; }
+        public List<ICD10Model> ICD10 { get; set; }
 
-        public HCPCSModel HCPCS { get; set; }
+        public List<HCPCSModel> HCPCS { get; set; }
 
         public IntakeFormStatus Status { get; set; }
 

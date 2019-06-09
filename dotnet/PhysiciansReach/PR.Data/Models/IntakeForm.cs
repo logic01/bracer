@@ -14,9 +14,7 @@ namespace PR.Data.Models
 
         public int? SignatureId { get; set; }
 
-        public int? ICD10Id { get; set; }
-
-        public int? HCPCSId { get; set; }
+       
 
         public int? DocumentId { get; set; }
 
@@ -28,9 +26,9 @@ namespace PR.Data.Models
 
         public List<Question> Questions { get; set; }
 
-        public ICD10 ICD10 { get; set; }
+        public List<ICD10> ICD10s { get; set; }
 
-        public HCPCS HCPCS { get; set; }
+        public List<HCPCS> HCPCSs { get; set; }
 
         public Signature Signature { get; set; }
 

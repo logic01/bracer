@@ -9,6 +9,7 @@ namespace PR.Data.Models
         public string Code { get; set; }
 
         public string Description { get; set; }
+        public int IntakeFormId { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
