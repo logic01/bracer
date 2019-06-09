@@ -1,5 +1,6 @@
 ﻿using PR.Data.Models;
 using PR.Models;
+using System;
 using System.Linq;
 
 namespace PR.Business.Mappings
@@ -50,7 +51,31 @@ namespace PR.Business.Mappings
 
             entity.ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList();
             entity.HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList();
-            //entity.Questions = model.Questions?.Select( x =>x. )
+        }
+
+        /// <summary>
+        /// When the intake form is being created the Questions need to be populated
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        public static IntakeForm ToCreateEntity(this IntakeFormModel model, int? documentId = null)
+        {
+            var now = DateTime.Now;
+            return new IntakeForm
+            {
+                PatientId = model.PatientId,
+                PhysicianId = model.PhysicianId,
+                SignatureId = model.SignatureId,
+                DocumentId = documentId,
+                IntakeFormType = model.IntakeFormType,
+                CreatedOn = now,
+                ModifiedOn = now,
+                ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList(),
+                HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList(),
+                Questions = model.Questions?.Select(x => x.ToEntity(default(int))).ToList(),
+                Status = model.Status
+            };
         }
 
         public static ICD10Model ToModel(this ICD10 entity)
@@ -100,7 +125,7 @@ namespace PR.Business.Mappings
             {
                 return;
             }
-            if(entity == null)
+            if (entity == null)
             {
                 entity = new ICD10();
             }
@@ -128,11 +153,11 @@ namespace PR.Business.Mappings
         public static void MapFromModel(this HCPCS entity, HCPCSModel model)
         {
             //TODO Is this code needed?
-            if(model == null)
+            if (model == null)
             {
                 return;
             }
-            if(entity == null)
+            if (entity == null)
             {
                 entity = new HCPCS();
             }
@@ -145,32 +170,54 @@ namespace PR.Business.Mappings
             entity.ModifiedOn = model.ModifiedOn;
         }
 
+        public static Question ToEntity(this QuestionModel model, int intakeFormId)
+        {
+            return new Question
+            {
+                IntakeFormId = intakeFormId,
+                QuestionId = model.QuestionId,
+                Text = model.Text,
+                Key = model.Key,
+                Answers = model.Answers?.Select(x => x.ToEntity()).ToList(),
+                CreatedOn = model.CreatedOn,
+                ModifiedOn = model.ModifiedOn
+            };
+        }
+
         public static QuestionModel ToModel(this Question entity)
         {
-            var model = new QuestionModel
+            return new QuestionModel
             {
                 QuestionId = entity.QuestionId,
                 Text = entity.Text,
                 Key = entity.Key,
-                Answers = entity.Answers.Select(a => a.ToModel()).ToList(),
+                Answers = entity.Answers?.Select(x => x.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
+        }
 
-            return model;
+        public static Answer ToEntity(this AnswerModel model)
+        {
+            return new Answer
+            {
+
+                AnswerId = model.AnswerId,
+                Text = model.Text,
+                CreatedOn = model.CreatedOn,
+                ModifiedOn = model.ModifiedOn
+            };
         }
 
         public static AnswerModel ToModel(this Answer entity)
         {
-            var model = new AnswerModel
+            return new AnswerModel
             {
                 AnswerId = entity.AnswerId,
                 Text = entity.Text,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
-
-            return model;
         }
 
     }
