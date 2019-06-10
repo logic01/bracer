@@ -16,7 +16,7 @@ export class InsuranceTypePipe implements PipeTransform {
         return 'PRIVATE';
       }
       case InsuranceType.BOTH: {
-        return 'BOTH';
+        return 'MEDICARE & PRIVATE';
       }
       default: {
         return 'NONE';

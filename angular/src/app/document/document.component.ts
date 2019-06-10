@@ -1,8 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
@@ -29,14 +27,9 @@ export class DocumentComponent implements OnInit {
 
   public form: FormGroup;
 
-  @Input() patient$: Observable<Patient> = this.patientApi.get('5');
-  @Input() physician$: Observable<Physician> = this.physicianApi.get('3');
-  @Input() intakeForm$: Observable<IntakeForm> = this.intakeFormApi.get('3');
-
-  public data$ = forkJoin(this.patient$, this.physician$, this.intakeForm$).pipe(
-    map(([patient, physician, intake]) => {
-      return { patient, physician, intake };
-    }));
+  public patient: Patient;
+  public physician: Physician;
+  public intakeForm: IntakeForm;
 
   public product = 'Ankle Brace';
   public painArea = 'Right Ankle';
@@ -59,16 +52,37 @@ export class DocumentComponent implements OnInit {
       diagnosis_other: new FormControl(''),
       lcode_other: new FormControl(''),
       additional_notes: new FormControl(''),
-      lengthOfNeed: new FormControl(''),
+      lengthOfNeed: new FormControl('', Validators.required),
     });
 
-    this.setDiagnosis(this.painArea);
+    this.intakeFormApi.get('2').subscribe((intake: IntakeForm) => {
+
+      // load intake
+      this.intakeForm = intake;
+      this.painArea = intake.questions.filter(q => q.key === 'PainChart')[0].answers[0].text;
+
+      // load patient
+      if (intake.patientId) {
+        this.patientApi.get(intake.patientId).subscribe((patient: Patient) => this.patient = patient);
+      }
+
+      // load physician
+      if (intake.physicianId) {
+        this.physicianApi.get(intake.physicianId).subscribe((physician: Physician) => this.physician = physician);
+      }
+
+      this.setDiagnosis(this.painArea);
+
+    });
+
+
   }
 
   private setDiagnosis(key: string) {
 
     switch (key.toUpperCase()) {
       case 'RIGHT ANKLE':
+        this.product = 'Ankle Brace';
         this.diagnosisOptions.push({ text: 'm19.071 primary osteoarthritis, right ankle and foot' });
         this.diagnosisOptions.push({ text: 'm25.579 pain in joint, ankle' });
         this.diagnosisOptions.push({ text: 'm25.571 pain in right ankle and joints of right foot' });
@@ -76,6 +90,7 @@ export class DocumentComponent implements OnInit {
         this.lcodeOptions.push({ product: 'product', text: 'L1906 Ankle Foot Orthosis, Plastic or Other Material With Ankle Joint, Prefabricated, Includes Fitting and Adjustment' });
         break;
       case 'LEFT ANKLE':
+        this.product = 'Ankle Brace';
         this.diagnosisOptions.push({ text: 'm19.072 primary osteoarthritis, left ankle and foot' });
         this.diagnosisOptions.push({ text: 'm25.579 pain in joint, ankle' });
         this.diagnosisOptions.push({ text: 'm25.572 pain in left ankle and joints of left foot' });
@@ -83,30 +98,35 @@ export class DocumentComponent implements OnInit {
         this.lcodeOptions.push({ product: 'product', text: 'L1906 Ankle Foot Orthosis, Plastic or Other Material With Ankle Joint, Prefabricated, Includes Fitting and Adjustment' });
         break;
       case 'RIGHT KNEE ':
+        this.product = 'Knee Brace';
         this.diagnosisOptions.push({ text: 'm17.11 unilateral osteoarthritis of the right knee' });
         this.diagnosisOptions.push({ text: 'm23.51 chronic instability of the right knee' });
         this.lcodeOptions.push({ product: 'product', text: 'L1833 (Hinged Wraparound Knee Support)' });
         this.lcodeOptions.push({ product: 'product', text: 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)' });
         break;
       case 'LEFT KNEE':
+        this.product = 'Knee Brace';
         this.diagnosisOptions.push({ text: 'm17.12 unilateral osteoarthritis of left knee' });
         this.diagnosisOptions.push({ text: 'm23.52 chronic instability of the left knee' });
         this.lcodeOptions.push({ product: 'product', text: 'L1833 (Hinged Wraparound Knee Support)' });
         this.lcodeOptions.push({ product: 'product', text: 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)' });
         break;
       case 'RIGHT WRIST':
+        this.product = 'Wrist Brace';
         this.diagnosisOptions.push({ text: 'm19.031 primary osteoarthritis, right wrist' });
         this.diagnosisOptions.push({ text: 'g56.0 carpal tunnel syndrome' });
         this.diagnosisOptions.push({ text: 'm19.041 osteoarthritis right hand' });
         this.lcodeOptions.push({ product: 'product', text: 'L3908 wrist hand orthosis, includes one or more non-torsional joint(s), elastic bands, turnbuckles, may include a soft interface and straps. it is prefabricated and off the shelf.' });
         break;
       case 'LEFT WRIST':
+        this.product = 'Wrist Brace';
         this.diagnosisOptions.push({ text: 'm19.032 primary osteoarthritis, left wrist' });
         this.diagnosisOptions.push({ text: 'g56.0 carpal tunnel syndrome' });
         this.diagnosisOptions.push({ text: 'm19.042 osteoarthritis left hand' });
         this.lcodeOptions.push({ product: 'product', text: 'L3908 wrist hand orthosis, includes one or more non-torsional joint(s), elastic bands, turnbuckles, may include a soft interface and straps. it is prefabricated and off the shelf.' });
         break;
       case 'RIGHT ELBOW':
+        this.product = 'Elbow Brace';
         this.diagnosisOptions.push({ text: 'm24.221 disorder of ligament, right elbow' });
         this.diagnosisOptions.push({ text: 'm12.821 other specific arthropathy, not elsewhere specified, right elbow' });
         this.diagnosisOptions.push({ text: 'm12.821 pain in right elbow' });
@@ -114,6 +134,7 @@ export class DocumentComponent implements OnInit {
         this.lcodeOptions.push({ product: 'product', text: 'L3761 Elbow Orthosis, With Adjustable Position Locking Joint(s), Prefabricated, Includes Fitting and Adjustments, Any Type.' });
         break;
       case 'LEFT ELBOW':
+        this.product = 'Elbow Brace';
         this.diagnosisOptions.push({ text: 'm24.221 disorder of ligament, left  elbow' });
         this.diagnosisOptions.push({ text: 'm12.821 other specific arthropathy, not elsewhere specified, left elbow' });
         this.diagnosisOptions.push({ text: 'm25.521 pain in left elbow' });
@@ -121,16 +142,19 @@ export class DocumentComponent implements OnInit {
         this.lcodeOptions.push({ product: 'product', text: 'L3761 Elbow Orthosis, With Adjustable Position Locking Joint(s), Prefabricated, Includes Fitting and Adjustments, Any Type.' });
         break;
       case 'RIGHT SHOULDER':
+        this.product = 'Shoulder Brace';
         this.diagnosisOptions.push({ text: 'm25.511 pain in right shoulder' });
         this.diagnosisOptions.push({ text: 'm19.011 primary osteoarthritis, right shoulder' });
         this.lcodeOptions.push({ product: 'product', text: 'L3960 (Shoulder Elbow Wrist Hand Orthosis, Abduction Positioning, Airplane Design, Prefabricated, Includes Fitting and Adjustment.)' });
         break;
       case 'LEFT SHOULDER':
+        this.product = 'Shoulder Brace';
         this.diagnosisOptions.push({ text: 'm25.512 pain in left shoulder ' });
         this.diagnosisOptions.push({ text: 'm19.012 primary osteoarthritis, left shoulder' });
         this.lcodeOptions.push({ product: 'product', text: 'L3960(Shoulder Elbow Wrist Hand Orthosis, Abduction Positioning, Airplane Design, Prefabricated, Includes Fitting and Adjustment.)' });
         break;
       case 'LOWER BACK':
+        this.product = 'Back Brace';
         this.diagnosisOptions.push({ text: 'm54.5 low back pain' });
         this.diagnosisOptions.push({ text: 'm53.2x7 spinal instabilities, lumbosacral region' });
         this.diagnosisOptions.push({ text: 'g89.4 chronic pain' });
@@ -162,6 +186,20 @@ export class DocumentComponent implements OnInit {
     let text = '';
     for (const ltext of this.lcodeText) {
       text += ltext.text;
+    }
+
+    return text;
+  }
+
+  getAnswer(key: string) {
+
+    let text = '';
+    const questions = this.intakeForm.questions.filter(q => q.key === key);
+
+    if (questions.length > 0) {
+      for (const answer of questions[0].answers) {
+        text += answer.text;
+      }
     }
 
     return text;
