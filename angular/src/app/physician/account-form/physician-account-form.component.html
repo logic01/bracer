@@ -92,7 +92,14 @@
     <mat-error
       *ngIf="accountForm.get('phoneNumber').hasError('required') || accountForm.get('phoneNumber').hasError('invalidPhoneNumber')">
       Please a valid phone number.</mat-error>
-    <mat-error *ngIf=""></mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Fax Number" type="text" formControlName="faxNumber"
+      [textMask]="{mask: maskService.phonenumber}">
+    <mat-error
+      *ngIf="accountForm.get('faxNumber').hasError('required') || accountForm.get('faxNumber').hasError('invalidPhoneNumber')">
+      Please a valid fax number.</mat-error>
   </mat-form-field>
 
   <mat-form-field>

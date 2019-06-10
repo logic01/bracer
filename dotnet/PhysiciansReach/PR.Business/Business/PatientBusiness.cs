@@ -21,14 +21,18 @@ namespace PR.Business
         {
             return _context.Patient
                     .Include(p => p.Address)
+                    .Include(p => p.PrivateInsurance)
+                    .Include(p => p.Medicare)
                     .Select(i => i.ToModel())
                     .ToList();
         }
 
         public PatientModel Get(int patientId)
         {
-            var patient = _context.Patient
+            Patient patient = _context.Patient
                 .Include(p => p.Address)
+                .Include(p => p.PrivateInsurance)
+                .Include(p => p.Medicare)
                 .FirstOrDefault(u => u.PatientId == patientId);
 
             return patient.ToModel();

@@ -29,9 +29,9 @@ export class DocumentComponent implements OnInit {
 
   public form: FormGroup;
 
-  @Input() patient$: Observable<Patient> = this.patientApi.get('1');
-  @Input() physician$: Observable<Physician> = this.physicianApi.get('6');
-  @Input() intakeForm$: Observable<IntakeForm> = this.intakeFormApi.get('1');
+  @Input() patient$: Observable<Patient> = this.patientApi.get('5');
+  @Input() physician$: Observable<Physician> = this.physicianApi.get('3');
+  @Input() intakeForm$: Observable<IntakeForm> = this.intakeFormApi.get('3');
 
   public data$ = forkJoin(this.patient$, this.physician$, this.intakeForm$).pipe(
     map(([patient, physician, intake]) => {
@@ -156,5 +156,15 @@ export class DocumentComponent implements OnInit {
     } else {
       this.lcodeText = this.lcodeText.filter(obj => obj !== this.lcodeOptions[index]);
     }
+  }
+
+  getLCodes() {
+    let text = '';
+    for (const ltext of this.lcodeText) {
+      text += ltext.text;
+    }
+
+    return text;
+
   }
 }

@@ -76,12 +76,13 @@ export class AgentAccountFormComponent implements OnInit {
     const agent = new Agent();
     agent.userAccount = new UserAccount();
 
+    agent.userAccount.type = AccountType.Agent;
     agent.userAccount.userName = this.accountForm.controls['userName'].value;
     agent.userAccount.password = this.accountForm.controls['password'].value;
     agent.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     agent.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     agent.userAccount.active = this.accountForm.controls['active'].value;
-    agent.userAccount.type = AccountType.Agent;
+
 
     agent.firstName = this.accountForm.controls['firstName'].value;
     agent.lastName = this.accountForm.controls['lastName'].value;

@@ -67,11 +67,11 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       language: new FormControl('English', Validators.required),
       callBackImmediately: new FormControl(false, Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
-      allergies: new FormControl('', [Validators.required, Validators.maxLength(300)]),
-      shoes: new FormControl('', Validators.required),
-      height: new FormControl('', Validators.required),
-      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
-      waist: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
+      allergies: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+      shoes: new FormControl('', [Validators.required, Validators.maxLength(4)]),
+      height: new FormControl('', [Validators.required, Validators.maxLength(6)]),
+      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
+      waist: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
 
       pharmacy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       medications: new FormControl('', Validators.maxLength(100)),
@@ -91,14 +91,14 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       privateGroup: new FormControl('', Validators.maxLength(100)),
       privatePcn: new FormControl('', Validators.maxLength(100)),
       bin: new FormControl('', Validators.maxLength(100)),
-      insuranceStreet: new FormControl('',Validators.maxLength(100)),
+      insuranceStreet: new FormControl('', Validators.maxLength(100)),
       insuranceCity: new FormControl('', Validators.maxLength(30)),
       insuranceState: new FormControl('', Validators.maxLength(100)),
       insuranceZip: new FormControl('', CustomValidators.zip),
       insurancePhone: new FormControl('', CustomValidators.phonenumber),
       memberId: new FormControl('', Validators.maxLength(100)),
       medicareGroup: new FormControl('', Validators.maxLength(100)),
-      medicarePcn: new FormControl('',Validators.maxLength(100) ),
+      medicarePcn: new FormControl('', Validators.maxLength(100)),
       subscriberNumber: new FormControl('', Validators.maxLength(100)),
       secondaryInsurance: new FormControl('', Validators.maxLength(100)),
       secondarySubscriberNumber: new FormControl('', Validators.maxLength(100)),
@@ -209,9 +209,9 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   }
 
   radioChange(event: MatRadioChange) {
-   this.privateInsurance = event.value === 'PRIVATE';
-   this.medicareInsurance = event.value === 'MEDICARE';
-   this.bothInsurance = event.value === 'BOTH';
-}
+    this.privateInsurance = event.value === 'PRIVATE';
+    this.medicareInsurance = event.value === 'MEDICARE';
+    this.bothInsurance = event.value === 'BOTH';
+  }
 
 }

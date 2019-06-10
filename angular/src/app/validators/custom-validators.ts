@@ -1,18 +1,18 @@
 import { AbstractControl, AbstractControlOptions, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+import { answerValidator } from './answer.validator';
 import { containsAlphaLowerValidator } from './contains-alpha-lower.validator';
 import { containsAlphaUpperValidator } from './contains-alpha-upper.validator';
 import { containsNumberValidator } from './contains-number.validator';
+import { dateValidator } from './date.validator';
 import { emailValidator } from './email.validator';
 import { equalValidator } from './equal.validator';
 import { noSpaceAllowedValidator } from './no-space-allowed';
+import { onlyNumericValidator } from './only-numeric.validator';
 import { passwordValidator } from './password.validator';
 import { phonenumberValidator } from './phone-number.validator';
 import { stateValidator } from './state.validator';
 import { zipMaskedValidator } from './zip-masked.validator';
-import { onlyNumericValidator } from './only-numeric.validator';
-import { answerValidator } from './answer.validator';
-import { dateValidator } from './date.validator';
 
 // a class to expose all the reactive validations
 export class CustomValidators {
@@ -60,15 +60,15 @@ export class CustomValidators {
         return containsNumberValidator(control);
     }
 
-    static onlyNumeric(control: AbstractControl): ValidationErrors{
+    static onlyNumeric(control: AbstractControl): ValidationErrors {
         return onlyNumericValidator(control);
     }
 
-    static answer(control: AbstractControl): ValidationErrors{
+    static answer(control: AbstractControl): ValidationErrors {
         return answerValidator(control);
     }
 
-    static date(control: AbstractControl): ValidationErrors{
+    static date(control: AbstractControl): ValidationErrors {
         return dateValidator(control);
     }
 }

@@ -8,7 +8,7 @@ namespace PR.Data.Models
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         { }
-        
+
         private readonly string connectionString;
         /// <summary>
         /// Added this constructor to allow for integration tests
@@ -190,6 +190,8 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(10);
 
+                entity.Property(e => e.FaxNumber).HasMaxLength(10);
+
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
@@ -338,6 +340,12 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.IsDme).IsRequired().HasDefaultValue(false);
 
+                entity.Property(e => e.Waist).HasMaxLength(3);
+                entity.Property(e => e.Height).HasMaxLength(6);
+                entity.Property(e => e.ShoeSize).HasMaxLength(4);
+                entity.Property(e => e.Allergies).HasMaxLength(500);
+                entity.Property(e => e.Weight).HasMaxLength(3);
+
                 entity.Property(e => e.BestTimeToCallBack).IsRequired().HasMaxLength(100).HasConversion<string>();
 
                 entity.Property(e => e.Medications).HasMaxLength(100);
@@ -424,7 +432,7 @@ namespace PR.Data.Models
                      .WithOne(doc => doc.IntakeForm)
                      .HasForeignKey<IntakeForm>(intake => intake.DocumentId)
                      .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_IntakeForm_Document");               
+                     .HasConstraintName("FK_IntakeForm_Document");
             });
         }
 

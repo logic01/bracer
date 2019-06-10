@@ -68,12 +68,12 @@ export class AdminAccountFormComponent implements OnInit {
     const admin = new Admin();
     admin.userAccount = new UserAccount();
 
+    admin.userAccount.type = AccountType.Admin;
     admin.userAccount.userName = this.accountForm.controls['userName'].value;
     admin.userAccount.password = this.accountForm.controls['password'].value;
     admin.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     admin.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
     admin.userAccount.active = this.accountForm.controls['active'].value;
-    admin.userAccount.type = AccountType.Agent;
 
     admin.firstName = this.accountForm.controls['firstName'].value;
     admin.lastName = this.accountForm.controls['lastName'].value;

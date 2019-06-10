@@ -12,6 +12,7 @@ namespace PR.Business.Mappings
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 PhoneNumber = entity.PhoneNumber,
+                FaxNumber = entity.FaxNumber,
                 NPI = entity.NPI,
                 DEA = entity.DEA,
                 CreatedOn = entity.CreatedOn,
@@ -35,6 +36,7 @@ namespace PR.Business.Mappings
             entity.FirstName = model.FirstName;
             entity.LastName = model.LastName;
             entity.PhoneNumber = model.PhoneNumber;
+            entity.FaxNumber = model.FaxNumber;
             entity.NPI = model.NPI;
             entity.DEA = model.DEA;
             entity.CreatedOn = model.CreatedOn;

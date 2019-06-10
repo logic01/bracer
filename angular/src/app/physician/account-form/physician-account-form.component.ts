@@ -38,6 +38,7 @@ export class PhysicianAccountFormComponent implements OnInit {
       dea: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       npi: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       phoneNumber: new FormControl('', [CustomValidators.phonenumber, Validators.required]),
+      faxNumber: new FormControl('', [CustomValidators.phonenumber, Validators.required]),
       addressLineOne: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
@@ -84,19 +85,21 @@ export class PhysicianAccountFormComponent implements OnInit {
     physician.userAccount = new UserAccount();
     physician.address = new Address();
 
+    physician.userAccount.type = AccountType.Physician;
     physician.userAccount.userName = this.accountForm.controls['userName'].value;
     physician.userAccount.password = this.accountForm.controls['password'].value;
     physician.userAccount.confirmationPassword = this.accountForm.controls['confirmationPassword'].value;
     physician.userAccount.emailAddress = this.accountForm.controls['emailAddress'].value;
-    physician.dea = this.accountForm.controls['dea'].value;
-    physician.npi = this.accountForm.controls['npi'].value;
     physician.userAccount.active = this.accountForm.controls['active'].value;
-    physician.userAccount.type = AccountType.Agent;
+
 
     physician.firstName = this.accountForm.controls['firstName'].value;
     physician.lastName = this.accountForm.controls['lastName'].value;
+    physician.dea = this.accountForm.controls['dea'].value;
+    physician.npi = this.accountForm.controls['npi'].value;
 
     physician.phoneNumber = this.formatHelper.toNumbersOnly(this.accountForm.controls['phoneNumber'].value);
+    physician.faxNumber = this.formatHelper.toNumbersOnly(this.accountForm.controls['faxNumber'].value);
 
     physician.address.addressLineOne = this.accountForm.controls['addressLineOne'].value;
     physician.address.addressLineTwo = this.accountForm.controls['addressLineTwo'].value;

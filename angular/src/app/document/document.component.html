@@ -1,6 +1,7 @@
 <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
 
   <div *ngIf="data$ | async; let data;" fxLayout="column">
+
     <div fxLayout="row" fxLayoutGap="10px">
 
       <div fxLayout="column">
@@ -30,9 +31,9 @@
                 {{data.patient.address.city}}, {{data.patient.address.state}} {{data.patient.address.zip}}
               </div>
               <div>{{data.patient.phoneNumber | phone}}</div>
-              <div>NA</div>
-              <div>NA</div>
-              <div>NA</div>
+              <div>{{data.patient.weight}}</div>
+              <div>{{data.patient.height}}</div>
+              <div>{{data.patient.shoeSize}}</div>
               <div>NA</div>
               <div>{{data.patient.dateOfBirth | date}}</div>
               <div> {{data.patient.sex | sex }}</div>
@@ -45,6 +46,7 @@
         <div fxLayout="column">
           <h4>DIAGNOSIS</h4>
           <div fxLayout="column">
+            <div>{{painArea}} pain. </div>
             <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
               (change)="onDiagnosisCheck($event, i)">
               {{item.text}}
@@ -82,7 +84,7 @@
 
       </div>
 
-      <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="column">
 
         <!-- Physician INFORMATION -->
         <!-- DONE -->
@@ -107,7 +109,7 @@
                 {{data.physician.address.addressLineTwo}}
                 {{data.physician.address.city}}, {{data.physician.address.state}} {{data.physician.address.zip}}</div>
               <div>{{data.physician.phoneNumber | phone}}</div>
-              <div></div>
+              <div *ngIf="data.physician.faxNumber">{{data.physician.faxNumber | phone}}</div>
               <div>{{dateOfService | date}}</div>
             </div>
           </div>
@@ -117,18 +119,26 @@
         <div fxLayout="column">
 
           <h4>INSURANCE INFORMATION</h4>
-          <div>Member ID:
-            <!--{{data.patient.insurance.memberId}}-->
-          </div>
           <div>Insurance Type:
-            <!--{{data.patient.insurance.insuranceType}}-->
+            {{data.patient.insurance | insuranceType}}
           </div>
-
+          <div *ngIf="data.patient.insurance === 1 || data.patient.insurance === 2">
+            Member Id: {{data.patient.medicare.memberId}}
+            Patient Group: {{data.patient.medicare.patientGroup}}
+            PCN: {{data.patient.medicare.pcn}}
+            Subscriber #: {{data.patient.medicare.subscriberNumber}}
+          </div>
+          <div *ngIf="data.patient.insurance === 0 || data.patient.insurance === 2">
+            Insurance Id: {{data.patient.privateInsurance.insuranceId}}
+            Patient Group: {{data.patient.medicare.group}}
+            PCN: {{data.patient.medicare.pcn}}
+            Bin: {{data.patient.medicare.bin}}
+          </div>
         </div>
 
         <!--ORTHOSIS DEVICE(S) PRESCRIBED-->
         <!-- DONE -->
-        <div fxLayout="column">
+        <div fxLayout=" column">
           <h4>ORTHOSIS DEVICE(S) PRESCRIBED</h4>
           <div fxLayout="column">
             Based on my examination of this patient, I am ordering the following orthosis for the {{painArea}}:
@@ -179,8 +189,144 @@
 
 
       </div>
+
     </div>
 
+
+    <div fxLayout="row">
+
+      <div fxLayout="column">
+
+        <!-- ORTHOTIC DEVICE NEED ASSESSMENT-->
+        <div fxLayout="column">
+          <h4>ORTHOTIC DEVICE NEED ASSESSMENT</h4>
+          <div>EXAM DATE: 24</div>
+        </div>
+
+        <!-- ORTHOTIC DEVICE NEED ASSESSMENT-->
+        <div fxLayout="column">
+          <h4>CHIEF COMPLAINT</h4>
+          <div>The patient complains of {{painArea}} pain at the time of this assessment.</div>
+        </div>
+
+        <!-- VITALS-->
+        <!-- DONE -->
+        <div fxLayout="column">
+          <h4>VITALS</h4>
+          <div>Height: {{data.patient.height}}</div>
+          <div>Weight: {{data.patient.weight}} lbs. </div>
+          <div>Shoe Size : {{data.patient.shoeSize}}</div>
+          <div>Waist Size: {{data.patient.waist}}</div>
+          <div>DOB: {{data.patient.dateOfBirth | date}}</div>
+        </div>
+
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="end start">
+        Date Of Service {{dateOfService | date: 'short'}}
+        26
+        <div>NPI: {{data.physician.npi}}</div>
+        <div>DEA: {{data.physician.dea}}</div>
+        29
+        <div>Phone: {{data.physician.phoneNumber}}</div>
+        <div>Fax: {{data.physician.faxNumber}}</div>
+
+      </div>
+
+    </div>
+
+
+    <div fxLayout="column">
+
+      <h4>SUBJECTIVE</h4>
+      <p>The patient describes their {{painArea}} pain to be at a level of 23 on a 0 to 10 scale. The patient describes
+        the
+        duration of the pain as 19. The etiology of the patient's {{painArea}} pain is described by patient as 14 .
+        Conditions
+        that cause or aggravate the {{painArea}} pain include 16. Previously, the patient has tried 17, with limited
+        success.
+        When
+        asked whether it eﬀects activities of daily living, the patient stated 21.</p>
+
+      <h4>RELATED SURGERY</h4>
+      <p>The patient states, they had 22 surgeries in the area of {{painArea}} </p>
+
+      <h4>OBJECTIVE/ASSESSMENT</h4>
+      <p>
+        Patient name, 1, a 8, currently 6 years old and weighs 5 lbs. The patient claims their pain was initially
+        caused
+        by 14 . Treatments previously tried for {{painArea}} pain include 17. When asked about previous surgery, the
+        patients
+        response was 22. Conditions that cause or aggravate the patients {{painArea}} pain include 16. The condition
+        necessitating
+        the {{product}}
+        is expected to be permanent or of 6 months or more duration and there is a need to control the {{painArea}} pain
+        in more
+        than
+        one plane. Adjustments and assistance with ﬁtting and sizing will not be required for the {{product}} . The
+        {{product}} is
+        prescribed
+        for the following indication(s); the patient is ambulatory and has weakness of the {{painArea}} pain that
+        requires
+        stabilization Fand has the potential to beneﬁt the patient functionally.</p>
+
+      <h4>DIAGNOSIS:</h4>
+      <div>{{painArea}} pain.</div>
+      <div *ngFor="let item of diagnosis;">
+        {{item.text}}
+      </div>
+      <div></div>
+
+
+      <h4>PLAN AND TREATMENT GOALS</h4>
+
+      <p>Based on my clinical impression with 1 and evaluation of their condition, I am ordering the following for the
+        {{painArea}}: {{product}} - {{getLCodes()}} the patient has been advised to use the device for support of their
+        {{painArea}} pain as needed for
+        comfort; or
+        daily
+        if necessary, to provide support to the area and aid potentially weak musculature and to improve activities of
+        daily
+        living.</p>
+
+      <h4>THE INDICATIONS OF NEED:</h4>
+
+      <p>{{painArea}}: The patient is ambulatory and has pain, discomfort and weakness in the region that requires
+        stabilization
+        and
+        has the potential to beneﬁt functionally, by aiding and supporting the musculoskeletal unstable or weak area.
+
+        <h4>TREATMENT GOALS:</h4>
+
+        <p>{{painArea}} pain: Improvement in patient’s function. Improvement in patient’s pain. Increase performance in
+          activities
+          of
+          daily living. Reduce medications. Slow musculoskeletal degeneration. Reduce inﬂammation.</p>
+
+        <p>Custom ﬁtting of the orthosis is not required and the patient or an assisting caregiver can apply the
+          prescribed
+          orthotic device with minimal self-</p>
+
+
+        <p>Our telephone number has been provided to 1 in case there are follow up questions for his use and/or
+          adjustment
+          directions from our oﬃces. I have also recommended for the patient to speak with their primary care
+          Physician
+          in the
+          near future as part of their ongoing plan of care.</p>
+
+
+        <p>I, 26, verify and conﬁrm this order for the above-named patient, and certify that I have personally
+          performed
+          the
+          assessment of the patient for the prescribed treatment and device and verify that it is reasonably and
+          medically
+          necessary, according to accepted standards of medical practice within the community, for this patient’s
+          medical
+          condition.</p>
+    </div>
+
+    <!-- signature -->
     <div fxLayout="column">
       <div>____________________________________________X {{signatureDate | date}}</div>
       <div>Electronically Signed and Dated: {{signatureDate | date:'short'}}</div>
