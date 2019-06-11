@@ -15,7 +15,6 @@ import { PipesModule } from './pipes/pipes.module';
 import { MaskService } from './services/mask.service';
 import { VendorModule } from './vendor/vendor.module';
 
-
 @NgModule({
   declarations: [
     AppComponent

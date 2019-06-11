@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material';
 
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
@@ -25,20 +23,15 @@ export interface HCPCS {
 })
 export class DocumentComponent implements OnInit {
 
-  public form: FormGroup;
-
   public patient: Patient;
   public physician: Physician;
   public intakeForm: IntakeForm;
-
-  public product = 'Ankle Brace';
-  public painArea = 'Right Ankle';
-  public signatureDate = Date.now();
-  public dateOfService = Date.now();
+  public product: string;
   public diagnosisOptions: ICD10[] = [];
-  public diagnosis: ICD10[] = [];
   public lcodeOptions: HCPCS[] = [];
+
   public lcodeText: HCPCS[] = [];
+  public diagnosis: ICD10[] = [];
 
   constructor(
     private readonly patientApi: PatientService,
@@ -48,18 +41,10 @@ export class DocumentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.form = new FormGroup({
-      diagnosis_other: new FormControl(''),
-      lcode_other: new FormControl(''),
-      additional_notes: new FormControl(''),
-      lengthOfNeed: new FormControl('', Validators.required),
-    });
-
     this.intakeFormApi.get('2').subscribe((intake: IntakeForm) => {
 
       // load intake
       this.intakeForm = intake;
-      this.painArea = intake.questions.filter(q => q.key === 'PainChart')[0].answers[0].text;
 
       // load patient
       if (intake.patientId) {
@@ -71,12 +56,17 @@ export class DocumentComponent implements OnInit {
         this.physicianApi.get(intake.physicianId).subscribe((physician: Physician) => this.physician = physician);
       }
 
-      this.setDiagnosis(this.painArea);
+      // kind of ghetto infering all this but for now it works.
+      const question = this.intakeForm.questions.filter(q => q.key === 'PainChart');
+      const painArea = question[0].answers[0].text;
+
+      // the product, lcode and diagnosis options are all distinct via the PainArea
+      this.setDiagnosis(painArea);
 
     });
 
-
   }
+
 
   private setDiagnosis(key: string) {
 
@@ -165,44 +155,4 @@ export class DocumentComponent implements OnInit {
     }
   }
 
-  onDiagnosisCheck(event: MatCheckboxChange, index: number) {
-    if (event.checked) {
-      this.diagnosis.push(this.diagnosisOptions[index]);
-    } else {
-      this.diagnosis = this.diagnosis.filter(obj => obj !== this.diagnosisOptions[index]);
-    }
-  }
-
-  onLCodeCheck(event: MatCheckboxChange, index: number) {
-
-    if (event.checked) {
-      this.lcodeText.push(this.lcodeOptions[index]);
-    } else {
-      this.lcodeText = this.lcodeText.filter(obj => obj !== this.lcodeOptions[index]);
-    }
-  }
-
-  getLCodes() {
-    let text = '';
-    for (const ltext of this.lcodeText) {
-      text += ltext.text;
-    }
-
-    return text;
-  }
-
-  getAnswer(key: string) {
-
-    let text = '';
-    const questions = this.intakeForm.questions.filter(q => q.key === key);
-
-    if (questions.length > 0) {
-      for (const answer of questions[0].answers) {
-        text += answer.text;
-      }
-    }
-
-    return text;
-
-  }
 }
