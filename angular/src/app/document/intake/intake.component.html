@@ -1,209 +1,261 @@
-<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()" fxLayout="column">
+<div *ngIf="patient && intakeForm && physician">
 
-  <div *ngIf="patient && intakeForm && physician" fxLayout="row" fxLayoutGap="10px">
+  <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutGap="20px"
+    fxLayoutAlign="center">
 
-    <div fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="20px">
 
-      <!-- PATIENT INFORMATION-->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>PATIENT INFORMATION</h4>
-        <div fxLayout="row" fxLayoutGap="10px">
-          <div fxLayout="column">
-            <div>Patient Name:</div>
-            <div>Address:</div>
-            <div>Phone:</div>
-            <div>Weight:</div>
-            <div>Height:</div>
-            <div>Shoe Size:</div>
-            <div>Age:</div>
-            <div>Date of Birth:</div>
-            <div>Gender:</div>
-          </div>
+      <div fxLayout="column" fxLayoutGap="10px">
 
-          <div fxLayout="column">
-            <div>{{patient?.firstName}} {{patient?.lastName}}</div>
-            <div>
-              {{patient?.address.addressLineOne}}
-              {{patient?.address.addressLineTwo}}
-              {{patient?.address.city}}, {{patient?.address.state}} {{patient?.address.zip}}
+        <!-- PATIENT INFORMATION-->
+        <mat-card>
+          <mat-card-title>PATIENT INFORMATION</mat-card-title>
+          <mat-card-content fxLayout="row" fxLayoutGap="10px">
+
+            <div fxLayout="column">
+              <div>Name:</div>
+              <div>Address:</div>
+              <div>Phone:</div>
+              <div>Weight:</div>
+              <div>Height:</div>
+              <div>Shoe Size:</div>
+              <div>Age:</div>
+              <div>Date of Birth:</div>
+              <div>Gender:</div>
             </div>
-            <div *ngIf="patient?.phoneNumber">{{patient?.phoneNumber | phone}}</div>
-            <div>{{patient?.weight}}</div>
-            <div>{{patient?.height}}</div>
-            <div>{{patient?.shoeSize}}</div>
-            <div>NA</div>
-            <div *ngIf="patient?.dateOfBirth">{{patient?.dateOfBirth | date}}</div>
-            <div *ngIf="patient?.sex"> {{patient?.sex | sex }}</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- DIAGNOSIS-->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>DIAGNOSIS</h4>
-        <div fxLayout="column">
-          <div>{{getAnswer('PaintChart')}} pain. </div>
-          <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
-            (change)="onDiagnosisCheck($event, i)">
-            {{item.text}}
-          </mat-checkbox>
-          <mat-form-field>
-            <input matInput placeholder="Other" type="text" formControlName="diagnosis_other">
-          </mat-form-field>
-        </div>
-      </div>
+            <div fxLayout="column">
+              <div>{{patient.firstName}} {{patient.lastName}}</div>
+              <div>
+                {{patient.address.addressLineOne}}
+                {{patient.address.addressLineTwo}}
+                {{patient.address.city}}, {{patient.address.state}} {{patient.address.zip}}
+              </div>
+              <div>{{patient.phoneNumber | phone}}</div>
+              <div>{{patient.weight}}</div>
+              <div>{{patient.height}}</div>
+              <div>{{patient.shoeSize}}</div>
+              <div>{{calcAge()}}</div>
+              <div *ngIf="patient.dateOfBirth">{{patient.dateOfBirth | date}}</div>
+              <div *ngIf="patient.sex !== undefined"> {{patient.sex | sex }}</div>
+            </div>
 
-      <!-- STATEMENT OF MEDICAL NECESSITY-->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>STATEMENT OF MEDICAL NECESSITY</h4>
-        <div>
-          The orthotic device or devices ordered as of the result of this examination is being prescribed as
-          adjunctive therapy to assist in reducing the level of pain and symptoms associated with the patient’s
-          identiﬁed diagnosis, and for overall improvement in the patient’s quality of life.
-        </div>
-      </div>
+          </mat-card-content>
+        </mat-card>
 
-      <!-- PREVIOUSLY TRIED TREATMENTS-->
-      <h4>PREVIOUSLY TRIED TREATMENTS</h4>
-      <div>{{getAnswer('PainSelfTreatment')}}</div>
-
-      <h4>PAIN LEVEL DESCRIBED BY PATIENT</h4>
-      <div>{{getAnswer('PainLevel')}} on a 0-10 scale</div>
-
-      <h4>ORDER VERIFICATION</h4>
-      <div>I, Dr. {{physician?.firstName}} {{physician?.lastName}}, verify and conﬁrm this order for the
-        above-named patient, and certify that I have personally performed the assessment of the patient for the
-        prescribed treatment and device and verify that it is reasonably and medically necessary, according to
-        accepted standards of medical practice within the community, for this patient’s medical condition. I hereby
-        aﬃrm this documentation as part of this patient’s medical record.
-      </div>
-
-    </div>
-
-    <div fxLayout="column">
-
-      <!-- Physician INFORMATION -->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>PHYSICIAN INFORMATION</h4>
-        <div fxLayout="row" fxLayoutGap="10px">
-          <div fxLayout="column">
-            <div>Name:</div>
-            <div>NPI:</div>
-            <div>DEA:</div>
-            <div>Address:</div>
-            <div>Phone:</div>
-            <div>Fax:</div>
-            <div>Date of Service:</div>
-          </div>
-
-          <div fxLayout="column">
-            <div>{{physician?.firstName}} {{physician?.lastName}}</div>
-            <div>{{physician?.npi}}</div>
-            <div>{{physician?.dea}}</div>
-            <div> {{physician?.address.addressLineOne}}
-              {{physician?.address.addressLineTwo}}
-              {{physician?.address.city}}, {{physician?.address.state}} {{physician?.address.zip}}</div>
-            <div *ngIf="physician?.phoneNumber">{{physician?.phoneNumber | phone}}</div>
-            <div *ngIf="physician?.faxNumber">{{physician?.faxNumber | phone}}</div>
-            <div>{{today | date}}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INSURANCE INFORMATION -->
-      <div fxLayout="column">
-
-        <h4>INSURANCE INFORMATION</h4>
-        <div>Insurance Type:
-          {{patient?.insurance | insuranceType}}
-        </div>
-        <div *ngIf="patient?.insurance === 1 || patient?.insurance === 2">
-          <div>Medicare Inforamtion</div>
-          <div> Member Id: {{patient?.medicare.memberId}}</div>
-          <div>Patient Group: {{patient?.medicare.patientGroup}}</div>
-          <div>PCN: {{patient?.medicare.pcn}}</div>
-          <div>Subscriber #: {{patient?.medicare.subscriberNumber}}</div>
-        </div>
-        <div *ngIf="patient?.insurance === 0 || patient?.insurance === 2">
-          <div>Private Insurance Inforamtion</div>
-          <div>Insurance Id: {{patient?.privateInsurance.insuranceId}}</div>
-          <div>Patient Group: {{patient?.privateInsurance.group}}</div>
-          <div>PCN: {{patient?.privateInsurance.pcn}}</div>
-          <div>Bin: {{patient?.privateInsurance.bin}}</div>
-        </div>
-      </div>
-
-      <!--ORTHOSIS DEVICE(S) PRESCRIBED-->
-      <!-- DONE -->
-      <div fxLayout=" column">
-        <h4>ORTHOSIS DEVICE(S) PRESCRIBED</h4>
-        <div fxLayout="column">
-          Based on my examination of this patient, I am ordering the following orthosis for the
-          {{getAnswer('PaintChart')}}:
-
-          <div *ngFor="let item of lcodeOptions; let i = index">
-            <mat-checkbox color="primary" (change)="onLCodeCheck($event, i)" [value]="i">
+        <!-- DIAGNOSIS-->
+        <mat-card>
+          <mat-card-title>DIAGNOSIS</mat-card-title>
+          <mat-card-content fxLayout="column">
+            <div>{{getAnswer('PainChart')}} pain. </div>
+            <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
+              (change)="onDiagnosisCheck($event, i)">
+              {{item.text}}
             </mat-checkbox>
-            <span> {{item.text}}</span>
-          </div>
-
-          <mat-form-field>
-            <input matInput placeholder="Other" type="text" formControlName="lcode_other">
-          </mat-form-field>
-
-          <div>Patient should begin using the orthosis as needed. Length of need:</div>
-          <mat-form-field>
-            <input matInput placeholder="Length Of Need*" type="text" formControlName="productDuration">
-            <mat-error *ngIf="form.get('productDuration').hasError('required')">This field is required.
+            <mat-form-field>
+              <input matInput placeholder="Other" type="text" formControlName="diagnosis_other">
+            </mat-form-field>
+            <mat-error *ngIf="this.diagnosisSelections.length === 0 && !form.get('diagnosis_other').value">
+              Please select or enter a diagnosis.
             </mat-error>
-          </mat-form-field>
+          </mat-card-content>
+        </mat-card>
 
-        </div>
+        <!-- STATEMENT OF MEDICAL NECESSITY-->
+        <mat-card>
+          <mat-card-title>STATEMENT OF MEDICAL NECESSITY</mat-card-title>
+          <mat-card-content>
+            The orthotic device or devices ordered as of the result of this examination is being prescribed as
+            adjunctive therapy to assist in reducing the level of pain and symptoms associated with the patient’s
+            identiﬁed diagnosis, and for overall improvement in the patient’s quality of life.
+          </mat-card-content>
+        </mat-card>
+
+        <!-- PREVIOUSLY TRIED TREATMENTS-->
+        <mat-card>
+          <mat-card-title>PREVIOUSLY TRIED TREATMENTS</mat-card-title>
+          <mat-card-content>{{getAnswer('PainSelfTreatment')}}</mat-card-content>
+        </mat-card>
+
+        <!-- PAIN LEVEL DESCRIBED BY PATIENT-->
+        <mat-card>
+          <mat-card-title>PAIN LEVEL DESCRIBED BY PATIENT</mat-card-title>
+          <mat-card-content>{{getAnswer('PainLevel')}} on a 0-10 scale</mat-card-content>
+        </mat-card>
+
+        <!-- ORDER VERIFICATION -->
+        <mat-card>
+          <mat-card-title> ORDER VERIFICATION </mat-card-title>
+          <mat-card-content>
+            I, Dr. {{physician?.firstName}} {{physician?.lastName}}, verify and conﬁrm this order for the
+            above-named patient, and certify that I have personally performed the assessment of the patient for the
+            prescribed treatment and device and verify that it is reasonably and medically necessary, according to
+            accepted standards of medical practice within the community, for this patient’s medical condition. I hereby
+            aﬃrm this documentation as part of this patient’s medical record.
+          </mat-card-content>
+        </mat-card>
 
       </div>
 
-      <div>First date patient is authorized to begin using {{product}} : {{today | date}}</div>
+      <div fxLayout="column" fxLayoutGap="10px">
 
-      <!--Treatement Goals-->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>TREATMENT GOALS</h4>
-        <div>My treatment goal(s) for the use of the prescribed orthosis are:</div>
-        <div>• Support weak musculature </div>
-        <div>• Improvement in Patient’s function </div>
-        <div>• Decrease in Patient’s pain </div>
-        <div>• To assist the patient or improve activities of daily living </div>
-        <div>• To aid in the stabilization of the {{getAnswer('PaintChart')}} </div>
-        <div>• To aid in controlling unwanted movements in the area of pain </div>
-        <div>• Slow degenerative changes </div>
-        <div>• Reduce potential inﬂammation </div>
+        <!-- Physician INFORMATION -->
+        <!-- DONE -->
+        <mat-card>
+          <mat-card-title>PHYSICIAN INFORMATION</mat-card-title>
+
+          <mat-card-content fxLayout="row" fxLayoutGap="10px">
+
+            <div fxLayout="column">
+              <div>Name:</div>
+              <div>NPI:</div>
+              <div>DEA:</div>
+              <div>Address:</div>
+              <div>Phone:</div>
+              <div>Fax:</div>
+              <div>Date of Service:</div>
+            </div>
+
+            <div fxLayout="column">
+              <div>{{physician?.firstName}} {{physician?.lastName}}</div>
+              <div>{{physician?.npi}}</div>
+              <div>{{physician?.dea}}</div>
+              <div> {{physician?.address.addressLineOne}}
+                {{physician?.address.addressLineTwo}}
+                {{physician?.address.city}}, {{physician?.address.state}} {{physician?.address.zip}}</div>
+              <div *ngIf="physician?.phoneNumber">{{physician?.phoneNumber | phone}}</div>
+              <div *ngIf="physician?.faxNumber">{{physician?.faxNumber | phone}}</div>
+              <div>{{today | date}}</div>
+            </div>
+
+          </mat-card-content>
+
+        </mat-card>
+
+        <!-- INSURANCE INFORMATION -->
+        <mat-card>
+
+          <mat-card-title>INSURANCE INFORMATION</mat-card-title>
+          <mat-card-content fxLayout="column">
+            <div>Insurance Type:
+              {{patient.insurance | insuranceType}}
+            </div>
+            <div *ngIf="patient.insurance === 1 || patient.insurance === 2">
+              <div>Medicare Inforamtion</div>
+              <div> Member Id: {{patient.medicare.memberId}}</div>
+              <div>Patient Group: {{patient.medicare.patientGroup}}</div>
+              <div>PCN: {{patient.medicare.pcn}}</div>
+              <div>Subscriber #: {{patient.medicare.subscriberNumber}}</div>
+            </div>
+            <div *ngIf="patient.insurance === 0 || patient.insurance === 2">
+              <div>Private Insurance Inforamtion</div>
+              <div>Insurance Id: {{patient.privateInsurance.insuranceId}}</div>
+              <div>Patient Group: {{patient.privateInsurance.group}}</div>
+              <div>PCN: {{patient.privateInsurance.pcn}}</div>
+              <div>Bin: {{patient.privateInsurance.bin}}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!--ORTHOSIS DEVICE(S) PRESCRIBED-->
+
+        <mat-card>
+          <mat-card-title>ORTHOSIS DEVICE(S) PRESCRIBED</mat-card-title>
+
+          <mat-card-content fxLayout="column">
+            <p>
+              Based on my examination of this patient, I am ordering the following orthosis for the
+              {{getAnswer('PainChart')}}:
+            </p>
+
+            <div *ngFor="let item of lcodeOptions; let i = index">
+              <mat-checkbox color="primary" (change)="onLCodeCheck($event, i)" [value]="i">
+              </mat-checkbox>
+              <span> {{item.text}}</span>
+            </div>
+
+            <mat-form-field>
+              <input matInput placeholder="Other" type="text" formControlName="lcode_other">
+            </mat-form-field>
+
+            <mat-error *ngIf="this.lcodeSelections.length === 0 && !form.get('lcode_other').value">
+              Please select or enter a orthosis device prescribed.
+            </mat-error>
+
+          </mat-card-content>
+        </mat-card>
+
+        <!-- DURATION -->
+        <mat-card>
+          <mat-card-title>DURATION</mat-card-title>
+
+          <mat-card-content fxLayout="column">
+            <div>Patient should begin using the orthosis as needed.</div>
+            <div>First date patient is authorized to begin using {{product}} : {{today | date}}</div>
+            <mat-form-field>
+              <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
+              <mat-error *ngIf="form.get('productDuration').hasError('required')">
+                Please enter the duration of time this device is prescribed for.
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+
+        <!--Treatement Goals-->
+        <mat-card>
+          <mat-card-title>TREATMENT GOALS</mat-card-title>
+          <mat-card-content fxLayout="column">
+            <div>My treatment goal(s) for the use of the prescribed orthosis are:</div>
+            <div>• Support weak musculature </div>
+            <div>• Improvement in Patient’s function </div>
+            <div>• Decrease in Patient’s pain </div>
+            <div>• To assist the patient or improve activities of daily living </div>
+            <div>• To aid in the stabilization of the {{getAnswer('PainChart')}} </div>
+            <div>• To aid in controlling unwanted movements in the area of pain </div>
+            <div>• Slow degenerative changes </div>
+            <div>• Reduce potential inﬂammation </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!--DDITIONAL DOCTOR NOTES-->
+        <mat-card>
+          <mat-card-title>ADDITIONAL DOCTOR NOTES:</mat-card-title>
+          <mat-card-content>
+            <mat-form-field>
+              <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
       </div>
-
-      <!--DDITIONAL DOCTOR NOTES-->
-      <!-- DONE -->
-      <div fxLayout="column">
-        <h4>ADDITIONAL DOCTOR NOTES:</h4>
-        <mat-form-field>
-          <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
-        </mat-form-field>
-      </div>
-
 
     </div>
 
-  </div>
+    <div fxLayoutAlign="start end">
+      <!-- signature -->
+      <mat-card>
+        <mat-card-title>Signature</mat-card-title>
+        <mat-card-content>
 
-  <!-- signature -->
-  <div fxLayout="column">
-    <div>____________________________________________X {{today | date:'short'}}</div>
-    <div>Electronically Signed and Dated: {{today | date:'short'}}</div>
-    <div>{{physician?.firstName}} {{physician?.lastName}}</div>
-    <div>NPI: {{physician?.npi}}</div>
-    <div>DEA: {{physician?.dea}}</div>
-  </div>
+          <div>
+            <button *ngIf="!signatureData" mat-raised-button color="accent" (click)="sign()">Sign</button>
 
-</form>
+            <div *ngIf="signatureData">
+              <img [src]="signatureData" alt="signature" />
+              <div>Electronically Signed and Dated: {{today | date:'short'}}</div>
+              <div>{{physician?.firstName}} {{physician?.lastName}}</div>
+              <div>NPI: {{physician?.npi}}</div>
+              <div>DEA: {{physician?.dea}}</div>
+            </div>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <button *ngIf="signatureData" type="submit" mat-raised-button color="accent">Approve</button>
+    
+  </form>
+
+</div>

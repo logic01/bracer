@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IntakeForm } from 'src/app/models/intake-form.model';
-import { Signature } from 'src/app/models/signature.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
-import { SignatureService } from 'src/app/services/api/signature.service';
-import { IPAddressService } from 'src/app/services/ip-address.service';
 import { SessionService } from 'src/app/services/session.service';
-
-import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -19,7 +13,7 @@ import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.c
 })
 export class PhysicianDashboardComponent implements OnInit {
 
-  columnsToDisplay = ['intakeFormId', 'status', 'sign'];
+  columnsToDisplay = ['intakeFormId', 'status', 'view'];
 
   data: IntakeForm[];
 
@@ -27,10 +21,7 @@ export class PhysicianDashboardComponent implements OnInit {
 
   constructor(
     private readonly session: SessionService,
-    private readonly intakeFormApi: IntakeFormService,
-    private readonly signatureApi: SignatureService,
-    private readonly dialog: MatDialog,
-    private readonly ipAddressService: IPAddressService) { }
+    private readonly intakeFormApi: IntakeFormService) { }
 
   ngOnInit() {
 
@@ -53,17 +44,10 @@ export class PhysicianDashboardComponent implements OnInit {
   }
   */
 
-  sign(id: string) {
-    const dialogRef = this.dialog.open(SignatureDialogComponent);
+  view(id: string) {
 
-    dialogRef.afterClosed().subscribe(result => {
-
-      const signature = new Signature();
-      signature.content = result;
-      signature.ipAddress = '71.205.117.185';
-      this.signatureApi.sign(id, signature).subscribe();
-
-    });
   }
+
+
 
 }
