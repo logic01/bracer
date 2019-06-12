@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material';
 
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
@@ -26,18 +28,22 @@ export class PrescriptionComponent implements OnInit {
 
   @Input() product: string;
   @Input() diagnosis: ICD10[] = [];
-  @Input() lcodeText: HCPCS[] = [];
-  @Input() signatureDate = Date.now();
-  @Input() dateOfService = Date.now();
+  @Input() lcodes: HCPCS[] = [];
+  @Input() duration: string;
 
-  constructor() { }
+  @Output() formSubmitEvent = new EventEmitter<string>();
+
+  public today = Date.now();
+  public signatureData: string;
+
+  constructor(private readonly dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
   getLCodes() {
     let text = '';
-    for (const ltext of this.lcodeText) {
+    for (const ltext of this.lcodes) {
       text += ltext.text;
     }
 
@@ -59,4 +65,21 @@ export class PrescriptionComponent implements OnInit {
 
   }
 
+  calcAge(): number {
+    const timeDiff = Math.abs(Date.now() - (new Date(this.patient.dateOfBirth).getTime()));
+    const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+    return age;
+  }
+
+
+  sign() {
+    this.dialog
+      .open(SignatureDialogComponent)
+      .afterClosed()
+      .subscribe(result => this.signatureData = result);
+  }
+
+  approve() {
+    this.formSubmitEvent.emit(this.signatureData);
+  }
 }

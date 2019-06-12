@@ -1,3 +1,9 @@
-<app-intake [intakeForm]="intakeForm" [patient]="patient" [physician]="physician" [product]="product"
-  [diagnosisOptions]="diagnosisOptions" [lcodeOptions]="lcodeOptions">
+<app-intake *ngIf="!intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
+  [product]="product" [diagnosisOptions]="diagnosisOptions" [lcodeOptions]="lcodeOptions"
+  (formSubmitEvent)="onIntakeApproval($event)">
 </app-intake>
+
+<app-prescription *ngIf="intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
+  [product]="product" [diagnosis]="diagnosisOptions" [lcodes]="lcodeOptions"
+  (formSubmitEvent)="onPrescriptionApproval($event)">
+</app-prescription>

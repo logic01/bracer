@@ -33,6 +33,8 @@ export class DocumentComponent implements OnInit {
   public lcodeText: HCPCS[] = [];
   public diagnosis: ICD10[] = [];
 
+  public intakeApproved = false;
+
   constructor(
     private readonly patientApi: PatientService,
     private readonly physicianApi: PhysicianService,
@@ -41,7 +43,7 @@ export class DocumentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.intakeFormApi.get('3').subscribe((intake: IntakeForm) => {
+    this.intakeFormApi.get('2').subscribe((intake: IntakeForm) => {
 
       // load intake
       this.intakeForm = intake;
@@ -65,6 +67,14 @@ export class DocumentComponent implements OnInit {
 
     });
 
+  }
+
+  onIntakeApproval() {
+    this.intakeApproved = true;
+  }
+
+  onPrescriptionApproval() {
+    this.intakeApproved = true;
   }
 
 

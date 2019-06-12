@@ -1,12 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
+
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
-import { Signature } from 'src/app/models/signature.model';
-import { SignatureService } from 'src/app/services/api/signature.service';
 
 export interface ICD10 {
   text: string;
@@ -31,15 +30,15 @@ export class IntakeComponent implements OnInit {
   @Input() diagnosisOptions: ICD10[] = [];
   @Input() lcodeOptions: HCPCS[] = [];
 
+  @Output() formSubmitEvent = new EventEmitter<string>();
+
   public form: FormGroup;
   public today = Date.now();
   public signatureData: string;
   public diagnosisSelections: ICD10[] = [];
   public lcodeSelections: HCPCS[] = [];
 
-  constructor(
-    private readonly signatureApi: SignatureService,
-    private readonly dialog: MatDialog) {
+  constructor(private readonly dialog: MatDialog) {
 
     this.form = new FormGroup({
       diagnosis_other: new FormControl(''),
@@ -93,25 +92,19 @@ export class IntakeComponent implements OnInit {
   }
 
   sign() {
-    const dialogRef = this.dialog.open(SignatureDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-
-      const signature = new Signature();
-      signature.content = result;
-      this.signatureData = result;
-      //      this.signatureApi.sign(id, signature).subscribe();
-
-    });
+    this.dialog
+      .open(SignatureDialogComponent)
+      .afterClosed()
+      .subscribe(result => this.signatureData = result);
   }
 
-  onSubmit() {
+  approve() {
 
     if (!this.form.valid || this.lcodeSelections.length === 0 || this.diagnosisSelections.length === 0 || !this.signatureData) {
       return;
     }
 
-    //    this.formSubmitEvent.emit(admin);
+    this.formSubmitEvent.emit(this.signatureData);
   }
 
 
