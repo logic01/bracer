@@ -6,15 +6,6 @@ import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 
-export interface ICD10 {
-  text: string;
-}
-
-export interface HCPCS {
-  product: string;
-  text: string;
-}
-
 @Component({
   selector: 'app-prescription',
   templateUrl: './prescription.component.html',
@@ -27,8 +18,8 @@ export class PrescriptionComponent implements OnInit {
   @Input() intakeForm: IntakeForm;
 
   @Input() product: string;
-  @Input() diagnosis: ICD10[] = [];
-  @Input() lcodes: HCPCS[] = [];
+  @Input() diagnosis: string[] = [];
+  @Input() lcodes: string[] = [];
   @Input() duration: string;
 
   @Output() formSubmitEvent = new EventEmitter<string>();
@@ -43,8 +34,8 @@ export class PrescriptionComponent implements OnInit {
 
   getLCodes() {
     let text = '';
-    for (const ltext of this.lcodes) {
-      text += ltext.text;
+    for (const lcodeText of this.lcodes) {
+      text += lcodeText;
     }
 
     return text;

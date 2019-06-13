@@ -7,15 +7,6 @@ import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 
-export interface ICD10 {
-  text: string;
-}
-
-export interface HCPCS {
-  product: string;
-  text: string;
-}
-
 @Component({
   selector: 'app-intake',
   templateUrl: './intake.component.html',
@@ -27,16 +18,16 @@ export class IntakeComponent implements OnInit {
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
   @Input() product: string;
-  @Input() diagnosisOptions: ICD10[] = [];
-  @Input() lcodeOptions: HCPCS[] = [];
+  @Input() diagnosisOptions: string[] = [];
+  @Input() lcodeOptions: string[] = [];
 
   @Output() formSubmitEvent = new EventEmitter<string>();
 
   public form: FormGroup;
   public today = Date.now();
   public signatureData: string;
-  public diagnosisSelections: ICD10[] = [];
-  public lcodeSelections: HCPCS[] = [];
+  public diagnosisSelections: string[] = [];
+  public lcodeSelections: string[] = [];
 
   constructor(private readonly dialog: MatDialog) {
 
