@@ -245,7 +245,7 @@ namespace PR.Export
                 new KeyValuePair<string, string>(MappingEnums.PhyDea.ToString(), physician?.DEA ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.PhyAddress.ToString(), physician?.Address?.ToString() ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.PhyPhone.ToString(), physician?.PhoneNumber ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.PhyFax.ToString(), physician?.Fax ?? "N/A")
+                new KeyValuePair<string, string>(MappingEnums.PhyFax.ToString(), physician?.FaxNumber ?? "N/A")
             };
 
             return kvps;

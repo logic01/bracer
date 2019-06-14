@@ -11,6 +11,7 @@ import {
   MatNativeDateModule,
   MatRadioModule,
   MatSelectModule,
+  MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
@@ -32,7 +33,8 @@ const modules = [
   MatRadioModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSortModule
 ];
 
 @NgModule({

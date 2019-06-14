@@ -16,7 +16,7 @@ namespace PR.Models
 
         public string DEA { get; set; }
 
-        public string Fax { get; set; } = "0000000000"; //Defaulting to 0000000000 until it is added through the UI
+        public string FaxNumber { get; set; } = "0000000000"; //Defaulting to 0000000000 until it is added through the UI
 
         public AddressModel Address { get; set; }
 

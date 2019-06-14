@@ -47,6 +47,16 @@ namespace PR.Models
 
         public string PhysiciansPhoneNumber { get; set; }
 
+        public string Waist { get; set; }
+
+        public string Height { get; set; }
+
+        public string ShoeSize { get; set; }
+
+        public string Allergies { get; set; }
+
+        public string Weight { get; set; }
+
         public AddressModel PhysiciansAddress { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -56,15 +66,7 @@ namespace PR.Models
         public PrivateInsuranceModel PrivateInsurance { get; set; }
 
         public MedicareModel Medicare { get; set; }
-                       
-        public string Waist { get; set; }
-        
-        public string Height { get; set; }
-        
-        public string ShoeSize { get; set; }
 
-        public string Allergies { get; set; }
-        
-        public string Weight { get; set; }
+
     }
 }

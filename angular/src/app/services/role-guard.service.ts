@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -21,13 +20,15 @@ export class RoleGuardService implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
-    const expectedRole = next.data.expectedRole as AccountType;
+    const expectedRoles = next.data.expectedRoles as AccountType[];
 
     return this.session.userAccount$.pipe(
       take(1),
       map((account: UserAccount) => {
 
-        if (account.type === expectedRole) {
+        const foundRole = expectedRoles.filter(r => r === account.type);
+
+        if (foundRole && foundRole.length > 0) {
           return true;
         }
 
