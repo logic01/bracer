@@ -1,7 +1,7 @@
 export const RouteUrls = {
   LoginComponent: 'login',
 
-  DocumentComponent: 'document',
+  IntakeDocumentComponent: 'intake-document/:id',
 
   AgentDashboardComponent: 'agent',
 
@@ -13,7 +13,6 @@ export const RouteUrls = {
 
   PhysicianDashboardComponent: 'physician',
   PhysicianCreateComponent: 'account/create/physician',
-  PhysicianDocumentComponent: 'physician/document',
   PhysicianEditComponent: 'physician/edit/:id',
 
   AdminDashboardComponent: 'admin',

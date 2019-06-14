@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { RouteUrls } from '../constants/routes';
+import { AccountType } from '../models/enums/account-type.enum';
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
 import { Physician } from '../models/physician.model';
 import { IntakeFormService } from '../services/api/intake-form.service';
 import { PatientService } from '../services/api/patient.service';
 import { PhysicianService } from '../services/api/physician.service';
+import { SessionService } from '../services/session.service';
 
 @Component({
   selector: 'app-document',
@@ -13,6 +17,10 @@ import { PhysicianService } from '../services/api/physician.service';
   styleUrls: ['./document.component.scss']
 })
 export class DocumentComponent implements OnInit {
+
+  private intakeFormId: string;
+
+  public isAdminView = false;
 
   public patient: Patient;
   public physician: Physician;
@@ -27,14 +35,20 @@ export class DocumentComponent implements OnInit {
   public intakeApproved = false;
 
   constructor(
+    private readonly session: SessionService,
     private readonly patientApi: PatientService,
     private readonly physicianApi: PhysicianService,
-    private readonly intakeFormApi: IntakeFormService) {
+    private readonly intakeFormApi: IntakeFormService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router) {
   }
 
   ngOnInit() {
 
-    this.intakeFormApi.get('2').subscribe((intake: IntakeForm) => {
+    this.session.userAccount$.subscribe(u => this.isAdminView = (u.type === AccountType.Admin));
+    this.intakeFormId = this.route.snapshot.paramMap.get('id');
+
+    this.intakeFormApi.get(this.intakeFormId).subscribe((intake: IntakeForm) => {
 
       // load intake
       this.intakeForm = intake;
@@ -65,7 +79,11 @@ export class DocumentComponent implements OnInit {
   }
 
   onPrescriptionApproval() {
-    this.intakeApproved = true;
+    if (this.isAdminView) {
+      this.router.navigate([RouteUrls.AdminDashboardComponent]);
+    } else {
+      this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
+    }
   }
 
 

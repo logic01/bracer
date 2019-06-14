@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
-
-import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
+
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-prescription',
@@ -13,6 +13,7 @@ import { Physician } from 'src/app/models/physician.model';
 })
 export class PrescriptionComponent implements OnInit {
 
+  @Input() isAdminView = false;
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
@@ -72,5 +73,9 @@ export class PrescriptionComponent implements OnInit {
 
   approve() {
     this.formSubmitEvent.emit(this.signatureData);
+  }
+
+  next() {
+    this.formSubmitEvent.emit();
   }
 }

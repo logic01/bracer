@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
-
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -14,6 +13,7 @@ import { Physician } from 'src/app/models/physician.model';
 })
 export class IntakeComponent implements OnInit {
 
+  @Input() isAdminView = true;
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
@@ -98,5 +98,8 @@ export class IntakeComponent implements OnInit {
     this.formSubmitEvent.emit(this.signatureData);
   }
 
+  next() {
+    this.formSubmitEvent.emit();
+  }
 
 }

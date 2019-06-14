@@ -50,7 +50,7 @@
               <div>{{getAnswer('PainChart')}} pain. </div>
               <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
                 (change)="onDiagnosisCheck($event, i)">
-                {{item.text}}
+                {{item}}
               </mat-checkbox>
               <mat-form-field>
                 <input matInput placeholder="Other" type="text" formControlName="diagnosis_other">
@@ -172,7 +172,7 @@
               <div *ngFor="let item of lcodeOptions; let i = index">
                 <mat-checkbox color="primary" (change)="onLCodeCheck($event, i)" [value]="i">
                 </mat-checkbox>
-                <span> {{item.text}}</span>
+                <span> {{item}}</span>
               </div>
 
               <mat-form-field>
@@ -234,7 +234,7 @@
       </div>
 
       <!-- signature -->
-      <mat-card>
+      <mat-card *ngIf="!isAdminView">
         <mat-card-title>Signature</mat-card-title>
         <mat-card-content>
 
@@ -253,7 +253,8 @@
         </mat-card-content>
       </mat-card>
 
-      <button *ngIf="signatureData" type="submit" mat-raised-button color="accent">Approve</button>
+      <button *ngIf="signatureData && !isAdminView" type="submit" mat-raised-button color="accent">Approve</button>
+      <button *ngIf="isAdminView" mat-raised-button color="accent" (click)="next()">Next</button>
 
     </form>
   </div>

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTable } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
@@ -34,11 +34,12 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   public intake$: Observable<IntakeForm[]>;
 
   public data: TableRow[] = [];
-  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'sign'];
+  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'actions'];
 
   private unsubscribe$ = new Subject();
 
   constructor(
+    private readonly router: Router,
     private readonly physicianApi: PhysicianService,
     private readonly vendorApi: VendorService,
     private readonly intakeApi: IntakeFormService,
@@ -104,12 +105,16 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  assign(intakeFormId: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
+  assign(id: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: id } });
   }
 
-  email(intakeFormId: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
+  view(id: string) {
+    this.router.navigate(['intake-document/', id]);
+  }
+
+  email(id: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: id } });
   }
 
 }
