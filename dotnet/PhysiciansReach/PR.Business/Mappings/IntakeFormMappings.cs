@@ -21,7 +21,8 @@ namespace PR.Business.Mappings
                 Status = entity.Status,
                 Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn
+                ModifiedOn = entity.ModifiedOn,
+                AdditionalDrNotes = entity.AdditionalDrNotes
             };
 
             return model;
@@ -48,6 +49,7 @@ namespace PR.Business.Mappings
             entity.IntakeFormType = model.IntakeFormType;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
+            entity.AdditionalDrNotes = model.AdditionalDrNotes;
 
             entity.ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList();
             entity.HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList();
@@ -74,7 +76,8 @@ namespace PR.Business.Mappings
                 ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList(),
                 HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList(),
                 Questions = model.Questions?.Select(x => x.ToEntity(default(int))).ToList(),
-                Status = model.Status
+                Status = model.Status,
+                AdditionalDrNotes = model.AdditionalDrNotes
             };
         }
 

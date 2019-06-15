@@ -1,6 +1,7 @@
 ﻿using PR.Constants.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PR.Data.Models
 {
@@ -38,6 +39,9 @@ namespace PR.Data.Models
 
         public Patient Patient { get; set; }
 
-        public Physician Physician { get; set; }
+        public Physician Physician { get; set; }    
+
+        [MaxLength(500)]
+        public string AdditionalDrNotes { get; set; }
     }
 }

@@ -34,7 +34,7 @@ export class IntakeComponent implements OnInit {
     this.form = new FormGroup({
       diagnosis_other: new FormControl(''),
       lcode_other: new FormControl(''),
-      additional_notes: new FormControl(''),
+      additional_notes: new FormControl('', Validators.maxLength(500)),
       productDuration: new FormControl('', Validators.required),
       signature: new FormControl(['', Validators.required])
     });

@@ -53,7 +53,9 @@
         HCPCSDescription = 44, //Not used in the doc?
         HCPCSDuration = 45,
         ICDCode = 46, //M, L codes
-        ICDDescription = 47 //Diagnosis
+        ICDDescription = 47, //Diagnosis
+        DrNotes1 = 48,
+        DrNotes2 = 49
 
     }
 }
