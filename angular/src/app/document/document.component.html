@@ -4,6 +4,6 @@
 </app-intake>
 
 <app-prescription *ngIf="intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
-  [product]="product" [diagnosis]="diagnosisOptions" [lcodes]="lcodeOptions" [isAdminView]="isAdminView"
-  (formSubmitEvent)="onPrescriptionApproval($event)">
+  [product]="product" [diagnosis]="intakeFormData.diagnosisSelections" [lcodes]="intakeFormData.lcodeSelections"
+  [isAdminView]="isAdminView" (formSubmitEvent)="onPrescriptionApproval($event)">
 </app-prescription>

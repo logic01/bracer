@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatTable } from '@angular/material';
+import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -27,15 +27,17 @@ export class TableRow {
 })
 export class ViewVendorComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatTable) table: MatTable<TableRow>;
+  @ViewChild(MatSort) sort: MatSort;
+
+  public datasource: MatTableDataSource<TableRow>;
 
   public vendor$: Observable<Vendor>;
   public physicians$: Observable<Physician[]>;
   public intake$: Observable<IntakeForm[]>;
 
-  public data: TableRow[] = [];
   public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'actions'];
 
+  private vendorId: string;
   private unsubscribe$ = new Subject();
 
   constructor(
@@ -49,11 +51,11 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    const vendorId = this.route.snapshot.paramMap.get('id');
+    this.vendorId = this.route.snapshot.paramMap.get('id');
 
-    this.vendor$ = this.vendorApi.get(vendorId);
+    this.vendor$ = this.vendorApi.get(this.vendorId);
     this.physicians$ = this.physicianApi.getAll();
-    this.intake$ = this.intakeApi.getByVendor(vendorId);
+    this.intake$ = this.intakeApi.getByVendor(this.vendorId);
 
     forkJoin([this.intake$, this.physicians$])
       .pipe(
@@ -63,6 +65,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
           const intakeForms = responses[0];
           const physicians = responses[1];
 
+          const data: TableRow[] = [];
           intakeForms.forEach((intake: IntakeForm) => {
 
             const row = new TableRow();
@@ -70,10 +73,11 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
             row.status = intake.status;
             row.physicianName = this.getPhysicianName(intake.physicianId, physicians);
             row.physicianState = this.getPhysicianState(intake.physicianId, physicians);
-            this.data.push(row);
+            data.push(row);
           });
 
-          this.table.renderRows();
+          this.datasource = new MatTableDataSource(data);
+          this.datasource.sort = this.sort;
         }))
       .subscribe();
 
@@ -105,16 +109,16 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  assign(id: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: id } });
+  assign(intakeFormId: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
   }
 
-  view(id: string) {
-    this.router.navigate(['intake-document/', id]);
+  view(intakeFormId: string) {
+    this.router.navigate(['vendor', this.vendorId, 'intake-document', intakeFormId]);
   }
 
-  email(id: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: id } });
+  email(documentId: string): void {
+    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: documentId } });
   }
 
 }

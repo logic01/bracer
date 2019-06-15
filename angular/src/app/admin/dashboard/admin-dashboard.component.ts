@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material';
+import { Observable } from 'rxjs';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -7,9 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardComponent implements OnInit {
 
-  constructor() { }
+  public lastTabIndex$: Observable<number> = this.session.lastTabIndex$;
+
+  constructor(private readonly session: SessionService) { }
 
   ngOnInit() {
+
+  }
+
+  public onTabChange(event: MatTabChangeEvent) {
+    this.session.lastTabIndex$.next(event.index);
   }
 
 }

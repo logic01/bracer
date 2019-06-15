@@ -7,6 +7,7 @@
         <div fxLayout="row">
             <h5 class="subtext">Connecting Patients with Doctors</h5>
             <div *ngIf="loggedIn$ | async" fxLayoutAlign="end end" style="width:85%">
+                <button mat-button color="primary" class="menu-button" (click)="home()">Home</button>
                 <button mat-button color="primary" class="menu-button" (click)="singOutClick()">Sign Out</button>
             </div>
         </div>

@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/Agent.model';
 import { AgentService } from 'src/app/services/api/agent.service';
@@ -15,11 +14,12 @@ import { AgentService } from 'src/app/services/api/agent.service';
 })
 export class AgentListComponent implements OnInit, OnDestroy {
 
+  @ViewChild(MatSort) sort: MatSort;
+
   private unsubscribe$ = new Subject();
 
+  public datasource: MatTableDataSource<Agent>;
   public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'edit'];
-
-  public data: Agent[];
 
   constructor(
     private readonly agentApi: AgentService,
@@ -29,8 +29,9 @@ export class AgentListComponent implements OnInit, OnDestroy {
     this.agentApi
       .getAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((physicianList: Agent[]) => {
-        this.data = physicianList;
+      .subscribe((agent: Agent[]) => {
+        this.datasource = new MatTableDataSource(agent);
+        this.datasource.sort = this.sort;
       });
   }
 

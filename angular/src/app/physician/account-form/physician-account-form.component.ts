@@ -30,8 +30,8 @@ export class PhysicianAccountFormComponent implements OnInit {
   ngOnInit() {
     this.accountForm = new FormGroup({
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
-      confirmationPassword: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      password: new FormControl('', [CustomValidators.password(6, 20)]),
+      confirmationPassword: new FormControl('', [CustomValidators.password(6, 20)]),
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
@@ -57,14 +57,25 @@ export class PhysicianAccountFormComponent implements OnInit {
       CustomValidators.equal(this.accountForm.get('password'))
     ]);
 
-    // populate form if we have a physician bound to the form
     if (this.physician$) {
+      // populate form for editing the physician
       this.physician$.subscribe((result: Physician) => {
         this.accountForm.patchValue(result);
         this.accountForm.patchValue(result.userAccount);
         this.accountForm.patchValue(result.address);
       });
+    } else {
+      // require a password for creating a physician
+      this.accountForm.get('password').validator = Validators.compose([
+        this.accountForm.get('password').validator, Validators.required
+      ]);
+
+      this.accountForm.get('confirmationPassword').validator = Validators.compose([
+        this.accountForm.get('confirmationPassword').validator, Validators.required
+      ]);
+
     }
+
   }
 
   onSubmit() {

@@ -10,6 +10,7 @@ import { IntakeFormService } from '../services/api/intake-form.service';
 import { PatientService } from '../services/api/patient.service';
 import { PhysicianService } from '../services/api/physician.service';
 import { SessionService } from '../services/session.service';
+import { IntakeFormData } from './intake/intake.component';
 
 @Component({
   selector: 'app-document',
@@ -19,6 +20,7 @@ import { SessionService } from '../services/session.service';
 export class DocumentComponent implements OnInit {
 
   private intakeFormId: string;
+  private vendorId: string;
 
   public isAdminView = false;
 
@@ -34,6 +36,8 @@ export class DocumentComponent implements OnInit {
 
   public intakeApproved = false;
 
+  public intakeFormData: IntakeFormData;
+
   constructor(
     private readonly session: SessionService,
     private readonly patientApi: PatientService,
@@ -46,7 +50,12 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
 
     this.session.userAccount$.subscribe(u => this.isAdminView = (u.type === AccountType.Admin));
-    this.intakeFormId = this.route.snapshot.paramMap.get('id');
+
+    this.intakeFormId = this.route.snapshot.paramMap.get('intakeFormId');
+
+    if (this.route.snapshot.paramMap.has('vendorId')) {
+      this.vendorId = this.route.snapshot.paramMap.get('vendorId');
+    }
 
     this.intakeFormApi.get(this.intakeFormId).subscribe((intake: IntakeForm) => {
 
@@ -74,13 +83,22 @@ export class DocumentComponent implements OnInit {
 
   }
 
-  onIntakeApproval() {
+  onIntakeApproval(data: IntakeFormData) {
+
+    if (data) {
+      this.intakeFormData = data;
+    } else {
+      // just set it to the default so the next page will display everything
+      this.intakeFormData = new IntakeFormData();
+      this.intakeFormData.diagnosisSelections = this.diagnosisOptions;
+      this.intakeFormData.lcodeSelections = this.lcodeOptions;
+    }
     this.intakeApproved = true;
   }
 
   onPrescriptionApproval() {
     if (this.isAdminView) {
-      this.router.navigate([RouteUrls.AdminDashboardComponent]);
+      this.router.navigate(['vendor', this.vendorId, 'view']);
     } else {
       this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
     }

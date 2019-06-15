@@ -21,7 +21,6 @@ export class PrescriptionComponent implements OnInit {
   @Input() product: string;
   @Input() diagnosis: string[] = [];
   @Input() lcodes: string[] = [];
-  @Input() duration: string;
 
   @Output() formSubmitEvent = new EventEmitter<string>();
 
@@ -31,6 +30,7 @@ export class PrescriptionComponent implements OnInit {
   constructor(private readonly dialog: MatDialog) { }
 
   ngOnInit() {
+    window.scrollTo(0, 0);
   }
 
   getLCodes() {

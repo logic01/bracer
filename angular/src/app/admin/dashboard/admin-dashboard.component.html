@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center start">
   <div fxLayout="column" fxLayoutGap="10px">
 
-    <mat-tab-group>
+    <mat-tab-group [selectedIndex]="lastTabIndex$ | async" (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Admins">
         <div fxLayout="row" fxLayoutAlign="center start">
           <p>

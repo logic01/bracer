@@ -18,11 +18,10 @@ export class PhysicianDashboardComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  columnsToDisplay = ['intakeFormId', 'status', 'view', 'download'];
-
-  dataSource: MatTableDataSource<IntakeForm>;
-
   private unsubscribe$ = new Subject();
+
+  public dataSource: MatTableDataSource<IntakeForm>;
+  public columnsToDisplay = ['intakeFormId', 'status', 'view', 'download'];
 
   constructor(
     private readonly router: Router,
@@ -30,7 +29,6 @@ export class PhysicianDashboardComponent implements OnInit {
     private readonly intakeFormApi: IntakeFormService) { }
 
   ngOnInit() {
-
 
     this.session.userAccount$.subscribe((account: UserAccount) => {
 

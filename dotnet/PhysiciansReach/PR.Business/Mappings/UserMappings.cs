@@ -52,8 +52,8 @@ namespace PR.Business.Mappings
         /// <returns></returns>
         public static void MapFromModel(this UserAccount entity, UserAccountModel model)
         {
-            //TODO Is this code needed?
-            if (model.Password != string.Empty)
+            //required for when account is edited and no password is supplied
+            if (!string.IsNullOrWhiteSpace(model.Password))
             {
                 var hash = new PasswordHash(model.Password);
                 var hashBytes = hash.ToArray();

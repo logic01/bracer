@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Admin } from 'src/app/models/admin.model';
 import { AdminService } from 'src/app/services/api/admin.service';
@@ -15,11 +14,12 @@ import { AdminService } from 'src/app/services/api/admin.service';
 })
 export class AdminListComponent implements OnInit, OnDestroy {
 
+  @ViewChild(MatSort) sort: MatSort;
+
   private unsubscribe$ = new Subject();
 
+  public datasource: MatTableDataSource<Admin>;
   public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'edit'];
-
-  public data: Admin[];
 
   constructor(
     private readonly adminApi: AdminService,
@@ -29,8 +29,9 @@ export class AdminListComponent implements OnInit, OnDestroy {
     this.adminApi
       .getAll()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((physicianList: Admin[]) => {
-        this.data = physicianList;
+      .subscribe((admins: Admin[]) => {
+        this.datasource = new MatTableDataSource(admins);
+        this.datasource.sort = this.sort;
       });
   }
 

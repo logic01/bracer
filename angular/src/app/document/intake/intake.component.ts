@@ -6,6 +6,14 @@ import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 
+export class IntakeFormData {
+  signature: string;
+  diagnosisSelections: string[];
+  lcodeSelections: string[];
+  duration: string;
+  notes: string;
+}
+
 @Component({
   selector: 'app-intake',
   templateUrl: './intake.component.html',
@@ -21,7 +29,7 @@ export class IntakeComponent implements OnInit {
   @Input() diagnosisOptions: string[] = [];
   @Input() lcodeOptions: string[] = [];
 
-  @Output() formSubmitEvent = new EventEmitter<string>();
+  @Output() formSubmitEvent = new EventEmitter<IntakeFormData | null>();
 
   public form: FormGroup;
   public today = Date.now();
@@ -95,7 +103,25 @@ export class IntakeComponent implements OnInit {
       return;
     }
 
-    this.formSubmitEvent.emit(this.signatureData);
+    const diagnosis_other = this.form.controls['diagnosis_other'].value;
+    if (diagnosis_other) {
+      this.diagnosisSelections.push(diagnosis_other);
+    }
+
+    const lcode_other = this.form.controls['lcode_other'].value;
+    if (lcode_other) {
+      this.diagnosisSelections.push(lcode_other);
+    }
+
+    const data = new IntakeFormData();
+
+    data.signature = this.signatureData;
+    data.diagnosisSelections = this.diagnosisSelections;
+    data.lcodeSelections = this.lcodeSelections;
+    data.notes = this.form.controls['additional_notes'].value;
+    data.duration = this.form.controls['productDuration'].value;
+
+    this.formSubmitEvent.emit(data);
   }
 
   next() {

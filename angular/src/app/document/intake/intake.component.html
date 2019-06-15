@@ -1,4 +1,4 @@
-<div style="background-color: lightgray" *ngIf="patient && intakeForm && physician">
+<div style="background-color: lightgray" *ngIf="patient && intakeForm">
 
   <div class="intake-content">
     <form [formGroup]="form" novalidate (ngSubmit)="approve()" fxLayout="column" fxLayoutGap="20px">
