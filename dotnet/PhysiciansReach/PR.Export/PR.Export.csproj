@@ -9,6 +9,7 @@
     <None Remove="Documents\BLANK_EXAM_NOTE_ONLY.docx" />
     <None Remove="Documents\BLANK_PATIENT.docx" />
     <None Remove="Documents\BLANK_PATIENT_IMAGE.docx" />
+    <None Remove="Documents\~%24ANK_EXAM_NOTE.docx" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace PR.Export.Tests.BusinessTests
 {
+    [TestClass]
     public class DocumentTests : IntegrationTestsBase
     {
         [TestMethod]

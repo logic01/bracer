@@ -58,8 +58,8 @@ namespace PR.Export.Tests.BusinessTests
                 UserAccount = new UserAccountModel
                 {
                     Type = Constants.Enums.AccountType.Admin,
-                    UserName = "admin02",
-                    EmailAddress = "admin02@test.com",
+                    UserName = "admin09",
+                    EmailAddress = "admin09@test.com",
                     Password = "P@ssword1",
                     ConfirmationPassword = "P@ssword1",
                     Active = true
@@ -84,8 +84,8 @@ namespace PR.Export.Tests.BusinessTests
                 UserAccount = new UserAccountModel
                 {
                     Type = Constants.Enums.AccountType.Physician,
-                    EmailAddress = "phy01@test.com",
-                    UserName = "phy01",
+                    EmailAddress = "phy09@test.com",
+                    UserName = "phy09",
                     Password = "P@ssword1",
                     ConfirmationPassword = "P@ssword1",
                     Active = true

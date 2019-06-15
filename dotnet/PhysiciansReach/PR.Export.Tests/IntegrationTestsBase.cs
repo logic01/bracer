@@ -13,8 +13,8 @@ namespace PR.Export.Tests
         protected readonly DataContext dbContext;
         public IntegrationTestsBase()
         {
-            //var conn = "Data Source=DESKTOP-FD8N113\\sqlexpress;Initial Catalog=PhysicansReach;Integrated Security=True";
-            var conn = "Server=(localdb)\\mssqllocaldb;Database=PhysiciansReach;Trusted_Connection=True;ConnectRetryCount=0";
+            var conn = "Data Source=DESKTOP-FD8N113\\sqlexpress;Initial Catalog=PhysicansReach;Integrated Security=True";
+            //var conn = "Server=(localdb)\\mssqllocaldb;Database=PhysiciansReach;Trusted_Connection=True;ConnectRetryCount=0";
             dbContext = new Data.Models.DataContext(conn);
         }
 
@@ -62,7 +62,8 @@ namespace PR.Export.Tests
                 HCPCSs = CreateHCPCSs(),
                 Physician = CreatePhysician(),
                 Signature = signature,
-                Status = Constants.Enums.IntakeFormStatus.New
+                Status = Constants.Enums.IntakeFormStatus.New,
+                AdditionalDrNotes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi blandit cursus risus at ultrices. Enim nunc faucibus a pellentesque sit amet porttitor eget dolor. Tincidunt dui ut ornare lectus sit amet est. Laoreet sit amet cursus sit amet dictum. Dignissim cras tincidunt lobortis feugiat vivamus at. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing"
             };
         }
 

@@ -28,5 +28,7 @@ namespace PR.Models
 
         public List<QuestionModel> Questions { get; set; }
 
+        public string AdditionalDrNotes { get; set; }
+
     }
 }

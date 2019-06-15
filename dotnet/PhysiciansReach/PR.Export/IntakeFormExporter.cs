@@ -36,9 +36,11 @@ namespace PR.Export
 
                 // Create and add the character style with the style id, style name, and
                 // aliases specified.
-                var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);               
+                var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
 
-                // Replace the images with the Signature file
+                // Replace the images with the Signature file. There are 2 signature images
+                // that are replaced in order. If there are multiple signatures you can
+                // place them below
                 var imageCount = 0;
                 foreach (var imagePart in doc.MainDocumentPart.ImageParts)
                 {
@@ -99,7 +101,7 @@ namespace PR.Export
             intakeFromKeys.AddRange(GetAllCodes(intakeForm));
             intakeFromKeys.AddRange(GetPhysicanKeys(physician));
             intakeFromKeys.AddRange(GetSignature(signature));
-
+            intakeFromKeys.AddRange(GetDrNotes(intakeForm.AdditionalDrNotes ?? ""));
 
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
@@ -112,7 +114,7 @@ namespace PR.Export
                 {
                     //If a key doesn't exist, you could see an empty value stuffed into the word doc
                     var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString()).Value ?? "N/A";
-                    item.VTLPWSTR = new VTLPWSTR(val);                    
+                    item.VTLPWSTR = new VTLPWSTR(val);
                 }
             }
 
@@ -256,7 +258,7 @@ namespace PR.Export
             var kvps = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
-                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCS)), 
+                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCS)),
                 new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCS?.FirstOrDefault()?.Product  ?? "N/A"),
                 new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCS)),
                 new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
@@ -265,6 +267,23 @@ namespace PR.Export
             };
             return kvps;
         }
+
+        /// <summary>
+        /// Not sure how the additional notes are being persisted, but calling it via this method will load 
+        /// it into the doc
+        /// </summary>
+        /// <param name="additionalNotes"></param>
+        /// <returns></returns>
+        private List<KeyValuePair<string, string>> GetDrNotes(string additionalNotes)
+        {
+            var kvps = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>(MappingEnums.DrNotes1.ToString(), additionalNotes) };
+            var secondPart =
+            additionalNotes.Length > 255 ? additionalNotes.Substring(254, additionalNotes.Length - 254) : "";
+            kvps.Add(new KeyValuePair<string, string>(MappingEnums.DrNotes2.ToString(), secondPart));
+            return kvps;
+        }
+
 
         /// <summary>
         /// The diagnosis will be formed by creating comma delimited list of ICD10.Code and ICD10.description
@@ -285,7 +304,7 @@ namespace PR.Export
         /// <returns></returns>
         private string GetOrthoPrescribed(List<HCPCSModel> hCPCs)
         {
-            return  string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+            return string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
         }
 
         /// <summary>
@@ -297,13 +316,13 @@ namespace PR.Export
         private string GetOrthoPrescribedAfter255(List<HCPCSModel> hCPCs)
         {
             var prescribed = string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
-            if(prescribed.Length > 255)
+            if (prescribed.Length > 255)
             {
                 return prescribed.Substring(254, prescribed.Length - 254);
             }
             return "";
         }
-         
+
         /// <summary>
         /// The signature information IP and Signature date are signed
         /// </summary>
@@ -315,7 +334,7 @@ namespace PR.Export
             {
                 new KeyValuePair<string, string>(MappingEnums.IP.ToString(), signature?.IpAddress  ?? "N/A"),
                 //Format - Wednesday, April 03, 2019 11:58:52 PM
-                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")                
+                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")
             };
             return kvps;
         }
