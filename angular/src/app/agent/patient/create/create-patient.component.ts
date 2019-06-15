@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatRadioChange } from '@angular/material';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatRadioChange, MatRadioGroup, MatSelect } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -32,10 +32,29 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   shoeSizes: number[] = SelectValueService.shoeSizes;
   heights: string[] = SelectValueService.heights;
 
+  submitted = false;
   privateInsurance: boolean;
   medicareInsurance: boolean;
   bothInsurance: boolean;
   selectedInsurance: string;
+  @ViewChild('genderC') genderField: MatRadioGroup;
+  @ViewChild('firstC') firstNameField: ElementRef;
+  @ViewChild('lastC') lastNameField: ElementRef;
+  @ViewChild('dobC') dobField: ElementRef;
+  @ViewChild('phoneC') phoneField: ElementRef;
+  @ViewChild('heightC') heightField: MatSelect;
+  @ViewChild('weightC') weightField: ElementRef;
+  @ViewChild('waistC') waistField: ElementRef;
+  @ViewChild('shoeC') shoeField: MatSelect;
+  @ViewChild('addressC') addressField: ElementRef;
+  @ViewChild('cityC') cityField: ElementRef;
+  @ViewChild('stateC') stateField: ElementRef;
+  @ViewChild('zipC') zipField: ElementRef;
+  @ViewChild('callbackC') callbackField: MatSelect;
+  @ViewChild('pharmacyC') pharmacyField: MatSelect;
+  @ViewChild('therapyC') therapyField: MatSelect;
+  @ViewChild('insuranceC') insuranceField: MatRadioGroup;
+
 
   constructor(
     private readonly session: SessionService,
@@ -51,27 +70,26 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     this.session.userAccount$.subscribe((result: UserAccount) => {
       this.agentId = result.userAccountId;
     });
-
     this.form = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       middleName: new FormControl('', Validators.maxLength(100)),
       lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       dateOfBirth: new FormControl('', [Validators.required]),
       phoneNumber: new FormControl('', [Validators.required, CustomValidators.phonenumber]),
+      height: new FormControl('', [Validators.required, Validators.maxLength(6)]),
+      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
+      waist: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
+      shoes: new FormControl('', [Validators.required, Validators.maxLength(4)]),
       addressLineOne: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.maxLength(30)]),
       state: new FormControl('', Validators.required),
       zip: new FormControl('', [Validators.required, Validators.maxLength(10), CustomValidators.zip]),
-      sex: new FormControl('', Validators.required),
+      sex: new FormControl('Male', Validators.required),
       language: new FormControl('English', Validators.required),
       callBackImmediately: new FormControl(false, Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
-      allergies: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-      shoes: new FormControl('', [Validators.required, Validators.maxLength(4)]),
-      height: new FormControl('', [Validators.required, Validators.maxLength(6)]),
-      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
-      waist: new FormControl('', [Validators.required, CustomValidators.onlyNumeric, Validators.maxLength(3)]),
+      allergies: new FormControl('', [Validators.maxLength(500)]),
 
       pharmacy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       medications: new FormControl('', Validators.maxLength(100)),
@@ -104,6 +122,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       secondarySubscriberNumber: new FormControl('', Validators.maxLength(100)),
       insuranceType: new FormControl('', Validators.required)
     });
+    
   }
 
   ngOnDestroy(): void {
@@ -111,8 +130,9 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
+    this.submitted = true;
     if (!this.form.valid) {
+      this.focusOnErrorElement();
       return;
     }
 
@@ -214,4 +234,67 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     this.bothInsurance = event.value === 'BOTH';
   }
 
+  focusOnErrorElement() {
+    // tslint:disable-next-line: forin
+    for (const field in this.form.controls) {
+      const control: AbstractControl = this.form.get(field);
+
+      if (control.errors != null) {
+        switch (field) {
+          case 'gender':
+            this.genderField._radios[0].focus();
+            return;
+          case 'firstName':
+            this.firstNameField.nativeElement.focus();
+            return;
+          case 'lastName':
+            this.lastNameField.nativeElement.focus();
+            return;
+          case 'dateOfBirth':
+            this.dobField.nativeElement.focus();
+            return;
+          case 'phoneNumber':
+            this.phoneField.nativeElement.focus();
+            return;
+          case 'height':
+            this.heightField.focus();
+            return;
+          case 'weight':
+            this.weightField.nativeElement.focus();
+            return;
+          case 'waist':
+            this.waistField.nativeElement.focus();
+            return;
+          case 'shoes':
+            this.shoeField.focus();
+            return;
+          case 'addressLineOne':
+            this.addressField.nativeElement.focus();
+            return;
+          case 'city':
+            this.cityField.nativeElement.focus();
+            return;
+          case 'state':
+            this.stateField.nativeElement.focus();
+            return;
+          case 'zip':
+            this.zipField.nativeElement.focus();
+            return;
+          case 'bestTimeToCallBack':
+            this.callbackField.focus();
+            return;
+          case 'pharmacy':
+            this.pharmacyField.focus();
+            return;
+          case 'therapy':
+            this.therapyField.focus();
+            return;
+          case 'insuranceType':
+            this.insuranceField._radios[0].focus();
+            return;
+
+        }
+      }
+    }
+  }
 }
