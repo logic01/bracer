@@ -7,8 +7,10 @@ export class IntakeForm {
     public patientId: string;
     public physicianId: string;
     public intakeFormType: IntakeFormType;
-    public ICD10: string;
-    public HCPCS: string;
+    public ICD10Codes: string[];
+    public HCPCSCodes: string[];
+    public duration: string;
+    public physicianNotes: string;
     public status: IntakeStatus;
     public createdOn: string;
     public modifiedOn: string;

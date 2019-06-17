@@ -1,5 +1,4 @@
-﻿using PR.Constants.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace PR.Models
@@ -12,13 +11,15 @@ namespace PR.Models
 
         public int? PhysicianId { get; set; }
 
-        public int? SignatureId { get; set; }
-
         public IntakeFormType IntakeFormType { get; set; }
 
-        public List<ICD10Model> ICD10 { get; set; }
+        public List<string> ICD10Codes { get; set; }
 
-        public List<HCPCSModel> HCPCS { get; set; }
+        public List<string> HCPCSCodes { get; set; }
+
+        public string Duration { get; set; }
+
+        public string PhysicianNotes { get; set; }
 
         public IntakeFormStatus Status { get; set; }
 

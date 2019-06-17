@@ -6,11 +6,12 @@ import { AccountType } from '../models/enums/account-type.enum';
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
 import { Physician } from '../models/physician.model';
+import { Signature } from '../models/signature.model';
 import { IntakeFormService } from '../services/api/intake-form.service';
 import { PatientService } from '../services/api/patient.service';
 import { PhysicianService } from '../services/api/physician.service';
+import { SignatureService } from '../services/api/signature.service';
 import { SessionService } from '../services/session.service';
-import { IntakeFormData } from './intake/intake.component';
 
 @Component({
   selector: 'app-document',
@@ -31,18 +32,17 @@ export class DocumentComponent implements OnInit {
   public diagnosisOptions: string[] = [];
   public lcodeOptions: string[] = [];
 
-  public lcodeText: string[] = [];
-  public diagnosis: string[] = [];
+  private intakeSignature: Signature;
+  private prescriptionSignature: Signature;
 
   public intakeApproved = false;
-
-  public intakeFormData: IntakeFormData;
 
   constructor(
     private readonly session: SessionService,
     private readonly patientApi: PatientService,
     private readonly physicianApi: PhysicianService,
     private readonly intakeFormApi: IntakeFormService,
+    private readonly signatureApi: SignatureService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
   }
@@ -83,27 +83,32 @@ export class DocumentComponent implements OnInit {
 
   }
 
-  onIntakeApproval(data: IntakeFormData) {
+  onIntakeApproval(data: { intakeForm: IntakeForm, signature: Signature }) {
 
     if (data) {
-      this.intakeFormData = data;
+      this.intakeForm = data.intakeForm;
+      this.intakeSignature = data.signature;
     } else {
-      // just set it to the default so the next page will display everything
-      this.intakeFormData = new IntakeFormData();
-      this.intakeFormData.diagnosisSelections = this.diagnosisOptions;
-      this.intakeFormData.lcodeSelections = this.lcodeOptions;
+      // set these to the defaults so the next page will display everything
+      this.intakeForm.ICD10Codes = this.diagnosisOptions;
+      this.intakeForm.HCPCSCodes = this.lcodeOptions;
+      this.intakeForm.duration = '';
     }
     this.intakeApproved = true;
   }
 
-  onPrescriptionApproval() {
+  onPrescriptionApproval(signature: Signature) {
     if (this.isAdminView) {
       this.router.navigate(['vendor', this.vendorId, 'view']);
     } else {
+      this.prescriptionSignature = signature;
+      this.intakeFormApi.put(this.intakeFormId, this.intakeForm).subscribe(() => { });
+      this.signatureApi.put(this.intakeFormId, this.intakeSignature);
+      this.signatureApi.put(this.intakeFormId, this.prescriptionSignature);
+
       this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
     }
   }
-
 
   private setDiagnosis(key: string) {
 

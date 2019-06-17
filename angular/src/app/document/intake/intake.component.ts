@@ -1,18 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
+
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
+import { SignatureType } from 'src/app/models/enums/signature-type';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
-
-export class IntakeFormData {
-  signature: string;
-  diagnosisSelections: string[];
-  lcodeSelections: string[];
-  duration: string;
-  notes: string;
-}
+import { Signature } from 'src/app/models/signature.model';
 
 @Component({
   selector: 'app-intake',
@@ -29,7 +24,7 @@ export class IntakeComponent implements OnInit {
   @Input() diagnosisOptions: string[] = [];
   @Input() lcodeOptions: string[] = [];
 
-  @Output() formSubmitEvent = new EventEmitter<IntakeFormData | null>();
+  @Output() formSubmitEvent = new EventEmitter<{ intakeForm: IntakeForm, signature: Signature } | null>();
 
   public form: FormGroup;
   public today = Date.now();
@@ -113,15 +108,16 @@ export class IntakeComponent implements OnInit {
       this.diagnosisSelections.push(lcode_other);
     }
 
-    const data = new IntakeFormData();
+    this.intakeForm.ICD10Codes = this.diagnosisSelections;
+    this.intakeForm.HCPCSCodes = this.lcodeSelections;
+    this.intakeForm.duration = this.form.controls['productDuration'].value;
+    this.intakeForm.physicianNotes = this.form.controls['additional_notes'].value;
 
-    data.signature = this.signatureData;
-    data.diagnosisSelections = this.diagnosisSelections;
-    data.lcodeSelections = this.lcodeSelections;
-    data.notes = this.form.controls['additional_notes'].value;
-    data.duration = this.form.controls['productDuration'].value;
+    const signature = new Signature();
+    signature.content = this.signatureData;
+    signature.type = SignatureType.IntakeDocument;
 
-    this.formSubmitEvent.emit(data);
+    this.formSubmitEvent.emit({ intakeForm: this.intakeForm, signature: signature });
   }
 
   next() {

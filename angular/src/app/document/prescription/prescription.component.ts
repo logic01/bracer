@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
-
-import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
+import { Signature } from 'src/app/models/signature.model';
 
 @Component({
   selector: 'app-prescription',
@@ -17,15 +18,12 @@ export class PrescriptionComponent implements OnInit {
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
-
   @Input() product: string;
-  @Input() diagnosis: string[] = [];
-  @Input() lcodes: string[] = [];
 
-  @Output() formSubmitEvent = new EventEmitter<string>();
+  @Output() formSubmitEvent = new EventEmitter<Signature>();
 
   public today = Date.now();
-  public signatureData: string;
+  public signature = new Signature();
 
   constructor(private readonly dialog: MatDialog) { }
 
@@ -35,7 +33,7 @@ export class PrescriptionComponent implements OnInit {
 
   getLCodes() {
     let text = '';
-    for (const lcodeText of this.lcodes) {
+    for (const lcodeText of this.intakeForm.HCPCSCodes) {
       text += lcodeText;
     }
 
@@ -54,7 +52,6 @@ export class PrescriptionComponent implements OnInit {
     }
 
     return text;
-
   }
 
   calcAge(): number {
@@ -63,16 +60,15 @@ export class PrescriptionComponent implements OnInit {
     return age;
   }
 
-
   sign() {
     this.dialog
       .open(SignatureDialogComponent)
       .afterClosed()
-      .subscribe(result => this.signatureData = result);
+      .subscribe(result => this.signature.content = result);
   }
 
   approve() {
-    this.formSubmitEvent.emit(this.signatureData);
+    this.formSubmitEvent.emit(this.signature);
   }
 
   next() {
