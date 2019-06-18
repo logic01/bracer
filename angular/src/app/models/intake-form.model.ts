@@ -1,18 +1,20 @@
 import { IntakeFormType } from './enums/intake-form-type.enum';
 import { IntakeStatus } from './enums/intake-status.enum';
+import { HCPCSCode } from './hcpcs-code.model';
+import { ICD10Code } from './icd10-code.model';
 import { Question } from './question.model';
 
 export class IntakeForm {
     public intakeFormId: string;
     public patientId: string;
     public physicianId: string;
+    public status: IntakeStatus;
     public intakeFormType: IntakeFormType;
-    public ICD10Codes: string[];
-    public HCPCSCodes: string[];
+    public questions: Question[];
+    public ICD10Codes: ICD10Code[];
+    public HCPCSCodes: HCPCSCode[];
     public duration: string;
     public physicianNotes: string;
-    public status: IntakeStatus;
     public createdOn: string;
     public modifiedOn: string;
-    public questions: Question[];
 }
