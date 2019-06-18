@@ -28,11 +28,11 @@ namespace PR.Export
         /// <returns></returns>
         public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician, List<IntakeFormModel> allIntakeForms)
         {
-            var examNoteMemoryStream = LoadMemoryStream();
+            MemoryStream examNoteMemoryStream = LoadMemoryStream();
 
             using (var doc = WordprocessingDocument.Open(examNoteMemoryStream, true))
             {
-                var docBody = doc.MainDocumentPart.Document.Body;
+                Body docBody = doc.MainDocumentPart.Document.Body;
 
                 // Create and add the character style with the style id, style name, and
                 // aliases specified.
@@ -42,10 +42,13 @@ namespace PR.Export
                 // that are replaced in order. If there are multiple signatures you can
                 // place them below
                 var imageCount = 0;
-                foreach (var imagePart in doc.MainDocumentPart.ImageParts)
+                foreach (ImagePart imagePart in doc.MainDocumentPart.ImageParts)
                 {
                     if (++imageCount < 2) //The first 2 images are the signature spot
+                    {
                         continue;
+                    }
+
                     var newImageBytes = signature.ContentBytes;
 
                     using (var writer = new BinaryWriter(imagePart.GetStream()))
@@ -55,14 +58,14 @@ namespace PR.Export
                 }
 
                 // Populate the Questionaire form with all intake forms
-                foreach (var questionaireIntakeForm in allIntakeForms)
+                foreach (IntakeFormModel questionaireIntakeForm in allIntakeForms)
                 {
                     // Create title and add the subsequent question answers for the questionaire
                     AppendTitleForIntakeForm(doc, docBody, questionaireIntakeForm);
 
 
                     var count = 1;
-                    foreach (var question in questionaireIntakeForm.Questions)
+                    foreach (QuestionModel question in questionaireIntakeForm.Questions)
                     {
                         count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
                     }
@@ -89,7 +92,7 @@ namespace PR.Export
         private void UpdateValuesInWordDocsCustomProperties(IntakeFormModel intakeForm, PatientModel patient, WordprocessingDocument doc, PhysicianModel physician, SignatureModel signature)
         {
             //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
-            var properties = doc.CustomFilePropertiesPart.Properties;
+            Properties properties = doc.CustomFilePropertiesPart.Properties;
 
             // Get all question's with a key, then gather the value as all answers comma delimited              
             var intakeFromKeys = intakeForm.Questions
@@ -108,7 +111,7 @@ namespace PR.Export
             //will need to approve the update for any fields.
             foreach (MappingEnums propertyEnum in Enum.GetValues(typeof(MappingEnums)))
             {
-                CustomDocumentProperty item = (CustomDocumentProperty)properties
+                var item = (CustomDocumentProperty)properties
                     .FirstOrDefault(x => ((CustomDocumentProperty)x).Name.Value.Equals(propertyEnum.ToString()));
                 if (item != null)
                 {
@@ -124,7 +127,7 @@ namespace PR.Export
             //however there is no way (that I have found) to programatically updated all of the fields
             //that are using the custom properties without requiring the downloader to 
             DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
-            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen
+            var updateFields = new UpdateFieldsOnOpen
             {
                 Val = new DocumentFormat.OpenXml.OnOffValue(true)
             };
@@ -141,7 +144,7 @@ namespace PR.Export
         private static string CreateIntakeFormAnswersCharStyle(WordprocessingDocument doc)
         {
             var answerFormatStyleId = "AnswerStyleChar";
-            Color grayText = new Color() { Val = "888888" };
+            var grayText = new Color() { Val = "888888" };
             Formatting.CreateAndAddCharacterStyle(doc,
                 answerFormatStyleId,
                 "Answer Style Char",
@@ -166,7 +169,7 @@ namespace PR.Export
             var answerText = string.Join(',', question.Answers.Select(x => x.Text == "" ? "Not Applicable" : x.Text));
             var questionText = $"{count++}. {question.Text} ";
             var answerParagraph = new Paragraph(new Run(new Text(questionText) { Space = SpaceProcessingModeValues.Preserve }));
-            var answerRun = answerParagraph.AppendChild<Run>(new Run(new Text(answerText) { Space = SpaceProcessingModeValues.Preserve }));
+            Run answerRun = answerParagraph.AppendChild<Run>(new Run(new Text(answerText) { Space = SpaceProcessingModeValues.Preserve }));
 
             // If the Run has no RunProperties object, create one.
             if (answerRun.Elements<RunProperties>().Count() == 0)
@@ -192,11 +195,11 @@ namespace PR.Export
         {
             docBody.AppendChild(new Paragraph());
 
-            var titleParagraph = CreateIntakeFormTitle(intakeForm.IntakeFormType);
+            Paragraph titleParagraph = CreateIntakeFormTitle(intakeForm.IntakeFormType);
             if (titleParagraph != null)
             {
                 Formatting.AddNewStyle(doc, "PRTitle1", "PRTitle", titleParagraph);
-                var paragraphProperties = titleParagraph.PrependChild(new ParagraphProperties());
+                ParagraphProperties paragraphProperties = titleParagraph.PrependChild(new ParagraphProperties());
                 docBody.AppendChild(titleParagraph);
             }
             docBody.AppendChild(new Paragraph());
@@ -257,13 +260,13 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
-                new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCS)),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCS?.FirstOrDefault()?.Product  ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCS)),
-                new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
-                new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10)),
-              //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
+                /*      new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCSCodes)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCSCodes?.FirstOrDefault()?.Product  ?? "N/A"),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCS)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
+                      new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10)),*/
+                //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
             };
             return kvps;
         }
@@ -291,9 +294,9 @@ namespace PR.Export
         /// </summary>
         /// <param name="icds"></param>
         /// <returns></returns>
-        private string GetDiagnosis(List<ICD10Model> icds)
+        private string GetDiagnosis(List<ICD10CodeModel> icds)
         {
-            return string.Join(", ", icds.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+            return string.Join(", ", icds.Select(x => x.Text)) ?? "N/A";
         }
 
         /// <summary>
@@ -302,9 +305,9 @@ namespace PR.Export
         /// </summary>
         /// <param name="icds"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribed(List<HCPCSModel> hCPCs)
+        private string GetOrthoPrescribed(List<HCPCSCodeModel> hCPCs)
         {
-            return string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+            return string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
         }
 
         /// <summary>
@@ -313,9 +316,9 @@ namespace PR.Export
         /// </summary>
         /// <param name="hCPCs"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribedAfter255(List<HCPCSModel> hCPCs)
+        private string GetOrthoPrescribedAfter255(List<HCPCSCodeModel> hCPCs)
         {
-            var prescribed = string.Join(" with ", hCPCs.Select(x => x.Code + " " + x.Description)) ?? "N/A";
+            var prescribed = string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
             if (prescribed.Length > 255)
             {
                 return prescribed.Substring(254, prescribed.Length - 254);
@@ -351,9 +354,9 @@ namespace PR.Export
         {
             var assembly = Assembly.GetAssembly(typeof(IntakeFormExporter));
             var memStream = new MemoryStream();
-            using (var stream = assembly.GetManifestResourceStream(ExamNote))
+            using (Stream stream = assembly.GetManifestResourceStream(ExamNote))
             {
-                byte[] buffer = new byte[16 * 1024];
+                var buffer = new byte[16 * 1024];
                 int read;
                 while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {

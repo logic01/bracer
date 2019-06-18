@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR.Constants.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace PR.Models
@@ -13,15 +14,15 @@ namespace PR.Models
 
         public IntakeFormType IntakeFormType { get; set; }
 
-        public List<string> ICD10Codes { get; set; }
+        public IntakeFormStatus Status { get; set; }
 
-        public List<string> HCPCSCodes { get; set; }
+        public List<ICD10CodeModel> ICD10Codes { get; set; }
+
+        public List<HCPCSCodeModel> HCPCSCodes { get; set; }
 
         public string Duration { get; set; }
 
         public string PhysicianNotes { get; set; }
-
-        public IntakeFormStatus Status { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

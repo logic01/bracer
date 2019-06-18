@@ -1,7 +1,6 @@
 ﻿using PR.Constants.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PR.Data.Models
 {
@@ -15,33 +14,31 @@ namespace PR.Data.Models
 
         public int? SignatureId { get; set; }
 
-       
-
         public int? DocumentId { get; set; }
 
         public IntakeFormType IntakeFormType { get; set; }
+
+        public IntakeFormStatus Status { get; set; }
+
+        public string AdditionalDrNotes { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 
-        public List<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
 
-        public List<ICD10> ICD10s { get; set; }
+        public ICollection<ICD10Code> ICD10Codes { get; set; }
 
-        public List<HCPCS> HCPCSs { get; set; }
+        public ICollection<HCPCSCode> HCPCSCodes { get; set; }
 
-        public Signature Signature { get; set; }
-
-        public IntakeFormStatus Status { get; set; }
+        public ICollection<Signature> Signatures { get; set; }
 
         public Document Document { get; set; }
 
         public Patient Patient { get; set; }
 
-        public Physician Physician { get; set; }    
+        public Physician Physician { get; set; }
 
-        [MaxLength(500)]
-        public string AdditionalDrNotes { get; set; }
     }
 }

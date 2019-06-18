@@ -19,7 +19,7 @@ export class PhysicianDashboardComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
-
+  private physicianId; string;
   public dataSource: MatTableDataSource<IntakeForm>;
   public columnsToDisplay = ['intakeFormId', 'status', 'view', 'download'];
 
@@ -31,6 +31,8 @@ export class PhysicianDashboardComponent implements OnInit {
   ngOnInit() {
 
     this.session.userAccount$.subscribe((account: UserAccount) => {
+
+      this.physicianId = account.userAccountId;
 
       this.intakeFormApi
         .getByPhysician(account.userAccountId)
@@ -44,12 +46,12 @@ export class PhysicianDashboardComponent implements OnInit {
 
   }
 
-  download(id: string) {
-    window.location.href = `${environment.api_url}/document/${id}/download`;
+  download(intakeFormId: string) {
+    window.location.href = `${environment.api_url}/document/${intakeFormId}/download`;
   }
 
-  view(id: string) {
-    this.router.navigate(['intake-document/', id]);
+  view(intakeFormId: string) {
+    this.router.navigate(['physician', this.physicianId, 'intake-document', intakeFormId]);
   }
 
 }

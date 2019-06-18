@@ -206,10 +206,10 @@
       <mat-card-content>
 
         <div>
-          <button *ngIf="!signatureData" mat-raised-button color="accent" (click)="sign()">Sign</button>
+          <button *ngIf="!signature.content" mat-raised-button color="accent" (click)="sign()">Sign</button>
 
-          <div *ngIf="signatureData">
-            <img [src]="signatureData" alt="signature" />
+          <div *ngIf="signature.content">
+            <img [src]="signature.content" alt="signature" />
             <div>Electronically Signed and Dated: {{today | date:'short'}}</div>
             <div>{{physician?.firstName}} {{physician?.lastName}}</div>
             <div>NPI: {{physician?.npi}}</div>
@@ -220,7 +220,8 @@
       </mat-card-content>
     </mat-card>
 
-    <button *ngIf="signatureData && !isAdminView" type="submit" mat-raised-button color="accent">Approve</button>
+    <button *ngIf="signature.content && !isAdminView" mat-raised-button color="accent"
+      (click)="approve()">Approve</button>
     <button *ngIf="isAdminView" mat-raised-button color="accent" (click)="next()">Next</button>
 
   </div>

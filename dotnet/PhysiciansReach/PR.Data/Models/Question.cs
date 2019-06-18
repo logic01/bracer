@@ -13,7 +13,7 @@ namespace PR.Data.Models
 
         public string Key { get; set; }
 
-        public List<Answer> Answers { get; set; }
+        public ICollection<Answer> Answers { get; set; }
 
         public IntakeForm IntakeForm { get; set; }
 

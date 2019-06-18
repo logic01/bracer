@@ -26,13 +26,14 @@ namespace PR.Export.Tests.BusinessTests
             var intakeModel = intakeForm.ToModel();
             var intakeModel2 = intakeForm2.ToModel();
             var exporter = new IntakeFormExporter();
-            var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), new List<IntakeFormModel> { intakeModel, intakeModel2 });
+            //todo
+          //  var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), new List<IntakeFormModel> { intakeModel, intakeModel2 });
 
             // Create Document
             var document = new Document
             {
                 IntakeFormId = intakeForm.IntakeFormId,
-                Content = documentContent
+                //Content = documentContent
             };
 
             var doc = dbContext.Document.Add(document);

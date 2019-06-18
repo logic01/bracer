@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
-
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { SignatureType } from 'src/app/models/enums/signature-type';
+import { HCPCSCode } from 'src/app/models/hcpcs-code.model';
+import { ICD10Code } from 'src/app/models/icd10-code.model';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
@@ -108,8 +109,20 @@ export class IntakeComponent implements OnInit {
       this.diagnosisSelections.push(lcode_other);
     }
 
-    this.intakeForm.ICD10Codes = this.diagnosisSelections;
-    this.intakeForm.HCPCSCodes = this.lcodeSelections;
+    this.intakeForm.ICD10Codes = [];
+    for (const option of this.diagnosisSelections) {
+      const code = new ICD10Code();
+      code.text = option;
+      this.intakeForm.ICD10Codes.push(code);
+    }
+
+    this.intakeForm.HCPCSCodes = [];
+    for (const option of this.lcodeSelections) {
+      const code = new HCPCSCode();
+      code.text = option;
+      this.intakeForm.HCPCSCodes.push(code);
+    }
+
     this.intakeForm.duration = this.form.controls['productDuration'].value;
     this.intakeForm.physicianNotes = this.form.controls['additional_notes'].value;
 

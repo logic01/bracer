@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
-
-import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
+import { SignatureType } from 'src/app/models/enums/signature-type';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 import { Signature } from 'src/app/models/signature.model';
+
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-prescription',
@@ -33,8 +34,8 @@ export class PrescriptionComponent implements OnInit {
 
   getLCodes() {
     let text = '';
-    for (const lcodeText of this.intakeForm.HCPCSCodes) {
-      text += lcodeText;
+    for (const code of this.intakeForm.HCPCSCodes) {
+      text += code.text;
     }
 
     return text;
@@ -68,6 +69,7 @@ export class PrescriptionComponent implements OnInit {
   }
 
   approve() {
+    this.signature.type = SignatureType.PrescriptionDocument;
     this.formSubmitEvent.emit(this.signature);
   }
 

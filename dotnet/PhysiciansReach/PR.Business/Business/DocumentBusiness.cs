@@ -56,20 +56,20 @@ namespace PR.Business
 
             var intakeForms = _context.IntakeForm
                 .Include("Questions.Answers")
-                .Include("ICD10s")
-                .Include("HCPCSs")
-                .Include(i => i.Signature)
+                .Include(i => i.ICD10Codes)
+                .Include(i => i.HCPCSCodes)
                 .Include("Physician.Address")
                 .Where(i => i.PatientId == patientId);
 
             var intakeForm = intakeForms.First(x => x.IntakeFormId == intakeFormId);
 
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), intakeForms.Select(x => x.ToModel()).ToList());
+            // toDo
+           // var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), intakeForms.Select(x => x.ToModel()).ToList());
 
             var document = new Document
             {
                 IntakeFormId = intakeFormId,
-                Content = documentContent
+                //Content = documentContent
             };
 
             _context.Document.Add(document);

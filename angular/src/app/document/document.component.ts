@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RouteUrls } from '../constants/routes';
 import { AccountType } from '../models/enums/account-type.enum';
+import { HCPCSCode } from '../models/hcpcs-code.model';
+import { ICD10Code } from '../models/icd10-code.model';
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
 import { Physician } from '../models/physician.model';
@@ -89,9 +91,23 @@ export class DocumentComponent implements OnInit {
       this.intakeForm = data.intakeForm;
       this.intakeSignature = data.signature;
     } else {
+
       // set these to the defaults so the next page will display everything
-      this.intakeForm.ICD10Codes = this.diagnosisOptions;
-      this.intakeForm.HCPCSCodes = this.lcodeOptions;
+
+      this.intakeForm.ICD10Codes = [];
+      for (const option of this.diagnosisOptions) {
+        const code = new ICD10Code();
+        code.text = option;
+        this.intakeForm.ICD10Codes.push(code);
+      }
+
+      this.intakeForm.HCPCSCodes = [];
+      for (const option of this.lcodeOptions) {
+        const code = new HCPCSCode();
+        code.text = option;
+        this.intakeForm.HCPCSCodes.push(code);
+      }
+
       this.intakeForm.duration = '';
     }
     this.intakeApproved = true;

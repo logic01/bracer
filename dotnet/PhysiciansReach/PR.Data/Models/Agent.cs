@@ -21,6 +21,6 @@ namespace PR.Data.Models
 
         public Vendor Vendor { get; set; }
 
-        public List<Patient> Patients { get; set; }
+        public ICollection<Patient> Patients { get; set; }
     }
 }

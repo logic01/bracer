@@ -34,7 +34,7 @@ namespace PR.Business
             var sig = new Signature();
             sig.MapFromModel(signatureModel);
 
-            intakeForm.Signature = sig;
+            intakeForm.Signatures.Add(sig);
 
             _context.SaveChanges();
 

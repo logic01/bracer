@@ -52,6 +52,10 @@ namespace PR.Data.Models
 
         public DbSet<Signature> Signature { get; set; }
 
+        public DbSet<ICD10Code> ICD10Code { get; set; }
+
+        public DbSet<HCPCSCode> HCPCSCode { get; set; }
+
         public DbSet<PrivateInsurance> PrivateInsurance { get; set; }
 
         public DbSet<Medicare> Medicare { get; set; }
@@ -72,6 +76,8 @@ namespace PR.Data.Models
             SignatureBuilder(modelBuilder);
             PrivateInsuranceBuilder(modelBuilder);
             MedicareBuilder(modelBuilder);
+            ICD10CodeBuilder(modelBuilder);
+            HCPCSCodeBuilder(modelBuilder);
         }
 
         protected void LogBuilder(ModelBuilder modelBuilder)
@@ -422,12 +428,6 @@ namespace PR.Data.Models
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_Physician_IntakeForms");
 
-                entity.HasOne(intake => intake.Signature)
-                     .WithOne(sig => sig.IntakeForm)
-                     .HasForeignKey<IntakeForm>(intake => intake.SignatureId)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_IntakeForm_Signature");
-
                 entity.HasOne(intake => intake.Document)
                      .WithOne(doc => doc.IntakeForm)
                      .HasForeignKey<IntakeForm>(intake => intake.DocumentId)
@@ -466,6 +466,39 @@ namespace PR.Data.Models
                 entity.HasKey(e => e.SignatureId).ForSqlServerIsClustered(false);
 
                 entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+            });
+        }
+
+
+        protected void ICD10CodeBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ICD10Code>(entity =>
+            {
+                entity.ToTable("ICD10Code", "dbo");
+
+                entity.HasKey(e => e.ICD10CodeId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Text).IsRequired();
+
+                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
+            });
+        }
+
+        protected void HCPCSCodeBuilder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<HCPCSCode>(entity =>
+            {
+                entity.ToTable("HCPCSCode", "dbo");
+
+                entity.HasKey(e => e.HCPCSCodeId).ForSqlServerIsClustered(false);
+
+                entity.Property(e => e.Text).IsRequired();
 
                 entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
 
