@@ -192,7 +192,7 @@
 
             <mat-card-content fxLayout="column">
               <div>Patient should begin using the orthosis as needed.</div>
-              <div>First date patient is authorized to begin using {{product}} : {{today | date}}</div>
+              <div>First date patient is authorized to begin using ((intakeForm.product}} : {{today | date}}</div>
               <mat-form-field>
                 <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
                 <mat-error *ngIf="form.get('productDuration').hasError('required')">

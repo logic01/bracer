@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
+import { Signature } from 'src/app/models/signature.model';
 
 import { environment } from '../../../environments/environment';
-import { Signature } from 'src/app/models/signature.model';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +11,8 @@ import { Signature } from 'src/app/models/signature.model';
 export class SignatureService {
 
     constructor(private http: HttpClient) { }
-    put(intakeFormId: string, signature: Signature): Observable<void> {
-        return this.http.post<void>(`${environment.api_url}/intakeform/${intakeFormId}/signature`, signature);
+
+    put(intakeFormId: string, signature: Signature): Observable<{ signatureId: string }> {
+        return this.http.post<{ signatureId: string }>(`${environment.api_url}/intakeform/${intakeFormId}/signature`, signature);
     }
 }

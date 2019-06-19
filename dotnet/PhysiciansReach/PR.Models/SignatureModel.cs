@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR.Constants.Enums;
+using System;
 
 namespace PR.Models
 {
@@ -9,6 +10,8 @@ namespace PR.Models
         public string Content { get; set; }
 
         public byte[] ContentBytes { get; set; }
+
+        public SignatureType Type { get; set; }
 
         public string IpAddress { get; set; }
 

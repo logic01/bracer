@@ -2,10 +2,10 @@
 {
     public enum IntakeFormStatus
     {
-        New,
-        Assigned,
-        Signed,
-        Emailed,
-        Closed
+        New = 0,
+        Assigned = 1,
+        Signed = 2,
+        Emailed = 3,
+        Closed = 4
     }
 }

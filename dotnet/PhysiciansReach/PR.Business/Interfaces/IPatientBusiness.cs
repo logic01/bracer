@@ -9,8 +9,12 @@ namespace PR.Business.Interfaces
 
         PatientModel Get(int id);
 
-        PatientModel Create(PatientModel patientModel);
+        List<PatientModel> GetByAgent(int agentId);
 
-        PatientModel Update(PatientModel patientModel);
+        List<PatientModel> GetByVendor(int vendorId);
+
+        int Create(PatientModel patientModel);
+
+        void Update(PatientModel patientModel);
     }
 }

@@ -8,6 +8,7 @@ export class IntakeForm {
     public intakeFormId: string;
     public patientId: string;
     public physicianId: string;
+    public documentId: string;
     public status: IntakeStatus;
     public intakeFormType: IntakeFormType;
     public questions: Question[];
@@ -15,6 +16,7 @@ export class IntakeForm {
     public HCPCSCodes: HCPCSCode[];
     public duration: string;
     public physicianNotes: string;
+    public product: string;
     public createdOn: string;
     public modifiedOn: string;
 }

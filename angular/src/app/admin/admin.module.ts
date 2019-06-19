@@ -11,6 +11,7 @@ import { AdminListComponent } from './tables/admin-list/admin-list.component';
 import { AgentListComponent } from './tables/agent-list/agent-list.component';
 import { PhysicianListComponent } from './tables/physician-list/physician-list.component';
 import { VendorListComponent } from './tables/vendor-list/vendor-list.component';
+import { PatientListComponent } from './tables/patient-list/patient-list.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { VendorListComponent } from './tables/vendor-list/vendor-list.component'
     AdminListComponent,
     VendorListComponent,
     PhysicianListComponent,
-    AdminAccountFormComponent
+    AdminAccountFormComponent,
+    PatientListComponent
   ],
   imports: [
     CommonModule,

@@ -3,7 +3,6 @@ using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
 using System;
-using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
@@ -26,8 +25,16 @@ namespace PhysiciansReach.Controllers
             return _business.Get(documentId);
         }
 
+        [HttpPost("Document")]
+        public ActionResult<DocumentModel> Post([FromBody] DocumentModel document)
+        {
+            var documentId = _business.Create(document);
+
+            return Ok(new { documentId });
+        }
+
         [HttpPut("Document/{documentId}")]
-        public ActionResult<DocumentModel> Put(int documentId, [FromBody] DocumentModel document)
+        public ActionResult Put(int documentId, [FromBody] DocumentModel document)
         {
             _logging.Log(LogSeverity.Info, "Put Document");
 
@@ -36,7 +43,9 @@ namespace PhysiciansReach.Controllers
                 throw new Exception("Invalid Request.");
             }
 
-            return _business.Update(document);
+            _business.Update(document);
+
+            return Ok();
         }
 
         [HttpGet("Document/{documentId}/Download")]

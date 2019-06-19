@@ -65,10 +65,6 @@ namespace PhysiciansReach.Controllers
 
             intakeForm.IntakeFormId = id;
 
-            // for now we only call this method during assignment process
-            // if that changes we need to figure out a better way to set the status
-            intakeForm.Status = IntakeFormStatus.Assigned;
-
             return _intakeBusiness.Update(intakeForm);
         }
     }

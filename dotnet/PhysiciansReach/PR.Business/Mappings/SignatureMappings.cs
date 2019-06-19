@@ -11,6 +11,7 @@ namespace PR.Business.Mappings
         {
             entity.SignatureId = model.SignatureId;
             entity.IpAddress = model.IpAddress;
+            entity.Type = model.Type;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 
@@ -26,6 +27,7 @@ namespace PR.Business.Mappings
             {
                 SignatureId = entity.SignatureId,
                 IpAddress = entity.IpAddress,
+                Type = entity.Type,
                 ContentBytes = entity.Content,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn

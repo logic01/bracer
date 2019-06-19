@@ -25,7 +25,7 @@ namespace PR.Export.Tests.BusinessTests
             // Create Document Byte Array
             var intakeModel = intakeForm.ToModel();
             var intakeModel2 = intakeForm2.ToModel();
-            var exporter = new IntakeFormExporter();
+            var exporter = new DocumentGenerator();
             //todo
           //  var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), new List<IntakeFormModel> { intakeModel, intakeModel2 });
 

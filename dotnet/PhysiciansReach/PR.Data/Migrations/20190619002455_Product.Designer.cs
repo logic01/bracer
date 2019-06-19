@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PR.Constants.Enums;
 using PR.Data.Models;
@@ -10,9 +11,10 @@ using PR.Data.Models;
 namespace PR.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190619002455_Product")]
+    partial class Product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,6 +267,8 @@ namespace PR.Data.Migrations
                     b.Property<string>("PhysicianNotes");
 
                     b.Property<string>("Product");
+
+                    b.Property<int?>("SignatureId");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -708,8 +712,7 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Admin")
                         .HasForeignKey("PR.Data.Models.Admin", "UserAccountId")
-                        .HasConstraintName("FK_Admin_UserAccount")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Admin_UserAccount");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Agent", b =>
@@ -717,14 +720,12 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Agent")
                         .HasForeignKey("PR.Data.Models.Agent", "UserAccountId")
-                        .HasConstraintName("FK_Agent_UserAccount")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Agent_UserAccount");
 
                     b.HasOne("PR.Data.Models.Vendor", "Vendor")
                         .WithMany("Agent")
                         .HasForeignKey("VendorId")
-                        .HasConstraintName("FK_Agent_Vendor")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Agent_Vendor");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Answer", b =>
@@ -732,8 +733,7 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
-                        .HasConstraintName("FK_Questions_Answers")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Questions_Answers");
                 });
 
             modelBuilder.Entity("PR.Data.Models.HCPCSCode", b =>
@@ -757,13 +757,13 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Document", "Document")
                         .WithOne("IntakeForm")
                         .HasForeignKey("PR.Data.Models.IntakeForm", "DocumentId")
-                        .HasConstraintName("FK_IntakeForm_Document");
+                        .HasConstraintName("FK_IntakeForm_Document")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.Patient", "Patient")
                         .WithMany("IntakeForms")
                         .HasForeignKey("PatientId")
-                        .HasConstraintName("FK_Patient_IntakeForms")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Patient_IntakeForms");
 
                     b.HasOne("PR.Data.Models.Physician", "Physician")
                         .WithMany("IntakeForms")
@@ -776,14 +776,12 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Address", "Address")
                         .WithOne("Patient")
                         .HasForeignKey("PR.Data.Models.Patient", "AddressId")
-                        .HasConstraintName("FK_Patient_Address")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Patient_Address");
 
                     b.HasOne("PR.Data.Models.Agent", "Agent")
                         .WithMany("Patients")
                         .HasForeignKey("AgentId")
-                        .HasConstraintName("FK_Patient_Agent")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Patient_Agent");
 
                     b.HasOne("PR.Data.Models.Medicare", "Medicare")
                         .WithOne("Patient")
@@ -806,14 +804,12 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Address", "Address")
                         .WithOne("Physician")
                         .HasForeignKey("PR.Data.Models.Physician", "AddressId")
-                        .HasConstraintName("FK_Physician_Address")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Physician_Address");
 
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Physician")
                         .HasForeignKey("PR.Data.Models.Physician", "UserAccountId")
-                        .HasConstraintName("FK_Physician_UserAccount")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Physician_UserAccount");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Question", b =>
@@ -821,8 +817,7 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
                         .WithMany("Questions")
                         .HasForeignKey("IntakeFormId")
-                        .HasConstraintName("FK_IntakeForm_Questions")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_IntakeForm_Questions");
                 });
 
             modelBuilder.Entity("PR.Data.Models.Signature", b =>

@@ -21,7 +21,6 @@ export class IntakeComponent implements OnInit {
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
-  @Input() product: string;
   @Input() diagnosisOptions: string[] = [];
   @Input() lcodeOptions: string[] = [];
 

@@ -12,6 +12,8 @@ namespace PR.Models
 
         public int? PhysicianId { get; set; }
 
+        public int? DocumentId { get; set; }
+
         public IntakeFormType IntakeFormType { get; set; }
 
         public IntakeFormStatus Status { get; set; }
@@ -24,13 +26,13 @@ namespace PR.Models
 
         public string PhysicianNotes { get; set; }
 
+        public string Product { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 
         public List<QuestionModel> Questions { get; set; }
-
-        public string AdditionalDrNotes { get; set; }
 
     }
 }

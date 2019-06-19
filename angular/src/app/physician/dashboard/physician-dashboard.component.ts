@@ -21,7 +21,7 @@ export class PhysicianDashboardComponent implements OnInit {
   private unsubscribe$ = new Subject();
   private physicianId; string;
   public dataSource: MatTableDataSource<IntakeForm>;
-  public columnsToDisplay = ['intakeFormId', 'status', 'view', 'download'];
+  public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'view', 'download'];
 
   constructor(
     private readonly router: Router,
@@ -46,8 +46,8 @@ export class PhysicianDashboardComponent implements OnInit {
 
   }
 
-  download(intakeFormId: string) {
-    window.location.href = `${environment.api_url}/document/${intakeFormId}/download`;
+  download(documentId: string) {
+    window.location.href = `${environment.api_url}/document/${documentId}/download`;
   }
 
   view(intakeFormId: string) {

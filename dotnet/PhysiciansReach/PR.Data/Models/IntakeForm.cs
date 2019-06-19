@@ -12,15 +12,17 @@ namespace PR.Data.Models
 
         public int? PhysicianId { get; set; }
 
-        public int? SignatureId { get; set; }
-
         public int? DocumentId { get; set; }
 
         public IntakeFormType IntakeFormType { get; set; }
 
         public IntakeFormStatus Status { get; set; }
 
-        public string AdditionalDrNotes { get; set; }
+        public string PhysicianNotes { get; set; }
+
+        public string Product { get; set; }
+
+        public string Duration { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

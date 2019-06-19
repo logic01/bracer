@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Business.Utils;
 using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Models;
@@ -53,8 +54,8 @@ namespace PR.Business
 
         public IntakeFormModel Create(IntakeFormModel intakeFormModel)
         {
-            var intakeForm = intakeFormModel.ToCreateEntity();
-
+            var intakeForm = new IntakeForm();
+            intakeForm.MapFromModel(intakeFormModel);
             intakeForm.Status = IntakeFormStatus.New;
 
             _context.IntakeForm.Add(intakeForm);
@@ -65,15 +66,19 @@ namespace PR.Business
 
         public IntakeFormModel Update(IntakeFormModel intakeFormModel)
         {
-            IntakeForm intakeForm = _context.IntakeForm.FirstOrDefault(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
+            IntakeForm intakeForm = _context.IntakeForm
+                .Include(i => i.Signatures)
+                .First(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
 
+            // set the new status based off of the databases last status
+            // do this before we map the model back to the entity so it sticks
+            intakeFormModel.Status = IntakeFormStatusFactory.GetNext(intakeForm);
             intakeForm.MapFromModel(intakeFormModel);
 
             _context.SaveChanges();
 
             return intakeForm.ToModel();
         }
-
 
     }
 }

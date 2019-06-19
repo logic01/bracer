@@ -5,9 +5,11 @@ import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
+import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 import { Vendor } from 'src/app/models/vendor.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
+import { PatientService } from 'src/app/services/api/patient.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
@@ -34,6 +36,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   public vendor$: Observable<Vendor>;
   public physicians$: Observable<Physician[]>;
   public intake$: Observable<IntakeForm[]>;
+  public patient$: Observable<Patient[]>;
 
   public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'actions'];
 
@@ -44,6 +47,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly physicianApi: PhysicianService,
     private readonly vendorApi: VendorService,
+    private readonly patientApi: PatientService,
     private readonly intakeApi: IntakeFormService,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog) {
@@ -56,7 +60,8 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     this.vendor$ = this.vendorApi.get(this.vendorId);
     this.physicians$ = this.physicianApi.getAll();
     this.intake$ = this.intakeApi.getByVendor(this.vendorId);
-
+  //  this.patient$ = this.patientApi.getByVendor(this.vendorId);
+// , this.patient$
     forkJoin([this.intake$, this.physicians$])
       .pipe(
         takeUntil(this.unsubscribe$),
@@ -64,6 +69,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
           const intakeForms = responses[0];
           const physicians = responses[1];
+        //  const patients = responses[2];
 
           const data: TableRow[] = [];
           intakeForms.forEach((intake: IntakeForm) => {
@@ -73,6 +79,8 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
             row.status = intake.status;
             row.physicianName = this.getPhysicianName(intake.physicianId, physicians);
             row.physicianState = this.getPhysicianState(intake.physicianId, physicians);
+          //  row.patientName = this.getPatientName(intake.patientId, patients);
+          //  row.patientState = this.getPatientState(intake.patientId, patients);
             data.push(row);
           });
 
@@ -104,6 +112,28 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
     if (physician) {
       return physician.address.state;
+    }
+
+    return '';
+  }
+
+  getPatientName(patientId: string, patients: Patient[]): string {
+
+    const patient = patients.find(x => x.patientId === patientId);
+
+    if (patient) {
+      return `${patient.firstName} ${patient.lastName}`;
+    }
+
+    return '';
+  }
+
+  getPatientState(patientId: string, patients: Patient[]): string {
+
+    const patient = patients.find(x => x.patientId === patientId);
+
+    if (patient) {
+      return patient.address.state;
     }
 
     return '';

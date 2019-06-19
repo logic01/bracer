@@ -16,8 +16,12 @@ export class DocumentService {
     return this.http.get<Document>(`${environment.api_url}/document/${documentId}`);
   }
 
-  put(document: Document): Observable<Document> {
-    return this.http.put<Document>(`${environment.api_url}/document/${document.documentId}`, document);
+  put(document: Document): Observable<void> {
+    return this.http.put<void>(`${environment.api_url}/document/${document.documentId}`, document);
+  }
+
+  post(document: Document): Observable<{ documentId: string }> {
+    return this.http.post<{ documentId: string }>(`${environment.api_url}/document`, document);
   }
 
 }

@@ -1,8 +1,8 @@
 <app-intake *ngIf="!intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
-  [product]="product" [diagnosisOptions]="diagnosisOptions" [lcodeOptions]="lcodeOptions" [isAdminView]="isAdminView"
+  [diagnosisOptions]="diagnosisOptions" [lcodeOptions]="lcodeOptions" [isAdminView]="isAdminView"
   (formSubmitEvent)="onIntakeApproval($event)">
 </app-intake>
 
 <app-prescription *ngIf="intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
-  [product]="product" [isAdminView]="isAdminView" (formSubmitEvent)="onPrescriptionApproval($event)">
+  [isAdminView]="isAdminView" (formSubmitEvent)="onPrescriptionApproval($event)">
 </app-prescription>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -89,6 +90,7 @@ namespace PhysiciansReach
 
         private void ConfigureDependecyInjection(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAdminBusiness, AdminBusiness>();
             services.AddTransient<IIntakeFormBusiness, IntakeFormBusiness>();
             services.AddTransient<IAgentBusiness, AgentBusiness>();
@@ -99,7 +101,7 @@ namespace PhysiciansReach
             services.AddTransient<ILoggingBusiness, LoggingBusiness>();
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();
             services.AddTransient<IEmailBusiness, EmailBusiness>();
-            services.AddTransient<IIntakeFormExporter, IntakeFormExporter>();
+            services.AddTransient<IDocumentGenerator, DocumentGenerator>();
             services.AddTransient<ISignatureBusiness, SignatureBusiness>();
         }
     }

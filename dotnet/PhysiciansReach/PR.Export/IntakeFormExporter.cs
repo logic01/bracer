@@ -16,7 +16,7 @@ using System.Reflection;
 namespace PR.Export
 {
 
-    public class IntakeFormExporter : IIntakeFormExporter
+    public class DocumentGenerator : IDocumentGenerator
     {
         private const string ExamNote = "PR.Export.Documents.BLANK_EXAM_NOTE.docx";
 
@@ -26,7 +26,11 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <returns></returns>
-        public byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician, List<IntakeFormModel> allIntakeForms)
+        public byte[] GenerateIntakeDocuments(
+            IntakeFormModel intakeForm,
+            PatientModel patient,
+            PhysicianModel physician,
+            ICollection<SignatureModel> signatures)
         {
             MemoryStream examNoteMemoryStream = LoadMemoryStream();
 
@@ -34,45 +38,25 @@ namespace PR.Export
             {
                 Body docBody = doc.MainDocumentPart.Document.Body;
 
-                // Create and add the character style with the style id, style name, and
+                // create and add the character style with the style id, style name, and
                 // aliases specified.
                 var answerFormatStyleId = CreateIntakeFormAnswersCharStyle(doc);
 
-                // Replace the images with the Signature file. There are 2 signature images
-                // that are replaced in order. If there are multiple signatures you can
-                // place them below
-                var imageCount = 0;
-                foreach (ImagePart imagePart in doc.MainDocumentPart.ImageParts)
+                SetSignatures(doc, signatures);
+
+                // Create title and add the subsequent question answers for the questionaire
+                AppendTitleForIntakeForm(doc, docBody, intakeForm);
+
+                var questionCount = 1;
+                foreach (QuestionModel question in intakeForm.Questions)
                 {
-                    if (++imageCount < 2) //The first 2 images are the signature spot
-                    {
-                        continue;
-                    }
-
-                    var newImageBytes = signature.ContentBytes;
-
-                    using (var writer = new BinaryWriter(imagePart.GetStream()))
-                    {
-                        writer.Write(newImageBytes);
-                    }
+                    questionCount = AppendQuestionAnswerPair(docBody, answerFormatStyleId, questionCount, question);
                 }
 
-                // Populate the Questionaire form with all intake forms
-                foreach (IntakeFormModel questionaireIntakeForm in allIntakeForms)
-                {
-                    // Create title and add the subsequent question answers for the questionaire
-                    AppendTitleForIntakeForm(doc, docBody, questionaireIntakeForm);
+                docBody.AppendChild(new Paragraph());
 
-
-                    var count = 1;
-                    foreach (QuestionModel question in questionaireIntakeForm.Questions)
-                    {
-                        count = AppendQuestionAnswerPair(docBody, answerFormatStyleId, count, question);
-                    }
-                    docBody.AppendChild(new Paragraph());
-                }
                 // Manual mapping bits
-                UpdateValuesInWordDocsCustomProperties(intakeForm, patient, doc, physician, signature);
+                UpdateValuesInWordDocsCustomProperties(doc, intakeForm, patient, physician, signatures);
             }
 
             var result = examNoteMemoryStream.ToArray();
@@ -82,6 +66,32 @@ namespace PR.Export
             return result;
         }
 
+        private void SetSignatures(WordprocessingDocument doc, ICollection<SignatureModel> signatures)
+        {
+            // replace the images with the Signature file. There are 2 signature images
+            // that are replaced in order. If there are multiple signatures you can
+            // place them below
+  
+            foreach (ImagePart imagePart in doc.MainDocumentPart.ImageParts)
+            {
+
+                byte[] signatureImage;
+
+                if (imagePart.Uri.ToString().Contains("image1"))
+                {
+                    signatureImage = signatures.First(s => s.Type == SignatureType.IntakeDocument).ContentBytes;
+                }
+                else
+                {
+                    signatureImage = signatures.First(s => s.Type == SignatureType.PrescriptionDocument).ContentBytes;
+                }
+
+                using (var writer = new BinaryWriter(imagePart.GetStream()))
+                {
+                    writer.Write(signatureImage);
+                }
+            }
+        }
         /// <summary>
         /// The field values in the word doc need to be update in the property settings object of the word doc. The questions
         /// have 'keys' which we are using with MappingsEnum to know how update with the value from the IntakeForms. Then we
@@ -89,7 +99,12 @@ namespace PR.Export
         /// </summary>
         /// <param name="intakeForms"></param>
         /// <param name="doc"></param>
-        private void UpdateValuesInWordDocsCustomProperties(IntakeFormModel intakeForm, PatientModel patient, WordprocessingDocument doc, PhysicianModel physician, SignatureModel signature)
+        private void UpdateValuesInWordDocsCustomProperties(
+            WordprocessingDocument doc,
+            IntakeFormModel intakeForm,
+            PatientModel patient,
+            PhysicianModel physician,
+            ICollection<SignatureModel> signatures)
         {
             //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
             Properties properties = doc.CustomFilePropertiesPart.Properties;
@@ -103,8 +118,8 @@ namespace PR.Export
             intakeFromKeys.AddRange(GetPatientKeys(patient));
             intakeFromKeys.AddRange(GetAllCodes(intakeForm));
             intakeFromKeys.AddRange(GetPhysicanKeys(physician));
-            intakeFromKeys.AddRange(GetSignature(signature));
-            intakeFromKeys.AddRange(GetDrNotes(intakeForm.AdditionalDrNotes ?? ""));
+            intakeFromKeys.AddRange(GetSignature(signatures.First())); // just use the first signature for now since IP/Creation should be identicalish
+            intakeFromKeys.AddRange(GetDrNotes(intakeForm.PhysicianNotes ?? ""));
 
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
@@ -129,9 +144,9 @@ namespace PR.Export
             DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
             var updateFields = new UpdateFieldsOnOpen
             {
-                Val = new DocumentFormat.OpenXml.OnOffValue(true)
+                Val = new OnOffValue(true)
             };
-            settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
+            settingsPart.Settings.PrependChild(updateFields);
             settingsPart.Settings.Save();
             doc.Save();
         }
@@ -260,12 +275,12 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                /*      new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
+                      new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
                       new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCSCodes)),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.HCPCSCodes?.FirstOrDefault()?.Product  ?? "N/A"),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCS)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.Product ?? "N/A"),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCSCodes)),
                       new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
-                      new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10)),*/
+                      new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10Codes)),
                 //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
             };
             return kvps;
@@ -294,7 +309,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="icds"></param>
         /// <returns></returns>
-        private string GetDiagnosis(List<ICD10CodeModel> icds)
+        private string GetDiagnosis(ICollection<ICD10CodeModel> icds)
         {
             return string.Join(", ", icds.Select(x => x.Text)) ?? "N/A";
         }
@@ -305,7 +320,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="icds"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribed(List<HCPCSCodeModel> hCPCs)
+        private string GetOrthoPrescribed(ICollection<HCPCSCodeModel> hCPCs)
         {
             return string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
         }
@@ -316,7 +331,7 @@ namespace PR.Export
         /// </summary>
         /// <param name="hCPCs"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribedAfter255(List<HCPCSCodeModel> hCPCs)
+        private string GetOrthoPrescribedAfter255(ICollection<HCPCSCodeModel> hCPCs)
         {
             var prescribed = string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
             if (prescribed.Length > 255)
@@ -352,7 +367,7 @@ namespace PR.Export
         /// </summary>
         private MemoryStream LoadMemoryStream()
         {
-            var assembly = Assembly.GetAssembly(typeof(IntakeFormExporter));
+            var assembly = Assembly.GetAssembly(typeof(DocumentGenerator));
             var memStream = new MemoryStream();
             using (Stream stream = assembly.GetManifestResourceStream(ExamNote))
             {
