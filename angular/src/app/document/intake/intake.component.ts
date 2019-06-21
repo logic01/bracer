@@ -2,9 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
+import { SignatureType } from 'src/app/models/enums/signature-type';
+import { HCPCSCode } from 'src/app/models/hcpcs-code.model';
+import { ICD10Code } from 'src/app/models/icd10-code.model';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
+import { Signature } from 'src/app/models/signature.model';
 
 @Component({
   selector: 'app-intake',
@@ -17,11 +21,10 @@ export class IntakeComponent implements OnInit {
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
-  @Input() product: string;
   @Input() diagnosisOptions: string[] = [];
   @Input() lcodeOptions: string[] = [];
 
-  @Output() formSubmitEvent = new EventEmitter<string>();
+  @Output() formSubmitEvent = new EventEmitter<{ intakeForm: IntakeForm, signature: Signature } | null>();
 
   public form: FormGroup;
   public today = Date.now();
@@ -95,7 +98,38 @@ export class IntakeComponent implements OnInit {
       return;
     }
 
-    this.formSubmitEvent.emit(this.signatureData);
+    const diagnosis_other = this.form.controls['diagnosis_other'].value;
+    if (diagnosis_other) {
+      this.diagnosisSelections.push(diagnosis_other);
+    }
+
+    const lcode_other = this.form.controls['lcode_other'].value;
+    if (lcode_other) {
+      this.diagnosisSelections.push(lcode_other);
+    }
+
+    this.intakeForm.ICD10Codes = [];
+    for (const option of this.diagnosisSelections) {
+      const code = new ICD10Code();
+      code.text = option;
+      this.intakeForm.ICD10Codes.push(code);
+    }
+
+    this.intakeForm.HCPCSCodes = [];
+    for (const option of this.lcodeSelections) {
+      const code = new HCPCSCode();
+      code.text = option;
+      this.intakeForm.HCPCSCodes.push(code);
+    }
+
+    this.intakeForm.duration = this.form.controls['productDuration'].value;
+    this.intakeForm.physicianNotes = this.form.controls['additional_notes'].value;
+
+    const signature = new Signature();
+    signature.content = this.signatureData;
+    signature.type = SignatureType.IntakeDocument;
+
+    this.formSubmitEvent.emit({ intakeForm: this.intakeForm, signature: signature });
   }
 
   next() {

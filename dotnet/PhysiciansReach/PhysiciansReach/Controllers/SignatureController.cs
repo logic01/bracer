@@ -11,9 +11,14 @@ namespace PhysiciansReach.Controllers
     {
         private readonly ISignatureBusiness _business;
         private readonly ILoggingBusiness _logging;
+        private IHttpContextAccessor _accessor;
 
-        public SignatureController(ISignatureBusiness business, ILoggingBusiness logging)
+        public SignatureController(
+            IHttpContextAccessor accessor,
+            ISignatureBusiness business,
+            ILoggingBusiness logging)
         {
+            _accessor = accessor;
             _business = business;
             _logging = logging;
         }
@@ -23,12 +28,12 @@ namespace PhysiciansReach.Controllers
         {
             _logging.Log(LogSeverity.Info, "Sign Document");
 
-            // get the client ip address
-            signature.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            // set the client ip address
+            signature.IpAddress = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
-            _business.Create(intakeFormId, signature);
+            var signatureId = _business.Create(intakeFormId, signature);
 
-            return Ok();
+            return CreatedAtAction("Post", new { signatureId });
         }
 
     }

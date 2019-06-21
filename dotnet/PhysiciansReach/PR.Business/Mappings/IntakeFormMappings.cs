@@ -14,15 +14,17 @@ namespace PR.Business.Mappings
                 IntakeFormId = entity.IntakeFormId,
                 PatientId = entity.PatientId,
                 PhysicianId = entity.PhysicianId,
-                SignatureId = entity.SignatureId,
-                ICD10 = entity.ICD10s?.Select(x => x.ToModel()).ToList(),
-                HCPCS = entity.HCPCSs?.Select(x => x.ToModel()).ToList(),
+                DocumentId = entity.DocumentId,
+                ICD10Codes = entity.ICD10Codes?.Select(x => x.ToModel()).ToList(),
+                HCPCSCodes = entity.HCPCSCodes?.Select(x => x.ToModel()).ToList(),
+                Product = entity.Product,
+                PhysicianNotes = entity.PhysicianNotes,
+                Duration = entity.Duration,
                 IntakeFormType = entity.IntakeFormType,
                 Status = entity.Status,
                 Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn,
-                AdditionalDrNotes = entity.AdditionalDrNotes
+                ModifiedOn = entity.ModifiedOn
             };
 
             return model;
@@ -36,7 +38,6 @@ namespace PR.Business.Mappings
         /// <returns></returns>
         public static void MapFromModel(this IntakeForm entity, IntakeFormModel model)
         {
-            //TODO Is this code needed?
             if (entity == null)
             {
                 entity = new IntakeForm();
@@ -44,131 +45,75 @@ namespace PR.Business.Mappings
             //IntakeFormId = model.IntakeFormId don't map primary key from the model
             entity.PatientId = model.PatientId;
             entity.PhysicianId = model.PhysicianId;
-            entity.SignatureId = model.SignatureId;
+            entity.DocumentId = model.DocumentId;
             entity.Status = model.Status;
             entity.IntakeFormType = model.IntakeFormType;
+            entity.Product = model.Product;
+            entity.PhysicianNotes = model.PhysicianNotes;
+            entity.Duration = model.Duration;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
-            entity.AdditionalDrNotes = model.AdditionalDrNotes;
 
-            entity.ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList();
-            entity.HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList();
+            entity.ICD10Codes = model.ICD10Codes?.Select(x => x.ToEntity()).ToList();
+            entity.HCPCSCodes = model.HCPCSCodes?.Select(x => x.ToEntity()).ToList();
         }
 
-        /// <summary>
-        /// When the intake form is being created the Questions need to be populated
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="documentId"></param>
-        /// <returns></returns>
-        public static IntakeForm ToCreateEntity(this IntakeFormModel model, int? documentId = null)
+        public static ICD10CodeModel ToModel(this ICD10Code entity)
         {
-            var now = DateTime.Now;
-            return new IntakeForm
+            return new ICD10CodeModel
             {
-                PatientId = model.PatientId,
-                PhysicianId = model.PhysicianId,
-                SignatureId = model.SignatureId,
-                DocumentId = documentId,
-                IntakeFormType = model.IntakeFormType,
-                CreatedOn = now,
-                ModifiedOn = now,
-                ICD10s = model.ICD10?.Select(x => x.ToEntity()).ToList(),
-                HCPCSs = model.HCPCS?.Select(x => x.ToEntity()).ToList(),
-                Questions = model.Questions?.Select(x => x.ToEntity(default(int))).ToList(),
-                Status = model.Status,
-                AdditionalDrNotes = model.AdditionalDrNotes
-            };
-        }
-
-        public static ICD10Model ToModel(this ICD10 entity)
-        {
-            return new ICD10Model
-            {
-                Id = entity.Id,
-                Code = entity.Code,
-                Description = entity.Description,
+                ICD10CodeId = entity.ICD10CodeId,
+                Text = entity.Text,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
         }
 
-        public static HCPCSModel ToModel(this HCPCS entity)
+        public static HCPCSCodeModel ToModel(this HCPCSCode entity)
         {
-            return new HCPCSModel
+            return new HCPCSCodeModel
             {
-                Id = entity.Id,
-                Code = entity.Code,
-                Product = entity.Product,
-                Duration = entity.Duration,
-                Description = entity.Description,
+                HCPCSCodeId = entity.HCPCSCodeId,
+                Text = entity.Text,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
         }
 
-        public static ICD10 ToEntity(this ICD10Model model)
+        public static ICD10Code ToEntity(this ICD10CodeModel model)
         {
-            return new ICD10
+            return new ICD10Code
             {
-                Id = model.Id,
-                Code = model.Code,
-                Description = model.Description,
+                ICD10CodeId = model.ICD10CodeId,
+                Text = model.Text,
                 CreatedOn = model.CreatedOn,
                 ModifiedOn = model.ModifiedOn
             };
         }
 
-
-
-        public static void MapFromModel(this ICD10 entity, ICD10Model model)
+        public static void MapFromModel(this ICD10Code entity, ICD10CodeModel model)
         {
-            //TODO Is this code needed?
-            if (model == null)
-            {
-                return;
-            }
-            if (entity == null)
-            {
-                entity = new ICD10();
-            }
-            model.Id = entity.Id;
-            model.Code = entity.Code;
-            model.Description = entity.Description;
+            model.ICD10CodeId = entity.ICD10CodeId;
+            model.Text = entity.Text;
             model.CreatedOn = entity.CreatedOn;
             model.ModifiedOn = entity.ModifiedOn;
         }
 
-        public static HCPCS ToEntity(this HCPCSModel entity)
+        public static HCPCSCode ToEntity(this HCPCSCodeModel entity)
         {
-            return new HCPCS
+            return new HCPCSCode
             {
-                Id = entity.Id,
-                Code = entity.Code,
-                Product = entity.Product,
-                Duration = entity.Duration,
-                Description = entity.Description,
+                HCPCSCodeId = entity.HCPCSCodeId,
+                Text = entity.Text,
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
             };
         }
 
-        public static void MapFromModel(this HCPCS entity, HCPCSModel model)
+        public static void MapFromModel(this HCPCSCode entity, HCPCSCodeModel model)
         {
-            //TODO Is this code needed?
-            if (model == null)
-            {
-                return;
-            }
-            if (entity == null)
-            {
-                entity = new HCPCS();
-            }
-            entity.Id = model.Id;
-            entity.Code = model.Code;
-            entity.Product = model.Product;
-            entity.Duration = model.Duration;
-            entity.Description = model.Description;
+            entity.HCPCSCodeId = model.HCPCSCodeId;
+            entity.Text = model.Text;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
         }

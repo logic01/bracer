@@ -6,8 +6,8 @@ namespace PR.Business.Interfaces
     {
         DocumentModel Get(int documentId);
 
-        DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId);
+        int Create(DocumentModel documentModel);
 
-        DocumentModel Update(DocumentModel documentModel);
+        void Update(DocumentModel documentModel);
     }
 }

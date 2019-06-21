@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { SignatureType } from 'src/app/models/enums/signature-type';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
+import { Signature } from 'src/app/models/signature.model';
 
 import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
@@ -17,26 +19,23 @@ export class PrescriptionComponent implements OnInit {
   @Input() patient: Patient;
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
-
   @Input() product: string;
-  @Input() diagnosis: string[] = [];
-  @Input() lcodes: string[] = [];
-  @Input() duration: string;
 
-  @Output() formSubmitEvent = new EventEmitter<string>();
+  @Output() formSubmitEvent = new EventEmitter<Signature>();
 
   public today = Date.now();
-  public signatureData: string;
+  public signature = new Signature();
 
   constructor(private readonly dialog: MatDialog) { }
 
   ngOnInit() {
+    window.scrollTo(0, 0);
   }
 
   getLCodes() {
     let text = '';
-    for (const lcodeText of this.lcodes) {
-      text += lcodeText;
+    for (const code of this.intakeForm.HCPCSCodes) {
+      text += code.text;
     }
 
     return text;
@@ -54,7 +53,6 @@ export class PrescriptionComponent implements OnInit {
     }
 
     return text;
-
   }
 
   calcAge(): number {
@@ -63,16 +61,16 @@ export class PrescriptionComponent implements OnInit {
     return age;
   }
 
-
   sign() {
     this.dialog
       .open(SignatureDialogComponent)
       .afterClosed()
-      .subscribe(result => this.signatureData = result);
+      .subscribe(result => this.signature.content = result);
   }
 
   approve() {
-    this.formSubmitEvent.emit(this.signatureData);
+    this.signature.type = SignatureType.PrescriptionDocument;
+    this.formSubmitEvent.emit(this.signature);
   }
 
   next() {

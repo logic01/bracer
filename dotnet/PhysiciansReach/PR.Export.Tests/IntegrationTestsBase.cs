@@ -4,7 +4,6 @@ using PR.Data.Models;
 using PR.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PR.Export.Tests
 {
@@ -38,9 +37,9 @@ namespace PR.Export.Tests
 
         protected IntakeForm CreateIntakeFormLocal(int patientId)
         {
-            // Create IntakeForm with ICD, HCPCS, Phsycian, and Signature
-            var intakeForm = CreateIntakeForm(patientId);
-            var savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
+            // Create IntakeForm with ICD, HCPCSCode, Phsycian, and Signature
+            IntakeForm intakeForm = CreateIntakeForm(patientId);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<IntakeForm> savedIntakeForm = dbContext.IntakeForm.Add(intakeForm);
             dbContext.SaveChanges();
             var intakeFormId = savedIntakeForm.Entity.IntakeFormId;
 
@@ -53,17 +52,16 @@ namespace PR.Export.Tests
 
         protected IntakeForm CreateIntakeForm(int patientId)
         {
-            var signature = CreateSignature();
+            Signature signature = CreateSignature();
             return new IntakeForm
             {
                 PatientId = patientId,
                 IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
-                ICD10s = CreateICD10s(),
-                HCPCSs = CreateHCPCSs(),
+                ICD10Codes = CreateICD10s(),
+                HCPCSCodes = CreateHCPCSCodes(),
                 Physician = CreatePhysician(),
-                Signature = signature,
                 Status = Constants.Enums.IntakeFormStatus.New,
-                AdditionalDrNotes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi blandit cursus risus at ultrices. Enim nunc faucibus a pellentesque sit amet porttitor eget dolor. Tincidunt dui ut ornare lectus sit amet est. Laoreet sit amet cursus sit amet dictum. Dignissim cras tincidunt lobortis feugiat vivamus at. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing"
+                PhysicianNotes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi blandit cursus risus at ultrices. Enim nunc faucibus a pellentesque sit amet porttitor eget dolor. Tincidunt dui ut ornare lectus sit amet est. Laoreet sit amet cursus sit amet dictum. Dignissim cras tincidunt lobortis feugiat vivamus at. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing"
             };
         }
 
@@ -111,44 +109,35 @@ namespace PR.Export.Tests
             return signature;
         }
 
-        protected static List<HCPCS> CreateHCPCSs()
+        protected static List<HCPCSCode> CreateHCPCSCodes()
         {
-            return new List<HCPCS>{ new HCPCS
+            return new List<HCPCSCode>{ new HCPCSCode
                 {
-                    Code = "L0650",
-                    Product = "Back Brace",
-                    Description = "(Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
+                    Text = "L0650 - (Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
                             "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
                             "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
                             "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
-                    Duration = "99/lifetime"
-                }, new HCPCS
+                }, new HCPCSCode
                 {
-                    Code = "L111",
-                    Product = "Back Brace",
-                    Description = "The custom description for L111",
-                    Duration = "99/lifetime"
-                } };
+                    Text = "L111 - The custom description for L111"
+                }
+            };
         }
 
-        protected static List<ICD10> CreateICD10s()
+        protected static List<ICD10Code> CreateICD10s()
         {
-            return new List<ICD10> { new ICD10
+            return new List<ICD10Code> { new ICD10Code
                 {
-                    Code = "m54.5",
-                    Description = "low back pain"
-                },new ICD10
+                    Text = "m54.5 - low back pain"
+                },new ICD10Code
                 {
-                    Code = "m53.2x7",
-                    Description = "spinal instabilities"
-                },new ICD10
+                    Text = "m53.2x7 - spinal instabilities"
+                },new ICD10Code
                 {
-                    Code = "g89.4",
-                    Description = "chronic pain"
-                },new ICD10
+                    Text = "g89.4 - chronic pain"
+                },new ICD10Code
                 {
-                    Code = "m51.36",
-                    Description = "lumbar disc degeneration"
+                    Text = "m51.36 - lumbar disc degeneration"
                 }};
         }
 
@@ -208,18 +197,20 @@ namespace PR.Export.Tests
 
         protected List<Question> CreateQuestions(int intakeFormId)
         {
-            var questions = new List<Question>();
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Cause of Patients Pain?", "PainFeeling", "Pain Causer"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Location(s) of Pain?", "PainChart", "Lower Back"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Onset of pain (When did the pain begin?)", "PainBegan", "2 months ago"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "What Provokes Pain", "PainCause", "Pain Provoker"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "What currently relieves the pain", "PainSelfTreatment", "RICE"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]", "PainDescription", "Sharp"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Duration of Pain (Constant (Daily), Intermittent (from time to time)", "PainDuration", "Constant Pain"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)", "PreviousTreatment", "Brace Helped"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Affects Activities of Daily Living(ADL) (If so, what?)", "EffectsDaily", "All movement effected"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "If yes, what type of surgery?", "Surgies", "Back surgery twice"));
-            questions.Add(CreateQuestionAnswer(intakeFormId, "Pain Rating", "PainLevel", "7"));
+            var questions = new List<Question>
+            {
+                CreateQuestionAnswer(intakeFormId, "Cause of Patients Pain?", "PainFeeling", "Pain Causer"),
+                CreateQuestionAnswer(intakeFormId, "Location(s) of Pain?", "PainChart", "Lower Back"),
+                CreateQuestionAnswer(intakeFormId, "Onset of pain (When did the pain begin?)", "PainBegan", "2 months ago"),
+                CreateQuestionAnswer(intakeFormId, "What Provokes Pain", "PainCause", "Pain Provoker"),
+                CreateQuestionAnswer(intakeFormId, "What currently relieves the pain", "PainSelfTreatment", "RICE"),
+                CreateQuestionAnswer(intakeFormId, "Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]", "PainDescription", "Sharp"),
+                CreateQuestionAnswer(intakeFormId, "Duration of Pain (Constant (Daily), Intermittent (from time to time)", "PainDuration", "Constant Pain"),
+                CreateQuestionAnswer(intakeFormId, "Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)", "PreviousTreatment", "Brace Helped"),
+                CreateQuestionAnswer(intakeFormId, "Affects Activities of Daily Living(ADL) (If so, what?)", "EffectsDaily", "All movement effected"),
+                CreateQuestionAnswer(intakeFormId, "If yes, what type of surgery?", "Surgies", "Back surgery twice"),
+                CreateQuestionAnswer(intakeFormId, "Pain Rating", "PainLevel", "7")
+            };
             return questions;
         }
 
@@ -236,19 +227,19 @@ namespace PR.Export.Tests
 
         protected Patient CreateAndPersistPatient(Agent agent)
         {
-            var patient = CreatePatient(agent.UserAccountId);
-            var savedPatient = dbContext.Patient.Add(patient);
+            Patient patient = CreatePatient(agent.UserAccountId);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Patient> savedPatient = dbContext.Patient.Add(patient);
             dbContext.SaveChanges();
             return savedPatient.Entity;
         }
 
         protected Agent CreateAgent()
         {
-            var vendor = CreateAndPersistVendor();
+            Vendor vendor = CreateAndPersistVendor();
 
             // Create Agent
-            var agent = CreateAgent(vendor.VendorId);
-            var savedAgent = dbContext.Agent.Add(agent);
+            Agent agent = CreateAgent(vendor.VendorId);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Agent> savedAgent = dbContext.Agent.Add(agent);
             dbContext.SaveChanges();
             return savedAgent.Entity;
         }
@@ -265,7 +256,7 @@ namespace PR.Export.Tests
                 ContactLastName = "Kelley",
                 Active = true,
             };
-            var savedVendor = dbContext.Vendor.Add(vendor);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Vendor> savedVendor = dbContext.Vendor.Add(vendor);
             dbContext.SaveChanges();
             return savedVendor.Entity;
         }

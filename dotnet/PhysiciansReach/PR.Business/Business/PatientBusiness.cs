@@ -38,25 +38,56 @@ namespace PR.Business
             return patient.ToModel();
         }
 
-        public PatientModel Create(PatientModel patientModel)
+        public List<PatientModel> GetByAgent(int agentId)
+        {
+            return _context.Patient
+                    .Include(p => p.Address)
+                    .Include(p => p.PrivateInsurance)
+                    .Include(p => p.Medicare)
+                    .Where(p => p.AgentId == agentId)
+                    .Select(i => i.ToModel())
+                    .ToList();
+
+        }
+
+        public List<PatientModel> GetByVendor(int vendorId)
+        {
+            var patients = new List<PatientModel>();
+
+            IQueryable<Agent> agents = _context.Agent
+                   .Include("Patient.Address")
+                   .Include("Patient.PrivateInsurance")
+                   .Include("Patient.Medicare")
+                   .Where(p => p.VendorId == vendorId);
+
+            foreach (Agent agent in agents)
+            {
+                patients.AddRange(agent.Patients.Select(p => p.ToModel()));
+            }
+
+
+            return patients.ToList();
+
+        }
+
+
+        public int Create(PatientModel patientModel)
         {
             Patient patient = patientModel.ToEntity();
 
             _context.Patient.Add(patient);
             _context.SaveChanges();
 
-            return patient.ToModel();
+            return patient.PatientId;
         }
 
-        public PatientModel Update(PatientModel patientModel)
+        public void Update(PatientModel patientModel)
         {
             Patient patient = _context.Patient.FirstOrDefault(u => u.PatientId == patientModel.PatientId);
 
             patient = patientModel.ToEntity();
             _context.Patient.Add(patient);
             _context.SaveChanges();
-
-            return patient.ToModel();
         }
 
 

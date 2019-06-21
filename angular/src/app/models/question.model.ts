@@ -12,9 +12,9 @@ export class PainQuestion extends Question {
     painPointText: string;
     elementId: string;
     getId(): string {
-        return this.painPoint +"_"+this.elementId;
+        return this.painPoint + '_' + this.elementId;
     }
-    getString(): string{
-        return this.painPointText.replace(/\s/g, "");
+    getString(): string {
+        return this.painPointText.replace(/\s/g, '');
     }
 }

@@ -2,14 +2,13 @@
 
 namespace PR.Data.Models
 {
-    public class ICD10
+    public class HCPCSCode
     {
-        public int Id { get; set; }
+        public int HCPCSCodeId { get; set; }
 
-        public string Code { get; set; }
-
-        public string Description { get; set; }
         public int IntakeFormId { get; set; }
+
+        public string Text { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

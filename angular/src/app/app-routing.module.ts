@@ -26,9 +26,14 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: RouteUrls.LoginComponent, component: LoginComponent },
   {
-    path: RouteUrls.IntakeDocumentComponent, component: DocumentComponent,
+    path: RouteUrls.VendorIntakeDocumentComponent, component: DocumentComponent,
     canActivate: [RoleGuardService, SignInGuardService],
-    data: { expectedRoles: [AccountType.Admin, AccountType.Physician] }
+    data: { expectedRoles: [AccountType.Admin] }
+  },
+  {
+    path: RouteUrls.PhysicianIntakeDocumentComponent, component: DocumentComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRoles: [AccountType.Physician] }
   },
   {
     path: RouteUrls.AdminCreateComponent, component: CreateAdminComponent,

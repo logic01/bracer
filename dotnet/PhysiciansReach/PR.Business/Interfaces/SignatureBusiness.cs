@@ -6,6 +6,6 @@ namespace PR.Business.Interfaces
     {
         SignatureModel Get(int signatureId);
 
-        SignatureModel Create(int intakeFormId, SignatureModel signatureModel);
+        int Create(int intakeFormId, SignatureModel signatureModel);
     }
 }

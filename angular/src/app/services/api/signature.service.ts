@@ -11,7 +11,8 @@ import { environment } from '../../../environments/environment';
 export class SignatureService {
 
     constructor(private http: HttpClient) { }
-    sign(intakeFormId: string, signature: Signature): Observable<void> {
-        return this.http.post<void>(`${environment.api_url}/intakeform/${intakeFormId}/signature`, signature);
+
+    put(intakeFormId: string, signature: Signature): Observable<{ signatureId: string }> {
+        return this.http.post<{ signatureId: string }>(`${environment.api_url}/intakeform/${intakeFormId}/signature`, signature);
     }
 }

@@ -12,23 +12,27 @@ namespace PR.Models
 
         public int? PhysicianId { get; set; }
 
-        public int? SignatureId { get; set; }
+        public int? DocumentId { get; set; }
 
         public IntakeFormType IntakeFormType { get; set; }
 
-        public List<ICD10Model> ICD10 { get; set; }
-
-        public List<HCPCSModel> HCPCS { get; set; }
-
         public IntakeFormStatus Status { get; set; }
+
+        public List<ICD10CodeModel> ICD10Codes { get; set; }
+
+        public List<HCPCSCodeModel> HCPCSCodes { get; set; }
+
+        public string Duration { get; set; }
+
+        public string PhysicianNotes { get; set; }
+
+        public string Product { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 
         public List<QuestionModel> Questions { get; set; }
-
-        public string AdditionalDrNotes { get; set; }
 
     }
 }

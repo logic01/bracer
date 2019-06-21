@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
-using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PR.Business
@@ -14,9 +13,9 @@ namespace PR.Business
     {
         private DataContext _context;
         private readonly IIntakeFormBusiness _intakeFormBusiness;
-        private readonly IIntakeFormExporter _exporter;
+        private readonly IDocumentGenerator _exporter;
 
-        public DocumentBusiness(DataContext context, IIntakeFormBusiness intakeFormBusiness, IIntakeFormExporter exporter)
+        public DocumentBusiness(DataContext context, IIntakeFormBusiness intakeFormBusiness, IDocumentGenerator exporter)
         {
             _context = context;
             _intakeFormBusiness = intakeFormBusiness;
@@ -30,7 +29,7 @@ namespace PR.Business
             return document.ToModel();
         }
 
-        public DocumentModel Update(DocumentModel documentModel)
+        public void Update(DocumentModel documentModel)
         {
             // get original
             Document document = _context.Document.FirstOrDefault(u => u.DocumentId == documentModel.DocumentId);
@@ -40,42 +39,46 @@ namespace PR.Business
 
             // save
             _context.SaveChanges();
-
-            // return new
-            return document.ToModel();
         }
 
-        public DocumentModel CreateIntakeFormDocument(int patientId, int intakeFormId)
+        public int Create(DocumentModel documentModel)
         {
+            IntakeForm intakeForm = _context.IntakeForm
+                    .Include("Questions.Answers")
+                    .Include(i => i.ICD10Codes)
+                    .Include(i => i.HCPCSCodes)
+                    .Include(i => i.Physician.Address)
+                    .Include(i => i.Signatures)
+                    .First(i => i.IntakeFormId == documentModel.IntakeFormId);
+
             Patient patient = _context.Patient
-                .Include(p => p.PhysiciansAddress) //This is the address that comes from the patient screen. Not sure if we should use this
                 .Include(p => p.Address)
                 .Include(p => p.PrivateInsurance)
                 .Include(p => p.Medicare)
-                .First(p => p.PatientId == patientId);
+                .First(p => p.PatientId == intakeForm.PatientId);
 
-            var intakeForms = _context.IntakeForm
-                .Include("Questions.Answers")
-                .Include("ICD10s")
-                .Include("HCPCSs")
-                .Include(i => i.Signature)
-                .Include("Physician.Address")
-                .Where(i => i.PatientId == patientId);
+            IntakeFormModel intakeFormModel = intakeForm.ToModel();
+            PatientModel patientModel = patient.ToModel();
+            PhysicianModel physicianModel = intakeForm.Physician.ToModel();
+            ICollection<SignatureModel> signatureModels = intakeForm.Signatures.Select(s => s.ToModel()).ToList();
 
-            var intakeForm = intakeForms.First(x => x.IntakeFormId == intakeFormId);
-
-            var documentContent = _exporter.CreateNewIntakeForm(intakeForm.ToModel(), patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), intakeForms.Select(x => x.ToModel()).ToList());
+            var documentContent = _exporter.GenerateIntakeDocuments(
+                intakeFormModel,
+                patientModel,
+                physicianModel,
+                signatureModels);
 
             var document = new Document
             {
-                IntakeFormId = intakeFormId,
+                IntakeFormId = documentModel.IntakeFormId,
                 Content = documentContent
             };
 
-            _context.Document.Add(document);
+            intakeForm.Document = document;
+
             _context.SaveChanges();
 
-            return document.ToModel();
+            return document.DocumentId;
         }
     }
 }

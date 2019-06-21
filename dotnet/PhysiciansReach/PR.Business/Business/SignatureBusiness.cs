@@ -1,8 +1,11 @@
-﻿using PR.Business.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Business.Utils;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PR.Business
@@ -11,9 +14,9 @@ namespace PR.Business
     {
         private DataContext _context;
         private readonly IIntakeFormBusiness _intakeFormBusiness;
-        private readonly IIntakeFormExporter _exporter;
+        private readonly IDocumentGenerator _exporter;
 
-        public SignatureBusiness(DataContext context, IIntakeFormBusiness intakeFormBusiness, IIntakeFormExporter exporter)
+        public SignatureBusiness(DataContext context, IIntakeFormBusiness intakeFormBusiness, IDocumentGenerator exporter)
         {
             _context = context;
             _intakeFormBusiness = intakeFormBusiness;
@@ -27,18 +30,28 @@ namespace PR.Business
             return signature.ToModel();
         }
 
-        public SignatureModel Create(int intakeFormId, SignatureModel signatureModel)
+        public int Create(int intakeFormId, SignatureModel signatureModel)
         {
-            IntakeForm intakeForm = _context.IntakeForm.FirstOrDefault(u => u.IntakeFormId == intakeFormId);
+            IntakeForm intakeForm = _context.IntakeForm
+                .Include(i => i.Signatures)
+                .First(u => u.IntakeFormId == intakeFormId);
 
             var sig = new Signature();
             sig.MapFromModel(signatureModel);
 
-            intakeForm.Signature = sig;
+            if (intakeForm.Signatures == null)
+            {
+                intakeForm.Signatures = new List<Signature>();
+            }
+
+            intakeForm.Signatures.Add(sig);
+
+            // set late because it depends on # of signatures
+            intakeForm.Status = IntakeFormStatusFactory.GetNext(intakeForm);
 
             _context.SaveChanges();
 
-            return sig.ToModel();
+            return sig.SignatureId;
         }
     }
 }

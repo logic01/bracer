@@ -40,7 +40,6 @@ namespace PR.Business.Mappings
                 Height = entity.Height,
                 ShoeSize = entity.ShoeSize,
                 Allergies = entity.Allergies
-
             };
 
             return model;

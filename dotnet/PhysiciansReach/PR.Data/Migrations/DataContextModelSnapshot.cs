@@ -176,55 +176,62 @@ namespace PR.Data.Migrations
                     b.ToTable("Document","dbo");
                 });
 
-            modelBuilder.Entity("PR.Data.Models.HCPCS", b =>
+            modelBuilder.Entity("PR.Data.Models.HCPCSCode", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("HCPCSCodeId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Duration")
-                        .HasMaxLength(100);
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("IntakeFormId");
 
-                    b.Property<DateTime>("ModifiedOn");
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("Product");
+                    b.Property<string>("Text")
+                        .IsRequired();
 
-                    b.HasKey("Id");
+                    b.HasKey("HCPCSCodeId")
+                        .HasAnnotation("SqlServer:Clustered", false);
 
                     b.HasIndex("IntakeFormId");
 
-                    b.ToTable("HCPCS");
+                    b.ToTable("HCPCSCode","dbo");
                 });
 
-            modelBuilder.Entity("PR.Data.Models.ICD10", b =>
+            modelBuilder.Entity("PR.Data.Models.ICD10Code", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ICD10CodeId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("Description");
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("IntakeFormId");
 
-                    b.Property<DateTime>("ModifiedOn");
+                    b.Property<DateTime>("ModifiedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Text")
+                        .IsRequired();
+
+                    b.HasKey("ICD10CodeId")
+                        .HasAnnotation("SqlServer:Clustered", false);
 
                     b.HasIndex("IntakeFormId");
 
-                    b.ToTable("ICD10");
+                    b.ToTable("ICD10Code","dbo");
                 });
 
             modelBuilder.Entity("PR.Data.Models.IntakeForm", b =>
@@ -233,15 +240,14 @@ namespace PR.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdditionalDrNotes")
-                        .HasMaxLength(500);
-
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<int?>("DocumentId");
+
+                    b.Property<string>("Duration");
 
                     b.Property<string>("IntakeFormType")
                         .IsRequired()
@@ -256,7 +262,9 @@ namespace PR.Data.Migrations
 
                     b.Property<int?>("PhysicianId");
 
-                    b.Property<int?>("SignatureId");
+                    b.Property<string>("PhysicianNotes");
+
+                    b.Property<string>("Product");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -274,10 +282,6 @@ namespace PR.Data.Migrations
                     b.HasIndex("PatientId");
 
                     b.HasIndex("PhysicianId");
-
-                    b.HasIndex("SignatureId")
-                        .IsUnique()
-                        .HasFilter("[SignatureId] IS NOT NULL");
 
                     b.ToTable("IntakeForm","dbo");
                 });
@@ -606,6 +610,8 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int?>("IntakeFormId");
+
                     b.Property<string>("IpAddress");
 
                     b.Property<DateTime>("ModifiedOn")
@@ -613,8 +619,12 @@ namespace PR.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int>("Type");
+
                     b.HasKey("SignatureId")
                         .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("IntakeFormId");
 
                     b.ToTable("Signature","dbo");
                 });
@@ -698,7 +708,8 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Admin")
                         .HasForeignKey("PR.Data.Models.Admin", "UserAccountId")
-                        .HasConstraintName("FK_Admin_UserAccount");
+                        .HasConstraintName("FK_Admin_UserAccount")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PR.Data.Models.Agent", b =>
@@ -706,12 +717,14 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Agent")
                         .HasForeignKey("PR.Data.Models.Agent", "UserAccountId")
-                        .HasConstraintName("FK_Agent_UserAccount");
+                        .HasConstraintName("FK_Agent_UserAccount")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.Vendor", "Vendor")
                         .WithMany("Agent")
                         .HasForeignKey("VendorId")
-                        .HasConstraintName("FK_Agent_Vendor");
+                        .HasConstraintName("FK_Agent_Vendor")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PR.Data.Models.Answer", b =>
@@ -719,21 +732,22 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
-                        .HasConstraintName("FK_Questions_Answers");
+                        .HasConstraintName("FK_Questions_Answers")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("PR.Data.Models.HCPCS", b =>
+            modelBuilder.Entity("PR.Data.Models.HCPCSCode", b =>
                 {
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
-                        .WithMany("HCPCSs")
+                        .WithMany("HCPCSCodes")
                         .HasForeignKey("IntakeFormId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("PR.Data.Models.ICD10", b =>
+            modelBuilder.Entity("PR.Data.Models.ICD10Code", b =>
                 {
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
-                        .WithMany("ICD10s")
+                        .WithMany("ICD10Codes")
                         .HasForeignKey("IntakeFormId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -743,24 +757,18 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Document", "Document")
                         .WithOne("IntakeForm")
                         .HasForeignKey("PR.Data.Models.IntakeForm", "DocumentId")
-                        .HasConstraintName("FK_IntakeForm_Document")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_IntakeForm_Document");
 
                     b.HasOne("PR.Data.Models.Patient", "Patient")
                         .WithMany("IntakeForms")
                         .HasForeignKey("PatientId")
-                        .HasConstraintName("FK_Patient_IntakeForms");
+                        .HasConstraintName("FK_Patient_IntakeForms")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.Physician", "Physician")
                         .WithMany("IntakeForms")
                         .HasForeignKey("PhysicianId")
                         .HasConstraintName("FK_Physician_IntakeForms");
-
-                    b.HasOne("PR.Data.Models.Signature", "Signature")
-                        .WithOne("IntakeForm")
-                        .HasForeignKey("PR.Data.Models.IntakeForm", "SignatureId")
-                        .HasConstraintName("FK_IntakeForm_Signature")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PR.Data.Models.Patient", b =>
@@ -768,12 +776,14 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Address", "Address")
                         .WithOne("Patient")
                         .HasForeignKey("PR.Data.Models.Patient", "AddressId")
-                        .HasConstraintName("FK_Patient_Address");
+                        .HasConstraintName("FK_Patient_Address")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.Agent", "Agent")
                         .WithMany("Patients")
                         .HasForeignKey("AgentId")
-                        .HasConstraintName("FK_Patient_Agent");
+                        .HasConstraintName("FK_Patient_Agent")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.Medicare", "Medicare")
                         .WithOne("Patient")
@@ -796,12 +806,14 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.Address", "Address")
                         .WithOne("Physician")
                         .HasForeignKey("PR.Data.Models.Physician", "AddressId")
-                        .HasConstraintName("FK_Physician_Address");
+                        .HasConstraintName("FK_Physician_Address")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PR.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Physician")
                         .HasForeignKey("PR.Data.Models.Physician", "UserAccountId")
-                        .HasConstraintName("FK_Physician_UserAccount");
+                        .HasConstraintName("FK_Physician_UserAccount")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PR.Data.Models.Question", b =>
@@ -809,7 +821,15 @@ namespace PR.Data.Migrations
                     b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
                         .WithMany("Questions")
                         .HasForeignKey("IntakeFormId")
-                        .HasConstraintName("FK_IntakeForm_Questions");
+                        .HasConstraintName("FK_IntakeForm_Questions")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PR.Data.Models.Signature", b =>
+                {
+                    b.HasOne("PR.Data.Models.IntakeForm", "IntakeForm")
+                        .WithMany("Signatures")
+                        .HasForeignKey("IntakeFormId");
                 });
 #pragma warning restore 612, 618
         }

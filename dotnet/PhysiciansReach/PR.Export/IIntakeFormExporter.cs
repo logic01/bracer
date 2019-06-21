@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace PR.Export
 {
-    public interface IIntakeFormExporter
+    public interface IDocumentGenerator
     {
-        byte[] CreateNewIntakeForm(IntakeFormModel intakeForm, PatientModel patient, SignatureModel signature, PhysicianModel physician, List<IntakeFormModel> allIntakeForms);
+        byte[] GenerateIntakeDocuments(
+            IntakeFormModel intakeForm,
+            PatientModel patient,
+            PhysicianModel physician,
+            ICollection<SignatureModel> signatures);
     }
 }

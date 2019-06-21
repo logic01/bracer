@@ -23,9 +23,9 @@ export class AdminAccountFormComponent implements OnInit {
   ngOnInit() {
     this.accountForm = new FormGroup({
       userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      password: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      password: new FormControl('', [CustomValidators.password(6, 20)]),
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
-      confirmationPassword: new FormControl('', [CustomValidators.password(6, 20), Validators.required]),
+      confirmationPassword: new FormControl('', [CustomValidators.password(6, 20)]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       active: new FormControl(true)
@@ -48,6 +48,15 @@ export class AdminAccountFormComponent implements OnInit {
         this.accountForm.patchValue(result);
         this.accountForm.patchValue(result.userAccount);
       });
+    } else {
+      // require a password for creating a admin
+      this.accountForm.get('password').validator = Validators.compose([
+        this.accountForm.get('password').validator, Validators.required
+      ]);
+
+      this.accountForm.get('confirmationPassword').validator = Validators.compose([
+        this.accountForm.get('confirmationPassword').validator, Validators.required
+      ]);
     }
 
   }

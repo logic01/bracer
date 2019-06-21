@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
     {
@@ -19,35 +18,53 @@ namespace PhysiciansReach.Controllers
             _logging = logging;
         }
 
-        [HttpGet]
+        [HttpGet("Patient")]
         public ActionResult<List<PatientModel>> Get()
         {
             _logging.Log(LogSeverity.Info, "Get All Patient");
             return _business.Get();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Patient/{id}")]
         public ActionResult<PatientModel> Get(int id)
         {
             _logging.Log(LogSeverity.Info, "Get Patient");
             return _business.Get(id);
         }
 
-        [HttpPost]
+        [HttpGet("Agent/{agentId}/Patient")]
+        public ActionResult<List<PatientModel>> GetByAgent(int agentId)
+        {
+            _logging.Log(LogSeverity.Info, "Get Patient By Agent");
+            return _business.GetByAgent(agentId);
+        }
+
+        [HttpGet("Vendor/{vendorId}/Patient")]
+        public ActionResult<List<PatientModel>> GetByVendor(int vendorId)
+        {
+            _logging.Log(LogSeverity.Info, "Get Patient By Vendor");
+            return _business.GetByVendor(vendorId);
+        }
+
+        [HttpPost("Patient")]
         public ActionResult<PatientModel> Post([FromBody] PatientModel patient)
         {
             _logging.Log(LogSeverity.Info, "Post Patient");
-            return _business.Create(patient);
+            var patientId = _business.Create(patient);
+
+            return CreatedAtAction("Post", new { patientId });
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Patient/{id}")]
         public ActionResult<PatientModel> Put(int id, [FromBody] PatientModel patient)
         {
             _logging.Log(LogSeverity.Info, "Put Patient");
 
             patient.PatientId = id;
 
-            return _business.Update(patient);
+            _business.Update(patient);
+
+            return Ok();
         }
     }
 }
