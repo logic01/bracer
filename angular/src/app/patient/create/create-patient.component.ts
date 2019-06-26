@@ -2,8 +2,11 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatRadioChange, MatRadioGroup, MatSelect } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 import { Address } from 'src/app/models/address.model';
 import { Medicare } from 'src/app/models/medicare.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -15,8 +18,6 @@ import { MaskService } from 'src/app/services/mask.service';
 import { SelectValueService } from 'src/app/services/select-value.service';
 import { SessionService } from 'src/app/services/session.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
-
-import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
 
 @Component({
   selector: 'app-create-patient',
@@ -35,7 +36,6 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   submitted = false;
   privateInsurance: boolean;
   medicareInsurance: boolean;
-  bothInsurance: boolean;
   selectedInsurance: string;
   @ViewChild('genderC') genderField: MatRadioGroup;
   @ViewChild('firstC') firstNameField: ElementRef;
@@ -108,7 +108,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       insuranceId: new FormControl('', Validators.maxLength(100)),
       privateGroup: new FormControl('', Validators.maxLength(100)),
       privatePcn: new FormControl('', Validators.maxLength(100)),
-      bin: new FormControl('', Validators.maxLength(100)),
+      bin: new FormControl('', [Validators.maxLength(6), CustomValidators.onlyNumeric]),
       insuranceStreet: new FormControl('', Validators.maxLength(100)),
       insuranceCity: new FormControl('', Validators.maxLength(30)),
       insuranceState: new FormControl('', Validators.maxLength(100)),
@@ -122,7 +122,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       secondarySubscriberNumber: new FormControl('', Validators.maxLength(100)),
       insuranceType: new FormControl('', Validators.required)
     });
-    
+
   }
 
   ngOnDestroy(): void {
@@ -194,7 +194,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
     patient.physiciansAddress.state = this.form.controls['physicianState'].value;
     patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
 
-    if (this.privateInsurance || this.bothInsurance) {
+    if (this.privateInsurance) {
       patient.privateInsurance = new PrivateInsurance();
       patient.privateInsurance.bin = this.form.controls['bin'].value;
       patient.privateInsurance.insurance = this.form.controls['insurance'].value;
@@ -208,7 +208,7 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
       patient.privateInsurance.phone = this.formatHelper.toNumbersOnly(this.form.controls['insurancePhone'].value);
     }
 
-    if (this.medicareInsurance || this.bothInsurance) {
+    if (this.medicareInsurance) {
       patient.medicare = new Medicare();
       patient.medicare.memberId = this.form.controls['memberId'].value;
       patient.medicare.patientGroup = this.form.controls['medicareGroup'].value;
@@ -231,7 +231,6 @@ export class CreatePatientComponent implements OnInit, OnDestroy {
   radioChange(event: MatRadioChange) {
     this.privateInsurance = event.value === 'PRIVATE';
     this.medicareInsurance = event.value === 'MEDICARE';
-    this.bothInsurance = event.value === 'BOTH';
   }
 
   focusOnErrorElement() {

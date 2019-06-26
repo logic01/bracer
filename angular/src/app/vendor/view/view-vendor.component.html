@@ -1,11 +1,11 @@
-<div *ngIf="(vendor$ | async) as vendor" fxLayout="row" fxLayoutAlign="center start">
-  <div fxLayout="column" fxLayoutGap="10px">
-    <h1> {{ vendor.companyName }} </h1>
-    <h4> Doing Business As: {{ vendor.doingBusinessAs }} </h4>
-    <h4> Phone Number: {{ vendor.phoneNumber | phone }} </h4>
-    <h4> Contact: {{ vendor.contactFirstName }} {{ vendor.contactLastName }} </h4>
-  </div>
-</div>
+<mat-card *ngIf="(vendor$ | async) as vendor">
+  <mat-card-title> {{ vendor.companyName }}</mat-card-title>
+  <mat-card-content>
+    <div> Doing Business As: {{ vendor.doingBusinessAs }} </div>
+    <div> Phone Number: {{ vendor.phoneNumber | phone }} </div>
+    <div> Contact: {{ vendor.contactFirstName }} {{ vendor.contactLastName }} </div>
+  </mat-card-content>
+</mat-card>
 
 <div fxLayout="row" fxLayoutAlign="center start">
   <div fxLayout="column" fxLayoutGap="10px">

@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { RouteUrls } from 'src/app/constants/routes';
 import { Admin } from 'src/app/models/admin.model';
 import { AdminService } from 'src/app/services/api/admin.service';
@@ -19,7 +21,7 @@ export class AdminListComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   public datasource: MatTableDataSource<Admin>;
-  public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'edit'];
+  public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'active', 'edit'];
 
   constructor(
     private readonly adminApi: AdminService,

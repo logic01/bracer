@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
 import { VendorService } from 'src/app/services/api/vendor.service';
@@ -19,7 +21,7 @@ export class VendorListComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   public datasource: MatTableDataSource<Vendor>;
-  public columnsToDisplay = ['vendorId', 'companyName', 'doingBusinessAs', 'phoneNumber', 'edit', 'view'];
+  public columnsToDisplay = ['vendorId', 'companyName', 'doingBusinessAs', 'phoneNumber', 'active', 'edit', 'view'];
 
   constructor(
     private readonly vendorApi: VendorService,

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
@@ -17,37 +18,27 @@ export class PainDmeOnlyComponent implements OnInit {
 
   @Output() formSubmitEvent = new EventEmitter<IntakeForm>();
 
+  public form: FormGroup;
 
-  LeftWrist: boolean = false;
-  RightWrist: boolean = false;
-  LeftElbow: boolean = false;
-  RightElbow: boolean = false;
-  LeftAnteriorShoulder: boolean = false;
-  RightAnteriorShoulder: boolean = false;
-  LeftHip: boolean = false;
-  RightHip: boolean = false;
-  LeftKnee: boolean = false;
-  RightKnee: boolean = false;
-  PosteriorLeftShoulder: boolean = false;
-  PosteriorRightShoulder: boolean = false;
-  Neck: boolean = false;
-  UpperMiddleBack: boolean = false;
-  MiddleBack: boolean = false;
-  LowerBack: boolean = false;
-  LeftOccipital: boolean = false;
-  RightOccipital: boolean = false;
-  FrontalorForehead: boolean = false;
-  LeftAnkle: boolean = false;
-  RightAnkle: boolean = false;
+  public LeftWrist = false;
+  public RightWrist = false;
+  public LeftElbow = false;
+  public RightElbow = false;
+  public LeftAnteriorShoulder = false;
+  public RightAnteriorShoulder = false;
+  public LeftKnee = false;
+  public RightKnee = false;
+  public LeftPosteriorShoulder = false;
+  public RightPosteriorShoulder = false;
+  public LeftAnkle = false;
+  public RightAnkle = false;
 
+  public painQuestions: PainQuestion[][];
+  public painPoints = SelectValueService.painPoints;
 
-  painQuestions: PainQuestion[][];
-  painPoints = SelectValueService.painPoints;
-  form: FormGroup;
-  patientId: string;
+  public patientId: string;
 
   constructor(private readonly route: ActivatedRoute, public readonly maskService: MaskService) { }
-
 
   ngOnInit() {
     this.patientId = this.route.snapshot.paramMap.get('id');
@@ -66,8 +57,8 @@ export class PainDmeOnlyComponent implements OnInit {
       for (let p = 0; p < painQuestionSet.length; p++) {
         const painQuestion = painQuestionSet[p];
         this.form.addControl(painQuestion.getId(), new FormControl());
-      };
-    };
+      }
+    }
   }
 
   onSubmit() {
@@ -101,8 +92,7 @@ export class PainDmeOnlyComponent implements OnInit {
       painArray.push(this.initPainQuestion('10', 'Have you had surgery in this area?', painPoint, 10));
       painArray.push(this.initPainQuestion('Surgies', 'If yes, what type of surgery?', painPoint, 11));
       painArray.push(this.initPainQuestion('12', 'Date of Surgery', painPoint, 12));
-      painArray.push(this.initPainQuestion('13', 'Is this a request for a TENS UNIT', painPoint, 13));
-      painArray.push(this.initPainQuestion('14', 'Are you able to ambulate? (can you walk on your own, or with a walker, or with a crutch)', painPoint, 14));
+      painArray.push(this.initPainQuestion('14', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)', painPoint, 14));
       painArray.push(this.initPainQuestion('PainLevel', 'Pain Rating', painPoint, 15));
       this.painQuestions.push(painArray);
     }
@@ -133,22 +123,10 @@ export class PainDmeOnlyComponent implements OnInit {
     if (this.RightElbow) { painPointIds.push(3); }
     if (this.LeftAnteriorShoulder) { painPointIds.push(4); }
     if (this.RightAnteriorShoulder) { painPointIds.push(5); }
-    if (this.LeftHip) { painPointIds.push(6); }
-    if (this.RightHip) { painPointIds.push(7); }
-    if (this.LeftKnee) { painPointIds.push(8); }
-    if (this.RightKnee) { painPointIds.push(9); }
-    if (this.PosteriorLeftShoulder) { painPointIds.push(10); }
-    if (this.PosteriorRightShoulder) { painPointIds.push(11); }
-    if (this.Neck) { painPointIds.push(12); }
-    if (this.UpperMiddleBack) { painPointIds.push(13); }
-    if (this.MiddleBack) { painPointIds.push(14); }
-    if (this.LowerBack) { painPointIds.push(15); }
-    if (this.LeftOccipital) { painPointIds.push(16); }
-    if (this.RightOccipital) { painPointIds.push(17); }
-    if (this.FrontalorForehead) { painPointIds.push(18); }
-    if (this.LeftAnkle) { painPointIds.push(19); }
-    if (this.RightAnkle) { painPointIds.push(20); }
-
+    if (this.LeftKnee) { painPointIds.push(6); }
+    if (this.RightKnee) { painPointIds.push(7); }
+    if (this.LeftAnkle) { painPointIds.push(8); }
+    if (this.RightAnkle) { painPointIds.push(9); }
 
     for (let pi = 0; pi < painPointIds.length; pi++) {
       const painPointId = painPointIds[pi];
@@ -156,7 +134,6 @@ export class PainDmeOnlyComponent implements OnInit {
       intake.patientId = this.patientId;
       intake.questions = [];
       intake.intakeFormType = IntakeFormType.PainDmeOnly;
-
 
       const painPointQuestions = this.painQuestions[painPointId];
       for (let i = 0; i < painPointQuestions.length; i++) {
@@ -179,7 +156,7 @@ export class PainDmeOnlyComponent implements OnInit {
   addAnswer(question: PainQuestion, value: string): Question {
 
     const answer = new Answer();
-    answer.text = value;
+    answer.text = value ? value : '';
     question.answers = [];
     question.answers.push(answer);
     return question;
@@ -188,27 +165,54 @@ export class PainDmeOnlyComponent implements OnInit {
   getPainCheckboxBinding(painPointText: string) {
     // On the UI this will set the value of the dynamic Pain DME Intake Forms
     // with the proper model boolean that maps to the checkbox
-    if (painPointText === 'LeftWrist') { return this.LeftWrist; }
-    else if (painPointText === 'RightWrist') { return this.RightWrist; }
-    else if (painPointText === 'LeftElbow') { return this.LeftElbow; }
-    else if (painPointText === 'RightElbow') { return this.RightElbow; }
-    else if (painPointText === 'LeftAnteriorShoulder') { return this.LeftAnteriorShoulder; }
-    else if (painPointText === 'RightAnteriorShoulder') { return this.RightAnteriorShoulder; }
-    else if (painPointText === 'LeftHip') { return this.LeftHip; }
-    else if (painPointText === 'RightHip') { return this.RightHip; }
-    else if (painPointText === 'LeftKnee') { return this.LeftKnee; }
-    else if (painPointText === 'RightKnee') { return this.RightKnee; }
-    else if (painPointText === 'PosteriorLeftShoulder') { return this.PosteriorLeftShoulder; }
-    else if (painPointText === 'PosteriorRightShoulder') { return this.PosteriorRightShoulder; }
-    else if (painPointText === 'Neck') { return this.Neck; }
-    else if (painPointText === 'UpperMiddleBack') { return this.UpperMiddleBack; }
-    else if (painPointText === 'MiddleBack') { return this.MiddleBack; }
-    else if (painPointText === 'LowerBack') { return this.LowerBack; }
-    else if (painPointText === 'LeftOccipital') { return this.LeftOccipital; }
-    else if (painPointText === 'RightOccipital') { return this.RightOccipital; }
-    else if (painPointText === 'FrontalorForehead') { return this.FrontalorForehead; }
-    else if (painPointText === 'LeftAnkle') { return this.LeftAnkle; }
-    return this.RightAnkle
+
+    let binding: boolean;
+
+    switch (painPointText) {
+      case 'LeftWrist':
+        binding = this.LeftWrist;
+        break;
+      case 'RightWrist':
+        binding = this.RightWrist;
+        break;
+      case 'LeftElbow':
+        binding = this.LeftElbow;
+        break;
+      case 'RightElbow':
+        binding = this.RightElbow;
+        break;
+      case 'LeftAnteriorShoulder':
+        binding = this.LeftAnteriorShoulder;
+        break;
+      case 'RightAnteriorShoulder':
+        binding = this.RightAnteriorShoulder;
+        break;
+      case 'RightAnteriorShoulder':
+        binding = this.RightAnteriorShoulder;
+        break;
+      case 'LeftKnee':
+        binding = this.LeftKnee;
+        break;
+      case 'RightKnee':
+        binding = this.RightKnee;
+        break;
+      case 'LeftPosteriorShoulder':
+        binding = this.LeftPosteriorShoulder;
+        break;
+      case 'RightPosteriorShoulder':
+        binding = this.RightPosteriorShoulder;
+        break;
+      case 'LeftAnkle':
+        binding = this.LeftAnkle;
+        break;
+      case 'RightAnkle':
+        binding = this.RightAnkle;
+        break;
+      default: binding = false;
+        break;
+    }
+
+    return binding;
   }
 
 }
