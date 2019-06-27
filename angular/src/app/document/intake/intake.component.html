@@ -61,6 +61,16 @@
             </mat-card-content>
           </mat-card>
 
+          <!--DDITIONAL DOCTOR NOTES-->
+          <mat-card>
+            <mat-card-title>ADDITIONAL DOCTOR NOTES:</mat-card-title>
+            <mat-card-content>
+              <mat-form-field>
+                <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+
           <!-- STATEMENT OF MEDICAL NECESSITY-->
           <mat-card>
             <mat-card-title>STATEMENT OF MEDICAL NECESSITY</mat-card-title>
@@ -170,18 +180,8 @@
               </p>
 
               <div *ngFor="let item of lcodeOptions; let i = index">
-                <mat-checkbox color="primary" (change)="onLCodeCheck($event, i)" [value]="i">
-                </mat-checkbox>
                 <span> {{item}}</span>
               </div>
-
-              <mat-form-field>
-                <input matInput placeholder="Other" type="text" formControlName="lcode_other">
-              </mat-form-field>
-
-              <mat-error *ngIf="this.lcodeSelections.length === 0 && !form.get('lcode_other').value">
-                Please select or enter a orthosis device prescribed.
-              </mat-error>
 
             </mat-card-content>
           </mat-card>
@@ -192,7 +192,7 @@
 
             <mat-card-content fxLayout="column">
               <div>Patient should begin using the orthosis as needed.</div>
-              <div>First date patient is authorized to begin using ((intakeForm.product}} : {{today | date}}</div>
+              <div>First date patient is authorized to begin using {{intakeForm.product}} : {{today | date}}</div>
               <mat-form-field>
                 <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
                 <mat-error *ngIf="form.get('productDuration').hasError('required')">
@@ -216,16 +216,6 @@
               <div>• To aid in controlling unwanted movements in the area of pain </div>
               <div>• Slow degenerative changes </div>
               <div>• Reduce potential inﬂammation </div>
-            </mat-card-content>
-          </mat-card>
-
-          <!--DDITIONAL DOCTOR NOTES-->
-          <mat-card>
-            <mat-card-title>ADDITIONAL DOCTOR NOTES:</mat-card-title>
-            <mat-card-content>
-              <mat-form-field>
-                <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
-              </mat-form-field>
             </mat-card-content>
           </mat-card>
 
