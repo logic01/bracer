@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { RouteUrls } from 'src/app/constants/routes';
 import { Physician } from 'src/app/models/physician.model';
 import { PhysicianService } from 'src/app/services/api/physician.service';
@@ -19,7 +21,7 @@ export class PhysicianListComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   public datasource: MatTableDataSource<Physician>;
-  public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'phoneNumber', 'edit'];
+  public columnsToDisplay = ['userId', 'userName', 'firstName', 'lastName', 'phoneNumber', 'active', 'edit'];
 
   constructor(
     private readonly physicianApi: PhysicianService,

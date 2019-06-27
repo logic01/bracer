@@ -26,14 +26,17 @@ namespace PR.Export.Tests.BusinessTests
             var intakeModel = intakeForm.ToModel();
             var intakeModel2 = intakeForm2.ToModel();
             var exporter = new DocumentGenerator();
-            //todo
-          //  var documentContent = exporter.CreateNewIntakeForm(intakeModel, patient.ToModel(), intakeForm.Signature.ToModel(), intakeForm.Physician.ToModel(), new List<IntakeFormModel> { intakeModel, intakeModel2 });
+
+            //todo if we are going to populate the questionare we need all intake forms to be passed to the DocumentGenerator
+            //var intakeForms =  new List<IntakeFormModel> { intakeModel, intakeModel2 };
+            var signatures = new List<SignatureModel> { CreateSignature().ToModel(), CreateSignature(false).ToModel() };
+            var documentContent = exporter.GenerateIntakeDocuments(intakeModel, patient.ToModel(), intakeForm.Physician.ToModel(), signatures);
 
             // Create Document
             var document = new Document
             {
                 IntakeFormId = intakeForm.IntakeFormId,
-                //Content = documentContent
+                Content = documentContent
             };
 
             var doc = dbContext.Document.Add(document);

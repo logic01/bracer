@@ -188,11 +188,10 @@ namespace PR.Export.Tests.BusinessTests
                 }
             };
 
-            var newPatientModel = patientBiz.Create(patientModel);
+            var newPatientModelId = patientBiz.Create(patientModel);
 
-            Assert.IsNotNull(newPatientModel);
-
-            Assert.IsTrue(newPatientModel.PatientId > 0);
+            
+            Assert.IsTrue(newPatientModelId > 0);
         }
     }
 }

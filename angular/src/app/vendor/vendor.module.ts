@@ -8,8 +8,8 @@ import { VendorAccountFormComponent } from './account-form/vendor-account-form.c
 import { AssignmentDialogComponent } from './assignment-dialog/assignment-dialog.component';
 import { CreateVendorComponent } from './create/create-vendor.component';
 import { EditVendorComponent } from './edit/edit-vendor.component';
-import { ViewVendorComponent } from './view/view-vendor.component';
 import { SendEmailDialogComponent } from './send-email-dialog/send-email-dialog.component';
+import { ViewVendorComponent } from './view/view-vendor.component';
 
 @NgModule({
   declarations: [

@@ -151,14 +151,14 @@
               <div>Insurance Type:
                 {{patient.insurance | insuranceType}}
               </div>
-              <div *ngIf="patient.insurance === 1 || patient.insurance === 2">
+              <div *ngIf="patient.insurance === 1">
                 <div><strong>Medicare</strong></div>
                 <div>Member Id: {{patient.medicare.memberId}}</div>
                 <div>Patient Group: {{patient.medicare.patientGroup}}</div>
                 <div>PCN: {{patient.medicare.pcn}}</div>
                 <div>Subscriber #: {{patient.medicare.subscriberNumber}}</div>
               </div>
-              <div *ngIf="patient.insurance === 0 || patient.insurance === 2">
+              <div *ngIf="patient.insurance === 0">
                 <div><strong>Private Insurance</strong></div>
                 <div>Insurance Id: {{patient.privateInsurance.insuranceId}}</div>
                 <div>Patient Group: {{patient.privateInsurance.group}}</div>

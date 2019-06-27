@@ -17,7 +17,10 @@ export class MaskService {
   // 80112
   public zip = [/\d/, /\d/, /\d/, /\d/, /\d/];
 
+  // 80112
+  public bin = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+
   // 02-15-1985
   public date = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
- 
+
 }

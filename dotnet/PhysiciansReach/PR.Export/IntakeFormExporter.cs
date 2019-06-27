@@ -71,24 +71,23 @@ namespace PR.Export
             // replace the images with the Signature file. There are 2 signature images
             // that are replaced in order. If there are multiple signatures you can
             // place them below
-  
             foreach (ImagePart imagePart in doc.MainDocumentPart.ImageParts)
             {
 
-                byte[] signatureImage;
+                byte[] signatureImage = null;
 
                 if (imagePart.Uri.ToString().Contains("image1"))
                 {
-                    signatureImage = signatures.First(s => s.Type == SignatureType.IntakeDocument).ContentBytes;
+                    signatureImage = signatures.First(s => s.Type == SignatureType.PrescriptionDocument).ContentBytes;
                 }
                 else
                 {
-                    signatureImage = signatures.First(s => s.Type == SignatureType.PrescriptionDocument).ContentBytes;
+                    signatureImage = signatures.First(s => s.Type == SignatureType.IntakeDocument).ContentBytes;
                 }
-
-                using (var writer = new BinaryWriter(imagePart.GetStream()))
+                using (var imageStream = imagePart.GetStream())
+                using (var writer = new BinaryWriter(imageStream))
                 {
-                    writer.Write(signatureImage);
+                    writer.Write(signatureImage);                    
                 }
             }
         }
