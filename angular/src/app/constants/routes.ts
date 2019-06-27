@@ -1,5 +1,6 @@
 export const RouteUrls = {
   LoginComponent: 'login',
+  ReportDisplayComponent: 'report',
 
   VendorIntakeDocumentComponent: 'vendor/:vendorId/intake-document/:intakeFormId',
   PhysicianIntakeDocumentComponent: 'physician/:physicianId/intake-document/:intakeFormId',

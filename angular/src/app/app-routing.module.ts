@@ -16,6 +16,7 @@ import { CreatePatientComponent } from './patient/create/create-patient.componen
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
+import { ReportDisplayComponent } from './report-display/report-display.component';
 import { RoleGuardService } from './services/role-guard.service';
 import { SignInGuardService } from './services/sign-in-guard.service';
 import { CreateVendorComponent } from './vendor/create/create-vendor.component';
@@ -27,6 +28,11 @@ const routes: Routes = [
   { path: RouteUrls.LoginComponent, component: LoginComponent },
   {
     path: RouteUrls.VendorIntakeDocumentComponent, component: DocumentComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRoles: [AccountType.Admin] }
+  },
+  {
+    path: RouteUrls.ReportDisplayComponent, component: ReportDisplayComponent,
     canActivate: [RoleGuardService, SignInGuardService],
     data: { expectedRoles: [AccountType.Admin] }
   },

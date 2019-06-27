@@ -16,10 +16,12 @@ import { PhysicianModule } from './physician/physician.module';
 import { PipesModule } from './pipes/pipes.module';
 import { MaskService } from './services/mask.service';
 import { VendorModule } from './vendor/vendor.module';
+import { ReportDisplayComponent } from './report-display/report-display.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ReportDisplayComponent
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import { SessionService } from './services/session.service';
 export class AppComponent implements OnInit {
 
   public loggedIn$ = this.session.loggedIn$;
+  public userAccount$ = this.session.userAccount$;
 
   constructor(
     private readonly router: Router,
@@ -53,5 +54,9 @@ export class AppComponent implements OnInit {
         }
       });
 
+  }
+
+  report() {
+    this.router.navigateByUrl(RouteUrls.ReportDisplayComponent);
   }
 }
