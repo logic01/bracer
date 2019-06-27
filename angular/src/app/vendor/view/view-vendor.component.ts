@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { forkJoin, Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+
+import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -13,12 +15,12 @@ import { PatientService } from 'src/app/services/api/patient.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
-import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
-
 export class TableRow {
   intakeFormId: string;
   physicianName: string;
   physicianState: string;
+  patientName: string;
+  patientState: string;
   status: IntakeStatus;
 }
 
@@ -34,16 +36,14 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   public datasource: MatTableDataSource<TableRow>;
 
   public vendor$: Observable<Vendor>;
-  public physicians$: Observable<Physician[]>;
-  public intake$: Observable<IntakeForm[]>;
-  public patient$: Observable<Patient[]>;
 
-  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'actions'];
+  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'patientName', 'patientState', 'actions'];
 
   private vendorId: string;
   private unsubscribe$ = new Subject();
 
   constructor(
+    private readonly changeDetectorRefs: ChangeDetectorRef,
     private readonly router: Router,
     private readonly physicianApi: PhysicianService,
     private readonly vendorApi: VendorService,
@@ -58,41 +58,54 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     this.vendorId = this.route.snapshot.paramMap.get('id');
 
     this.vendor$ = this.vendorApi.get(this.vendorId);
-    this.physicians$ = this.physicianApi.getAll();
-    this.intake$ = this.intakeApi.getByVendor(this.vendorId);
-  //  this.patient$ = this.patientApi.getByVendor(this.vendorId);
-// , this.patient$
-    forkJoin([this.intake$, this.physicians$])
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        map(responses => {
 
-          const intakeForms = responses[0];
-          const physicians = responses[1];
-        //  const patients = responses[2];
+    const data: TableRow[] = [];
 
-          const data: TableRow[] = [];
-          intakeForms.forEach((intake: IntakeForm) => {
+    this.datasource = new MatTableDataSource(data);
+    this.datasource.sort = this.sort;
 
-            const row = new TableRow();
-            row.intakeFormId = intake.intakeFormId;
-            row.status = intake.status;
-            row.physicianName = this.getPhysicianName(intake.physicianId, physicians);
-            row.physicianState = this.getPhysicianState(intake.physicianId, physicians);
-          //  row.patientName = this.getPatientName(intake.patientId, patients);
-          //  row.patientState = this.getPatientState(intake.patientId, patients);
-            data.push(row);
-          });
+    this.intakeApi.getByVendor(this.vendorId).subscribe((intakes: IntakeForm[]) => {
+
+      intakes.forEach((intake: IntakeForm) => {
+
+        const physician$ = this.physicianApi.get(intake.physicianId);
+        const patient$ = this.patientApi.get(intake.patientId);
+
+        forkJoin([physician$, patient$]).subscribe(responses => {
+
+          const physician = responses[0];
+          const patient = responses[1];
+
+          const row = this.buildTableRow(intake, physician, patient);
+          data.push(row);
+
 
           this.datasource = new MatTableDataSource(data);
           this.datasource.sort = this.sort;
-        }))
-      .subscribe();
+
+          // this.changeDetectorRefs.detectChanges();
+        });
+
+      });
+
+    });
 
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
+  }
+
+
+  buildTableRow(intake: IntakeForm, physician: Physician, patient: Patient): TableRow {
+    const row = new TableRow();
+    row.intakeFormId = intake.intakeFormId;
+    row.patientName = patient.firstName + ' ' + patient.lastName;
+    row.patientState = patient.address.state;
+    row.physicianName = physician.firstName + ' ' + physician.lastName;
+    row.physicianState = physician.address.state;
+
+    return row;
   }
 
   getPhysicianName(physicianId: string, physicians: Physician[]): string {
@@ -145,10 +158,6 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   view(intakeFormId: string) {
     this.router.navigate(['vendor', this.vendorId, 'intake-document', intakeFormId]);
-  }
-
-  email(documentId: string): void {
-    const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: documentId } });
   }
 
 }

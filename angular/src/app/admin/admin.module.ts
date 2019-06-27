@@ -8,11 +8,13 @@ import { AdminAccountFormComponent } from './account-form/admin-account-form.com
 import { CreateAdminComponent } from './create/create-admin.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { EditAdminComponent } from './edit/edit-admin.component';
+import { ReportDisplayComponent } from './reports/report-display/report-display.component';
 import { AdminListComponent } from './tables/admin-list/admin-list.component';
 import { AgentListComponent } from './tables/agent-list/agent-list.component';
 import { PatientListComponent } from './tables/patient-list/patient-list.component';
 import { PhysicianListComponent } from './tables/physician-list/physician-list.component';
 import { VendorListComponent } from './tables/vendor-list/vendor-list.component';
+import { VendorReportComponent } from './reports/vendor-report/vendor-report.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { VendorListComponent } from './tables/vendor-list/vendor-list.component'
     VendorListComponent,
     PhysicianListComponent,
     AdminAccountFormComponent,
-    PatientListComponent
+    PatientListComponent,
+    ReportDisplayComponent,
+    VendorReportComponent
   ],
   imports: [
     CommonModule,
