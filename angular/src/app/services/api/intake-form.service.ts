@@ -22,6 +22,10 @@ export class IntakeFormService {
     return this.http.get<IntakeForm[]>(`${environment.api_url}/vendor/${vendorId}/intakeform`);
   }
 
+  getAll(): Observable<IntakeForm[]> {
+    return this.http.get<IntakeForm[]>(`${this.url}`);
+  }
+
   get(id: string): Observable<IntakeForm> {
     return this.http.get<IntakeForm>(`${this.url}/${id}`);
   }

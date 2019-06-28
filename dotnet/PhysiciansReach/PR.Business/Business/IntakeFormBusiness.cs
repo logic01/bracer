@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
-using PR.Business.Utils;
 using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Models;
@@ -70,9 +69,6 @@ namespace PR.Business
                 .Include(i => i.Signatures)
                 .First(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
 
-            // set the new status based off of the databases last status
-            // do this before we map the model back to the entity so it sticks
-            intakeFormModel.Status = IntakeFormStatusFactory.GetNext(intakeForm);
             intakeForm.MapFromModel(intakeFormModel);
 
             _context.SaveChanges();

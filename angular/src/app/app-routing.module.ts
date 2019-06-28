@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { BillingDashboardComponent } from './admin/billing/billing-dashboard/billing-dashboard.component';
 import { CreateAdminComponent } from './admin/create/create-admin.component';
 import { AdminDashboardComponent } from './admin/dashboard/admin-dashboard.component';
 import { EditAdminComponent } from './admin/edit/edit-admin.component';
-import { ReportDisplayComponent } from './admin/reports/report-display/report-display.component';
 import { CreateAgentComponent } from './agent/create/create-agent.component';
 import { AgentDashboardComponent } from './agent/dashboard/agent-dashboard.component';
 import { EditAgentComponent } from './agent/edit/edit-agent.component';
@@ -32,7 +32,7 @@ const routes: Routes = [
     data: { expectedRoles: [AccountType.Admin] }
   },
   {
-    path: RouteUrls.ReportDisplayComponent, component: ReportDisplayComponent,
+    path: RouteUrls.BillingDashboardComponent, component: BillingDashboardComponent,
     canActivate: [RoleGuardService, SignInGuardService],
     data: { expectedRoles: [AccountType.Admin] }
   },

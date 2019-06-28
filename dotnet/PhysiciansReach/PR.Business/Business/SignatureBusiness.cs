@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
-using PR.Business.Utils;
 using PR.Data.Models;
 using PR.Export;
 using PR.Models;
@@ -46,10 +45,7 @@ namespace PR.Business
 
             intakeForm.Signatures.Add(sig);
 
-            // set late because it depends on # of signatures
-            intakeForm.Status = IntakeFormStatusFactory.GetNext(intakeForm);
-
-            _context.SaveChanges();
+           _context.SaveChanges();
 
             return sig.SignatureId;
         }

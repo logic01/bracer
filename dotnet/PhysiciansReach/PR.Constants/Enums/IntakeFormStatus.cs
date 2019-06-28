@@ -4,8 +4,9 @@
     {
         New = 0,
         Assigned = 1,
-        Signed = 2,
-        Emailed = 3,
-        Closed = 4
+        UnderReview = 2,
+        Denied = 3,
+        Approved = 4,
+        Downloaded = 5
     }
 }

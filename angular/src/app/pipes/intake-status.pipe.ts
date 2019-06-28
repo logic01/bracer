@@ -15,11 +15,17 @@ export class IntakeStatusPipe implements PipeTransform {
       case IntakeStatus.Assigned: {
         return 'Assigned';
       }
-      case IntakeStatus.Signed: {
-        return 'Signed';
+      case IntakeStatus.UnderReview: {
+        return 'Under Review';
       }
-      case IntakeStatus.Closed: {
-        return 'Closed';
+      case IntakeStatus.Approved: {
+        return 'Approved';
+      }
+      case IntakeStatus.Denied: {
+        return 'Denied';
+      }
+      case IntakeStatus.Downloaded: {
+        return 'Downloaded';
       }
       default: {
         return 'New';

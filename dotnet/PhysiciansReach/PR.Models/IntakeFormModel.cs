@@ -28,6 +28,12 @@ namespace PR.Models
 
         public string Product { get; set; }
 
+     //   public bool PhysicianBilled { get; set; }
+
+       // public bool VendorBilled { get; set; }
+
+      //  public bool PhysicianBilled { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }

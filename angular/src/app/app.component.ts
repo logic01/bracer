@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  report() {
-    this.router.navigateByUrl(RouteUrls.ReportDisplayComponent);
+  billing() {
+    this.router.navigateByUrl(RouteUrls.BillingDashboardComponent);
   }
 }
