@@ -43,34 +43,6 @@
             </mat-card-content>
           </mat-card>
 
-          <!-- DIAGNOSIS-->
-          <mat-card>
-            <mat-card-title>DIAGNOSIS</mat-card-title>
-            <mat-card-content fxLayout="column">
-              <div>{{getAnswer('PainChart')}} pain. </div>
-              <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
-                (change)="onDiagnosisCheck($event, i)">
-                {{item}}
-              </mat-checkbox>
-              <mat-form-field>
-                <input matInput placeholder="Other" type="text" formControlName="diagnosis_other">
-              </mat-form-field>
-              <mat-error *ngIf="this.diagnosisSelections.length === 0 && !form.get('diagnosis_other').value">
-                Please select or enter a diagnosis.
-              </mat-error>
-            </mat-card-content>
-          </mat-card>
-
-          <!--DDITIONAL DOCTOR NOTES-->
-          <mat-card>
-            <mat-card-title>ADDITIONAL DOCTOR NOTES:</mat-card-title>
-            <mat-card-content>
-              <mat-form-field>
-                <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
-              </mat-form-field>
-            </mat-card-content>
-          </mat-card>
-
           <!-- STATEMENT OF MEDICAL NECESSITY-->
           <mat-card>
             <mat-card-title>STATEMENT OF MEDICAL NECESSITY</mat-card-title>
@@ -93,19 +65,49 @@
             <mat-card-content>{{getAnswer('PainLevel')}} on a 0-10 scale</mat-card-content>
           </mat-card>
 
-          <!-- ORDER VERIFICATION -->
+          <!-- DIAGNOSIS-->
           <mat-card>
-            <mat-card-title> ORDER VERIFICATION </mat-card-title>
-            <mat-card-content>
-              I, Dr. {{physician?.firstName}} {{physician?.lastName}}, verify and conﬁrm this order for the
-              above-named patient, and certify that I have personally performed the assessment of the patient for the
-              prescribed treatment and device and verify that it is reasonably and medically necessary, according to
-              accepted standards of medical practice within the community, for this patient’s medical condition. I
-              hereby
-              aﬃrm this documentation as part of this patient’s medical record.
+            <mat-card-title>DIAGNOSIS</mat-card-title>
+            <mat-card-content fxLayout="column">
+              <div>{{getAnswer('PainChart')}} pain. </div>
+              <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
+                (change)="onDiagnosisCheck($event, i)">
+                {{item}}
+              </mat-checkbox>
+              <mat-form-field>
+                <input matInput placeholder="Other" type="text" formControlName="diagnosis_other">
+              </mat-form-field>
+              <mat-error *ngIf="this.diagnosisSelections.length === 0 && !form.get('diagnosis_other').value">
+                Please select or enter a diagnosis.
+              </mat-error>
             </mat-card-content>
           </mat-card>
 
+          <!-- DURATION -->
+          <mat-card>
+            <mat-card-title>DURATION</mat-card-title>
+
+            <mat-card-content fxLayout="column">
+              <div>Patient should begin using the orthosis as needed.</div>
+              <div>First date patient is authorized to begin using {{intakeForm.product}} : {{today | date}}</div>
+              <mat-form-field>
+                <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
+                <mat-error *ngIf="form.get('productDuration').hasError('required')">
+                  Please enter the duration of time this device is prescribed for.
+                </mat-error>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+
+          <!--ADDITIONAL DOCTOR NOTES-->
+          <mat-card>
+            <mat-card-title>ADDITIONAL DOCTOR NOTES:</mat-card-title>
+            <mat-card-content>
+              <mat-form-field>
+                <input matInput placeholder="Additional Notes" type="text" formControlName="additional_notes">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
         </div>
 
         <div fxLayout="column" fxLayoutGap="10px" fxFlex="0 0 calc(50%)">
@@ -169,7 +171,6 @@
           </mat-card>
 
           <!--ORTHOSIS DEVICE(S) PRESCRIBED-->
-
           <mat-card>
             <mat-card-title>ORTHOSIS DEVICE(S) PRESCRIBED</mat-card-title>
 
@@ -183,22 +184,6 @@
                 <span> {{item}}</span>
               </div>
 
-            </mat-card-content>
-          </mat-card>
-
-          <!-- DURATION -->
-          <mat-card>
-            <mat-card-title>DURATION</mat-card-title>
-
-            <mat-card-content fxLayout="column">
-              <div>Patient should begin using the orthosis as needed.</div>
-              <div>First date patient is authorized to begin using {{intakeForm.product}} : {{today | date}}</div>
-              <mat-form-field>
-                <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
-                <mat-error *ngIf="form.get('productDuration').hasError('required')">
-                  Please enter the duration of time this device is prescribed for.
-                </mat-error>
-              </mat-form-field>
             </mat-card-content>
           </mat-card>
 
@@ -219,6 +204,19 @@
             </mat-card-content>
           </mat-card>
 
+
+          <!-- ORDER VERIFICATION -->
+          <mat-card>
+            <mat-card-title> ORDER VERIFICATION </mat-card-title>
+            <mat-card-content>
+              I, Dr. {{physician?.firstName}} {{physician?.lastName}}, verify and conﬁrm this order for the
+              above-named patient, and certify that I have personally performed the assessment of the patient for the
+              prescribed treatment and device and verify that it is reasonably and medically necessary, according to
+              accepted standards of medical practice within the community, for this patient’s medical condition. I
+              hereby
+              aﬃrm this documentation as part of this patient’s medical record.
+            </mat-card-content>
+          </mat-card>
         </div>
 
       </div>

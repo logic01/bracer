@@ -16,7 +16,11 @@ export class IntakeForm {
     public HCPCSCodes: HCPCSCode[];
     public duration: string;
     public physicianNotes: string;
+    public deniedReason: string;
     public product: string;
+    public vendorBilled: boolean;
+    public vendorPaid: boolean;
+    public physicianBilled: boolean;
     public createdOn: string;
     public modifiedOn: string;
 }

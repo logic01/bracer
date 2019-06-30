@@ -3,6 +3,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
@@ -20,8 +21,12 @@ export class PhysicianDashboardComponent implements OnInit {
 
   private unsubscribe$ = new Subject();
   private physicianId: string;
+
   public dataSource: MatTableDataSource<IntakeForm>;
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'view', 'download'];
+
+  // for the UI to use Enum values
+  public IntakeStatus = IntakeStatus;
 
   constructor(
     private readonly router: Router,

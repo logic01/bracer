@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
@@ -89,10 +88,10 @@ export class PainDmeOnlyComponent implements OnInit {
       painArray.push(this.initPainQuestion('PainDuration', 'Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))', painPoint, 7));
       painArray.push(this.initPainQuestion('PreviousTreatment', 'Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)', painPoint, 8));
       painArray.push(this.initPainQuestion('EffectsDaily', 'Affects Activities of Daily Living(ADL) (If so, what?)', painPoint, 9));
-      painArray.push(this.initPainQuestion('10', 'Have you had surgery in this area?', painPoint, 10));
+      painArray.push(this.initPainQuestion('HadSurgery', 'Have you had surgery in this area?', painPoint, 10));
       painArray.push(this.initPainQuestion('Surgies', 'If yes, what type of surgery?', painPoint, 11));
-      painArray.push(this.initPainQuestion('12', 'Date of Surgery', painPoint, 12));
-      painArray.push(this.initPainQuestion('14', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)', painPoint, 14));
+      painArray.push(this.initPainQuestion('DateOfSurgery', 'Date of Surgery', painPoint, 12));
+      painArray.push(this.initPainQuestion('Abulatory', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)', painPoint, 14));
       painArray.push(this.initPainQuestion('PainLevel', 'Pain Rating', painPoint, 15));
       this.painQuestions.push(painArray);
     }

@@ -131,6 +131,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   buildTableRow(intake: IntakeForm, physician?: Physician, patient?: Patient): TableRow {
     const row = new TableRow();
     row.intakeFormId = intake.intakeFormId;
+    row.status = intake.status;
 
     if (patient) {
       row.patientName = patient.firstName + ' ' + patient.lastName;

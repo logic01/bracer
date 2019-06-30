@@ -1,22 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concat } from 'rxjs';
 
 import { RouteUrls } from '../constants/routes';
 import { Document } from '../models/document.model';
 import { AccountType } from '../models/enums/account-type.enum';
+import { IntakeStatus } from '../models/enums/intake-status.enum';
 import { HCPCSCode } from '../models/hcpcs-code.model';
 import { ICD10Code } from '../models/icd10-code.model';
 import { IntakeForm } from '../models/intake-form.model';
 import { Patient } from '../models/patient.model';
 import { Physician } from '../models/physician.model';
 import { Signature } from '../models/signature.model';
+import { UserAccount } from '../models/user-account.model';
 import { DocumentService } from '../services/api/document.service';
 import { IntakeFormService } from '../services/api/intake-form.service';
 import { PatientService } from '../services/api/patient.service';
 import { PhysicianService } from '../services/api/physician.service';
 import { SignatureService } from '../services/api/signature.service';
 import { SessionService } from '../services/session.service';
+import { DenyDialogComponent } from './deny-dialog/deny-dialog.component';
 
 @Component({
   selector: 'app-document',
@@ -42,6 +46,7 @@ export class DocumentComponent implements OnInit {
   public intakeApproved = false;
 
   constructor(
+    private readonly dialog: MatDialog,
     private readonly session: SessionService,
     private readonly patientApi: PatientService,
     private readonly physicianApi: PhysicianService,
@@ -54,18 +59,32 @@ export class DocumentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.session.userAccount$.subscribe(u => this.isAdminView = (u.type === AccountType.Admin));
-
     this.intakeFormId = this.route.snapshot.paramMap.get('intakeFormId');
 
     if (this.route.snapshot.paramMap.has('vendorId')) {
       this.vendorId = this.route.snapshot.paramMap.get('vendorId');
     }
 
+    this.session.userAccount$.subscribe((account: UserAccount) => {
+
+      this.isAdminView = (account.type === AccountType.Admin);
+
+      this.loadIntakeForm();
+    });
+
+  }
+
+  private loadIntakeForm() {
     this.intakeFormApi.get(this.intakeFormId).subscribe((intake: IntakeForm) => {
 
       // load intake
       this.intakeForm = intake;
+
+      // change intake status to under review is the physician is viewing it.
+      if (!this.isAdminView && this.intakeForm.status === IntakeStatus.Assigned) {
+        this.intakeForm.status = IntakeStatus.UnderReview;
+        this.intakeFormApi.put(this.intakeFormId, this.intakeForm).subscribe();
+      }
 
       // load patient
       if (intake.patientId) {
@@ -85,7 +104,6 @@ export class DocumentComponent implements OnInit {
       this.setDiagnosis(painArea);
 
     });
-
   }
 
   onIntakeApproval(data: { intakeForm: IntakeForm, signature: Signature }) {
@@ -120,7 +138,9 @@ export class DocumentComponent implements OnInit {
     if (this.isAdminView) {
       this.router.navigate(['vendor', this.vendorId, 'view']);
     } else {
+
       this.prescriptionSignature = signature;
+      this.intakeForm.status = IntakeStatus.Approved;
 
       // setup doc to be generated last
       const doc = new Document();
@@ -137,6 +157,23 @@ export class DocumentComponent implements OnInit {
       });
     }
   }
+
+  deny() {
+    this.dialog
+      .open(DenyDialogComponent)
+      .afterClosed()
+      .subscribe((result: string) => {
+        this.intakeForm.deniedReason = result;
+        this.intakeForm.status = IntakeStatus.Denied;
+
+        this.intakeFormApi.put(this.intakeFormId, this.intakeForm).subscribe(() => {
+          this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
+        });
+
+      });
+
+  }
+
 
   private setDiagnosis(key: string) {
 

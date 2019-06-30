@@ -24,6 +24,14 @@ namespace PR.Data.Models
 
         public string Duration { get; set; }
 
+        public bool PhysicianBilled { get; set; }
+
+        public bool VendorBilled { get; set; }
+
+        public bool VendorPaid { get; set; }
+
+        public string DeniedReason { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }

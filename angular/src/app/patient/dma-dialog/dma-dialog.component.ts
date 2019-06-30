@@ -30,13 +30,6 @@ export class DmaDialogComponent implements OnInit {
     { value: 'RightKnee', viewValue: 'Right Knee' },
     { value: 'PosteriorLeftShoulder', viewValue: 'Posterior Left Shoulder' },
     { value: 'PosteriorRightShoulder', viewValue: 'Posterior Right Shoulder' },
-    { value: 'Neck', viewValue: 'Neck' },
-    { value: 'UpperMiddleBack', viewValue: 'Upper Middle Back' },
-    { value: 'MiddleBack', viewValue: 'Middle Back' },
-    { value: 'LowerBack', viewValue: 'Lower Back' },
-    { value: 'LeftOccipital', viewValue: 'Left Occipital' },
-    { value: 'RightOccipital', viewValue: 'Right Occipital' },
-    { value: 'FrontalOrForhead', viewValue: 'Frontal or Forhead' },
     { value: 'LeftAnkle', viewValue: 'Left Ankle' },
     { value: 'RightAnkle', viewValue: 'Right Ankle' }
   ];

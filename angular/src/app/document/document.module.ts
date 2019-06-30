@@ -5,6 +5,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { DesignModule } from '../design/design.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { DenyDialogComponent } from './deny-dialog/deny-dialog.component';
 import { DocumentComponent } from './document.component';
 import { IntakeComponent } from './intake/intake.component';
 import { PrescriptionComponent } from './prescription/prescription.component';
@@ -15,7 +16,8 @@ import { SignatureDialogComponent } from './signature-dialog/signature-dialog.co
     DocumentComponent,
     IntakeComponent,
     PrescriptionComponent,
-    SignatureDialogComponent
+    SignatureDialogComponent,
+    DenyDialogComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { SignatureDialogComponent } from './signature-dialog/signature-dialog.co
     SignaturePadModule
   ],
   entryComponents: [
-    SignatureDialogComponent
+    SignatureDialogComponent,
+    DenyDialogComponent
   ]
 })
 export class DocumentModule { }

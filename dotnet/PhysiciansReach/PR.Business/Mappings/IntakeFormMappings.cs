@@ -1,6 +1,5 @@
 ﻿using PR.Data.Models;
 using PR.Models;
-using System;
 using System.Linq;
 
 namespace PR.Business.Mappings
@@ -22,6 +21,10 @@ namespace PR.Business.Mappings
                 Duration = entity.Duration,
                 IntakeFormType = entity.IntakeFormType,
                 Status = entity.Status,
+                PhysicianBilled = entity.PhysicianBilled,
+                VendorBilled = entity.VendorBilled,
+                VendorPaid = entity.VendorPaid,
+                DeniedReason = entity.DeniedReason,
                 Questions = entity.Questions?.Select(q => q.ToModel()).ToList(),
                 CreatedOn = entity.CreatedOn,
                 ModifiedOn = entity.ModifiedOn
@@ -51,6 +54,10 @@ namespace PR.Business.Mappings
             entity.Product = model.Product;
             entity.PhysicianNotes = model.PhysicianNotes;
             entity.Duration = model.Duration;
+            entity.PhysicianBilled = model.PhysicianBilled;
+            entity.VendorBilled = model.VendorBilled;
+            entity.VendorPaid = model.VendorPaid;
+            entity.DeniedReason = model.DeniedReason;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 
