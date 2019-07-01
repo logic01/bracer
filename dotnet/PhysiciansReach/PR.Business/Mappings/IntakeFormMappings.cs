@@ -21,7 +21,7 @@ namespace PR.Business.Mappings
                 Duration = entity.Duration,
                 IntakeFormType = entity.IntakeFormType,
                 Status = entity.Status,
-                PhysicianBilled = entity.PhysicianBilled,
+                PhysicianPaid = entity.PhysicianPaid,
                 VendorBilled = entity.VendorBilled,
                 VendorPaid = entity.VendorPaid,
                 DeniedReason = entity.DeniedReason,
@@ -54,7 +54,7 @@ namespace PR.Business.Mappings
             entity.Product = model.Product;
             entity.PhysicianNotes = model.PhysicianNotes;
             entity.Duration = model.Duration;
-            entity.PhysicianBilled = model.PhysicianBilled;
+            entity.PhysicianPaid = model.PhysicianPaid;
             entity.VendorBilled = model.VendorBilled;
             entity.VendorPaid = model.VendorPaid;
             entity.DeniedReason = model.DeniedReason;

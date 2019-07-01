@@ -20,7 +20,7 @@ export class IntakeForm {
     public product: string;
     public vendorBilled: boolean;
     public vendorPaid: boolean;
-    public physicianBilled: boolean;
+    public physicianPaid: boolean;
     public createdOn: string;
     public modifiedOn: string;
 }

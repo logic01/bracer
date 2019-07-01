@@ -6,8 +6,6 @@ import { DesignModule } from '../design/design.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { AdminAccountFormComponent } from './account-form/admin-account-form.component';
 import { BillingDashboardComponent } from './billing/billing-dashboard/billing-dashboard.component';
-import { PhysicianBillingComponent } from './billing/physician-billing/physician-billing.component';
-import { VendorBillingComponent } from './billing/vendor-billing/vendor-billing.component';
 import { CreateAdminComponent } from './create/create-admin.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { EditAdminComponent } from './edit/edit-admin.component';
@@ -28,9 +26,7 @@ import { VendorListComponent } from './tables/vendor-list/vendor-list.component'
     PhysicianListComponent,
     AdminAccountFormComponent,
     PatientListComponent,
-    BillingDashboardComponent,
-    PhysicianBillingComponent,
-    VendorBillingComponent
+    BillingDashboardComponent
   ],
   imports: [
     CommonModule,
