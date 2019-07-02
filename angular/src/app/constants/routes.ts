@@ -5,13 +5,14 @@ export const RouteUrls = {
   VendorIntakeDocumentComponent: 'vendor/:vendorId/intake-document/:intakeFormId',
   PhysicianIntakeDocumentComponent: 'physician/:physicianId/intake-document/:intakeFormId',
 
-
   AgentDashboardComponent: 'agent',
 
   AgentEditComponent: 'agent/edit/:id',
   AgentCreateComponent: 'account/create/agent',
 
-  PatientCreateComponent: 'agent/patient',
+  PatientCreateComponent: 'agent/:agentId/patient',
+  PatientEditComponent: 'agent/:agentId/patient/:patientId',
+
   IntakeFormComponent: 'agent/patient/:id/intake-form',
 
   PhysicianDashboardComponent: 'physician',

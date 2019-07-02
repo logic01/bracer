@@ -8,8 +8,6 @@ import { UserAccount } from 'src/app/models/user-account.model';
 import { PatientService } from 'src/app/services/api/patient.service';
 import { SessionService } from 'src/app/services/session.service';
 
-import { RouteUrls } from '../../constants/routes';
-
 @Component({
   selector: 'app-agent-dashboard',
   templateUrl: './agent-dashboard.component.html',
@@ -20,8 +18,11 @@ export class AgentDashboardComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
+  private agentId: string;
+
   public dataSource: MatTableDataSource<Patient>;
   public columnsToDisplay = ['patientId', 'createdOn', 'firstName', 'lastName', 'actions'];
+
 
   constructor(
     private readonly router: Router,
@@ -32,8 +33,10 @@ export class AgentDashboardComponent implements OnInit {
 
     this.session.userAccount$.subscribe((account: UserAccount) => {
 
+      this.agentId = account.userAccountId;
+
       this.patientApi
-        .getByAgent(account.userAccountId)
+        .getByAgent(this.agentId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((patientList: Patient[]) => {
           this.dataSource = new MatTableDataSource(patientList);
@@ -44,6 +47,10 @@ export class AgentDashboardComponent implements OnInit {
   }
 
   add() {
-    this.router.navigateByUrl(RouteUrls.PatientCreateComponent);
+    this.router.navigate(['agent', this.agentId, 'patient']);
+  }
+
+  edit(patientId: string) {
+    this.router.navigate(['agent', this.agentId, 'patient', patientId]);
   }
 }

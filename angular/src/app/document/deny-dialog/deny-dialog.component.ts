@@ -20,6 +20,15 @@ export class DenyDialogComponent implements OnInit {
     });
   }
 
+  ok() {
+
+    if (!this.form.valid) {
+      return;
+    }
+
+    this.dialogRef.close(this.form.controls['reason'].value);
+  }
+
   cancel() {
     this.dialogRef.close();
   }

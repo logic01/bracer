@@ -14,6 +14,7 @@ import { IntakeFormComponent } from './intake-form/intake-form/intake-form.compo
 import { LoginComponent } from './login/login.component';
 import { AccountType } from './models/enums/account-type.enum';
 import { CreatePatientComponent } from './patient/create/create-patient.component';
+import { EditPatientComponent } from './patient/edit/edit.component';
 import { CreatePhysicianComponent } from './physician/create/create-physician.component';
 import { PhysicianDashboardComponent } from './physician/dashboard/physician-dashboard.component';
 import { EditPhysicianComponent } from './physician/edit/edit-physician.component';
@@ -65,6 +66,11 @@ const routes: Routes = [
     path: RouteUrls.PatientCreateComponent, component: CreatePatientComponent,
     canActivate: [RoleGuardService, SignInGuardService],
     data: { expectedRoles: [AccountType.Agent] }
+  },
+  {
+    path: RouteUrls.PatientEditComponent, component: EditPatientComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRoles: [AccountType.Agent, AccountType.Admin] }
   },
   {
     path: RouteUrls.AgentDashboardComponent, component: AgentDashboardComponent,
