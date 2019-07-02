@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
+import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { UserAccount } from 'src/app/models/user-account.model';
@@ -25,6 +27,7 @@ export class BillingDashboardComponent implements OnInit {
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'physicianPaid', 'vendorBilled', 'vendorPaid'];
 
   constructor(
+    private readonly router: Router,
     private readonly session: SessionService,
     private readonly intakeFormApi: IntakeFormService) { }
 
@@ -47,58 +50,60 @@ export class BillingDashboardComponent implements OnInit {
 
   vendorPaid(event: MatCheckboxChange, intakeFormId: string) {
 
-    let updateItem = this.changes.find(this.findIndexToUpdate, intakeFormId);
+    const alreadyChangedItem = this.changes.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
 
-    if (!updateItem) {
-      updateItem = this.dataSource.data.find(this.findIndexToUpdate, intakeFormId);
+    if (!alreadyChangedItem) {
+      const newIttem = this.dataSource.data.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
+      newIttem.vendorPaid = event.checked;
+      this.changes.push(newIttem);
+    } else {
+      alreadyChangedItem.vendorPaid = event.checked;
+      const index = this.changes.indexOf(alreadyChangedItem);
+      this.changes[index] = alreadyChangedItem;
     }
-
-    const index = this.changes.indexOf(updateItem);
-
-    updateItem.vendorPaid = event.checked;
-
-    this.changes[index] = updateItem;
 
   }
 
 
   vendorBilled(event: MatCheckboxChange, intakeFormId: string) {
 
-    let updateItem = this.changes.find(this.findIndexToUpdate, intakeFormId);
+    const alreadyChangedItem = this.changes.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
 
-    if (!updateItem) {
-      updateItem = this.dataSource.data.find(this.findIndexToUpdate, intakeFormId);
+    if (!alreadyChangedItem) {
+      const newIttem = this.dataSource.data.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
+      newIttem.vendorBilled = event.checked;
+      this.changes.push(newIttem);
+    } else {
+      alreadyChangedItem.vendorBilled = event.checked;
+      const index = this.changes.indexOf(alreadyChangedItem);
+      this.changes[index] = alreadyChangedItem;
     }
-
-    const index = this.changes.indexOf(updateItem);
-
-    updateItem.vendorBilled = event.checked;
-
-    this.changes[index] = updateItem;
 
   }
 
   physicianPaid(event: MatCheckboxChange, intakeFormId: string) {
-    let updateItem = this.changes.find(this.findIndexToUpdate, intakeFormId);
+    const alreadyChangedItem = this.changes.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
 
-    if (!updateItem) {
-      updateItem = this.dataSource.data.find(this.findIndexToUpdate, intakeFormId);
+    if (!alreadyChangedItem) {
+      const newIttem = this.dataSource.data.find((item: IntakeForm) => item.intakeFormId === intakeFormId);
+      newIttem.physicianPaid = event.checked;
+      this.changes.push(newIttem);
+    } else {
+      alreadyChangedItem.physicianPaid = event.checked;
+      const index = this.changes.indexOf(alreadyChangedItem);
+      this.changes[index] = alreadyChangedItem;
     }
 
-    const index = this.changes.indexOf(updateItem);
-
-    updateItem.physicianPaid = event.checked;
-
-    this.changes[index] = updateItem;
   }
 
-  private findIndexToUpdate(newItem) {
-    return newItem.id === this;
-  }
 
   save() {
 
+    const observables = [];
 
+    this.changes.forEach((intake: IntakeForm) => observables.push(this.intakeFormApi.put(intake.intakeFormId, intake)));
+
+    forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
 
   }
 }

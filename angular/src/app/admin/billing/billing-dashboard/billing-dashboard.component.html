@@ -20,8 +20,8 @@
       <ng-container matColumnDef="physicianPaid">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Physician Paid </th>
         <td mat-cell *matCellDef="let result">
-          <mat-checkbox labelPosition="before" color="primary" [checked]="result.PhysicianPaid"
-            (change)="physicianPaid($event)">
+          <mat-checkbox labelPosition="before" color="primary" [checked]="result.physicianPaid"
+            (change)="physicianPaid($event, result.intakeFormId)">
           </mat-checkbox>
         </td>
       </ng-container>
@@ -29,8 +29,8 @@
       <ng-container matColumnDef="vendorBilled">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Vendor Billed </th>
         <td mat-cell *matCellDef="let result">
-          <mat-checkbox labelPosition="before" color="primary" [checked]="result.VendorBilled"
-            (change)="vendorBilled($event)">
+          <mat-checkbox labelPosition="before" color="primary" [checked]="result.vendorBilled"
+            (change)="vendorBilled($event, result.intakeFormId)">
           </mat-checkbox>
         </td>
       </ng-container>
@@ -38,8 +38,8 @@
       <ng-container matColumnDef="vendorPaid">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Vendor Paid </th>
         <td mat-cell *matCellDef="let result">
-          <mat-checkbox labelPosition="before" color="primary" [checked]="result.VendorPaid"
-            (change)="vendorpaid($event)">
+          <mat-checkbox labelPosition="before" color="primary" [checked]="result.vendorPaid"
+            (change)="vendorPaid($event, result.intakeFormId)">
           </mat-checkbox>
         </td>
       </ng-container>
