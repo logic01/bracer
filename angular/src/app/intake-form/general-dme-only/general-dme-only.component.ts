@@ -1,11 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Answer } from 'src/app/models/answer.model';
+import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { ActivatedRoute } from '@angular/router';
-import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { Answer } from 'src/app/models/answer.model';
-
 import { SelectValueService } from 'src/app/services/select-value.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
@@ -21,7 +20,7 @@ export class GeneralDmeOnlyComponent implements OnInit {
   form: FormGroup;
   patientId: string;
   questions: Question[] = [];
-  shoeSizes: number[] = SelectValueService.shoeSizes;
+  shoeSizes: string[] = SelectValueService.shoeSizes;
   heights: string[] = SelectValueService.heights;
 
   constructor(private readonly route: ActivatedRoute) { }
@@ -86,7 +85,7 @@ export class GeneralDmeOnlyComponent implements OnInit {
     this.addAnswer(this.questions[0], this.form.controls['q1'].value);
     this.addAnswer(this.questions[1], this.form.controls['q2'].value);
     this.addAnswer(this.questions[2], this.form.controls['q3'].value);
-    this.addAnswer(this.questions[3], this.form.controls['q4'].value + " inches");
+    this.addAnswer(this.questions[3], this.form.controls['q4'].value + ' inches');
     this.addAnswer(this.questions[4], this.form.controls['q5'].value);
     this.addAnswer(this.questions[5], this.form.controls['q6'].value);
     this.addAnswer(this.questions[6], this.form.controls['q7'].value);

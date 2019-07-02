@@ -1,4 +1,4 @@
-<form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px">
 
   <mat-form-field>
     <input matInput placeholder="Reason*" type="text" formControlName="reason">
@@ -8,7 +8,7 @@
   </mat-form-field>
 
   <div mat-dialog-actions>
-    <button mat-raised-button color="accent" [mat-dialog-close]="form.get('reason').value">Ok</button>
+    <button mat-raised-button color="accent" (click)="ok()">Ok</button>
     <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
   </div>
 
