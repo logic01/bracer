@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Exceptions;
 using PR.Data.Models;
 using PR.Models;
 using System;
@@ -46,7 +47,7 @@ namespace PR.Business
             return admin.ToModel();
         }
 
-        public AdminModel Update(AdminModel adminModel)
+        public int Update(AdminModel adminModel)
         {
             Admin admin = _context.Admin
                 .Include(a => a.UserAccount)
@@ -58,7 +59,7 @@ namespace PR.Business
 
             _context.SaveChanges();
 
-            return admin.ToModel();
+            return admin.UserAccountId;
         }
     }
 }

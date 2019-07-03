@@ -11,6 +11,6 @@ namespace PR.Business.Interfaces
 
         AdminModel Create(AdminModel adminModel);
 
-        AdminModel Update(AdminModel adminModel);
+        int Update(AdminModel adminModel);
     }
 }

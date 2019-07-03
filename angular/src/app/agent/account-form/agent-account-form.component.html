@@ -5,6 +5,7 @@
     <mat-error *ngIf="accountForm.get('userName').hasError('required')">Please enter a value.</mat-error>
     <mat-error *ngIf="accountForm.get('userName').hasError('minlength')">Minimum of 2 characters.</mat-error>
     <mat-error *ngIf="accountForm.get('userName').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+    <mat-error *ngIf="accountForm.get('userName').hasError('duplicate')">User name already in use.</mat-error>
   </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">

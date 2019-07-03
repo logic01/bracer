@@ -1,12 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Admin } from 'src/app/models/admin.model';
 
 import { RouteUrls } from '../../constants/routes';
 import { AdminService } from '../../services/api/admin.service';
-import { Admin } from 'src/app/models/admin.model';
 
 @Component({
   selector: 'app-create-admin',
@@ -28,7 +27,8 @@ export class CreateAdminComponent implements OnDestroy {
     this.adminApi
       .post(admin)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newAdmin: Admin) => {
+      .subscribe(
+        (newAdmin: Admin) => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

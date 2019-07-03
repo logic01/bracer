@@ -5,6 +5,7 @@ import { Admin } from 'src/app/models/admin.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { UserAccount } from 'src/app/models/user-account.model';
 import { CustomValidators } from 'src/app/validators/custom-validators';
+import { UsernameDuplicateValidator } from 'src/app/validators/username-duplicate.validator';
 
 @Component({
   selector: 'app-admin-account-form',
@@ -18,11 +19,13 @@ export class AdminAccountFormComponent implements OnInit {
 
   public accountForm: FormGroup;
 
-  constructor() { }
+  constructor(private readonly dupeValidator: UsernameDuplicateValidator) { }
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+      userName: new FormControl('',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
+        this.dupeValidator.checkUsername.bind(this.dupeValidator)),
       password: new FormControl('', [CustomValidators.password(6, 20)]),
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
       confirmationPassword: new FormControl('', [CustomValidators.password(6, 20)]),

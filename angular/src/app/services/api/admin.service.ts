@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -27,7 +26,7 @@ export class AdminService {
     return this.http.post<Admin>(this.url, admin);
   }
 
-  put(id: string, admin: Admin): Observable<Admin> {
-    return this.http.put<Admin>(`${this.url}/${id}`, admin);
+  put(id: string, admin: Admin): Observable<{ adminId: string }> {
+    return this.http.put<{ adminId: string }>(`${this.url}/${id}`, admin);
   }
 }

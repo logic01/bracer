@@ -45,7 +45,7 @@ namespace PR.Business
         public AgentModel Create(AgentModel agentModel)
         {
             var agent = new Agent();
-            agent.UserAccount = new UserAccount();
+
             agent.MapFromModel(agentModel);
 
             _context.Agent.Add(agent);

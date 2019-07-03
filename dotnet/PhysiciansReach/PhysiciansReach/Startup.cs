@@ -103,6 +103,7 @@ namespace PhysiciansReach
             services.AddTransient<IEmailBusiness, EmailBusiness>();
             services.AddTransient<IDocumentGenerator, DocumentGenerator>();
             services.AddTransient<ISignatureBusiness, SignatureBusiness>();
+            services.AddTransient<IUserAccountBusiness, UserAccountBusiness>();
         }
     }
 }

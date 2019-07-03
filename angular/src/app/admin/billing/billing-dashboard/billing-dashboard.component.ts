@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
-import { UserAccount } from 'src/app/models/user-account.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { SessionService } from 'src/app/services/session.service';
 
@@ -33,18 +30,14 @@ export class BillingDashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.session.userAccount$.subscribe((account: UserAccount) => {
-
-      this.intakeFormApi.getAll()
-        .pipe(
-          map(intakes => intakes.filter(v => v.status === IntakeStatus.Downloaded)),
-          takeUntil(this.unsubscribe$))
-        .subscribe((intakeFormList: IntakeForm[]) => {
-          this.dataSource = new MatTableDataSource(intakeFormList);
-          this.dataSource.sort = this.sort;
-        });
-
-    });
+    this.intakeFormApi.getAll()
+      .pipe(
+        map(intakes => intakes.filter(v => v.status >= IntakeStatus.Approved )),
+        takeUntil(this.unsubscribe$))
+      .subscribe((intakeFormList: IntakeForm[]) => {
+        this.dataSource = new MatTableDataSource(intakeFormList);
+        this.dataSource.sort = this.sort;
+      });
 
   }
 
