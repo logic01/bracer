@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PR.Api.Models;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
@@ -16,6 +17,13 @@ namespace PhysiciansReach.Controllers
         {
             _business = business;
             _logging = logging;
+        }
+
+        [HttpGet("Patient")]
+        public ActionResult<List<PatientModel>> Get([FromQuery]int[] ids)
+        {
+            _logging.Log(LogSeverity.Info, "Get All Patient");
+            return _business.Get(ids);
         }
 
         [HttpGet("Patient")]

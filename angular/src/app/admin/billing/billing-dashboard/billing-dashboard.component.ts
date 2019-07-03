@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+
 import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
-import { SessionService } from 'src/app/services/session.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-billing-dashboard',
@@ -18,21 +20,23 @@ export class BillingDashboardComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
+  // for the UI to access Enum
+  public IntakeStatus = IntakeStatus;
+
   private changes: IntakeForm[] = [];
   private unsubscribe$ = new Subject();
   public dataSource: MatTableDataSource<IntakeForm>;
-  public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'physicianPaid', 'vendorBilled', 'vendorPaid'];
+  public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'physicianPaid', 'vendorBilled', 'vendorPaid', 'download'];
 
   constructor(
     private readonly router: Router,
-    private readonly session: SessionService,
     private readonly intakeFormApi: IntakeFormService) { }
 
   ngOnInit() {
 
     this.intakeFormApi.getAll()
       .pipe(
-        map(intakes => intakes.filter(v => v.status >= IntakeStatus.Approved )),
+        map(intakes => intakes.filter(v => v.status >= IntakeStatus.Approved)),
         takeUntil(this.unsubscribe$))
       .subscribe((intakeFormList: IntakeForm[]) => {
         this.dataSource = new MatTableDataSource(intakeFormList);
@@ -98,5 +102,9 @@ export class BillingDashboardComponent implements OnInit {
 
     forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
 
+  }
+
+  download(documentId: string) {
+    window.location.href = `${environment.api_url}/document/${documentId}/download`;
   }
 }

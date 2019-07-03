@@ -17,6 +17,18 @@ namespace PR.Business
             _context = context;
         }
 
+        public List<PatientModel> Get(int[] ids)
+        {
+            return _context.Patient
+                    .Include(p => p.Address)
+                    .Include(p => p.PrivateInsurance)
+                    .Include(p => p.Medicare)
+                    .Where(p => ids.Contains(p.PatientId))
+                    .Select(i => i.ToModel())
+                    .ToList();
+        }
+
+
         public List<PatientModel> Get()
         {
             return _context.Patient

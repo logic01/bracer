@@ -26,20 +26,21 @@ namespace PR.Business
                     .ToList();
         }
 
-        public List<AgentModel> Get(int[] userAccountIds)
+        public List<AgentModel> Get(int[] ids)
         {
-            IQueryable<Agent> agents = _context.Agent.Where(a => userAccountIds.Contains(a.UserAccountId));
-
-            return agents.Select(i => i.ToModel()).ToList();
+            return _context.Agent
+                 .Include(a => a.UserAccount)
+                 .Where(a => ids.Contains(a.UserAccountId))
+                 .Select(i => i.ToModel())
+                 .ToList();
         }
 
         public AgentModel Get(int userAccountId)
         {
-            Agent agent = _context.Agent
-                .Include(a => a.UserAccount)
-                .FirstOrDefault(u => u.UserAccountId == userAccountId);
-
-            return agent.ToModel();
+            return _context.Agent
+                 .Include(a => a.UserAccount)
+                 .FirstOrDefault(u => u.UserAccountId == userAccountId)
+                 .ToModel();
         }
 
         public AgentModel Create(AgentModel agentModel)

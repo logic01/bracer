@@ -26,12 +26,20 @@ namespace PhysiciansReach.Controllers
             return _business.Get();
         }
 
+        [HttpGet]
+        public ActionResult<List<PhysicianModel>> Get([FromQuery]int[] ids)
+        {
+            _logging.Log(LogSeverity.Info, "Get Specified Physicians");
+            return _business.Get(ids);
+        }
+
         [HttpGet("{id}")]
         public ActionResult<PhysicianModel> Get(int id)
         {
             _logging.Log(LogSeverity.Info, "Get Physician");
             return _business.Get(id);
         }
+
         [HttpPost]
         public ActionResult<PhysicianModel> Post([FromBody] PhysicianModel physician)
         {

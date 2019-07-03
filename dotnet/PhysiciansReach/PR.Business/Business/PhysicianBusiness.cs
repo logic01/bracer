@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
-using PR.Constants.Exceptions;
 using PR.Data.Models;
 using PR.Models;
 using System;
@@ -24,6 +23,16 @@ namespace PR.Business
             return _context.Physician
                     .Include(p => p.UserAccount)
                     .Include(p => p.Address)
+                    .Select(i => i.ToModel())
+                    .ToList();
+        }
+
+        public List<PhysicianModel> Get(int[] ids)
+        {
+            return _context.Physician
+                    .Include(p => p.UserAccount)
+                    .Include(p => p.Address)
+                    .Where(p => ids.Contains(p.UserAccountId))
                     .Select(i => i.ToModel())
                     .ToList();
         }

@@ -20,6 +20,13 @@ namespace PhysiciansReach.Controllers
         }
 
         [HttpGet]
+        public ActionResult<List<AgentModel>> Get([FromQuery]int[] ids)
+        {
+            _logging.Log(LogSeverity.Info, "Get Specified Agents");
+            return _business.Get(ids);
+        }
+
+        [HttpGet]
         public ActionResult<List<AgentModel>> Get()
         {
             _logging.Log(LogSeverity.Info, "Get All Agent");
