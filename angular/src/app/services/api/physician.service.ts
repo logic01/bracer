@@ -15,12 +15,21 @@ export class PhysicianService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Physician[]> {
-    return this.http.get<Physician[]>(this.url);
-  }
-
   get(id: string): Observable<Physician> {
     return this.http.get<Physician>(`${this.url}/${id}`);
+  }
+
+  getList(ids: string[]): Observable<Physician[]> {
+
+    let queryString = '';
+
+    ids.forEach(id => queryString += `\&ids=${id}`);
+
+    return this.http.get<Physician[]>(`${this.url}?${queryString}`);
+  }
+
+  getAll(): Observable<Physician[]> {
+    return this.http.get<Physician[]>(this.url);
   }
 
   post(physician: Physician): Observable<Physician> {

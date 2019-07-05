@@ -19,18 +19,20 @@ namespace PhysiciansReach.Controllers
             _logging = logging;
         }
 
-        [HttpGet]
-        public ActionResult<List<PhysicianModel>> Get()
-        {
-            _logging.Log(LogSeverity.Info, "Get All Physician");
-            return _business.Get();
-        }
 
         [HttpGet]
         public ActionResult<List<PhysicianModel>> Get([FromQuery]int[] ids)
         {
-            _logging.Log(LogSeverity.Info, "Get Specified Physicians");
-            return _business.Get(ids);
+            _logging.Log(LogSeverity.Info, "Get Multiple Physicians");
+
+            if (ids.Length == 0)
+            {
+                return _business.GetAll();
+            }
+            else
+            {
+                return _business.Get(ids);
+            }
         }
 
         [HttpGet("{id}")]

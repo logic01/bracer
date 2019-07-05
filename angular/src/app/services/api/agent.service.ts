@@ -15,6 +15,16 @@ export class AgentService {
 
   constructor(private http: HttpClient) { }
 
+
+  getList(ids: string[]): Observable<Agent[]> {
+
+    let queryString = '';
+
+    ids.forEach(id => queryString += `\&ids=${id}`);
+
+    return this.http.get<Agent[]>(`${this.url}?${queryString}`);
+  }
+
   getAll(): Observable<Agent[]> {
     return this.http.get<Agent[]>(this.url);
   }

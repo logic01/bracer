@@ -7,7 +7,7 @@ namespace PR.Business.Interfaces
     {
         PhysicianModel Get(int id);
 
-        List<PhysicianModel> Get();
+        List<PhysicianModel> GetAll();
 
         List<PhysicianModel> Get(int[] ids);
 

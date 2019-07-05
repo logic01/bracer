@@ -29,7 +29,7 @@ namespace PR.Business
         }
 
 
-        public List<PatientModel> Get()
+        public List<PatientModel> GetAll()
         {
             return _context.Patient
                     .Include(p => p.Address)

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
+
 import { Patient } from 'src/app/models/patient.model';
 import { environment } from 'src/environments/environment';
 
@@ -13,8 +15,8 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.url);
+  get(id: string): Observable<Patient> {
+    return this.http.get<Patient>(`${this.url}/${id}`);
   }
 
   getByAgent(agentId: string): Observable<Patient[]> {
@@ -25,9 +27,20 @@ export class PatientService {
     return this.http.get<Patient[]>(`${environment.api_url}/vendor/${vendorId}/patient`);
   }
 
-  get(id: string): Observable<Patient> {
-    return this.http.get<Patient>(`${this.url}/${id}`);
+  getList(ids: string[]): Observable<Patient[]> {
+
+    let queryString = '';
+
+    ids.forEach(id => queryString += `\&ids=${id}`);
+
+    return this.http.get<Patient[]>(`${this.url}?${queryString}`);
   }
+
+
+  getAll(): Observable<Patient[]> {
+    return this.http.get<Patient[]>(this.url);
+  }
+
 
   post(patient: Patient): Observable<{ patientId: string }> {
     return this.http.post<{ patientId: string }>(this.url, patient);

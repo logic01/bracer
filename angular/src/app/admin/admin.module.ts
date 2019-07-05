@@ -14,6 +14,8 @@ import { AgentListComponent } from './tables/agent-list/agent-list.component';
 import { PatientListComponent } from './tables/patient-list/patient-list.component';
 import { PhysicianListComponent } from './tables/physician-list/physician-list.component';
 import { VendorListComponent } from './tables/vendor-list/vendor-list.component';
+import { VendorBillingComponent } from './billing/vendor-billing/vendor-billing.component';
+import { PhysicianBillingComponent } from './billing/physician-billing/physician-billing.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { VendorListComponent } from './tables/vendor-list/vendor-list.component'
     PhysicianListComponent,
     AdminAccountFormComponent,
     PatientListComponent,
-    BillingDashboardComponent
+    BillingDashboardComponent,
+    VendorBillingComponent,
+    PhysicianBillingComponent
   ],
   imports: [
     CommonModule,

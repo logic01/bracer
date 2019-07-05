@@ -18,7 +18,17 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<PhysicianModel> Get()
+        public PhysicianModel Get(int userAccountId)
+        {
+            Physician physician = _context.Physician
+                .Include(p => p.UserAccount)
+                .Include(p => p.Address)
+                .FirstOrDefault(u => u.UserAccountId == userAccountId);
+
+            return physician.ToModel();
+        }
+
+        public List<PhysicianModel> GetAll()
         {
             return _context.Physician
                     .Include(p => p.UserAccount)
@@ -35,16 +45,6 @@ namespace PR.Business
                     .Where(p => ids.Contains(p.UserAccountId))
                     .Select(i => i.ToModel())
                     .ToList();
-        }
-
-        public PhysicianModel Get(int userAccountId)
-        {
-            Physician physician = _context.Physician
-                .Include(p => p.UserAccount)
-                .Include(p => p.Address)
-                .FirstOrDefault(u => u.UserAccountId == userAccountId);
-
-            return physician.ToModel();
         }
 
         public PhysicianModel Create(PhysicianModel physicianModel)

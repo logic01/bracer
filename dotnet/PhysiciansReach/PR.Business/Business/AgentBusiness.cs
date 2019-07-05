@@ -18,7 +18,16 @@ namespace PR.Business
             _context = context;
         }
 
-        public List<AgentModel> Get()
+        public AgentModel Get(int userAccountId)
+        {
+            return _context.Agent
+                 .Include(a => a.UserAccount)
+                 .FirstOrDefault(u => u.UserAccountId == userAccountId)
+                 .ToModel();
+        }
+
+
+        public List<AgentModel> GetAll()
         {
             return _context.Agent
                     .Include(p => p.UserAccount)
@@ -35,13 +44,6 @@ namespace PR.Business
                  .ToList();
         }
 
-        public AgentModel Get(int userAccountId)
-        {
-            return _context.Agent
-                 .Include(a => a.UserAccount)
-                 .FirstOrDefault(u => u.UserAccountId == userAccountId)
-                 .ToModel();
-        }
 
         public AgentModel Create(AgentModel agentModel)
         {
