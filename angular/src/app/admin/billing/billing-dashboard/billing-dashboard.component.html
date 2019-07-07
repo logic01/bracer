@@ -1,22 +1,25 @@
 <div fxLayout="row" fxLayoutAlign="center start">
   <div fxLayout="column" fxLayoutGap="10px">
 
-    <mat-card fxLayout="column">
-      <mat-card-title>Physician Billing </mat-card-title>
-      <mat-card-content>
-        <app-physician-billing></app-physician-billing>
-      </mat-card-content>
-    </mat-card>
+    <mat-tab-group>
 
+      <mat-tab label="Physician Billing">
+        <div fxLayout="row" fxLayoutAlign="center start">
+          <p>
+            <app-physician-billing></app-physician-billing>
+          </p>
+        </div>
+      </mat-tab>
 
-    <mat-card fxLayout="column">
-      <mat-card-title>Vendor Billing </mat-card-title>
-      <mat-card-content>
-        <app-vendor-billing></app-vendor-billing>
-      </mat-card-content>
-    </mat-card>
+      <mat-tab label="Vendor Billing">
+        <div fxLayout="row" fxLayoutAlign="center start">
+          <p>
+            <app-vendor-billing></app-vendor-billing>
+          </p>
+        </div>
+      </mat-tab>
 
-
+    </mat-tab-group>
 
   </div>
 </div>

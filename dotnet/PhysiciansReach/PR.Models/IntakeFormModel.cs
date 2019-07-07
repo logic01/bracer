@@ -20,7 +20,7 @@ namespace PR.Models
 
         public List<ICD10CodeModel> ICD10Codes { get; set; }
 
-        public List<HCPCSCodeModel> HCPCSCodes { get; set; }
+        public string HCPCSCode { get; set; }
 
         public string Duration { get; set; }
 

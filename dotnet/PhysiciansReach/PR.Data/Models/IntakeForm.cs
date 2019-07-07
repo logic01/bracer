@@ -32,6 +32,8 @@ namespace PR.Data.Models
 
         public string DeniedReason { get; set; }
 
+        public string HCPCSCode { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public DateTime ModifiedOn { get; set; }
@@ -39,8 +41,6 @@ namespace PR.Data.Models
         public ICollection<Question> Questions { get; set; }
 
         public ICollection<ICD10Code> ICD10Codes { get; set; }
-
-        public ICollection<HCPCSCode> HCPCSCodes { get; set; }
 
         public ICollection<Signature> Signatures { get; set; }
 

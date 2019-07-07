@@ -15,7 +15,7 @@ namespace PR.Business.Mappings
                 PhysicianId = entity.PhysicianId,
                 DocumentId = entity.DocumentId,
                 ICD10Codes = entity.ICD10Codes?.Select(x => x.ToModel()).ToList(),
-                HCPCSCodes = entity.HCPCSCodes?.Select(x => x.ToModel()).ToList(),
+                HCPCSCode = entity.HCPCSCode,
                 Product = entity.Product,
                 PhysicianNotes = entity.PhysicianNotes,
                 Duration = entity.Duration,
@@ -58,11 +58,12 @@ namespace PR.Business.Mappings
             entity.VendorBilled = model.VendorBilled;
             entity.VendorPaid = model.VendorPaid;
             entity.DeniedReason = model.DeniedReason;
+            entity.HCPCSCode = model.HCPCSCode;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 
             entity.ICD10Codes = model.ICD10Codes?.Select(x => x.ToEntity()).ToList();
-            entity.HCPCSCodes = model.HCPCSCodes?.Select(x => x.ToEntity()).ToList();
+
         }
 
         public static ICD10CodeModel ToModel(this ICD10Code entity)
@@ -76,16 +77,6 @@ namespace PR.Business.Mappings
             };
         }
 
-        public static HCPCSCodeModel ToModel(this HCPCSCode entity)
-        {
-            return new HCPCSCodeModel
-            {
-                HCPCSCodeId = entity.HCPCSCodeId,
-                Text = entity.Text,
-                CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn
-            };
-        }
 
         public static ICD10Code ToEntity(this ICD10CodeModel model)
         {
@@ -106,24 +97,6 @@ namespace PR.Business.Mappings
             model.ModifiedOn = entity.ModifiedOn;
         }
 
-        public static HCPCSCode ToEntity(this HCPCSCodeModel entity)
-        {
-            return new HCPCSCode
-            {
-                HCPCSCodeId = entity.HCPCSCodeId,
-                Text = entity.Text,
-                CreatedOn = entity.CreatedOn,
-                ModifiedOn = entity.ModifiedOn
-            };
-        }
-
-        public static void MapFromModel(this HCPCSCode entity, HCPCSCodeModel model)
-        {
-            entity.HCPCSCodeId = model.HCPCSCodeId;
-            entity.Text = model.Text;
-            entity.CreatedOn = model.CreatedOn;
-            entity.ModifiedOn = model.ModifiedOn;
-        }
 
         public static Question ToEntity(this QuestionModel model, int intakeFormId)
         {

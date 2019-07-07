@@ -58,7 +58,7 @@ namespace PR.Export.Tests
                 PatientId = patientId,
                 IntakeFormType = Constants.Enums.IntakeFormType.PainDmeOnly,
                 ICD10Codes = CreateICD10s(),
-                HCPCSCodes = CreateHCPCSCodes(),
+                HCPCSCode = CreateHCPCSCodes(),
                 Physician = CreatePhysician(),
                 Status = Constants.Enums.IntakeFormStatus.New,
                 PhysicianNotes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi blandit cursus risus at ultrices. Enim nunc faucibus a pellentesque sit amet porttitor eget dolor. Tincidunt dui ut ornare lectus sit amet est. Laoreet sit amet cursus sit amet dictum. Dignissim cras tincidunt lobortis feugiat vivamus at. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing"
@@ -106,7 +106,7 @@ namespace PR.Export.Tests
                 ModifiedOn = DateTime.Now,
                 Type = firstSignature
                 ? Constants.Enums.SignatureType.PrescriptionDocument
-                : Constants.Enums.SignatureType.IntakeDocument                
+                : Constants.Enums.SignatureType.IntakeDocument
             };
             var signature = new Signature();
             //Testing the mapper to ensure the data:image/jpeg;base64, gets stripped before being stored
@@ -114,19 +114,12 @@ namespace PR.Export.Tests
             return signature;
         }
 
-        protected static List<HCPCSCode> CreateHCPCSCodes()
+        protected static string CreateHCPCSCodes()
         {
-            return new List<HCPCSCode>{ new HCPCSCode
-                {
-                    Text = "L0650 - (Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
+            return "L0650 - (Lumbar - sacral orthosis.Sagittal control with rigid anterior and posterior panels, " +
                             "posterior panels, posterior extends from Sacrococcygeal junction to the T-9 vertebra, lateral strength, " +
                             "with rigid lateral panels, prefabricated and off the shelf. Custom fitting of the orthosis is not required " +
-                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)",
-                }, new HCPCSCode
-                {
-                    Text = "L111 - The custom description for L111"
-                }
-            };
+                            "and the patient or an assisting care giver can apply the prescribed orthotic device with minimal self - adjusting.)";
         }
 
         protected static List<ICD10Code> CreateICD10s()

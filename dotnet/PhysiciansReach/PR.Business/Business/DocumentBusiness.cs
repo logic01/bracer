@@ -46,7 +46,6 @@ namespace PR.Business
             IntakeForm intakeForm = _context.IntakeForm
                     .Include("Questions.Answers")
                     .Include(i => i.ICD10Codes)
-                    .Include(i => i.HCPCSCodes)
                     .Include(i => i.Physician.Address)
                     .Include(i => i.Signatures)
                     .First(i => i.IntakeFormId == documentModel.IntakeFormId);

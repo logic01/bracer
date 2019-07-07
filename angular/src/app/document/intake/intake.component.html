@@ -90,12 +90,15 @@
             <mat-card-content fxLayout="column">
               <div>Patient should begin using the orthosis as needed.</div>
               <div>First date patient is authorized to begin using {{intakeForm.product}} : {{today | date}}</div>
+
+              <mat-checkbox formControlName="duration_default" color="primary"> 99 PRN </mat-checkbox>
               <mat-form-field>
-                <input matInput placeholder="Duration Of Usage*" type="text" formControlName="productDuration">
-                <mat-error *ngIf="form.get('productDuration').hasError('required')">
-                  Please enter the duration of time this device is prescribed for.
-                </mat-error>
+                <input matInput placeholder="Other" type="text" formControlName="duration_other">
               </mat-form-field>
+              <mat-error *ngIf="!form.get('duration_default').value === true && !form.get('duration_other').value">
+                Please you must either select the 99 PRN or add a custom duration.
+              </mat-error>
+
             </mat-card-content>
           </mat-card>
 
@@ -180,9 +183,8 @@
                 {{getAnswer('PainChart')}}:
               </p>
 
-              <div *ngFor="let item of lcodeOptions; let i = index">
-                <span> {{item}}</span>
-              </div>
+              <p>{{intakeForm.HCPCSCode}}</p>
+
 
             </mat-card-content>
           </mat-card>

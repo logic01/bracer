@@ -84,10 +84,10 @@ namespace PR.Export
                 {
                     signatureImage = signatures.First(s => s.Type == SignatureType.IntakeDocument).ContentBytes;
                 }
-                using (var imageStream = imagePart.GetStream())
+                using (Stream imageStream = imagePart.GetStream())
                 using (var writer = new BinaryWriter(imageStream))
                 {
-                    writer.Write(signatureImage);                    
+                    writer.Write(signatureImage);
                 }
             }
         }
@@ -275,9 +275,9 @@ namespace PR.Export
             var kvps = new List<KeyValuePair<string, string>>
             {
                       new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCSCodes)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCSCode)),
                       new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.Product ?? "N/A"),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCSCodes)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCSCode)),
                       new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
                       new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10Codes)),
                 //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
@@ -319,9 +319,9 @@ namespace PR.Export
         /// </summary>
         /// <param name="icds"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribed(ICollection<HCPCSCodeModel> hCPCs)
+        private string GetOrthoPrescribed(string hcpcsCode)
         {
-            return string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
+            return " with " + hcpcsCode;
         }
 
         /// <summary>
@@ -330,9 +330,9 @@ namespace PR.Export
         /// </summary>
         /// <param name="hCPCs"></param>
         /// <returns></returns>
-        private string GetOrthoPrescribedAfter255(ICollection<HCPCSCodeModel> hCPCs)
+        private string GetOrthoPrescribedAfter255(string hCPCs)
         {
-            var prescribed = string.Join(" with ", hCPCs.Select(x => x.Text)) ?? "N/A";
+            var prescribed =" with " + hCPCs;
             if (prescribed.Length > 255)
             {
                 return prescribed.Substring(254, prescribed.Length - 254);

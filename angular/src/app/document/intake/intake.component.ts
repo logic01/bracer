@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { SignatureType } from 'src/app/models/enums/signature-type';
-import { HCPCSCode } from 'src/app/models/hcpcs-code.model';
 import { ICD10Code } from 'src/app/models/icd10-code.model';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -22,7 +21,6 @@ export class IntakeComponent implements OnInit {
   @Input() physician: Physician;
   @Input() intakeForm: IntakeForm;
   @Input() diagnosisOptions: string[] = [];
-  @Input() lcodeOptions: string[] = [];
 
   @Output() formSubmitEvent = new EventEmitter<{ intakeForm: IntakeForm, signature: Signature } | null>();
 
@@ -30,15 +28,14 @@ export class IntakeComponent implements OnInit {
   public today = Date.now();
   public signatureData: string;
   public diagnosisSelections: string[] = [];
-  public lcodeSelections: string[] = [];
 
   constructor(private readonly dialog: MatDialog) {
 
     this.form = new FormGroup({
       diagnosis_other: new FormControl(''),
-      lcode_other: new FormControl(''),
       additional_notes: new FormControl('', Validators.maxLength(500)),
-      productDuration: new FormControl('', Validators.required),
+      duration_default: new FormControl(true),
+      duration_other: new FormControl(''),
       signature: new FormControl(['', Validators.required])
     });
 
@@ -76,15 +73,6 @@ export class IntakeComponent implements OnInit {
     }
   }
 
-  onLCodeCheck(event: MatCheckboxChange, index: number) {
-
-    if (event.checked) {
-      this.lcodeSelections.push(this.lcodeOptions[index]);
-    } else {
-      this.lcodeSelections = this.lcodeSelections.filter(obj => obj !== this.lcodeOptions[index]);
-    }
-  }
-
   sign() {
     this.dialog
       .open(SignatureDialogComponent)
@@ -94,18 +82,19 @@ export class IntakeComponent implements OnInit {
 
   approve() {
 
-    if (!this.form.valid || this.lcodeSelections.length === 0 || this.diagnosisSelections.length === 0 || !this.signatureData) {
-      return;
-    }
-
     const diagnosis_other = this.form.controls['diagnosis_other'].value;
     if (diagnosis_other) {
       this.diagnosisSelections.push(diagnosis_other);
     }
 
-    const lcode_other = this.form.controls['lcode_other'].value;
-    if (lcode_other) {
-      this.diagnosisSelections.push(lcode_other);
+    let duration = this.form.controls['duration_default'].value;
+
+    if (!duration) {
+      duration = this.form.controls['duration_other'].value;
+    }
+
+    if (!this.form.valid || !duration || this.diagnosisSelections.length === 0 || this.diagnosisSelections.length === 0 || !this.signatureData) {
+      return;
     }
 
     this.intakeForm.ICD10Codes = [];
@@ -115,14 +104,7 @@ export class IntakeComponent implements OnInit {
       this.intakeForm.ICD10Codes.push(code);
     }
 
-    this.intakeForm.HCPCSCodes = [];
-    for (const option of this.lcodeSelections) {
-      const code = new HCPCSCode();
-      code.text = option;
-      this.intakeForm.HCPCSCodes.push(code);
-    }
-
-    this.intakeForm.duration = this.form.controls['productDuration'].value;
+    this.intakeForm.duration = duration;
     this.intakeForm.physicianNotes = this.form.controls['additional_notes'].value;
 
     const signature = new Signature();

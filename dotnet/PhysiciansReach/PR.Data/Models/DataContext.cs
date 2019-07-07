@@ -54,8 +54,6 @@ namespace PR.Data.Models
 
         public DbSet<ICD10Code> ICD10Code { get; set; }
 
-        public DbSet<HCPCSCode> HCPCSCode { get; set; }
-
         public DbSet<PrivateInsurance> PrivateInsurance { get; set; }
 
         public DbSet<Medicare> Medicare { get; set; }
@@ -77,7 +75,6 @@ namespace PR.Data.Models
             PrivateInsuranceBuilder(modelBuilder);
             MedicareBuilder(modelBuilder);
             ICD10CodeBuilder(modelBuilder);
-            HCPCSCodeBuilder(modelBuilder);
         }
 
         protected void LogBuilder(ModelBuilder modelBuilder)
@@ -477,21 +474,6 @@ namespace PR.Data.Models
             });
         }
 
-        protected void HCPCSCodeBuilder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<HCPCSCode>(entity =>
-            {
-                entity.ToTable("HCPCSCode", "dbo");
-
-                entity.HasKey(e => e.HCPCSCodeId).ForSqlServerIsClustered(false);
-
-                entity.Property(e => e.Text).IsRequired();
-
-                entity.Property(e => e.CreatedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ModifiedOn).IsRequired().HasColumnType("datetime2").HasDefaultValueSql("(getdate())");
-            });
-        }
 
         protected void QuestionBuilder(ModelBuilder modelBuilder)
         {

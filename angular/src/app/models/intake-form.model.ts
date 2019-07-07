@@ -1,6 +1,5 @@
 import { IntakeFormType } from './enums/intake-form-type.enum';
 import { IntakeStatus } from './enums/intake-status.enum';
-import { HCPCSCode } from './hcpcs-code.model';
 import { ICD10Code } from './icd10-code.model';
 import { Question } from './question.model';
 
@@ -13,7 +12,7 @@ export class IntakeForm {
     public intakeFormType: IntakeFormType;
     public questions: Question[];
     public ICD10Codes: ICD10Code[];
-    public HCPCSCodes: HCPCSCode[];
+    public HCPCSCode: string;
     public duration: string;
     public physicianNotes: string;
     public deniedReason: string;

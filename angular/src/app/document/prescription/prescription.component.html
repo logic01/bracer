@@ -117,7 +117,8 @@
           response was {{getAnswer('Surgies')}}. Conditions that cause or aggravate the patients
           {{getAnswer('PainChart')}} pain include {{getAnswer('PainCause')}}. The condition
           necessitating
-          the {{intakeForm.product}} is expected to be permanent or of {{productDuration}} duration and there is a need to control
+          the {{intakeForm.product}} is expected to be permanent or of {{productDuration}} duration and there is a need
+          to control
           the
           {{getAnswer('PainChart')}} pain
           in more than one plane. Adjustments and assistance with ﬁtting and sizing will not be required for the
@@ -143,7 +144,8 @@
         <mat-card-content>Based on my clinical impression with {{patient.firstName}} {{patient.lastName}} and
           evaluation of their
           condition, I am ordering the following for the
-          {{getAnswer('PainChart')}}: {{intakeForm.product}} - {{getLCodes()}} the patient has been advised to use the device for
+          {{getAnswer('PainChart')}}: {{intakeForm.product}} - {{intakeForm.HCPCSCode}} the patient has been advised to
+          use the device for
           support of their
           {{getAnswer('PainChart')}} pain as needed for
           comfort; or

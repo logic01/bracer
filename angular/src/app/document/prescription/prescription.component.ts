@@ -32,14 +32,6 @@ export class PrescriptionComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  getLCodes() {
-    let text = '';
-    for (const code of this.intakeForm.HCPCSCodes) {
-      text += code.text;
-    }
-
-    return text;
-  }
 
   getAnswer(key: string) {
 

@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutGap="10px">
 
   <app-intake *ngIf="!intakeApproved" [intakeForm]="intakeForm" [patient]="patient" [physician]="physician"
-    [diagnosisOptions]="diagnosisOptions" [lcodeOptions]="lcodeOptions" [isAdminView]="isAdminView"
+    [diagnosisOptions]="diagnosisOptions" [isAdminView]="isAdminView"
     (formSubmitEvent)="onIntakeApproval($event)">
   </app-intake>
 

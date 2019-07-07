@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
-
+import { Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-
+import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Physician } from 'src/app/models/physician.model';
@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 
 export class TableRow {
   intakeFormId: string;
+  documentId: string;
   createdOn: string;
   status: IntakeStatus;
   physicianName: string;
@@ -39,8 +40,8 @@ export class PhysicianBillingComponent implements OnInit {
   public datasource: MatTableDataSource<TableRow>;
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'physicianName', 'physicianState', 'physicianPaid', 'download'];
 
-
   constructor(
+    private readonly router: Router,
     private readonly physicianApi: PhysicianService,
     private readonly intakeApi: IntakeFormService) { }
 
@@ -80,6 +81,7 @@ export class PhysicianBillingComponent implements OnInit {
   buildTableRow(intake: IntakeForm, physician: Physician): TableRow {
     const row = new TableRow();
     row.intakeFormId = intake.intakeFormId;
+    row.documentId = intake.documentId;
     row.status = intake.status;
     row.physicianName = physician.firstName + ' ' + physician.lastName;
     row.physicianState = physician.address.state;
@@ -111,9 +113,8 @@ export class PhysicianBillingComponent implements OnInit {
 
     this.changes.forEach((intake: IntakeForm) => observables.push(this.intakeApi.put(intake.intakeFormId, intake)));
 
-    forkJoin(observables).subscribe();
+    forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
   }
-
 
   download(documentId: string) {
     window.location.href = `${environment.api_url}/document/${documentId}/download`;
