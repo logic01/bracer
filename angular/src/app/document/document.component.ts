@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { concat } from 'rxjs';
 
 import { RouteUrls } from '../constants/routes';
@@ -33,7 +34,7 @@ export class DocumentComponent implements OnInit {
   private vendorId: string;
 
   public isAdminView = false;
-
+  public IntakeStatus = IntakeStatus;
   public patient: Patient;
   public physician: Physician;
   public intakeForm: IntakeForm;

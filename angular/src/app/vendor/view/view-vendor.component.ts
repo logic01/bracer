@@ -14,6 +14,7 @@ import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PatientService } from 'src/app/services/api/patient.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
+import { environment } from 'src/environments/environment';
 
 export class TableRow {
   intakeFormId: string;
@@ -40,6 +41,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'patientName', 'patientState', 'actions'];
 
   private vendorId: string;
+  private intakes: IntakeForm[];
   private unsubscribe$ = new Subject();
 
   constructor(
@@ -59,6 +61,8 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     this.vendor$ = this.vendorApi.get(this.vendorId);
 
     this.intakeApi.getByVendor(this.vendorId).subscribe((intakes: IntakeForm[]) => {
+
+      this.intakes = intakes;
 
       if (intakes.length > 0) {
         const physicianIds = intakes.map(({ physicianId }) => physicianId);
@@ -118,6 +122,17 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   view(intakeFormId: string) {
     this.router.navigate(['vendor', this.vendorId, 'intake-document', intakeFormId]);
+  }
+
+  download(intakeFormId: string) {
+
+    const intake = this.intakes.find(i => i.intakeFormId === intakeFormId);
+
+    window.location.href = `${environment.api_url}/document/${intake.documentId}/download`;
+
+    intake.status = IntakeStatus.Downloaded;
+
+    this.intakeApi.put(intakeFormId, intake).subscribe();
   }
 
 }
