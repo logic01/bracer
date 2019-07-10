@@ -17,6 +17,7 @@ $accent-blue:  mat-color($accent-blue-palette);
 
 // The warn palette is optional (defaults to red).
 $warning-palette: mat-palette($mat-blood-red, 900);
+$warning-color: mat-color($warning-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
 $light-theme: mat-light-theme($primary-soft-green-palette, $accent-sky-blue-palette, $warning-palette);

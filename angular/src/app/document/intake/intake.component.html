@@ -3,9 +3,18 @@
   <div class="intake-content">
     <form [formGroup]="form" novalidate (ngSubmit)="approve()" fxLayout="column" fxLayoutGap="20px">
 
+      <!-- DENEID -->
+      <mat-card class="warning" *ngIf="intakeForm.deniedReason">
+        <mat-card-title>DENIED!</mat-card-title>
+        <mat-card-content>
+          {{ intakeForm.deniedReason }}
+        </mat-card-content>
+      </mat-card>
+
       <div fxLayout="row" fxLayoutGap="10px">
 
         <div fxLayout="column" fxLayoutGap="10px" fxFlex="0 0 calc(50%)">
+
 
           <!-- PATIENT INFORMATION-->
           <mat-card>

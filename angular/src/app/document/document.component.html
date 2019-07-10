@@ -8,9 +8,6 @@
     [isAdminView]="isAdminView" (formSubmitEvent)="onPrescriptionApproval($event)">
   </app-prescription>
 
-  <label color="warning" *ngIf="isAdminView && intakeForm && intakeForm.intakeStatus == IntakeStatus.Denied">
-    {{ intakeForm.deniedReason }}
-  </label>
   <button *ngIf="!isAdminView" mat-raised-button color="accent" (click)="deny()">Deny</button>
 
 </div>
