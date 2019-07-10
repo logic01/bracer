@@ -2,7 +2,9 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatRadioChange, MatRadioGroup, MatSelect } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+
 import { Observable, Subject } from 'rxjs';
+
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
 import { InsuranceType } from 'src/app/models/enums/insurance-type.enum';
@@ -16,10 +18,12 @@ import { PrivateInsurance } from 'src/app/models/private-insurance.model';
 import { FormatHelperService } from 'src/app/services/format-helper.service';
 import { MaskService } from 'src/app/services/mask.service';
 import { SelectValueService } from 'src/app/services/select-value.service';
-import { SessionService } from 'src/app/services/session.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
-import { DmaDialogComponent } from '../dma-dialog/dma-dialog.component';
+export interface PainArea {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-patient-form',
@@ -59,8 +63,24 @@ export class PatientFormComponent implements OnInit, OnDestroy {
   public privateInsurance: boolean;
   public medicareInsurance: boolean;
 
+  public painAreas: PainArea[] = [
+    { value: 'LeftWrist', viewValue: 'Left Wrist' },
+    { value: 'RightWrist', viewValue: 'Right Wrist' },
+    { value: 'LeftElbow', viewValue: 'Left Elbow' },
+    { value: 'RightElbow', viewValue: 'Right Elbow' },
+    { value: 'LeftAnteriorShoulder', viewValue: 'Left Anterior Shoulder' },
+    { value: 'RightAnteriorShoulder', viewValue: 'Right Anterior Shoulder' },
+    { value: 'LeftHip', viewValue: 'TaLeft Hipcos' },
+    { value: 'RightHip', viewValue: 'Right Hip' },
+    { value: 'LeftKnee', viewValue: 'Left Knee' },
+    { value: 'RightKnee', viewValue: 'Right Knee' },
+    { value: 'PosteriorLeftShoulder', viewValue: 'Posterior Left Shoulder' },
+    { value: 'PosteriorRightShoulder', viewValue: 'Posterior Right Shoulder' },
+    { value: 'LeftAnkle', viewValue: 'Left Ankle' },
+    { value: 'RightAnkle', viewValue: 'Right Ankle' }
+  ];
+
   constructor(
-    private readonly session: SessionService,
     private readonly dialog: MatDialog,
     private readonly route: ActivatedRoute,
     public readonly maskService: MaskService,
@@ -85,11 +105,16 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       city: new FormControl('', [Validators.required, Validators.maxLength(30)]),
       state: new FormControl('', Validators.required),
       zipCode: new FormControl('', [Validators.required, Validators.maxLength(10), CustomValidators.zip]),
-      sex: new FormControl('Male', Validators.required),
-      language: new FormControl('English', Validators.required),
+      sex: new FormControl('', Validators.required),
+      language: new FormControl('', Validators.required),
       callBackImmediately: new FormControl(false, Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
       allergies: new FormControl('', [Validators.maxLength(500)]),
+
+      hadBraceBefore: new FormControl('', Validators.required),
+      mainPainArea: new FormControl('', Validators.required),
+      secondPainArea: new FormControl('', Validators.required),
+      painCream: new FormControl('', Validators.required),
 
       pharmacy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       medications: new FormControl('', Validators.maxLength(100)),
@@ -101,7 +126,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       physicianCity: new FormControl('', Validators.maxLength(30)),
       physicianState: new FormControl(''),
       physicianZip: new FormControl('', [Validators.maxLength(10), CustomValidators.zip]),
-      isDme: new FormControl(false),
       therapy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       otherProducts: new FormControl('', Validators.maxLength(100)),
       insurance: new FormControl('', Validators.maxLength(100)),
@@ -138,7 +162,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
           });
         this.form.patchValue(
           {
-            isDme: result.isDme ? 'true' : 'false',
             pharmacy: PharmacyType[result.pharmacy],
             sex: SexType[result.sex],
             language: LanguageType[result.language],
@@ -146,7 +169,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
             insuranceType: InsuranceType[result.insurance],
             bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
           });
-
 
       });
     }
@@ -168,10 +190,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     const patient = this.buildPatient();
 
     this.formSubmitEvent.emit(patient);
-  }
-
-  openDmeDialog(): void {
-    const dialogRef = this.dialog.open(DmaDialogComponent);
   }
 
   private buildPatient(): Patient {
@@ -202,7 +220,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     patient.therapy = this.form.controls['therapy'].value;
     patient.insurance = this.form.controls['insuranceType'].value;
     patient.pharmacy = this.form.controls['pharmacy'].value;
-    patient.isDme = this.form.controls['isDme'].value;
+    patient.isDme = true;
 
     patient.address = new Address();
     patient.address.addressLineOne = this.form.controls['addressLineOne'].value;

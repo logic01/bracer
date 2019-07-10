@@ -344,8 +344,6 @@ namespace PR.Data.Models
                 entity.Property(e => e.Allergies).HasMaxLength(500);
                 entity.Property(e => e.Weight).HasMaxLength(3);
 
-                entity.Property(e => e.BestTimeToCallBack).IsRequired().HasMaxLength(100).HasConversion<string>();
-
                 entity.Property(e => e.Medications).HasMaxLength(100);
 
                 entity.Property(e => e.Notes).HasMaxLength(100);
