@@ -37,6 +37,11 @@ namespace PR.Models
 
         public bool IsDme { get; set; }
 
+        public string MainPainArea { get; set; }
+        public string SecondPainArea { get; set; }
+        public string HadBraceBefore { get; set; }
+        public string PainCream { get; set; }
+
         public string Medications { get; set; }
 
         public string Notes { get; set; }

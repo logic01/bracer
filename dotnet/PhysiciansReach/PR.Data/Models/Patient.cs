@@ -1,7 +1,6 @@
 ﻿using PR.Constants.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PR.Data.Models
 {
@@ -36,7 +35,12 @@ namespace PR.Data.Models
         public CallbackTime BestTimeToCallBack { get; set; }
 
         public bool IsDme { get; set; }
-               
+
+        public string MainPainArea { get; set; }
+        public string SecondPainArea { get; set; }
+        public string HadBraceBefore { get; set; }
+        public string PainCream { get; set; }
+
         public string Medications { get; set; }
 
         public string Notes { get; set; }

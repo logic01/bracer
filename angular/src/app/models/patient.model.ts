@@ -27,6 +27,11 @@ export class Patient {
     public shoeSize: string;
     public allergies: string;
 
+    public mainPainArea: string;
+    public secondPainArea: string;
+    public hadBraceBefore: string;
+    public painCream: string;
+
     public medications: string;
     public notes: string;
     public otherProducts: string;

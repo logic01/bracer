@@ -193,53 +193,59 @@
       <mat-card-title>Medical Information</mat-card-title>
 
       <!-- DME -->
-      <div>
+      <div fxLayout="column" fxLayoutGap="10px">
         <h4>DME:</h4>
 
-        <div mat-dialog-content fxLayout="column" fxLayoutGap="20px">
-          <mat-form-field>
-            <mat-select placeholder="Main pain area:" formControlName="mainPainArea">
-              <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('mainPainArea').hasError('required')">Please select an area of pain.
-            </mat-error>
-          </mat-form-field>
+        <!-- MAIN PAIN AREA -->
+        <mat-form-field>
+          <mat-select placeholder="Main pain area:" formControlName="mainPainArea">
+            <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('mainPainArea').hasError('required')">Please select an area of pain.
+          </mat-error>
+        </mat-form-field>
 
-          <div fxLayout="column" fxLayoutGap="20px">
-            <mat-label>Have you ever had a brace for this area of pain?</mat-label>
-            <mat-radio-group formControlName="hadBraceBefore" fxLayout="row" fxLayoutGap="30px">
-              <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
-              <mat-radio-button value="false" color="primary"> No </mat-radio-button>
-            </mat-radio-group>
-            <mat-error *ngIf="form.get('hadBraceBefore').hasError('required') && form.get('hadBraceBefore').touched">
-              Please select yes or no.
-            </mat-error>
-          </div>
+        <!-- SECONDARY PAIN AREA -->
+        <mat-form-field>
+          <mat-select placeholder="Secondary pain area:" formControlName="secondPainArea">
+            <mat-option value="none">None</mat-option>
+            <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field>
-            <mat-select placeholder="Secondary pain area:" formControlName="secondPainArea">
-              <mat-option>None</mat-option>
-              <mat-option *ngFor="let area of painAreas" [value]="area.value">{{area.viewValue}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div fxLayout="column" fxLayoutGap="20px">
-            <mat-label style="max-width: 300px">Our doctors offer different pain relief creams to help with your pain.
-              If a
-              doctor believes it would help your problem would you be intersted in that if your insurance covers it?
-            </mat-label>
-            <mat-radio-group formControlName="painCream" fxLayout="row" fxLayoutGap="30px">
-              <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
-              <mat-radio-button value="false" color="primary"> No </mat-radio-button>
-            </mat-radio-group>
-            <mat-error *ngIf="form.get('painCream').hasError('required') && form.get('painCream').toched">Please select yes or no.
-            </mat-error>
-          </div>
+        <!-- HAD BRACE -->
+        <div>
+          <mat-label>Have you ever had a brace for this area of pain?</mat-label>
+          <mat-radio-group formControlName="hadBraceBefore" fxLayout="row" fxLayoutGap="30px">
+            <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
+            <mat-radio-button value="false" color="primary"> No </mat-radio-button>
+          </mat-radio-group>
+          <mat-error *ngIf="form.get('hadBraceBefore').hasError('required') && form.get('hadBraceBefore').touched">
+            Please select yes or no.
+          </mat-error>
         </div>
+
+        <!-- CREAM -->
+        <div>
+          <mat-label style="max-width: 300px">Our doctors offer different pain relief creams to help with your pain.
+            If a
+            doctor believes it would help your problem would you be intersted in that if your insurance covers it?
+          </mat-label>
+          <mat-radio-group formControlName="painCream" fxLayout="row" fxLayoutGap="30px">
+            <mat-radio-button value="true" color="primary"> Yes </mat-radio-button>
+            <mat-radio-button value="false" color="primary"> No </mat-radio-button>
+          </mat-radio-group>
+          <mat-error *ngIf="form.get('painCream').hasError('required') && form.get('painCream').toched">Please select
+            yes or no.
+          </mat-error>
+        </div>
+
 
       </div>
 
       <br />
+
+      <!-- PHARMACY -->
       <mat-form-field>
         <mat-select #pharmacyC placeholder="Pharmacy*" formControlName="pharmacy">
           <mat-option value="TWA"> TWA </mat-option>
@@ -249,16 +255,20 @@
         </mat-error>
       </mat-form-field>
 
+      <!-- MEDICATIONS -->
       <mat-form-field>
         <input matInput placeholder="Medications" type="text" formControlName="medications">
         <mat-error *ngIf="form.get('medications').hasError('maxlength')">Maximum of 100 characters.
         </mat-error>
       </mat-form-field>
 
+      <!-- NOTES -->
       <mat-form-field>
         <input matInput placeholder="Additional Notes" type="text" formControlName="notes">
         <mat-error *ngIf="form.get('notes').hasError('maxlength')">Maximum of 100 characters.</mat-error>
       </mat-form-field>
+
+      <!-- PHYSICIAN NAME -->
       <div fxLayout="row" fxLayoutGap="10px">
         <mat-form-field>
           <input matInput placeholder="Primary Care Physician Name" type="text" formControlName="physiciansName">
@@ -274,27 +284,30 @@
 
         </mat-form-field>
       </div>
+
+      <!-- ADDRESS LINE ONE, LINE TWO -->
       <div fxLayout="row" fxLayoutGap="10px">
+
         <mat-form-field>
           <input matInput placeholder="Address Line One" type="text" formControlName="physicianAddressLineOne">
-          <mat-error *ngIf="form.get('physicianAddressLineOne').hasError('maxlength')">Field cannot be longer than 100
-            chars.</mat-error>
-
+          <mat-error *ngIf="form.get('physicianAddressLineOne').hasError('maxlength')">Maximum of 100 characters.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput placeholder="Address Line Two" type="text" formControlName="physicianAddressLineTwo">
-          <mat-error *ngIf="form.get('physicianAddressLineTwo').hasError('maxlength')">Field cannot be longer than 100
-            chars.</mat-error>
-
+          <mat-error *ngIf="form.get('physicianAddressLineTwo').hasError('maxlength')">Maximum of 100 characters.
+          </mat-error>
         </mat-form-field>
+
       </div>
+
+      <!-- CITY, STATE, ZIP-->
       <div fxLayout="row" fxLayoutGap="10px">
         <mat-form-field>
           <input matInput placeholder="City" type="text" formControlName="physicianCity">
-          <mat-error *ngIf="form.get('physicianCity').hasError('maxlength')">Field cannot be longer than 30 chars.
+          <mat-error *ngIf="form.get('physicianCity').hasError('maxlength')">Maximum of 30 characters.
           </mat-error>
-
         </mat-form-field>
 
         <mat-form-field>
@@ -312,6 +325,7 @@
         </mat-form-field>
       </div>
 
+      <!-- THERAPY TYPE -->
       <mat-form-field>
         <mat-select #therapyC placeholder="Therapy Type*" formControlName="therapy">
           <mat-option value="RX"> Rx </mat-option>
@@ -322,95 +336,101 @@
         <mat-error *ngIf="form.get('therapy').hasError('required')">Please select a type of therapy. </mat-error>
       </mat-form-field>
 
+      <!-- OTHER PRODUCTS -->
       <mat-form-field>
         <input matInput placeholder="Other Product" type="text" formControlName="otherProducts">
         <mat-error *ngIf="form.get('otherProducts').hasError('maxlength')">Maximum of 100 characters.
         </mat-error>
       </mat-form-field>
 
+      <!-- INSURANCE TYPE -->
+      <div>
+        <h4>Insurance Type:*</h4>
 
-      <h4>Insurance Type:*</h4>
-      <mat-error class="radio-button-error" *ngIf="form.get('insuranceType').hasError('required') && submitted">
-        Insurance Type Required.
-      </mat-error>
-      <mat-radio-group #insuranceC formControlName="insuranceType" fxLayout="row" fxLayoutGap="10px">
+        <mat-radio-group #insuranceC formControlName="insuranceType" fxLayout="row" fxLayoutGap="10px">
+          <mat-radio-button value="PRIVATE" color="primary" (change)="radioChange($event)"> PRIVATE
+          </mat-radio-button>
+          <mat-radio-button value="MEDICARE" color="primary" (change)="radioChange($event)"> MEDICARE
+          </mat-radio-button>
+        </mat-radio-group>
 
-        <mat-radio-button value="PRIVATE" color="primary" (change)="radioChange($event)"> PRIVATE
-        </mat-radio-button>
-        <mat-radio-button value="MEDICARE" color="primary" (change)="radioChange($event)"> MEDICARE
-        </mat-radio-button>
-      </mat-radio-group>
+        <mat-error class="radio-button-error"
+          *ngIf="form.get('insuranceType').hasError('required') && form.get('insuranceType').touched">
+          Insurance Type Required.
+        </mat-error>
 
-      <!-- Insurance -->
+      </div>
+
+      <!-- INSURANCE -->
       <div fxLayout="row" fxLayoutGap="10px">
 
         <div *ngIf="privateInsurance" fxLayout="column" fxFlex="50">
-          <mat-card>
-            <mat-card-title>Private Insurance</mat-card-title>
 
-            <mat-form-field>
-              <input matInput placeholder="Insurance" type="text" formControlName="insurance">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Insurance ID" type="text" formControlName="insuranceId">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Group" type="text" formControlName="privateGroup">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="PCN" type="text" formControlName="privatePcn">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Bin" type="text" formControlName="bin" [textMask]="{mask: maskService.bin}">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder=" Insurance Street" type="text" formControlName="insuranceStreet">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Insurance City" type="text" formControlName="insuranceCity">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Insurance State" type="text" [textMask]="{mask: maskService.state}"
-                formControlName="insuranceState">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Insurance Zip" type="text" [textMask]="{mask: maskService.zip}"
-                formControlName="insuranceZip">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Insurance Phone" [textMask]="{mask: maskService.phonenumber}" type="text"
-                formControlName="insurancePhone">
-            </mat-form-field>
-          </mat-card>
+          <h4>Private Insurance</h4>
+
+          <mat-form-field>
+            <input matInput placeholder="Insurance" type="text" formControlName="insurance">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Insurance ID" type="text" formControlName="insuranceId">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Group" type="text" formControlName="privateGroup">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="PCN" type="text" formControlName="privatePcn">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bin" type="text" formControlName="bin" [textMask]="{mask: maskService.bin}">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder=" Insurance Street" type="text" formControlName="insuranceStreet">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Insurance City" type="text" formControlName="insuranceCity">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Insurance State" type="text" [textMask]="{mask: maskService.state}"
+              formControlName="insuranceState">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Insurance Zip" type="text" [textMask]="{mask: maskService.zip}"
+              formControlName="insuranceZip">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Insurance Phone" [textMask]="{mask: maskService.phonenumber}" type="text"
+              formControlName="insurancePhone">
+          </mat-form-field>
+
         </div>
 
         <div *ngIf="medicareInsurance" fxLayout="column" fxFlex="50">
-          <mat-card>
-            <mat-card-title>Medicare</mat-card-title>
 
-            <mat-form-field>
-              <input matInput placeholder="Member ID" type="text" formControlName="memberId">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Patient Group" type="text" formControlName="medicareGroup">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="PCN" type="text" formControlName="medicarePcn">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Subscriber #" type="text" formControlName="subscriberNumber">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Secondary/Supplement Insurance Carrier" type="text"
-                formControlName="secondaryInsurance">
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Secondary Subscriber #" type="text"
-                formControlName="secondarySubscriberNumber">
-            </mat-form-field>
-          </mat-card>
+          <h4>Medicare</h4>
+
+          <mat-form-field>
+            <input matInput placeholder="Member ID" type="text" formControlName="memberId">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Patient Group" type="text" formControlName="medicareGroup">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="PCN" type="text" formControlName="medicarePcn">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Subscriber #" type="text" formControlName="subscriberNumber">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Secondary/Supplement Insurance Carrier" type="text"
+              formControlName="secondaryInsurance">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Secondary Subscriber #" type="text"
+              formControlName="secondarySubscriberNumber">
+          </mat-form-field>
 
         </div>
+
       </div>
 
     </mat-card>

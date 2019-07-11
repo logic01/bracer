@@ -24,6 +24,10 @@ namespace PR.Business.Mappings
                 DateOfBirth = entity.DateOfBirth,
                 CallBackImmediately = entity.CallBackImmediately,
                 IsDme = entity.IsDme,
+                MainPainArea = entity.MainPainArea,
+                SecondPainArea = entity.SecondPainArea,
+                HadBraceBefore = entity.HadBraceBefore,
+                PainCream = entity.PainCream,
                 Medications = entity.Medications,
                 Notes = entity.Notes,
                 OtherProducts = entity.OtherProducts,
@@ -45,47 +49,53 @@ namespace PR.Business.Mappings
             return model;
         }
 
-        public static Patient ToEntity(this PatientModel model)
+
+        /// <summary>
+        /// Takes an EF Core Entity and maps the model to it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static void MapFromModel(this Patient entity, PatientModel model)
         {
-            var entity = new Patient
-            {
-                PatientId = model.PatientId,
-                AgentId = model.AgentId,
-                Language = model.Language,
-                Sex = model.Sex,
-                BestTimeToCallBack = model.BestTimeToCallBack,
-                Therapy = model.Therapy,
-                Insurance = model.Insurance,
-                Pharmacy = model.Pharmacy,
-                FirstName = model.FirstName,
-                MiddleName = model.MiddleName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
-                DateOfBirth = model.DateOfBirth,
-                CallBackImmediately = model.CallBackImmediately,
-                IsDme = model.IsDme,
-                Medications = model.Medications,
-                Notes = model.Notes,
-                OtherProducts = model.OtherProducts,
-                PhysiciansName = model.PhysiciansName,
-                PhysiciansPhoneNumber = model.PhysiciansPhoneNumber,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn,
-                Address = model.Address.ToEntity(),
-                PhysiciansAddress = model.PhysiciansAddress?.ToEntity(),
-                PhysiciansAddressId = model.PhysiciansAddress?.AddressId,
-                Medicare = model.Medicare?.ToEntity(),
-                PrivateInsurance = model.PrivateInsurance?.ToEntity(),
-                Waist = model.Waist,
-                Weight = model.Weight,
-                Height = model.Height,
-                ShoeSize = model.ShoeSize,
-                Allergies = model.Allergies
-            };
-
-            return entity;
+            // don't map primary key
+            //entity.PatientId = model.PatientId;
+            entity.AgentId = model.AgentId;
+            entity.Language = model.Language;
+            entity.Sex = model.Sex;
+            entity.BestTimeToCallBack = model.BestTimeToCallBack;
+            entity.Therapy = model.Therapy;
+            entity.Insurance = model.Insurance;
+            entity.Pharmacy = model.Pharmacy;
+            entity.FirstName = model.FirstName;
+            entity.MiddleName = model.MiddleName;
+            entity.LastName = model.LastName;
+            entity.PhoneNumber = model.PhoneNumber;
+            entity.DateOfBirth = model.DateOfBirth;
+            entity.CallBackImmediately = model.CallBackImmediately;
+            entity.IsDme = model.IsDme;
+            entity.MainPainArea = model.MainPainArea;
+            entity.SecondPainArea = model.SecondPainArea;
+            entity.HadBraceBefore = model.HadBraceBefore;
+            entity.PainCream = model.PainCream;
+            entity.Medications = model.Medications;
+            entity.Notes = model.Notes;
+            entity.OtherProducts = model.OtherProducts;
+            entity.PhysiciansName = model.PhysiciansName;
+            entity.PhysiciansPhoneNumber = model.PhysiciansPhoneNumber;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+            entity.Address = model.Address.ToEntity();
+            entity.PhysiciansAddress = model.PhysiciansAddress?.ToEntity();
+            entity.PhysiciansAddressId = model.PhysiciansAddress?.AddressId;
+            entity.Medicare = model.Medicare?.ToEntity();
+            entity.PrivateInsurance = model.PrivateInsurance?.ToEntity();
+            entity.Waist = model.Waist;
+            entity.Weight = model.Weight;
+            entity.Height = model.Height;
+            entity.ShoeSize = model.ShoeSize;
+            entity.Allergies = model.Allergies;
         }
-
 
     }
 }

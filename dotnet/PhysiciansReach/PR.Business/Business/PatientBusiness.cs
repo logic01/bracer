@@ -85,7 +85,9 @@ namespace PR.Business
 
         public int Create(PatientModel patientModel)
         {
-            Patient patient = patientModel.ToEntity();
+            Patient patient = new Patient();
+
+            patient.MapFromModel(patientModel);
 
             _context.Patient.Add(patient);
             _context.SaveChanges();
@@ -97,7 +99,8 @@ namespace PR.Business
         {
             Patient patient = _context.Patient.FirstOrDefault(u => u.PatientId == patientModel.PatientId);
 
-            patient = patientModel.ToEntity();
+            patient.MapFromModel(patientModel);
+
             _context.Patient.Add(patient);
             _context.SaveChanges();
         }
