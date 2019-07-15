@@ -82,16 +82,16 @@ export class GeneralDmeOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], this.form.controls['q1'].value);
-    this.addAnswer(this.questions[1], this.form.controls['q2'].value);
-    this.addAnswer(this.questions[2], this.form.controls['q3'].value);
-    this.addAnswer(this.questions[3], this.form.controls['q4'].value + ' inches');
-    this.addAnswer(this.questions[4], this.form.controls['q5'].value);
-    this.addAnswer(this.questions[5], this.form.controls['q6'].value);
-    this.addAnswer(this.questions[6], this.form.controls['q7'].value);
-    this.addAnswer(this.questions[7], this.form.controls['q8'].value);
-    this.addAnswer(this.questions[8], this.form.controls['q9'].value);
-    this.addAnswer(this.questions[9], this.form.controls['q10'].value);
+    this.addAnswer(this.questions[0], this.getControlValue('q1'));
+    this.addAnswer(this.questions[1], this.getControlValue('q2'));
+    this.addAnswer(this.questions[2], this.getControlValue('q3'));
+    this.addAnswer(this.questions[3], this.getControlValue('q4') + ' inches');
+    this.addAnswer(this.questions[4], this.getControlValue('q5'));
+    this.addAnswer(this.questions[5], this.getControlValue('q6'));
+    this.addAnswer(this.questions[6], this.getControlValue('q7'));
+    this.addAnswer(this.questions[7], this.getControlValue('q8'));
+    this.addAnswer(this.questions[8], this.getControlValue('q9'));
+    this.addAnswer(this.questions[9], this.getControlValue('q10'));
 
     const intake = new IntakeForm();
     intake.intakeFormType = IntakeFormType.GeneralDmeOnly;
@@ -99,6 +99,16 @@ export class GeneralDmeOnlyComponent implements OnInit {
     intake.patientId = this.patientId;
 
     return intake;
+  }
+
+  getControlValue(key: string) {
+    const val = this.form.controls[key].value;
+
+    if (val) {
+      return val;
+    }
+
+    return '';
   }
 
   addAnswer(question: Question, value: string) {

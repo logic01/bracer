@@ -1,5 +1,6 @@
 ﻿using PR.Data.Models;
 using PR.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PR.Business.Mappings
@@ -62,7 +63,35 @@ namespace PR.Business.Mappings
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
 
-            entity.ICD10Codes = model.ICD10Codes?.Select(x => x.ToEntity()).ToList();
+            if (entity.Questions == null)
+            {
+                entity.Questions = new List<Question>();
+            }
+
+            entity.Questions = model.Questions?.Select(questionsModel =>
+            {
+                var question = new Question();
+
+                question.MapFromModel(questionsModel, entity.IntakeFormId);
+
+                return question;
+
+            }).ToList();
+
+            if (entity.ICD10Codes == null)
+            {
+                entity.ICD10Codes = new List<ICD10Code>();
+            }
+
+            entity.ICD10Codes = model.ICD10Codes?.Select(iCD10CodeModel =>
+            {
+                var icd10Code = new ICD10Code();
+
+                icd10Code.MapFromModel(iCD10CodeModel);
+
+                return icd10Code;
+
+            }).ToList();
 
         }
 
@@ -77,39 +106,12 @@ namespace PR.Business.Mappings
             };
         }
 
-
-        public static ICD10Code ToEntity(this ICD10CodeModel model)
-        {
-            return new ICD10Code
-            {
-                ICD10CodeId = model.ICD10CodeId,
-                Text = model.Text,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
-        }
-
         public static void MapFromModel(this ICD10Code entity, ICD10CodeModel model)
         {
             model.ICD10CodeId = entity.ICD10CodeId;
             model.Text = entity.Text;
             model.CreatedOn = entity.CreatedOn;
             model.ModifiedOn = entity.ModifiedOn;
-        }
-
-
-        public static Question ToEntity(this QuestionModel model, int intakeFormId)
-        {
-            return new Question
-            {
-                IntakeFormId = intakeFormId,
-                QuestionId = model.QuestionId,
-                Text = model.Text,
-                Key = model.Key,
-                Answers = model.Answers?.Select(x => x.ToEntity()).ToList(),
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
         }
 
         public static QuestionModel ToModel(this Question entity)
@@ -125,16 +127,30 @@ namespace PR.Business.Mappings
             };
         }
 
-        public static Answer ToEntity(this AnswerModel model)
+        public static void MapFromModel(this Question entity, QuestionModel model, int intakeFormId)
         {
-            return new Answer
-            {
+            // entity.QuestionId = model.QuestionId; don't map primary key
+            entity.IntakeFormId = intakeFormId;
 
-                AnswerId = model.AnswerId,
-                Text = model.Text,
-                CreatedOn = model.CreatedOn,
-                ModifiedOn = model.ModifiedOn
-            };
+            entity.Text = model.Text;
+            entity.Key = model.Key;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+
+            if (entity.Answers == null)
+            {
+                entity.Answers = new List<Answer>();
+            }
+
+            entity.Answers = model.Answers?.Select(answerModel =>
+            {
+                var answer = new Answer();
+
+                answer.MapFromModel(answerModel);
+
+                return answer;
+
+            }).ToList();
         }
 
         public static AnswerModel ToModel(this Answer entity)
@@ -148,5 +164,12 @@ namespace PR.Business.Mappings
             };
         }
 
+        public static void MapFromModel(this Answer entity, AnswerModel model)
+        {
+            //entity.AnswerId = model.AnswerId; don't map primary key
+            entity.Text = model.Text;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
+        }
     }
 }
