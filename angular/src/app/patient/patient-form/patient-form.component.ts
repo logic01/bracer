@@ -222,6 +222,11 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     patient.pharmacy = this.form.controls['pharmacy'].value;
     patient.isDme = true;
 
+    patient.mainPainArea= this.form.controls['mainPainArea'].value;
+    patient.secondPainArea= this.form.controls['secondPainArea'].value;
+    patient.hadBraceBefore= this.form.controls['hadBraceBefore'].value;
+    patient.painCream= this.form.controls['therapy'].value;
+
     patient.address = new Address();
     patient.address.addressLineOne = this.form.controls['addressLineOne'].value;
     patient.address.addressLineTwo = this.form.controls['addressLineTwo'].value;
