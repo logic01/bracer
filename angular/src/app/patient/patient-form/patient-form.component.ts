@@ -134,11 +134,11 @@ export class PatientFormComponent implements OnInit, OnDestroy {
         this.form.patchValue(result.address);
         this.form.patchValue(
           {
-            physicianAddressLineOne: result.address.addressLineOne,
-            physicianAddressLineTwo: result.address.addressLineTwo,
-            physicianCity: result.address.city,
-            physicianState: result.address.state,
-            physicianZip: result.address.zipCode,
+            physicianAddressLineOne: result.physiciansAddress.addressLineOne,
+            physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
+            physicianCity: result.physiciansAddress.city,
+            physicianState: result.physiciansAddress.state,
+            physicianZip: result.physiciansAddress.zipCode,
           });
         this.form.patchValue(
           {
@@ -149,6 +149,8 @@ export class PatientFormComponent implements OnInit, OnDestroy {
             insuranceType: InsuranceType[result.insurance],
             bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
           });
+          this.form.patchValue(result.medicare);
+          this.form.patchValue(result.privateInsurance);
 
       });
     }
@@ -203,7 +205,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     patient.mainPainArea = this.form.controls['mainPainArea'].value;
     patient.secondPainArea = this.form.controls['secondPainArea'].value;
     patient.hadBraceBefore = this.form.controls['hadBraceBefore'].value;
-    patient.painCream = this.form.controls['therapy'].value;
+    patient.painCream = this.form.controls['painCream'].value;
 
     patient.address = new Address();
     patient.address.addressLineOne = this.form.controls['addressLineOne'].value;
@@ -219,7 +221,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     patient.physiciansAddress.state = this.form.controls['physicianState'].value;
     patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
 
-    if (this.form.controls['insuranceType'].value === InsuranceType.PRIVATE) {
+    if (this.form.controls['insuranceType'].value === 'PRIVATE') {
       patient.privateInsurance = new PrivateInsurance();
       patient.privateInsurance.bin = this.form.controls['bin'].value;
       patient.privateInsurance.insurance = this.form.controls['insurance'].value;
@@ -233,7 +235,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       patient.privateInsurance.phone = this.formatHelper.toNumbersOnly(this.form.controls['insurancePhone'].value);
     }
 
-    if (this.form.controls['insuranceType'].value === InsuranceType.MEDICARE) {
+    if (this.form.controls['insuranceType'].value === 'MEDICARE') {
       patient.medicare = new Medicare();
       patient.medicare.memberId = this.form.controls['memberId'].value;
       patient.medicare.patientGroup = this.form.controls['medicareGroup'].value;

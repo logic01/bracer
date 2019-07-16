@@ -21,6 +21,7 @@ namespace PR.Business
         {
             return _context.Patient
                     .Include(p => p.Address)
+                    .Include(p => p.PhysiciansAddress)
                     .Include(p => p.PrivateInsurance)
                     .Include(p => p.Medicare)
                     .Where(p => ids.Contains(p.PatientId))
@@ -33,6 +34,7 @@ namespace PR.Business
         {
             return _context.Patient
                     .Include(p => p.Address)
+                    .Include(p => p.PhysiciansAddress)
                     .Include(p => p.PrivateInsurance)
                     .Include(p => p.Medicare)
                     .Select(i => i.ToModel())
@@ -43,6 +45,7 @@ namespace PR.Business
         {
             Patient patient = _context.Patient
                 .Include(p => p.Address)
+                .Include(p => p.PhysiciansAddress)
                 .Include(p => p.PrivateInsurance)
                 .Include(p => p.Medicare)
                 .FirstOrDefault(u => u.PatientId == patientId);
@@ -54,6 +57,7 @@ namespace PR.Business
         {
             return _context.Patient
                     .Include(p => p.Address)
+                    .Include(p => p.PhysiciansAddress)
                     .Include(p => p.PrivateInsurance)
                     .Include(p => p.Medicare)
                     .Where(p => p.AgentId == agentId)
@@ -68,6 +72,7 @@ namespace PR.Business
 
             IQueryable<Agent> agents = _context.Agent
                    .Include("Patient.Address")
+                   .Include("Patient.PhysiciansAddress")
                    .Include("Patient.PrivateInsurance")
                    .Include("Patient.Medicare")
                    .Where(p => p.VendorId == vendorId);
@@ -79,7 +84,6 @@ namespace PR.Business
 
 
             return patients.ToList();
-
         }
 
 
@@ -101,10 +105,8 @@ namespace PR.Business
 
             patient.MapFromModel(patientModel);
 
-            _context.Patient.Add(patient);
             _context.SaveChanges();
         }
-
 
     }
 }
