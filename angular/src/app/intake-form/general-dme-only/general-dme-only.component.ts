@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
@@ -34,16 +35,16 @@ export class GeneralDmeOnlyComponent implements OnInit {
 
   initForm() {
     this.form = new FormGroup({
-      q1: new FormControl('', Validators.required),
-      q2: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
-      q3: new FormControl('', Validators.required),
-      q4: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
-      q5: new FormControl('', Validators.required),
-      q6: new FormControl('', Validators.required),
-      q7: new FormControl('', Validators.required),
-      q8: new FormControl('', Validators.required),
-      q9: new FormControl('', Validators.required),
-      q10: new FormControl('', Validators.required)
+      height: new FormControl('', Validators.required),
+      weight: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
+      shoesize: new FormControl('', Validators.required),
+      waistSize: new FormControl('', [Validators.required, CustomValidators.onlyNumeric]),
+      medications: new FormControl('', Validators.required),
+      allergies: new FormControl('', Validators.required),
+      hasSeenPrimaryCareDr: new FormControl('', Validators.required),
+      hasPrescBrace: new FormControl('', Validators.required),
+      diabetic: new FormControl('', Validators.required),
+      insulinOrMedication: new FormControl('', Validators.required)
     });
   }
 
@@ -82,16 +83,16 @@ export class GeneralDmeOnlyComponent implements OnInit {
 
   buildIntake(): IntakeForm {
 
-    this.addAnswer(this.questions[0], this.getControlValue('q1'));
-    this.addAnswer(this.questions[1], this.getControlValue('q2'));
-    this.addAnswer(this.questions[2], this.getControlValue('q3'));
-    this.addAnswer(this.questions[3], this.getControlValue('q4') + ' inches');
-    this.addAnswer(this.questions[4], this.getControlValue('q5'));
-    this.addAnswer(this.questions[5], this.getControlValue('q6'));
-    this.addAnswer(this.questions[6], this.getControlValue('q7'));
-    this.addAnswer(this.questions[7], this.getControlValue('q8'));
-    this.addAnswer(this.questions[8], this.getControlValue('q9'));
-    this.addAnswer(this.questions[9], this.getControlValue('q10'));
+    this.addAnswer(this.questions[0], this.getControlValue('height'));
+    this.addAnswer(this.questions[1], this.getControlValue('weight'));
+    this.addAnswer(this.questions[2], this.getControlValue('shoesize'));
+    this.addAnswer(this.questions[3], this.getControlValue('waistSize') + ' inches');
+    this.addAnswer(this.questions[4], this.getControlValue('medications'));
+    this.addAnswer(this.questions[5], this.getControlValue('allergies'));
+    this.addAnswer(this.questions[6], this.getControlValue('hasSeenPrimaryCareDr'));
+    this.addAnswer(this.questions[7], this.getControlValue('hasPrescBrace'));
+    this.addAnswer(this.questions[8], this.getControlValue('diabetic'));
+    this.addAnswer(this.questions[9], this.getControlValue('insulinOrMedication'));
 
     const intake = new IntakeForm();
     intake.intakeFormType = IntakeFormType.GeneralDmeOnly;
