@@ -8,6 +8,8 @@ namespace PR.Business.Interfaces
 
         IntakeFormModel Get(int id);
 
+        List<IntakeFormModel> GetByPatient(int patientId);
+
         List<IntakeFormModel> GetByPhysician(int physicianId);
 
         List<IntakeFormModel> GetByVendor(int vendorId);

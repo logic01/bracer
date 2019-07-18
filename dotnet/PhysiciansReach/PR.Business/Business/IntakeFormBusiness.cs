@@ -18,6 +18,15 @@ namespace PR.Business
             _context = context;
         }
 
+        public List<IntakeFormModel> GetByPatient(int patientId)
+        {
+            return _context.IntakeForm
+                    .Include("Questions.Answers")
+                    .Where(d => d.PatientId == patientId)
+                    .Select(i => i.ToModel())
+                    .ToList();
+        }
+
         public List<IntakeFormModel> GetByPhysician(int physicianId)
         {
             return _context.IntakeForm

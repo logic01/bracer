@@ -34,6 +34,14 @@ namespace PhysiciansReach.Controllers
             return _intakeBusiness.Get(id);
         }
 
+        [HttpGet("Patient/{patientId}/IntakeForm")]
+        public ActionResult<List<IntakeFormModel>> GetByPatient(int patientId)
+        {
+            _logging.Log(LogSeverity.Info, "Get All Document");
+            return _intakeBusiness.GetByPatient(patientId);
+        }
+
+
         [HttpGet("Physician/{physicianId}/IntakeForm")]
         public ActionResult<List<IntakeFormModel>> GetByPhysician(int physicianId)
         {
