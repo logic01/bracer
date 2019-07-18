@@ -13,7 +13,8 @@ export const RouteUrls = {
   PatientCreateComponent: 'agent/:agentId/patient',
   PatientEditComponent: 'agent/:agentId/patient/:patientId',
 
-  IntakeFormComponent: 'agent/patient/:id/intake-form',
+  CreatePainDmeOnlyComponent: 'patient/:patientId/pain-dme-only',
+  EditPainDmeOnlyComponent: 'patient/:patientId/pain-dme-only/:intakeFormId/edit',
 
   PhysicianDashboardComponent: 'physician',
   PhysicianCreateComponent: 'account/create/physician',

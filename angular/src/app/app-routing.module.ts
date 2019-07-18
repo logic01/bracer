@@ -10,7 +10,8 @@ import { AgentDashboardComponent } from './agent/dashboard/agent-dashboard.compo
 import { EditAgentComponent } from './agent/edit/edit-agent.component';
 import { RouteUrls } from './constants/routes';
 import { DocumentComponent } from './document/document.component';
-import { IntakeFormComponent } from './intake-form/intake-form/intake-form.component';
+import { CreatePainDmeOnlyComponent } from './intake-form/pain-dme-only/create/create-pain-dme-only.component';
+import { EditPainDmeOnlyComponent } from './intake-form/pain-dme-only/edit/edit-pain-dme-only.component';
 import { LoginComponent } from './login/login.component';
 import { AccountType } from './models/enums/account-type.enum';
 import { CreatePatientComponent } from './patient/create/create-patient.component';
@@ -58,9 +59,14 @@ const routes: Routes = [
     data: { expectedRoles: [AccountType.Admin] }
   },
   {
-    path: RouteUrls.IntakeFormComponent, component: IntakeFormComponent,
+    path: RouteUrls.CreatePainDmeOnlyComponent, component: CreatePainDmeOnlyComponent,
     canActivate: [RoleGuardService, SignInGuardService],
     data: { expectedRoles: [AccountType.Agent] }
+  },
+  {
+    path: RouteUrls.EditPainDmeOnlyComponent, component: EditPainDmeOnlyComponent,
+    canActivate: [RoleGuardService, SignInGuardService],
+    data: { expectedRoles: [AccountType.Agent, AccountType.Admin] }
   },
   {
     path: RouteUrls.PatientCreateComponent, component: CreatePatientComponent,

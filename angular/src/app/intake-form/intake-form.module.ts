@@ -10,7 +10,9 @@ import { GeneralDmeOnlyComponent } from './general-dme-only/general-dme-only.com
 import { GeneralRxOnlyComponent } from './general-rx-only/general-rx-only.component';
 import { HeartburnAcidRxOnlyComponent } from './heartburn-acid-rx-only/heartburn-acid-rx-only.component';
 import { IntakeFormComponent } from './intake-form/intake-form.component';
-import { PainDmeOnlyComponent } from './pain-dme-only/pain-dme-only.component';
+import { CreatePainDmeOnlyComponent } from './pain-dme-only/create/create-pain-dme-only.component';
+import { EditPainDmeOnlyComponent } from './pain-dme-only/edit/edit-pain-dme-only.component';
+import { PainDmeOnlyComponent } from './pain-dme-only/form/pain-dme-only.component';
 import { PainRxOnlyComponent } from './pain-rx-only/pain-rx-only.component';
 import { RashSkinRxOnlyComponent } from './rash-skin-rx-only/rash-skin-rx-only.component';
 import { ScarRxOnlyComponent } from './scar-rx-only/scar-rx-only.component';
@@ -28,6 +30,8 @@ import { ScarRxOnlyComponent } from './scar-rx-only/scar-rx-only.component';
     IntakeFormComponent,
     PainDmeOnlyComponent,
     GeneralDmeOnlyComponent,
+    CreatePainDmeOnlyComponent,
+    EditPainDmeOnlyComponent,
   ],
   imports: [
     CommonModule,

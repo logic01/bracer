@@ -29,7 +29,7 @@ export class CreatePatientComponent implements OnDestroy {
       .post(patient)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((newPatient: Patient) => {
-        const route = ['agent/patient/', newPatient.patientId, 'intake-form'];
+        const route = ['patient/', newPatient.patientId, 'pain-dme-only'];
         this.router.navigate(route);
       });
   }

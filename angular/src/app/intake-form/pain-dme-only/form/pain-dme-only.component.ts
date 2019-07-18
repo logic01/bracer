@@ -1,10 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
+import { Observable, Subject } from 'rxjs';
+
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
+import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { PainQuestion, Question } from 'src/app/models/question.model';
+import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { MaskService } from 'src/app/services/mask.service';
 import { SelectValueService } from 'src/app/services/select-value.service';
 
@@ -13,9 +18,10 @@ import { SelectValueService } from 'src/app/services/select-value.service';
   templateUrl: './pain-dme-only.component.html',
   styleUrls: ['./pain-dme-only.component.scss']
 })
-export class PainDmeOnlyComponent implements OnInit {
+export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
-  @Output() formSubmitEvent = new EventEmitter<IntakeForm>();
+  @Input() intake$: Observable<IntakeForm>;
+  @Output() formSubmitEvent = new EventEmitter<IntakeForm[]>();
 
   public form: FormGroup;
 
@@ -37,13 +43,22 @@ export class PainDmeOnlyComponent implements OnInit {
 
   public patientId: string;
 
-  constructor(private readonly route: ActivatedRoute, public readonly maskService: MaskService) { }
+  private unsubscribe$ = new Subject();
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    public readonly maskService: MaskService,
+    private readonly intakeApi: IntakeFormService) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('id');
+    this.patientId = this.route.snapshot.paramMap.get('patientId');
 
     this.initQuestions();
     this.initForm();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   initForm() {
@@ -68,9 +83,8 @@ export class PainDmeOnlyComponent implements OnInit {
 
     const intakeForms = this.buildIntakeForms();
 
-    for (let i = 0; i < intakeForms.length; i++) {
-      this.formSubmitEvent.emit(intakeForms[i]);
-    }
+    this.formSubmitEvent.emit(intakeForms);
+
   }
 
   initQuestions() {
@@ -143,6 +157,9 @@ export class PainDmeOnlyComponent implements OnInit {
         }
         intake.questions.push(this.addAnswer(painPointQuestion, answerText));
       }
+
+
+      intake.status = IntakeStatus.New;
       intakeForms.push(intake);
     }
 

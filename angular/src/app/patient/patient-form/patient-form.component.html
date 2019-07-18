@@ -166,7 +166,8 @@
           </mat-form-field>
 
           <div>
-            <mat-checkbox formControlName="callBackImmediately" labelPosition="before">Call Back Immediately
+            <mat-checkbox formControlName="callBackImmediately" labelPosition="before" color="primary">Call Back
+              Immediately
             </mat-checkbox>
           </div>
 
@@ -480,3 +481,5 @@
   <button type="submit" mat-raised-button color="accent">Submit</button>
 
 </form>
+
+<app-intake-table *ngIf="patientId" [patientId]="patientId"></app-intake-table>

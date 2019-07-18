@@ -34,6 +34,7 @@ export interface PainArea {
 export class PatientFormComponent implements OnInit, OnDestroy {
 
   @Input() patient$: Observable<Patient>;
+  @Input() patientId: string;
   @Output() formSubmitEvent = new EventEmitter<Patient>();
 
   private unsubscribe$ = new Subject();
@@ -69,6 +70,20 @@ export class PatientFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.agentId = this.route.snapshot.paramMap.get('agentId');
+
+    this.initForm();
+
+    // patch values into the form if a Patient is provided
+    if (this.patient$) {
+      this.patchForm();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
+
+  private initForm() {
 
     this.form = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
@@ -126,39 +141,58 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       secondarySubscriberNumber: new FormControl('', Validators.maxLength(100)),
       insuranceType: new FormControl('', Validators.required)
     });
-
-    // populate form if we have a vendor bound to the form
-    if (this.patient$) {
-      this.patient$.subscribe((result: Patient) => {
-        this.form.patchValue(result);
-        this.form.patchValue(result.address);
-        this.form.patchValue(
-          {
-            physicianAddressLineOne: result.physiciansAddress.addressLineOne,
-            physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
-            physicianCity: result.physiciansAddress.city,
-            physicianState: result.physiciansAddress.state,
-            physicianZip: result.physiciansAddress.zipCode,
-          });
-        this.form.patchValue(
-          {
-            pharmacy: PharmacyType[result.pharmacy],
-            sex: SexType[result.sex],
-            language: LanguageType[result.language],
-            therapy: TherapyType[result.therapy],
-            insuranceType: InsuranceType[result.insurance],
-            bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
-          });
-          this.form.patchValue(result.medicare);
-          this.form.patchValue(result.privateInsurance);
-
-      });
-    }
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.unsubscribe();
+  private patchForm() {
+
+    this.patient$.subscribe((result: Patient) => {
+      this.form.patchValue(result);
+      this.form.patchValue(result.address);
+      this.form.patchValue(
+        {
+          physicianAddressLineOne: result.physiciansAddress.addressLineOne,
+          physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
+          physicianCity: result.physiciansAddress.city,
+          physicianState: result.physiciansAddress.state,
+          physicianZip: result.physiciansAddress.zipCode,
+        });
+      this.form.patchValue(
+        {
+          pharmacy: PharmacyType[result.pharmacy],
+          sex: SexType[result.sex],
+          language: LanguageType[result.language],
+          therapy: TherapyType[result.therapy],
+          insuranceType: InsuranceType[result.insurance],
+          bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
+        });
+      if (result.medicare) {
+        this.form.patchValue({
+          memberId: result.medicare.memberId,
+          medicareGroup: result.medicare.patientGroup,
+          medicarePcn: result.medicare.pcn,
+          subscriberNumber: result.medicare.subscriberNumber,
+          secondaryInsurance: result.medicare.secondaryCarrier,
+          secondarySubscriberNumber: result.medicare.secondarySubscriberNumber
+
+        });
+      }
+      if (result.privateInsurance) {
+        this.form.patchValue({
+          bin: result.privateInsurance.bin,
+          insurance: result.privateInsurance.insurance,
+          insuranceId: result.privateInsurance.insuranceId,
+          privateGroup: result.privateInsurance.group,
+          privatePcn: result.privateInsurance.pcn,
+          insuranceStreet: result.privateInsurance.street,
+          insuranceCity: result.privateInsurance.city,
+          insuranceState: result.privateInsurance.state,
+          insuranceZip: result.privateInsurance.zip,
+          insurancePhone: result.privateInsurance.phone
+        });
+      }
+    });
   }
+
 
   onSubmit() {
     if (!this.form.valid) {
@@ -171,6 +205,70 @@ export class PatientFormComponent implements OnInit, OnDestroy {
 
     this.formSubmitEvent.emit(patient);
   }
+
+  radioChange(event: MatRadioChange) {
+
+    // set private fields required
+    if (event.source.value === 'PRIVATE') {
+      this.form.get('memberId').clearValidators();
+      this.form.get('medicareGroup').clearValidators();
+      this.form.get('medicarePcn').clearValidators();
+      this.form.get('subscriberNumber').clearValidators();
+      this.form.get('secondaryInsurance').clearValidators();
+      this.form.get('secondarySubscriberNumber').clearValidators();
+
+      this.form.get('bin').validator = Validators.required;
+      this.form.get('insurance').validator = Validators.required;
+      this.form.get('insuranceId').validator = Validators.required;
+      this.form.get('privateGroup').validator = Validators.required;
+      this.form.get('privatePcn').validator = Validators.required;
+      this.form.get('insuranceStreet').validator = Validators.required;
+      this.form.get('insuranceCity').validator = Validators.required;
+      this.form.get('insuranceState').validator = Validators.required;
+      this.form.get('insuranceZip').validator = Validators.required;
+      this.form.get('insurancePhone').validator = Validators.required;
+    }
+
+    // set medicare fields required
+    if (event.source.value === 'MEDICARE') {
+      this.form.get('memberId').validator = Validators.required;
+      this.form.get('medicareGroup').validator = Validators.required;
+      this.form.get('medicarePcn').validator = Validators.required;
+      this.form.get('subscriberNumber').validator = Validators.required;
+      this.form.get('secondaryInsurance').validator = Validators.required;
+      this.form.get('secondarySubscriberNumber').validator = Validators.required;
+
+      this.form.get('bin').clearValidators();
+      this.form.get('insurance').clearValidators();
+      this.form.get('insuranceId').clearValidators();
+      this.form.get('privateGroup').clearValidators();
+      this.form.get('privatePcn').clearValidators();
+      this.form.get('insuranceStreet').clearValidators();
+      this.form.get('insuranceCity').clearValidators();
+      this.form.get('insuranceState').clearValidators();
+      this.form.get('insuranceZip').clearValidators();
+      this.form.get('insurancePhone').clearValidators();
+
+    }
+
+    this.form.get('memberId').updateValueAndValidity();
+    this.form.get('medicareGroup').updateValueAndValidity();
+    this.form.get('medicarePcn').updateValueAndValidity();
+    this.form.get('subscriberNumber').updateValueAndValidity();
+    this.form.get('secondaryInsurance').updateValueAndValidity();
+    this.form.get('secondarySubscriberNumber').updateValueAndValidity();
+    this.form.get('insurance').updateValueAndValidity();
+    this.form.get('insuranceId').updateValueAndValidity();
+    this.form.get('privateGroup').updateValueAndValidity();
+    this.form.get('privatePcn').updateValueAndValidity();
+    this.form.get('insuranceStreet').updateValueAndValidity();
+    this.form.get('insuranceCity').updateValueAndValidity();
+    this.form.get('insuranceState').updateValueAndValidity();
+    this.form.get('insuranceZip').updateValueAndValidity();
+    this.form.get('insurancePhone').updateValueAndValidity();
+
+  }
+
 
   private buildPatient(): Patient {
 
@@ -255,70 +353,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     return patient;
   }
 
-
-
-  radioChange(event: MatRadioChange) {
-
-    // set private fields required
-    if (event.source.value === 'PRIVATE') {
-      this.form.get('memberId').clearValidators();
-      this.form.get('medicareGroup').clearValidators();
-      this.form.get('medicarePcn').clearValidators();
-      this.form.get('subscriberNumber').clearValidators();
-      this.form.get('secondaryInsurance').clearValidators();
-      this.form.get('secondarySubscriberNumber').clearValidators();
-
-      this.form.get('bin').validator = Validators.required;
-      this.form.get('insurance').validator = Validators.required;
-      this.form.get('insuranceId').validator = Validators.required;
-      this.form.get('privateGroup').validator = Validators.required;
-      this.form.get('privatePcn').validator = Validators.required;
-      this.form.get('insuranceStreet').validator = Validators.required;
-      this.form.get('insuranceCity').validator = Validators.required;
-      this.form.get('insuranceState').validator = Validators.required;
-      this.form.get('insuranceZip').validator = Validators.required;
-      this.form.get('insurancePhone').validator = Validators.required;
-    }
-
-    // set medicare fields required
-    if (event.source.value === 'MEDICARE') {
-      this.form.get('memberId').validator = Validators.required;
-      this.form.get('medicareGroup').validator = Validators.required;
-      this.form.get('medicarePcn').validator = Validators.required;
-      this.form.get('subscriberNumber').validator = Validators.required;
-      this.form.get('secondaryInsurance').validator = Validators.required;
-      this.form.get('secondarySubscriberNumber').validator = Validators.required;
-
-      this.form.get('bin').clearValidators();
-      this.form.get('insurance').clearValidators();
-      this.form.get('insuranceId').clearValidators();
-      this.form.get('privateGroup').clearValidators();
-      this.form.get('privatePcn').clearValidators();
-      this.form.get('insuranceStreet').clearValidators();
-      this.form.get('insuranceCity').clearValidators();
-      this.form.get('insuranceState').clearValidators();
-      this.form.get('insuranceZip').clearValidators();
-      this.form.get('insurancePhone').clearValidators();
-
-    }
-
-    this.form.get('memberId').updateValueAndValidity();
-    this.form.get('medicareGroup').updateValueAndValidity();
-    this.form.get('medicarePcn').updateValueAndValidity();
-    this.form.get('subscriberNumber').updateValueAndValidity();
-    this.form.get('secondaryInsurance').updateValueAndValidity();
-    this.form.get('secondarySubscriberNumber').updateValueAndValidity();
-    this.form.get('insurance').updateValueAndValidity();
-    this.form.get('insuranceId').updateValueAndValidity();
-    this.form.get('privateGroup').updateValueAndValidity();
-    this.form.get('privatePcn').updateValueAndValidity();
-    this.form.get('insuranceStreet').updateValueAndValidity();
-    this.form.get('insuranceCity').updateValueAndValidity();
-    this.form.get('insuranceState').updateValueAndValidity();
-    this.form.get('insuranceZip').updateValueAndValidity();
-    this.form.get('insurancePhone').updateValueAndValidity();
+  private pullIntakes() {
 
   }
-
-
 }

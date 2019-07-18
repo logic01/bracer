@@ -31,7 +31,9 @@ export class IntakeFormService {
     return this.http.get<IntakeForm[]>(`${environment.api_url}/vendor/${vendorId}/intakeform`);
   }
 
-
+  getByPatient(patientId: string): Observable<IntakeForm[]> {
+    return this.http.get<IntakeForm[]>(`${environment.api_url}/patient/${patientId}/intakeform`);
+  }
 
   post(intakeForm: IntakeForm): Observable<IntakeForm> {
     return this.http.post<IntakeForm>(this.url, intakeForm);
