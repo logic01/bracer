@@ -20,7 +20,6 @@ export class IntakeTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
-  private physicianId: string;
 
   public dataSource: MatTableDataSource<IntakeForm>;
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'edit'];

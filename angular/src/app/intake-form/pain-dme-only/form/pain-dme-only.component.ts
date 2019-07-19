@@ -1,17 +1,20 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, Subject } from 'rxjs';
 
-import { Answer } from 'src/app/models/answer.model';
-import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
-import { PainQuestion, Question } from 'src/app/models/question.model';
-import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { MaskService } from 'src/app/services/mask.service';
 import { SelectValueService } from 'src/app/services/select-value.service';
+
+
+export class PainQuestion {
+  key: string;
+  painPoint: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-pain-dme-only',
@@ -24,21 +27,6 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   @Output() formSubmitEvent = new EventEmitter<IntakeForm[]>();
 
   public form: FormGroup;
-
-  public LeftWrist = false;
-  public RightWrist = false;
-  public LeftElbow = false;
-  public RightElbow = false;
-  public LeftAnteriorShoulder = false;
-  public RightAnteriorShoulder = false;
-  public LeftKnee = false;
-  public RightKnee = false;
-  public LeftPosteriorShoulder = false;
-  public RightPosteriorShoulder = false;
-  public LeftAnkle = false;
-  public RightAnkle = false;
-
-  public painQuestions: PainQuestion[][];
   public painPoints = SelectValueService.painPoints;
 
   public patientId: string;
@@ -46,14 +34,12 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   constructor(
+    private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
-    public readonly maskService: MaskService,
-    private readonly intakeApi: IntakeFormService) { }
+    public readonly maskService: MaskService) { }
 
   ngOnInit() {
     this.patientId = this.route.snapshot.paramMap.get('patientId');
-
-    this.initQuestions();
     this.initForm();
   }
 
@@ -62,16 +48,69 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    // dynamically adding the formGroups by the pain question possiblities
-    this.form = new FormGroup({});
-    for (let i = 0; i < this.painQuestions.length; i++) {
-      const painQuestionSet: PainQuestion[] = this.painQuestions[i];
-      const checkBoxId = i + '_check';
-      this.form.addControl(checkBoxId, new FormControl());
-      for (let p = 0; p < painQuestionSet.length; p++) {
-        const painQuestion = painQuestionSet[p];
-        this.form.addControl(painQuestion.getId(), new FormControl());
-      }
+
+    this.form = this.formBuilder.group({
+      leftElbow: new FormControl(''),
+      leftElbowQuestions: this.formBuilder.array([]),
+      rightElbow: new FormControl(''),
+      rigthElbowQuestions: this.formBuilder.array([]),
+      leftAnteriorShoulder: new FormControl(''),
+      leftAnteriorShoulderQuestions: this.formBuilder.array([]),
+      rightAnteriorShoulder: new FormControl(''),
+      rightAnteriorShoulderQuestions: this.formBuilder.array([]),
+      leftPosteriorShoulder: new FormControl(''),
+      leftPosteriorShoulderQuestions: this.formBuilder.array([]),
+      rightPosteriorShoulder: new FormControl(''),
+      rightPosteriorShoulderQuestions: this.formBuilder.array([]),
+      leftKnee: new FormControl(''),
+      leftKneeQuestions: this.formBuilder.array([]),
+      rightKnee: new FormControl(''),
+      rightKneeQuestions: this.formBuilder.array([]),
+      leftAnkle: new FormControl(''),
+      leftAnkleQuestions: this.formBuilder.array([]),
+      rightAnkle: new FormControl(''),
+      rightAnkleQuestions: this.formBuilder.array([])
+    });
+  }
+
+  onCheck(event: MatCheckboxChange) {
+
+    // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
+
+    const checked = event.checked;
+    const painPoint = event.source.value;
+
+    if (checked) {
+      this.addQuestions(painPoint);
+    } else {
+      this.removeQuestions(painPoint);
+    }
+
+  }
+
+  private addQuestions(painPoint: string) {
+
+    const questions = this.form.get(painPoint + 'Questions') as FormArray;
+    questions.push(this.formBuilder.group({ name: 'painFeeling', text: 'Cause of Patients Pain?' }));
+    questions.push(this.formBuilder.group({ name: 'painBegan', text: 'Onset of pain (When did the pain begin?)' }));
+    questions.push(this.formBuilder.group({ name: 'painCause', text: 'What Provokes Pain' }));
+    questions.push(this.formBuilder.group({ name: 'painSelfTreatment', text: 'What currently relieves the pain?' }));
+    questions.push(this.formBuilder.group({ name: 'painDescription', text: 'Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]' }));
+    questions.push(this.formBuilder.group({ name: 'painDuration', text: 'Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))' }));
+    questions.push(this.formBuilder.group({ name: 'previousTreatment', text: 'Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)' }));
+    questions.push(this.formBuilder.group({ name: 'effectsDaily', text: 'Affects Activities of Daily Living(ADL) (If so, what?)' }));
+    questions.push(this.formBuilder.group({ name: 'hadSurgery', text: 'Have you had surgery in this area?' }));
+    questions.push(this.formBuilder.group({ name: 'surgies', text: 'If yes, what type of surgery?' }));
+    questions.push(this.formBuilder.group({ name: 'dateOfSurgery', text: 'Date of Surgery' }));
+    questions.push(this.formBuilder.group({ name: 'abulatory', text: 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)' }));
+    questions.push(this.formBuilder.group({ name: 'painLevel', text: 'Pain Rating' }));
+
+  }
+
+  private removeQuestions(painPoint: string) {
+    const questions = this.form.get(painPoint + 'Questions') as FormArray;
+    for (let i = 0; i < questions.length; i++) {
+      questions.removeAt(i);
     }
   }
 
@@ -83,46 +122,11 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
     const intakeForms = this.buildIntakeForms();
 
-    this.formSubmitEvent.emit(intakeForms);
+    this.formSubmitEvent.emit();
 
   }
 
-  initQuestions() {
-    this.painQuestions = [];
-    // tslint:disable-next-line: forin
-    for (const painPoint in this.painPoints) {
-      const painArray: PainQuestion[] = [];
-
-      painArray.push(this.initPainQuestion('PainFeeling', 'Cause of Patients Pain?', painPoint, 1));
-      painArray.push(this.initPainQuestion('PainChart', 'Location(s) of Pain?', painPoint, 2));
-      painArray.push(this.initPainQuestion('PainBegan', 'Onset of pain (When did the pain begin?)', painPoint, 3));
-      painArray.push(this.initPainQuestion('PainCause', 'What Provokes Pain', painPoint, 4));
-      painArray.push(this.initPainQuestion('PainSelfTreatment', 'What currently relieves the pain', painPoint, 5));
-      painArray.push(this.initPainQuestion('PainDescription', 'Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]', painPoint, 6));
-      painArray.push(this.initPainQuestion('PainDuration', 'Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))', painPoint, 7));
-      painArray.push(this.initPainQuestion('PreviousTreatment', 'Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)', painPoint, 8));
-      painArray.push(this.initPainQuestion('EffectsDaily', 'Affects Activities of Daily Living(ADL) (If so, what?)', painPoint, 9));
-      painArray.push(this.initPainQuestion('HadSurgery', 'Have you had surgery in this area?', painPoint, 10));
-      painArray.push(this.initPainQuestion('Surgies', 'If yes, what type of surgery?', painPoint, 11));
-      painArray.push(this.initPainQuestion('DateOfSurgery', 'Date of Surgery', painPoint, 12));
-      painArray.push(this.initPainQuestion('Abulatory', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)', painPoint, 14));
-      painArray.push(this.initPainQuestion('PainLevel', 'Pain Rating', painPoint, 15));
-      this.painQuestions.push(painArray);
-    }
-  }
-
-  initPainQuestion(key: string, text: string, painPoint: string, elementId: number): PainQuestion {
-    const question = new PainQuestion();
-    question.key = key;
-    question.text = text;
-    question.answers = [];
-    question.painPoint = painPoint;
-    question.painPointText = this.painPoints[painPoint];
-    question.elementId = elementId.toString();
-    return question;
-  }
-
-  buildIntakeForms(): IntakeForm[] {
+  buildIntakeForms() {
 
     const intakeForms: IntakeForm[] = [];
     const painPointIds: number[] = [];
@@ -130,7 +134,7 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     // For the checkboxes that are checked select
     // which array from the painPointQuestions need to be
     // added as an intake form
-    if (this.LeftWrist) { painPointIds.push(0); }
+    /*if (this.LeftWrist) { painPointIds.push(0); }
     if (this.RightWrist) { painPointIds.push(1); }
     if (this.LeftElbow) { painPointIds.push(2); }
     if (this.RightElbow) { painPointIds.push(3); }
@@ -165,71 +169,10 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
 
     // need to return each set of PainQuestion/Answers as individual intake forms
-    return intakeForms;
+    return intakeForms;*/
 
   }
 
-  addAnswer(question: PainQuestion, value: string): Question {
-
-    const answer = new Answer();
-    answer.text = value ? value : '';
-    question.answers = [];
-    question.answers.push(answer);
-    return question;
-  }
-
-  getPainCheckboxBinding(painPointText: string) {
-    // On the UI this will set the value of the dynamic Pain DME Intake Forms
-    // with the proper model boolean that maps to the checkbox
-
-    let binding: boolean;
-
-    switch (painPointText) {
-      case 'LeftWrist':
-        binding = this.LeftWrist;
-        break;
-      case 'RightWrist':
-        binding = this.RightWrist;
-        break;
-      case 'LeftElbow':
-        binding = this.LeftElbow;
-        break;
-      case 'RightElbow':
-        binding = this.RightElbow;
-        break;
-      case 'LeftAnteriorShoulder':
-        binding = this.LeftAnteriorShoulder;
-        break;
-      case 'RightAnteriorShoulder':
-        binding = this.RightAnteriorShoulder;
-        break;
-      case 'RightAnteriorShoulder':
-        binding = this.RightAnteriorShoulder;
-        break;
-      case 'LeftKnee':
-        binding = this.LeftKnee;
-        break;
-      case 'RightKnee':
-        binding = this.RightKnee;
-        break;
-      case 'LeftPosteriorShoulder':
-        binding = this.LeftPosteriorShoulder;
-        break;
-      case 'RightPosteriorShoulder':
-        binding = this.RightPosteriorShoulder;
-        break;
-      case 'LeftAnkle':
-        binding = this.LeftAnkle;
-        break;
-      case 'RightAnkle':
-        binding = this.RightAnkle;
-        break;
-      default: binding = false;
-        break;
-    }
-
-    return binding;
-  }
 
 }
 

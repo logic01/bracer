@@ -353,7 +353,5 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     return patient;
   }
 
-  private pullIntakes() {
 
-  }
 }

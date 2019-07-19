@@ -4,109 +4,50 @@
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center start">
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="1_check" [(ngModel)]="LeftElbow" value="LeftElbow" color="primary">
+                <mat-checkbox formControlName="leftElbow" value="LeftElbow" color="primary" (click)="onCheck($event)">
                     Left Elbow
                 </mat-checkbox>
-                <mat-checkbox formControlName="2_check" [(ngModel)]="RightElbow" value="RightElbow" color="primary">
+                <mat-checkbox formControlName="rightElbow" value="RightElbow" color="primary">
                     Right Elbow
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="3_check" [(ngModel)]="LeftAnteriorShoulder" value="LeftAnteriorShoulder"
-                    color="primary">Left Anterior Shoulder
+                <mat-checkbox formControlName="leftAnteriorShoulder" value="LeftAnteriorShoulder" color="primary">
+                    Left Anterior Shoulder
                 </mat-checkbox>
-                <mat-checkbox formControlName="4_check" [(ngModel)]="RightAnteriorShoulder"
-                    value="RightAnteriorShoulder" color="primary">
+                <mat-checkbox formControlName="rightAnteriorShoulder" value="RightAnteriorShoulder" color="primary">
                     Right Anterior Shoulder
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="5_check" [(ngModel)]="LeftPosteriorShoulder"
-                    value="PosteriorLeftShoulder" color="primary">
+                <mat-checkbox formControlName="leftPosteriorShoulder" value="LeftPosteriorShoulder" color="primary">
                     Left Posterior Shoulder
                 </mat-checkbox>
-                <mat-checkbox formControlName="6_check" [(ngModel)]="RightPosteriorShoulder"
-                    value="PosteriorRightShoulder" color="primary">
+                <mat-checkbox formControlName="rightPosteriorShoulder" value="rightPosteriorShoulder" color="primary">
                     Right Posterior Shoulder
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="7_check" [(ngModel)]="LeftKnee" value="LeftKnee" color="primary">
+                <mat-checkbox formControlName="leftKnee" value="LeftKnee" color="primary">
                     Left Knee
                 </mat-checkbox>
-                <mat-checkbox formControlName="8_check" [(ngModel)]="RightKnee" value="RightKnee" color="primary">
+                <mat-checkbox formControlName="rightKnee" value="RightKnee" color="primary">
                     Right Knee
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="9_check" [(ngModel)]="LeftAnkle" value="LeftAnkle" color="primary">
+                <mat-checkbox formControlName="leftAnkle" value="LeftAnkle" color="primary">
                     Left Ankle
                 </mat-checkbox>
-                <mat-checkbox formControlName="10_check" [(ngModel)]="RightAnkle" value="RightAnkle" color="primary">
+                <mat-checkbox formControlName="rightAnkle" value="RightAnkle" color="primary">
                     Right Ankle
                 </mat-checkbox>
             </div>
         </div>
-
-        <ng-container *ngFor="let painQuestionSet of painQuestions">
-
-            <div fxLayout="row" fxLayoutGap="20px" *ngIf="getPainCheckboxBinding(painQuestionSet[0].getString())">
-                <mat-card fxLayout="column">
-
-                    <mat-card-title>{{painQuestionSet[0].painPointText}}</mat-card-title>
-
-                    <ng-container *ngFor="let painQuestion of painQuestionSet">
-                        <mat-form-field *ngIf="painQuestion.elementId == 2">
-                            <input matInput [placeholder]="painQuestion.text" [value]="painQuestion.painPointText"
-                                readonly="readonly" type="text" [formControlName]="painQuestion.getId()">
-                        </mat-form-field>
-
-                        <mat-form-field
-                            *ngIf="painQuestion.elementId == 14 || painQuestion.elementId == 13 || painQuestion.elementId == 10">
-                            <mat-select [placeholder]="painQuestion.text" [formControlName]="painQuestion.getId()">
-                                <mat-option value="Yes"> Yes </mat-option>
-                                <mat-option value="No">No</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field *ngIf="painQuestion.elementId == 12 ">
-                            <input matInput [placeholder]="painQuestion.text" [textMask]="{mask: maskService.date}"
-                                type="text" [formControlName]="painQuestion.getId()">
-                        </mat-form-field>
-                        <mat-form-field
-                            *ngIf="painQuestion.elementId != 15 && painQuestion.elementId != 14 && painQuestion.elementId != 13 && painQuestion.elementId != 10 && painQuestion.elementId != 2 && painQuestion.elementId != 12 ">
-                            <input matInput [placeholder]="painQuestion.text" type="text"
-                                [formControlName]="painQuestion.getId()">
-                        </mat-form-field>
-                        <div *ngIf="painQuestion.elementId == 15" fxLayout="column" fxLayoutGap="10px">
-                            <mat-label>{{painQuestion.text}}</mat-label>
-                            <mat-radio-group [formControlName]="painQuestion.getId()" fxLayout=" row"
-                                fxLayoutGap="10px">
-                                <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
-                                <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
-                                <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
-                                <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
-                                <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
-                                <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
-                                <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
-                                <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
-                                <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
-                                <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
-                                <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
-
-                    </ng-container>
-
-                </mat-card>
-
-            </div>
-
-        </ng-container>
-
 
         <button type="submit" mat-raised-button color="accent">Submit</button>
     </form>
