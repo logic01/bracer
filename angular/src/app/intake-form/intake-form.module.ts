@@ -31,7 +31,7 @@ import { ScarRxOnlyComponent } from './scar-rx-only/scar-rx-only.component';
     PainDmeOnlyComponent,
     GeneralDmeOnlyComponent,
     CreatePainDmeOnlyComponent,
-    EditPainDmeOnlyComponent,
+    EditPainDmeOnlyComponent
   ],
   imports: [
     CommonModule,

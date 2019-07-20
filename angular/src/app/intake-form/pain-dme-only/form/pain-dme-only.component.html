@@ -4,49 +4,935 @@
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center start">
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="leftElbow" value="LeftElbow" color="primary" (click)="onCheck($event)">
+                <mat-checkbox formControlName="leftElbow" value="leftElbow" color="primary" (change)="onCheck($event)">
                     Left Elbow
                 </mat-checkbox>
-                <mat-checkbox formControlName="rightElbow" value="RightElbow" color="primary">
+                <mat-checkbox formControlName="rightElbow" value="rightElbow" color="primary"
+                    (change)="onCheck($event)">
                     Right Elbow
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="leftAnteriorShoulder" value="LeftAnteriorShoulder" color="primary">
+                <mat-checkbox formControlName="leftAnteriorShoulder" value="leftAnteriorShoulder" color="primary"
+                    (change)="onCheck($event)">
                     Left Anterior Shoulder
                 </mat-checkbox>
-                <mat-checkbox formControlName="rightAnteriorShoulder" value="RightAnteriorShoulder" color="primary">
+                <mat-checkbox formControlName="rightAnteriorShoulder" value="rightAnteriorShoulder" color="primary"
+                    (change)="onCheck($event)">
                     Right Anterior Shoulder
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="leftPosteriorShoulder" value="LeftPosteriorShoulder" color="primary">
+                <mat-checkbox formControlName="leftPosteriorShoulder" value="leftPosteriorShoulder" color="primary"
+                    (change)="onCheck($event)">
                     Left Posterior Shoulder
                 </mat-checkbox>
-                <mat-checkbox formControlName="rightPosteriorShoulder" value="rightPosteriorShoulder" color="primary">
+                <mat-checkbox formControlName="rightPosteriorShoulder" value="rightPosteriorShoulder" color="primary"
+                    (change)="onCheck($event)">
                     Right Posterior Shoulder
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="leftKnee" value="LeftKnee" color="primary">
+                <mat-checkbox formControlName="leftKnee" value="leftKnee" color="primary" (change)="onCheck($event)">
                     Left Knee
                 </mat-checkbox>
-                <mat-checkbox formControlName="rightKnee" value="RightKnee" color="primary">
+                <mat-checkbox formControlName="rightKnee" value="rightKnee" color="primary" (change)="onCheck($event)">
                     Right Knee
                 </mat-checkbox>
             </div>
 
             <div fxLayout="column" fxLayoutGap="10px">
-                <mat-checkbox formControlName="leftAnkle" value="LeftAnkle" color="primary">
+                <mat-checkbox formControlName="leftAnkle" value="leftAnkle" color="primary" (change)="onCheck($event)">
                     Left Ankle
                 </mat-checkbox>
-                <mat-checkbox formControlName="rightAnkle" value="RightAnkle" color="primary">
+                <mat-checkbox formControlName="rightAnkle" value="rightAnkle" color="primary"
+                    (change)="onCheck($event)">
                     Right Ankle
                 </mat-checkbox>
             </div>
+        </div>
+
+        <div formArrayName="leftElbowQuestions"
+            *ngFor="let item of form.get('leftElbowQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Left Elbow</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="rightElbowQuestions"
+            *ngFor="let item of form.get('rightElbowQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Right Elbow</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="leftAnteriorShoulderQuestions"
+            *ngFor="let item of form.get('leftAnteriorShoulderQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Left Anterior Shoulder</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="rightAnteriorShoulderQuestions"
+            *ngFor="let item of form.get('rightAnteriorShoulderQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Right Anterior Shoulder</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="leftPosteriorShoulderQuestions"
+            *ngFor="let item of form.get('leftPosteriorShoulderQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Left Posterior Shoulder</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="rightPosteriorShoulderQuestions"
+            *ngFor="let item of form.get('rightPosteriorShoulderQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Right Posterior Shoulder</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="leftKneeQuestions"
+            *ngFor="let item of form.get('leftKneeQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Left Knee</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="rightKneeQuestions"
+            *ngFor="let item of form.get('rightKneeQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Right Knee</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="leftAnkleQuestions"
+            *ngFor="let item of form.get('leftAnkleQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Left Ankle</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div formArrayName="rightAnkleQuestions"
+            *ngFor="let item of form.get('rightAnkleQuestions').controls; let i = index;">
+
+            <mat-card [formGroupName]="i">
+                <mat-card-title>Right Ankle</mat-card-title>
+
+                <mat-card-content fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input matInput formControlName="painFeeling" placeholder="Cause of Patients Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painBegan"
+                            placeholder="Onset of pain (When did the pain begin?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painCause" placeholder="What Provokes Pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painSelfTreatment"
+                            placeholder="What currently relieves the pain?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDescription"
+                            placeholder="Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="painDuration"
+                            placeholder="Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="previousTreatment"
+                            placeholder="Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="effectsDaily"
+                            placeholder="Affects Activities of Daily Living(ADL) (If so, what?)">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="hadSurgery" placeholder="Have you had surgery in this area?">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="surgies" placeholder="If yes, what type of surgery?">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="dateOfSurgery" placeholder="Date of Surgery"
+                            [textMask]="{mask: maskService.date}">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select formControlName="abulatory"
+                            placeholder="Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)">
+                            <mat-option value="Yes"> Yes </mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-label>Pain Rating</mat-label>
+                    <mat-radio-group formControlName="painLevel" fxLayout="row" fxLayoutGap="10px">
+                        <mat-radio-button value="0" color="primary"> 0 </mat-radio-button>
+                        <mat-radio-button value="1" color="primary"> 1 </mat-radio-button>
+                        <mat-radio-button value="2" color="primary"> 2 </mat-radio-button>
+                        <mat-radio-button value="3" color="primary"> 3 </mat-radio-button>
+                        <mat-radio-button value="4" color="primary"> 4 </mat-radio-button>
+                        <mat-radio-button value="5" color="primary"> 5 </mat-radio-button>
+                        <mat-radio-button value="6" color="primary"> 6 </mat-radio-button>
+                        <mat-radio-button value="7" color="primary"> 7 </mat-radio-button>
+                        <mat-radio-button value="8" color="primary"> 8 </mat-radio-button>
+                        <mat-radio-button value="9" color="primary"> 9 </mat-radio-button>
+                        <mat-radio-button value="10" color="primary"> 10 </mat-radio-button>
+                    </mat-radio-group>
+                </mat-card-content>
+            </mat-card>
         </div>
 
         <button type="submit" mat-raised-button color="accent">Submit</button>
