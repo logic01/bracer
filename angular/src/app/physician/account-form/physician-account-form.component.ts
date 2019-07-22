@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Address } from 'src/app/models/address.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { Physician } from 'src/app/models/physician.model';
@@ -15,12 +16,13 @@ import { UsernameDuplicateValidator } from 'src/app/validators/username-duplicat
   templateUrl: './physician-account-form.component.html',
   styleUrls: ['./physician-account-form.component.scss']
 })
-export class PhysicianAccountFormComponent implements OnInit {
+export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
 
   @Input() physician$: Observable<Physician>;
   @Output() formSubmitEvent = new EventEmitter<Physician>();
 
   public accountForm: FormGroup;
+  private unsubscribe$ = new Subject();
 
   constructor(
     public readonly maskService: MaskService,
@@ -63,11 +65,13 @@ export class PhysicianAccountFormComponent implements OnInit {
 
     if (this.physician$) {
       // populate form for editing the physician
-      this.physician$.subscribe((result: Physician) => {
-        this.accountForm.patchValue(result);
-        this.accountForm.patchValue(result.userAccount);
-        this.accountForm.patchValue(result.address);
-      });
+      this.physician$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((result: Physician) => {
+          this.accountForm.patchValue(result);
+          this.accountForm.patchValue(result.userAccount);
+          this.accountForm.patchValue(result.address);
+        });
     } else {
       // require a password for creating a physician
       this.accountForm.get('password').validator = Validators.compose([
@@ -80,6 +84,10 @@ export class PhysicianAccountFormComponent implements OnInit {
 
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {

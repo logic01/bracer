@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './physician-dashboard.component.html',
   styleUrls: ['./physician-dashboard.component.scss']
 })
-export class PhysicianDashboardComponent implements OnInit {
+export class PhysicianDashboardComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -35,20 +35,25 @@ export class PhysicianDashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.session.userAccount$.subscribe((account: UserAccount) => {
+    this.session.userAccount$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: UserAccount) => {
+        this.physicianId = account.userAccountId;
 
-      this.physicianId = account.userAccountId;
+        this.intakeFormApi
+          .getByPhysician(account.userAccountId)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((intakeFormList: IntakeForm[]) => {
+            this.dataSource = new MatTableDataSource(intakeFormList);
+            this.dataSource.sort = this.sort;
+          });
 
-      this.intakeFormApi
-        .getByPhysician(account.userAccountId)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((intakeFormList: IntakeForm[]) => {
-          this.dataSource = new MatTableDataSource(intakeFormList);
-          this.dataSource.sort = this.sort;
-        });
+      });
 
-    });
+  }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   download(documentId: string) {

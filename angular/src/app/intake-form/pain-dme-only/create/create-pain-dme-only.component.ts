@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { forkJoin, Subject } from 'rxjs';
-
+import { takeUntil } from 'rxjs/operators';
 import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
@@ -18,8 +17,8 @@ export class CreatePainDmeOnlyComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private readonly intakeApi: IntakeFormService,
-  ) { }
+    private readonly intakeApi: IntakeFormService) {
+  }
 
   ngOnInit() {
   }
@@ -35,7 +34,9 @@ export class CreatePainDmeOnlyComponent implements OnInit, OnDestroy {
     intakes.forEach((intake: IntakeForm) => observables.push(this.intakeApi.post(intake)));
 
     // call the api for all the intake forms
-    forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AgentDashboardComponent));
+    forkJoin(observables)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => this.router.navigateByUrl(RouteUrls.AgentDashboardComponent));
   }
 
 }

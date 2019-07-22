@@ -2,9 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-
 import { Observable, Subject } from 'rxjs';
-
+import { takeUntil } from 'rxjs/operators';
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
 import { InsuranceType } from 'src/app/models/enums/insurance-type.enum';
@@ -145,52 +144,54 @@ export class PatientFormComponent implements OnInit, OnDestroy {
 
   private patchForm() {
 
-    this.patient$.subscribe((result: Patient) => {
-      this.form.patchValue(result);
-      this.form.patchValue(result.address);
-      this.form.patchValue(
-        {
-          physicianAddressLineOne: result.physiciansAddress.addressLineOne,
-          physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
-          physicianCity: result.physiciansAddress.city,
-          physicianState: result.physiciansAddress.state,
-          physicianZip: result.physiciansAddress.zipCode,
-        });
-      this.form.patchValue(
-        {
-          pharmacy: PharmacyType[result.pharmacy],
-          sex: SexType[result.sex],
-          language: LanguageType[result.language],
-          therapy: TherapyType[result.therapy],
-          insuranceType: InsuranceType[result.insurance],
-          bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
-        });
-      if (result.medicare) {
-        this.form.patchValue({
-          memberId: result.medicare.memberId,
-          medicareGroup: result.medicare.patientGroup,
-          medicarePcn: result.medicare.pcn,
-          subscriberNumber: result.medicare.subscriberNumber,
-          secondaryInsurance: result.medicare.secondaryCarrier,
-          secondarySubscriberNumber: result.medicare.secondarySubscriberNumber
+    this.patient$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((result: Patient) => {
+        this.form.patchValue(result);
+        this.form.patchValue(result.address);
+        this.form.patchValue(
+          {
+            physicianAddressLineOne: result.physiciansAddress.addressLineOne,
+            physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
+            physicianCity: result.physiciansAddress.city,
+            physicianState: result.physiciansAddress.state,
+            physicianZip: result.physiciansAddress.zipCode,
+          });
+        this.form.patchValue(
+          {
+            pharmacy: PharmacyType[result.pharmacy],
+            sex: SexType[result.sex],
+            language: LanguageType[result.language],
+            therapy: TherapyType[result.therapy],
+            insuranceType: InsuranceType[result.insurance],
+            bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
+          });
+        if (result.medicare) {
+          this.form.patchValue({
+            memberId: result.medicare.memberId,
+            medicareGroup: result.medicare.patientGroup,
+            medicarePcn: result.medicare.pcn,
+            subscriberNumber: result.medicare.subscriberNumber,
+            secondaryInsurance: result.medicare.secondaryCarrier,
+            secondarySubscriberNumber: result.medicare.secondarySubscriberNumber
 
-        });
-      }
-      if (result.privateInsurance) {
-        this.form.patchValue({
-          bin: result.privateInsurance.bin,
-          insurance: result.privateInsurance.insurance,
-          insuranceId: result.privateInsurance.insuranceId,
-          privateGroup: result.privateInsurance.group,
-          privatePcn: result.privateInsurance.pcn,
-          insuranceStreet: result.privateInsurance.street,
-          insuranceCity: result.privateInsurance.city,
-          insuranceState: result.privateInsurance.state,
-          insuranceZip: result.privateInsurance.zip,
-          insurancePhone: result.privateInsurance.phone
-        });
-      }
-    });
+          });
+        }
+        if (result.privateInsurance) {
+          this.form.patchValue({
+            bin: result.privateInsurance.bin,
+            insurance: result.privateInsurance.insurance,
+            insuranceId: result.privateInsurance.insuranceId,
+            privateGroup: result.privateInsurance.group,
+            privatePcn: result.privateInsurance.pcn,
+            insuranceStreet: result.privateInsurance.street,
+            insuranceCity: result.privateInsurance.city,
+            insuranceState: result.privateInsurance.state,
+            insuranceZip: result.privateInsurance.zip,
+            insurancePhone: result.privateInsurance.phone
+          });
+        }
+      });
   }
 
 

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 import { RouteUrls } from '../constants/routes';
 import { AccountType } from '../models/enums/account-type.enum';
@@ -13,9 +14,11 @@ import { SessionService } from '../services/session.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   public loginForm: FormGroup;
+  private unsubscribe$ = new Subject();
+
   constructor(
     private readonly router: Router,
     private readonly loginApi: LoginService,
@@ -26,6 +29,10 @@ export class LoginComponent implements OnInit {
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {

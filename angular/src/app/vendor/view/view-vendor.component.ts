@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { forkJoin, Observable, Subject } from 'rxjs';
-
-import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
+import { takeUntil } from 'rxjs/operators';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -15,6 +13,8 @@ import { PatientService } from 'src/app/services/api/patient.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 import { environment } from 'src/environments/environment';
+
+import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 
 export class TableRow {
   intakeFormId: string;
@@ -60,37 +60,42 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
     this.vendor$ = this.vendorApi.get(this.vendorId);
 
-    this.intakeApi.getByVendor(this.vendorId).subscribe((intakes: IntakeForm[]) => {
+    this.intakeApi
+      .getByVendor(this.vendorId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((intakes: IntakeForm[]) => {
 
-      this.intakes = intakes;
+        this.intakes = intakes;
 
-      if (intakes.length > 0) {
-        const physicianIds = intakes.map(({ physicianId }) => physicianId);
-        const patientIds = intakes.map(({ patientId }) => patientId);
+        if (intakes.length > 0) {
+          const physicianIds = intakes.map(({ physicianId }) => physicianId);
+          const patientIds = intakes.map(({ patientId }) => patientId);
 
-        const physicians$ = this.physicianApi.getList(physicianIds);
-        const patients$ = this.patientApi.getList(patientIds);
+          const physicians$ = this.physicianApi.getList(physicianIds);
+          const patients$ = this.patientApi.getList(patientIds);
 
-        forkJoin([physicians$, patients$]).subscribe(responses => {
+          forkJoin([physicians$, patients$])
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(responses => {
 
-          const physicians = responses[0];
-          const patients = responses[1];
-          const data: TableRow[] = [];
+              const physicians = responses[0];
+              const patients = responses[1];
+              const data: TableRow[] = [];
 
-          intakes.forEach((intake: IntakeForm) => {
-            const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
-            const patient = patients.find(p => p.patientId === intake.patientId);
-            const row = this.buildTableRow(intake, physician, patient);
-            data.push(row);
-          });
+              intakes.forEach((intake: IntakeForm) => {
+                const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
+                const patient = patients.find(p => p.patientId === intake.patientId);
+                const row = this.buildTableRow(intake, physician, patient);
+                data.push(row);
+              });
 
-          this.datasource = new MatTableDataSource(data);
-          this.datasource.sort = this.sort;
+              this.datasource = new MatTableDataSource(data);
+              this.datasource.sort = this.sort;
 
-        });
+            });
 
-      }
-    });
+        }
+      });
 
   }
 
@@ -132,7 +137,10 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
     intake.status = IntakeStatus.Downloaded;
 
-    this.intakeApi.put(intakeFormId, intake).subscribe();
+    this.intakeApi
+      .put(intakeFormId, intake)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe();
   }
 
 }

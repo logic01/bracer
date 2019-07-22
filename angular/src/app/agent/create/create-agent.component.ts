@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/agent.model';
-import { Vendor } from 'src/app/models/vendor.model';
 import { AgentService } from 'src/app/services/api/agent.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
@@ -18,7 +15,7 @@ import { VendorService } from 'src/app/services/api/vendor.service';
 export class CreateAgentComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
-  public vendors$: Observable<Vendor[]>;
+  public vendors$ = this.vendorApi.getAll();
 
   constructor(
     private readonly agentApi: AgentService,
@@ -26,7 +23,6 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.vendors$ = this.vendorApi.getAll();
   }
 
   ngOnDestroy(): void {
@@ -37,7 +33,7 @@ export class CreateAgentComponent implements OnInit, OnDestroy {
     this.agentApi
       .post(agent)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newAgent: Agent) => {
+      .subscribe(() => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

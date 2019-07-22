@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { SignatureType } from 'src/app/models/enums/signature-type';
 import { ICD10Code } from 'src/app/models/icd10-code.model';
@@ -14,7 +16,7 @@ import { Signature } from 'src/app/models/signature.model';
   templateUrl: './intake.component.html',
   styleUrls: ['./intake.component.scss']
 })
-export class IntakeComponent implements OnInit {
+export class IntakeComponent implements OnInit, OnDestroy {
 
   @Input() isAdminView = true;
   @Input() patient: Patient;
@@ -29,7 +31,13 @@ export class IntakeComponent implements OnInit {
   public signatureData: string;
   public diagnosisSelections: string[] = [];
 
+  private unsubscribe$ = new Subject();
+
   constructor(private readonly dialog: MatDialog) {
+
+  }
+
+  ngOnInit() {
 
     this.form = new FormGroup({
       diagnosis_other: new FormControl(''),
@@ -38,10 +46,10 @@ export class IntakeComponent implements OnInit {
       duration_other: new FormControl(''),
       signature: new FormControl(['', Validators.required])
     });
-
   }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   calcAge(): number {
@@ -77,6 +85,7 @@ export class IntakeComponent implements OnInit {
     this.dialog
       .open(SignatureDialogComponent)
       .afterClosed()
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(result => this.signatureData = result);
   }
 

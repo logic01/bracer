@@ -1,9 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { Patient } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/api/patient.service';
 

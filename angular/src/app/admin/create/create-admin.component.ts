@@ -15,6 +15,7 @@ import { AdminService } from '../../services/api/admin.service';
 export class CreateAdminComponent implements OnDestroy {
 
   private unsubscribe$ = new Subject();
+
   constructor(
     private readonly adminApi: AdminService,
     private readonly router: Router) { }
@@ -27,8 +28,7 @@ export class CreateAdminComponent implements OnDestroy {
     this.adminApi
       .post(admin)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (newAdmin: Admin) => {
+      .subscribe(() => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

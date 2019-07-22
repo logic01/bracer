@@ -32,7 +32,9 @@ export class EditPatientComponent implements OnInit, OnDestroy {
     this.patientId = this.route.snapshot.paramMap.get('patientId');
     this.patient$ = this.patientApi.get(this.patientId);
 
-    this.session.userAccount$.subscribe((result: UserAccount) => this.isAdmin = result.type === AccountType.Admin);
+    this.session.userAccount$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((result: UserAccount) => this.isAdmin = result.type === AccountType.Admin);
   }
 
   ngOnDestroy(): void {

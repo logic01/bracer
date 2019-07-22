@@ -56,7 +56,7 @@
         </div>
 
         <div formArrayName="leftElbowQuestions"
-            *ngFor="let item of form.get('leftElbowQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('leftElbowQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Left Elbow</mat-card-title>
@@ -144,7 +144,7 @@
         </div>
 
         <div formArrayName="rightElbowQuestions"
-            *ngFor="let item of form.get('rightElbowQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('rightElbowQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Right Elbow</mat-card-title>
@@ -232,7 +232,7 @@
         </div>
 
         <div formArrayName="leftAnteriorShoulderQuestions"
-            *ngFor="let item of form.get('leftAnteriorShoulderQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('leftAnteriorShoulderQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Left Anterior Shoulder</mat-card-title>
@@ -320,7 +320,7 @@
         </div>
 
         <div formArrayName="rightAnteriorShoulderQuestions"
-            *ngFor="let item of form.get('rightAnteriorShoulderQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('rightAnteriorShoulderQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Right Anterior Shoulder</mat-card-title>
@@ -408,7 +408,7 @@
         </div>
 
         <div formArrayName="leftPosteriorShoulderQuestions"
-            *ngFor="let item of form.get('leftPosteriorShoulderQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('leftPosteriorShoulderQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Left Posterior Shoulder</mat-card-title>
@@ -496,7 +496,7 @@
         </div>
 
         <div formArrayName="rightPosteriorShoulderQuestions"
-            *ngFor="let item of form.get('rightPosteriorShoulderQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('rightPosteriorShoulderQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Right Posterior Shoulder</mat-card-title>
@@ -584,7 +584,7 @@
         </div>
 
         <div formArrayName="leftKneeQuestions"
-            *ngFor="let item of form.get('leftKneeQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('leftKneeQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Left Knee</mat-card-title>
@@ -672,7 +672,7 @@
         </div>
 
         <div formArrayName="rightKneeQuestions"
-            *ngFor="let item of form.get('rightKneeQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('rightKneeQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Right Knee</mat-card-title>
@@ -760,7 +760,7 @@
         </div>
 
         <div formArrayName="leftAnkleQuestions"
-            *ngFor="let item of form.get('leftAnkleQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('leftAnkleQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Left Ankle</mat-card-title>
@@ -848,7 +848,7 @@
         </div>
 
         <div formArrayName="rightAnkleQuestions"
-            *ngFor="let item of form.get('rightAnkleQuestions').controls; let i = index;">
+            *ngFor="let item of formArrayControls('rightAnkleQuestions'); let i = index;">
 
             <mat-card [formGroupName]="i">
                 <mat-card-title>Right Ankle</mat-card-title>

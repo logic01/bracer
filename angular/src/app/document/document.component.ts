@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { concat } from 'rxjs';
+import { concat, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from '../constants/routes';
 import { Document } from '../models/document.model';
@@ -28,7 +28,7 @@ import { DenyDialogComponent } from './deny-dialog/deny-dialog.component';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss']
 })
-export class DocumentComponent implements OnInit {
+export class DocumentComponent implements OnInit, OnDestroy {
 
   private intakeFormId: string;
   private vendorId: string;
@@ -42,6 +42,7 @@ export class DocumentComponent implements OnInit {
 
   private intakeSignature: Signature;
   private prescriptionSignature: Signature;
+  private unsubscribe$ = new Subject();
 
   public intakeApproved = false;
 
@@ -65,45 +66,65 @@ export class DocumentComponent implements OnInit {
       this.vendorId = this.route.snapshot.paramMap.get('vendorId');
     }
 
-    this.session.userAccount$.subscribe((account: UserAccount) => {
+    this.session.userAccount$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: UserAccount) => {
 
-      this.isAdminView = (account.type === AccountType.Admin);
+        this.isAdminView = (account.type === AccountType.Admin);
 
-      this.loadIntakeForm();
-    });
+        this.loadIntakeForm();
+      });
 
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
+
   private loadIntakeForm() {
-    this.intakeFormApi.get(this.intakeFormId).subscribe((intake: IntakeForm) => {
 
-      // load intake
-      this.intakeForm = intake;
+    this.intakeFormApi
+      .get(this.intakeFormId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((intake: IntakeForm) => {
 
-      // change intake status to under review is the physician is viewing it.
-      if (!this.isAdminView && this.intakeForm.status === IntakeStatus.Assigned) {
-        this.intakeForm.status = IntakeStatus.UnderReview;
-        this.intakeFormApi.put(this.intakeFormId, this.intakeForm).subscribe();
-      }
+        // load intake
+        this.intakeForm = intake;
 
-      // load patient
-      if (intake.patientId) {
-        this.patientApi.get(intake.patientId).subscribe((patient: Patient) => this.patient = patient);
-      }
+        // change intake status to under review is the physician is viewing it.
+        if (!this.isAdminView && this.intakeForm.status === IntakeStatus.Assigned) {
+          this.intakeForm.status = IntakeStatus.UnderReview;
 
-      // load physician
-      if (intake.physicianId) {
-        this.physicianApi.get(intake.physicianId).subscribe((physician: Physician) => this.physician = physician);
-      }
+          this.intakeFormApi
+            .put(this.intakeFormId, this.intakeForm)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe();
+        }
 
-      // kind of ghetto infering all this but for now it works.
-      const question = this.intakeForm.questions.filter(q => q.key === 'PainChart');
-      const painArea = question[0].answers[0].text;
+        // load patient
+        if (intake.patientId) {
+          this.patientApi
+            .get(intake.patientId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((patient: Patient) => this.patient = patient);
+        }
 
-      // the product, lcode and diagnosis options are all distinct via the PainArea
-      this.setDiagnosis(painArea);
+        // load physician
+        if (intake.physicianId) {
+          this.physicianApi
+            .get(intake.physicianId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((physician: Physician) => this.physician = physician);
+        }
 
-    });
+        // kind of ghetto infering all this but for now it works.
+        const question = this.intakeForm.questions.filter(q => q.key === 'PainChart');
+        const painArea = question[0].answers[0].text;
+
+        // the product, lcode and diagnosis options are all distinct via the PainArea
+        this.setDiagnosis(painArea);
+
+      });
   }
 
   onIntakeApproval(data: { intakeForm: IntakeForm, signature: Signature }) {
@@ -144,9 +165,11 @@ export class DocumentComponent implements OnInit {
       const docObv$ = this.documentApi.post(doc);
 
       // run all methods in order
-      concat(intakeObv$, sig1Obv$, sig2Obv$, docObv$).subscribe(() => {
-        this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
-      });
+      concat(intakeObv$, sig1Obv$, sig2Obv$, docObv$)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(() => {
+          this.router.navigate([RouteUrls.PhysicianDashboardComponent]);
+        });
     }
   }
 
@@ -154,6 +177,7 @@ export class DocumentComponent implements OnInit {
     this.dialog
       .open(DenyDialogComponent)
       .afterClosed()
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((result: string) => {
         this.intakeForm.deniedReason = result;
         this.intakeForm.status = IntakeStatus.Denied;

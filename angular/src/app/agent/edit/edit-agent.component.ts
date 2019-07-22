@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/agent.model';
-import { Vendor } from 'src/app/models/vendor.model';
 import { AgentService } from 'src/app/services/api/agent.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
@@ -18,10 +15,11 @@ import { VendorService } from 'src/app/services/api/vendor.service';
 })
 export class EditAgentComponent implements OnInit, OnDestroy {
 
-  private unsubscribe$ = new Subject();
-  public vendors$: Observable<Vendor[]>;
+  public vendors$ = this.vendorApi.getAll();
   public agent$: Observable<Agent>;
+
   private id: string;
+  private unsubscribe$ = new Subject();
 
   constructor(
     private readonly agentApi: AgentService,
@@ -31,8 +29,6 @@ export class EditAgentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-
-    this.vendors$ = this.vendorApi.getAll();
     this.agent$ = this.agentApi.get(this.id);
   }
 
@@ -44,7 +40,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
     this.agentApi
       .put(this.id, agent)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newAgent: Agent) => {
+      .subscribe(() => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

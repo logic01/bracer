@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Vendor } from 'src/app/models/vendor.model';
 import { MaskService } from 'src/app/services/mask.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
@@ -10,12 +11,13 @@ import { CustomValidators } from 'src/app/validators/custom-validators';
   templateUrl: './vendor-account-form.component.html',
   styleUrls: ['./vendor-account-form.component.scss']
 })
-export class VendorAccountFormComponent implements OnInit {
+export class VendorAccountFormComponent implements OnInit, OnDestroy {
 
   @Input() vendor$: Observable<Vendor>;
   @Output() formSubmitEvent = new EventEmitter<Vendor>();
 
   public accountForm: FormGroup;
+  private unsubscribe$ = new Subject();
 
   constructor(public readonly maskService: MaskService) { }
 
@@ -31,11 +33,17 @@ export class VendorAccountFormComponent implements OnInit {
 
     // populate form if we have a vendor bound to the form
     if (this.vendor$) {
-      this.vendor$.subscribe((result: Vendor) => {
-        this.accountForm.patchValue(result);
-      });
+      this.vendor$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((result: Vendor) => {
+          this.accountForm.patchValue(result);
+        });
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {
@@ -52,7 +60,7 @@ export class VendorAccountFormComponent implements OnInit {
   private buildVendor(): Vendor {
 
     const vendor = new Vendor();
-    vendor.active  = this.accountForm.controls['active'].value;
+    vendor.active = this.accountForm.controls['active'].value;
     vendor.companyName = this.accountForm.controls['companyName'].value;
     vendor.doingBusinessAs = this.accountForm.controls['doingBusinessAs'].value;
     vendor.phoneNumber = this.accountForm.controls['phoneNumber'].value;

@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
+import { Question } from 'src/app/models/question.model';
 import { MaskService } from 'src/app/services/mask.service';
 import { SelectValueService } from 'src/app/services/select-value.service';
 
@@ -23,7 +25,6 @@ export class PainQuestion {
 })
 export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
-  @Input() intake$: Observable<IntakeForm>;
   @Output() formSubmitEvent = new EventEmitter<IntakeForm[]>();
 
   public form: FormGroup;
@@ -47,7 +48,38 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  initForm() {
+  onCheck(event: MatCheckboxChange) {
+
+    // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
+
+    const checked = event.checked;
+    const painPoint = event.source.value;
+
+    if (checked) {
+      this.addQuestions(painPoint);
+    } else {
+      this.removeQuestions(painPoint);
+    }
+
+  }
+
+  onSubmit() {
+
+    if (!this.form.valid) {
+      return;
+    }
+
+    const intakeForms = this.buildIntakeForms();
+
+    this.formSubmitEvent.emit(intakeForms);
+
+  }
+
+  formArrayControls(key: string): AbstractControl[] {
+    return (<FormArray>this.form.get(key)).controls;
+  }
+
+  private initForm() {
 
     this.form = this.formBuilder.group({
       leftElbow: new FormControl(''),
@@ -73,19 +105,70 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCheck(event: MatCheckboxChange) {
+  private buildIntakeForms() {
 
-    // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
+    const intakeForms: IntakeForm[] = [];
 
-    const checked = event.checked;
-    const painPoint = event.source.value;
+    this.addIntake(intakeForms, 'leftElbow');
+    this.addIntake(intakeForms, 'rightElbow');
 
-    if (checked) {
-      this.addQuestions(painPoint);
-    } else {
-      this.removeQuestions(painPoint);
+    return intakeForms;
+  }
+
+  private addIntake(intakeForms: IntakeForm[], key: string) {
+
+    if (this.form.get(key).value === true) {
+      intakeForms.push(this.buildIntake(key));
+    }
+  }
+
+  private buildIntake(painPoint: string): IntakeForm {
+
+    const formArray = this.form.get(painPoint + 'Questions') as FormArray;
+    if (!formArray) {
+      return;
     }
 
+    const formGroup = formArray.controls[0] as FormGroup;
+    if (!formGroup) {
+      return;
+    }
+
+    const intake = new IntakeForm();
+    intake.status = IntakeStatus.New;
+    intake.patientId = this.patientId;
+    intake.intakeFormType = IntakeFormType.PainDmeOnly;
+    intake.questions = [];
+
+    intake.questions.push(this.buildQuestion(formGroup, 'painFeeling'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painBegan'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painCause'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painSelfTreatment'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painDescription'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painDuration'));
+    intake.questions.push(this.buildQuestion(formGroup, 'previousTreatment'));
+    intake.questions.push(this.buildQuestion(formGroup, 'effectsDaily'));
+    intake.questions.push(this.buildQuestion(formGroup, 'hadSurgery'));
+    intake.questions.push(this.buildQuestion(formGroup, 'surgies'));
+    intake.questions.push(this.buildQuestion(formGroup, 'dateOfSurgery'));
+    intake.questions.push(this.buildQuestion(formGroup, 'abulatory'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painLevel'));
+
+    return intake;
+  }
+
+  private buildQuestion(formGroup: FormGroup, key: string): Question {
+
+    const question = new Question();
+    question.key = key;
+    question.text = key;
+    question.answers = [];
+
+    const answer = new Answer();
+    answer.text = formGroup.get(key).value ? formGroup.get(key).value : '';
+    question.answers.push(answer);
+
+    return question;
   }
 
   private addQuestions(painPoint: string) {
@@ -107,76 +190,5 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit() {
-
-    if (!this.form.valid) {
-      return;
-    }
-
-    const intakeForms = this.buildIntakeForms();
-
-    this.formSubmitEvent.emit();
-
-  }
-
-  buildIntakeForms() {
-
-    const intakeForms: IntakeForm[] = [];
-
-    this.addIntake(intakeForms, 'leftElbow');
-
-    return intakeForms;
-
-  }
-
-  addIntake(intakeForms: IntakeForm[], painPoint: string) {
-
-
-    const formArray = this.form.get(painPoint + 'Questions') as FormArray;
-    if (!formArray) {
-      return;
-    }
-
-    const formGroup = formArray.controls[0] as FormGroup;
-    if (!formGroup) {
-      return;
-    }
-
-    const intake = new IntakeForm();
-    intake.status = IntakeStatus.New;
-    intake.patientId = this.patientId;
-    intake.intakeFormType = IntakeFormType.PainDmeOnly;
-    intake.questions = [];
-
-
-
-    const questions1 = formGroup.get('painFeeling');
-    const questions2 = formGroup.get('painBegan');
-    const questions3 = formGroup.get('painCause');
-    const questions4 = formGroup.get('painSelfTreatment');
-    const questions5 = formGroup.get('painDescription');
-    const questions6 = formGroup.get('painDuration');
-    const questions7 = formGroup.get('previousTreatment');
-    const questions13 = formGroup.get('effectsDaily');
-
-    const questions8 = formGroup.get('hadSurgery');
-    const questions9 = formGroup.get('surgies');
-    const questions10 = formGroup.get('dateOfSurgery');
-    const questions11 = formGroup.get('abulatory');
-    const questions12 = formGroup.get('painLevel');
-
-
-    /*  const question = new Question();
-      question.answers = [];
-
-      const answer = new Answer();
-      answer.text = questions.controls[i].value ? questions.controls[i].value : '';
-      question.answers.push(answer);
-      question.key = Object.keys(this.form).find(name => questions.controls[i] === this.form[name]) || null;
-      question.text = Object.keys(this.form).find(name => questions.controls[i] === this.form[name]) || null;*/
-
-
-    intakeForms.push(intake);
-  }
 
 }

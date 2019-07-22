@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Patient } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/api/patient.service';
@@ -42,8 +40,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  edit(id: number) {
-    this.router.navigate(['/patient/edit', id]);
+  edit(agentId: number, patientId: number) {
+    this.router.navigate(['agent', agentId, 'patient', patientId]);
   }
 
   add() {

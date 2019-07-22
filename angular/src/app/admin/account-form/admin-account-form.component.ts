@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Admin } from 'src/app/models/admin.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { UserAccount } from 'src/app/models/user-account.model';
@@ -12,12 +13,13 @@ import { UsernameDuplicateValidator } from 'src/app/validators/username-duplicat
   templateUrl: './admin-account-form.component.html',
   styleUrls: ['./admin-account-form.component.scss']
 })
-export class AdminAccountFormComponent implements OnInit {
+export class AdminAccountFormComponent implements OnInit, OnDestroy {
 
   @Input() admin$: Observable<Admin>;
   @Output() formSubmitEvent = new EventEmitter<Admin>();
 
   public accountForm: FormGroup;
+  private unsubscribe$ = new Subject();
 
   constructor(private readonly dupeValidator: UsernameDuplicateValidator) { }
 
@@ -47,10 +49,12 @@ export class AdminAccountFormComponent implements OnInit {
 
     // populate form if we have a vendor bound to the form
     if (this.admin$) {
-      this.admin$.subscribe((result: Admin) => {
-        this.accountForm.patchValue(result);
-        this.accountForm.patchValue(result.userAccount);
-      });
+      this.admin$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((result: Admin) => {
+          this.accountForm.patchValue(result);
+          this.accountForm.patchValue(result.userAccount);
+        });
     } else {
       // require a password for creating a admin
       this.accountForm.get('password').validator = Validators.compose([
@@ -62,6 +66,10 @@ export class AdminAccountFormComponent implements OnInit {
       ]);
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {

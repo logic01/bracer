@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -13,7 +13,7 @@ import { SessionService } from 'src/app/services/session.service';
   templateUrl: './agent-dashboard.component.html',
   styleUrls: ['./agent-dashboard.component.scss']
 })
-export class AgentDashboardComponent implements OnInit {
+export class AgentDashboardComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -31,19 +31,25 @@ export class AgentDashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.session.userAccount$.subscribe((account: UserAccount) => {
+    this.session.userAccount$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: UserAccount) => {
 
-      this.agentId = account.userAccountId;
+        this.agentId = account.userAccountId;
 
-      this.patientApi
-        .getByAgent(this.agentId)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((patientList: Patient[]) => {
-          this.dataSource = new MatTableDataSource(patientList);
-          this.dataSource.sort = this.sort;
-        });
+        this.patientApi
+          .getByAgent(this.agentId)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((patientList: Patient[]) => {
+            this.dataSource = new MatTableDataSource(patientList);
+            this.dataSource.sort = this.sort;
+          });
 
-    });
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   add() {

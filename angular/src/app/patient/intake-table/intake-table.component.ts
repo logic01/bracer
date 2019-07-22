@@ -1,10 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
@@ -14,7 +12,7 @@ import { IntakeFormService } from 'src/app/services/api/intake-form.service';
   templateUrl: './intake-table.component.html',
   styleUrls: ['./intake-table.component.scss']
 })
-export class IntakeTableComponent implements OnInit {
+export class IntakeTableComponent implements OnInit, OnDestroy {
 
   @Input() patientId: string;
   @ViewChild(MatSort) sort: MatSort;
@@ -42,6 +40,9 @@ export class IntakeTableComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
 
   edit(intakeFormId: string) {
     this.router.navigate(['patient', this.patientId, 'pain-dme-only', intakeFormId, 'edit']);

@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { RouteUrls } from '../../constants/routes';
 import { Physician } from 'src/app/models/physician.model';
 import { PhysicianService } from 'src/app/services/api/physician.service';
+
+import { RouteUrls } from '../../constants/routes';
 
 
 @Component({
@@ -38,7 +37,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
     this.physicianApi
       .put(this.id, physician)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newPhysician: Physician) => {
+      .subscribe(() => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

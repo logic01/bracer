@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
 import { VendorService } from 'src/app/services/api/vendor.service';
@@ -37,7 +35,7 @@ export class EditVendorComponent implements OnInit, OnDestroy {
     this.vendorApi
       .put(this.id, vendor)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((newVendor: Vendor) => {
+      .subscribe(() => {
         this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
       });
   }

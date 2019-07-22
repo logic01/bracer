@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
@@ -27,7 +27,7 @@ export class TableRow {
   templateUrl: './physician-billing.component.html',
   styleUrls: ['./physician-billing.component.scss']
 })
-export class PhysicianBillingComponent implements OnInit {
+export class PhysicianBillingComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -59,36 +59,28 @@ export class PhysicianBillingComponent implements OnInit {
           const physicianIds = intakes.map(({ physicianId }) => physicianId);
           const physicians$ = this.physicianApi.getList(physicianIds);
 
-          physicians$.subscribe((physicians: Physician[]) => {
+          physicians$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((physicians: Physician[]) => {
 
-            const data: TableRow[] = [];
+              const data: TableRow[] = [];
 
-            intakes.forEach((intake: IntakeForm) => {
-              const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
-              const row = this.buildTableRow(intake, physician);
-              data.push(row);
+              intakes.forEach((intake: IntakeForm) => {
+                const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
+                const row = this.buildTableRow(intake, physician);
+                data.push(row);
+              });
+
+              this.datasource = new MatTableDataSource(data);
+              this.datasource.sort = this.sort;
+
             });
-
-            this.datasource = new MatTableDataSource(data);
-            this.datasource.sort = this.sort;
-
-          });
-
         }
       });
   }
 
-  buildTableRow(intake: IntakeForm, physician: Physician): TableRow {
-    const row = new TableRow();
-    row.intakeFormId = intake.intakeFormId;
-    row.documentId = intake.documentId;
-    row.status = intake.status;
-    row.physicianName = physician.firstName + ' ' + physician.lastName;
-    row.physicianState = physician.address.state;
-    row.physicianPaid = intake.physicianPaid;
-    row.createdOn = intake.createdOn;
-
-    return row;
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   paid(event: MatCheckboxChange, intakeFormId: string) {
@@ -113,11 +105,26 @@ export class PhysicianBillingComponent implements OnInit {
 
     this.changes.forEach((intake: IntakeForm) => observables.push(this.intakeApi.put(intake.intakeFormId, intake)));
 
-    forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
+    forkJoin(observables)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
   }
 
   download(documentId: string) {
     window.location.href = `${environment.api_url}/document/${documentId}/download`;
+  }
+
+  private buildTableRow(intake: IntakeForm, physician: Physician): TableRow {
+    const row = new TableRow();
+    row.intakeFormId = intake.intakeFormId;
+    row.documentId = intake.documentId;
+    row.status = intake.status;
+    row.physicianName = physician.firstName + ' ' + physician.lastName;
+    row.physicianState = physician.address.state;
+    row.physicianPaid = intake.physicianPaid;
+    row.createdOn = intake.createdOn;
+
+    return row;
   }
 
 }

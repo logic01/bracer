@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { Agent } from 'src/app/models/Agent.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { UserAccount } from 'src/app/models/user-account.model';
@@ -14,13 +14,14 @@ import { UsernameDuplicateValidator } from 'src/app/validators/username-duplicat
   templateUrl: './agent-account-form.component.html',
   styleUrls: ['./agent-account-form.component.scss']
 })
-export class AgentAccountFormComponent implements OnInit {
+export class AgentAccountFormComponent implements OnInit, OnDestroy {
 
   @Input() agent$: Observable<Agent>;
   @Input() vendors$: Observable<Vendor[]>;
   @Output() formSubmitEvent = new EventEmitter<Agent>();
 
   public accountForm: FormGroup;
+  private unsubscribe$ = new Subject();
 
   constructor(private readonly dupeValidator: UsernameDuplicateValidator) { }
 
@@ -51,11 +52,13 @@ export class AgentAccountFormComponent implements OnInit {
 
     // populate form if we have a agent bound to the form
     if (this.agent$) {
-      this.agent$.subscribe((result: Agent) => {
-        this.accountForm.patchValue(result);
-        this.accountForm.patchValue(result.userAccount);
-        this.accountForm.patchValue({ vendor: result.vendorId });
-      });
+      this.agent$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((result: Agent) => {
+          this.accountForm.patchValue(result);
+          this.accountForm.patchValue(result.userAccount);
+          this.accountForm.patchValue({ vendor: result.vendorId });
+        });
     } else {
       // require a password for creating an agent
       this.accountForm.get('password').validator = Validators.compose([
@@ -71,6 +74,10 @@ export class AgentAccountFormComponent implements OnInit {
     // only display vendors that are active.
     this.vendors$ = this.vendors$.pipe(map(vendors => vendors.filter(v => v.active)));
 
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   onSubmit() {

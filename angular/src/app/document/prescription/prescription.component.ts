@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SignatureType } from 'src/app/models/enums/signature-type';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
@@ -13,7 +15,7 @@ import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.c
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.scss']
 })
-export class PrescriptionComponent implements OnInit {
+export class PrescriptionComponent implements OnInit, OnDestroy {
 
   @Input() isAdminView = false;
   @Input() patient: Patient;
@@ -25,6 +27,7 @@ export class PrescriptionComponent implements OnInit {
 
   public today = Date.now();
   public signature = new Signature();
+  private unsubscribe$ = new Subject();
 
   constructor(private readonly dialog: MatDialog) { }
 
@@ -32,6 +35,9 @@ export class PrescriptionComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
+  }
 
   getAnswer(key: string) {
 
@@ -57,6 +63,7 @@ export class PrescriptionComponent implements OnInit {
     this.dialog
       .open(SignatureDialogComponent)
       .afterClosed()
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(result => this.signature.content = result);
   }
 

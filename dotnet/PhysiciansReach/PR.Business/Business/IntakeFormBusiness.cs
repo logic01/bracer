@@ -76,6 +76,7 @@ namespace PR.Business
         {
             IntakeForm intakeForm = _context.IntakeForm
                 .Include(i => i.Signatures)
+                .Include("Questions.Answers")
                 .First(u => u.IntakeFormId == intakeFormModel.IntakeFormId);
 
             intakeForm.MapFromModel(intakeFormModel);

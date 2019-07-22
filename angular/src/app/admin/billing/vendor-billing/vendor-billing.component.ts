@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
@@ -35,7 +35,7 @@ export class TableRow {
   templateUrl: './vendor-billing.component.html',
   styleUrls: ['./vendor-billing.component.scss']
 })
-export class VendorBillingComponent implements OnInit {
+export class VendorBillingComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -80,44 +80,34 @@ export class VendorBillingComponent implements OnInit {
           // only get patients associated with the Approved intake forms
           const patients$ = this.patientApi.getList(patientIds);
 
-          patients$.subscribe((patients: Patient[]) => {
+          patients$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((patients: Patient[]) => {
 
-            const data: TableRow[] = [];
+              const data: TableRow[] = [];
 
-            intakes.forEach((intake: IntakeForm) => {
+              intakes.forEach((intake: IntakeForm) => {
 
-              const patient = patients.find(p => p.patientId === intake.patientId);
-              const agent = agents.find(a => a.userAccount.userAccountId === patient.agentId);
-              const vendor = vendors.find(v => v.vendorId === agent.vendorId);
+                const patient = patients.find(p => p.patientId === intake.patientId);
+                const agent = agents.find(a => a.userAccount.userAccountId === patient.agentId);
+                const vendor = vendors.find(v => v.vendorId === agent.vendorId);
 
-              const row = this.buildTableRow(intake, patient, agent, vendor);
+                const row = this.buildTableRow(intake, patient, agent, vendor);
 
-              data.push(row);
+                data.push(row);
+              });
+
+              this.datasource = new MatTableDataSource(data);
+              this.datasource.sort = this.sort;
+
             });
-
-            this.datasource = new MatTableDataSource(data);
-            this.datasource.sort = this.sort;
-
-          });
 
         }
       });
   }
 
-  buildTableRow(intake: IntakeForm, patient: Patient, agent: Agent, vendor: Vendor): TableRow {
-    const row = new TableRow();
-    row.intakeFormId = intake.intakeFormId;
-    row.documentId = intake.documentId;
-    row.status = intake.status;
-    row.patientName = patient.firstName + ' ' + patient.lastName;
-    row.patientState = patient.address.state;
-    row.vendorName = vendor.companyName;
-    row.agentName = agent.firstName + ' ' + agent.lastName;
-    row.vendorPaid = intake.vendorPaid;
-    row.vendorBilled = intake.vendorBilled;
-    row.createdOn = intake.createdOn;
-
-    return row;
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   paid(event: MatCheckboxChange, intakeFormId: string) {
@@ -156,12 +146,30 @@ export class VendorBillingComponent implements OnInit {
 
     this.changes.forEach((intake: IntakeForm) => observables.push(this.intakeApi.put(intake.intakeFormId, intake)));
 
-    forkJoin(observables).subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
+    forkJoin(observables)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
   }
 
 
   download(documentId: string) {
     window.location.href = `${environment.api_url}/document/${documentId}/download`;
+  }
+
+  private buildTableRow(intake: IntakeForm, patient: Patient, agent: Agent, vendor: Vendor): TableRow {
+    const row = new TableRow();
+    row.intakeFormId = intake.intakeFormId;
+    row.documentId = intake.documentId;
+    row.status = intake.status;
+    row.patientName = patient.firstName + ' ' + patient.lastName;
+    row.patientState = patient.address.state;
+    row.vendorName = vendor.companyName;
+    row.agentName = agent.firstName + ' ' + agent.lastName;
+    row.vendorPaid = intake.vendorPaid;
+    row.vendorBilled = intake.vendorBilled;
+    row.createdOn = intake.createdOn;
+
+    return row;
   }
 
 

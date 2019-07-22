@@ -34,7 +34,9 @@ export class AssignmentDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // get physicians and filter them so only active show.
-    this.physicians$ = this.physicianApi.getAll().pipe(map(physician => physician.filter(p => p.userAccount.active)));
+    this.physicians$ = this.physicianApi
+      .getAll()
+      .pipe(map(physician => physician.filter(p => p.userAccount.active)));
 
     this.intake$ = this.intakeApi.get(this.data.intakeFormId);
 

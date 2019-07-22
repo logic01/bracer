@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from './constants/routes';
 import { AccountType } from './models/enums/account-type.enum';
@@ -12,10 +14,11 @@ import { SessionService } from './services/session.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   public loggedIn$ = this.session.loggedIn$;
   public userAccount$ = this.session.userAccount$;
+  private unsubscribe$ = new Subject();
 
   constructor(
     private readonly router: Router,
@@ -25,12 +28,18 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      window.scrollTo(0, 0);
-    });
+    this.router.events
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((evt) => {
+        if (!(evt instanceof NavigationEnd)) {
+          return;
+        }
+        window.scrollTo(0, 0);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.unsubscribe();
   }
 
   singOutClick() {
@@ -38,21 +47,23 @@ export class AppComponent implements OnInit {
   }
 
   home() {
-    this.session.userAccount$.subscribe(
-      (result: UserAccount) => {
+    this.session.userAccount$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (result: UserAccount) => {
 
-        if (result.type === AccountType.Admin) {
-          this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
-        }
+          if (result.type === AccountType.Admin) {
+            this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+          }
 
-        if (result.type === AccountType.Agent) {
-          this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
-        }
+          if (result.type === AccountType.Agent) {
+            this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
+          }
 
-        if (result.type === AccountType.Physician) {
-          this.router.navigateByUrl(RouteUrls.PhysicianDashboardComponent);
-        }
-      });
+          if (result.type === AccountType.Physician) {
+            this.router.navigateByUrl(RouteUrls.PhysicianDashboardComponent);
+          }
+        });
 
   }
 
