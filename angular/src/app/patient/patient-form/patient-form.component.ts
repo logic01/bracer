@@ -151,14 +151,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
         this.form.patchValue(result.address);
         this.form.patchValue(
           {
-            physicianAddressLineOne: result.physiciansAddress.addressLineOne,
-            physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
-            physicianCity: result.physiciansAddress.city,
-            physicianState: result.physiciansAddress.state,
-            physicianZip: result.physiciansAddress.zipCode,
-          });
-        this.form.patchValue(
-          {
             pharmacy: PharmacyType[result.pharmacy],
             sex: SexType[result.sex],
             language: LanguageType[result.language],
@@ -166,6 +158,19 @@ export class PatientFormComponent implements OnInit, OnDestroy {
             insuranceType: InsuranceType[result.insurance],
             bestTimeToCallBack: CallbackTime[result.bestTimeToCallBack]
           });
+
+        if (result.physiciansAddress) {
+          this.form.patchValue(
+            {
+              physicianAddressLineOne: result.physiciansAddress.addressLineOne,
+              physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
+              physicianCity: result.physiciansAddress.city,
+              physicianState: result.physiciansAddress.state,
+              physicianZip: result.physiciansAddress.zipCode,
+            });
+        }
+
+
         if (result.medicare) {
           this.form.patchValue({
             memberId: result.medicare.memberId,

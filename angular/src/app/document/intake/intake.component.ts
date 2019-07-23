@@ -98,7 +98,9 @@ export class IntakeComponent implements OnInit, OnDestroy {
 
     let duration = this.form.controls['duration_default'].value;
 
-    if (!duration) {
+    if (duration) {
+      duration = '99 PRN'; // default value
+    } else {
       duration = this.form.controls['duration_other'].value;
     }
 
@@ -106,11 +108,11 @@ export class IntakeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.intakeForm.ICD10Codes = [];
+    this.intakeForm.icD10Codes = [];
     for (const option of this.diagnosisSelections) {
       const code = new ICD10Code();
       code.text = option;
-      this.intakeForm.ICD10Codes.push(code);
+      this.intakeForm.icD10Codes.push(code);
     }
 
     this.intakeForm.duration = duration;

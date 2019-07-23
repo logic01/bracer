@@ -1,13 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Answer } from 'src/app/models/answer.model';
+import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { ActivatedRoute } from '@angular/router';
-import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { Answer } from 'src/app/models/answer.model';
-
 import { SelectValueService } from 'src/app/services/select-value.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
+
 @Component({
   selector: 'app-general-rx-only',
   templateUrl: './general-rx-only.component.html',
@@ -57,7 +57,7 @@ export class GeneralRxOnlyComponent implements OnInit {
 
     this.questions.push(this.initQuestion('Height', 'How tall are you?'));
     this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('PainChart', 'Location of pain?'));
+    this.questions.push(this.initQuestion('painArea', 'Location of pain?'));
     this.questions.push(this.initQuestion('4', 'What current medications are you taking?'));
     this.questions.push(this.initQuestion('Allergies', 'Do you have any allergies?'));
     this.questions.push(this.initQuestion('6', 'Recent medical issues related to heart, liver, or kidneys?'));

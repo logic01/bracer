@@ -34,11 +34,11 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  public datasource: MatTableDataSource<TableRow>;
-
   public vendor$: Observable<Vendor>;
+  public datasource: MatTableDataSource<TableRow>;
+  public IntakeStatus = IntakeStatus;
 
-  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'patientName', 'patientState', 'actions'];
+  public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'patientName', 'patientState', 'view', 'assign', 'download'];
 
   private vendorId: string;
   private intakes: IntakeForm[];
@@ -68,35 +68,64 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
         this.intakes = intakes;
 
         if (intakes.length > 0) {
-          const physicianIds = intakes.map(({ physicianId }) => physicianId);
-          const patientIds = intakes.map(({ patientId }) => patientId);
 
-          const physicians$ = this.physicianApi.getList(physicianIds);
-          const patients$ = this.patientApi.getList(patientIds);
+          const physicianIds = intakes.filter(i => i.physicianId).map(({ physicianId }) => physicianId);
+          const patientIds = intakes.filter(i => i.patientId).map(({ patientId }) => patientId);
 
-          forkJoin([physicians$, patients$])
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(responses => {
-
-              const physicians = responses[0];
-              const patients = responses[1];
-              const data: TableRow[] = [];
-
-              intakes.forEach((intake: IntakeForm) => {
-                const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
-                const patient = patients.find(p => p.patientId === intake.patientId);
-                const row = this.buildTableRow(intake, physician, patient);
-                data.push(row);
-              });
-
-              this.datasource = new MatTableDataSource(data);
-              this.datasource.sort = this.sort;
-
-            });
-
+          if (physicianIds.length > 0) {
+            this.buildFullTable(intakes, physicianIds, patientIds);
+          } else {
+            this.buildPatientTable(intakes, patientIds);
+          }
         }
       });
 
+  }
+
+  buildFullTable(intakes: IntakeForm[], physicianIds: string[], patientIds: string[]) {
+
+    const patients$ = this.patientApi.getList(patientIds);
+    const physicians$ = this.physicianApi.getList(physicianIds);
+
+    forkJoin([physicians$, patients$])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(responses => {
+
+        const physicians = responses[0];
+        const patients = responses[1];
+        const data: TableRow[] = [];
+
+        intakes.forEach((intake: IntakeForm) => {
+          const physician = physicians.find(p => p.userAccount.userAccountId === intake.physicianId);
+          const patient = patients.find(p => p.patientId === intake.patientId);
+          const row = this.buildTableRow(intake, physician, patient);
+          data.push(row);
+        });
+
+        this.datasource = new MatTableDataSource(data);
+        this.datasource.sort = this.sort;
+
+      });
+  }
+
+  buildPatientTable(intakes: IntakeForm[], patientIds: string[]) {
+
+    this.patientApi
+      .getList(patientIds)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((patients: Patient[]) => {
+        const data: TableRow[] = [];
+
+        intakes.forEach((intake: IntakeForm) => {
+          const patient = patients.find(p => p.patientId === intake.patientId);
+          const row = this.buildTableRow(intake, undefined, patient);
+          data.push(row);
+        });
+
+        this.datasource = new MatTableDataSource(data);
+        this.datasource.sort = this.sort;
+
+      });
   }
 
   ngOnDestroy(): void {

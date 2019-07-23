@@ -1,11 +1,10 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IntakeForm } from 'src/app/models/intake-form.model';
-import { Question } from 'src/app/models/question.model';
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { CustomValidators } from 'src/app/validators/custom-validators';
+import { IntakeForm } from 'src/app/models/intake-form.model';
+import { Question } from 'src/app/models/question.model';
 
 @Component({
   selector: 'app-pain-rx-only',
@@ -64,7 +63,7 @@ export class PainRxOnlyComponent implements OnInit {
   }
 
   initQuestions() {
-    this.questions.push(this.initQuestion('PainChart', 'Location(s) of pain?'));
+    this.questions.push(this.initQuestion('painArea', 'Location(s) of pain?'));
     this.questions.push(this.initQuestion('PainBegan', 'When was the onset of pain?'));
     this.questions.push(this.initQuestion('PainCause', 'What was the cause of pain?'));
     this.questions.push(this.initQuestion('PainDuration', 'What is the duration of pain?'));

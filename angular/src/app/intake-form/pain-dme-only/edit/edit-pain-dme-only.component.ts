@@ -115,22 +115,22 @@ export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
 
   fillIntake() {
 
-    this.populateQuestionAnswer('painFeeling');
-    this.populateQuestionAnswer('painBegan');
-    this.populateQuestionAnswer('painCause');
-    this.populateQuestionAnswer('painSelfTreatment');
-    this.populateQuestionAnswer('painDescription');
-    this.populateQuestionAnswer('painDuration');
-    this.populateQuestionAnswer('previousTreatment');
-    this.populateQuestionAnswer('effectsDaily');
-    this.populateQuestionAnswer('hadSurgery');
-    this.populateQuestionAnswer('surgies');
-    this.populateQuestionAnswer('dateOfSurgery');
-    this.populateQuestionAnswer('abulatory');
-    this.populateQuestionAnswer('painLevel');
+    this.populateQuestionAnswer('painFeeling', 'Cause of Patients Pain?');
+    this.populateQuestionAnswer('painBegan', 'Onset of pain (When did the pain begin?)');
+    this.populateQuestionAnswer('painCause', 'What Provokes Pain?');
+    this.populateQuestionAnswer('painSelfTreatment', 'What currently relieves the pain?');
+    this.populateQuestionAnswer('painDescription', 'Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]');
+    this.populateQuestionAnswer('painDuration', 'Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))');
+    this.populateQuestionAnswer('previousTreatment', 'Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)');
+    this.populateQuestionAnswer('effectsDaily', 'Affects Activities of Daily Living(ADL) (If so, what?)');
+    this.populateQuestionAnswer('hadSurgery', 'Have you had surgery in this area?');
+    this.populateQuestionAnswer('surgies', 'If yes, what type of surgery?');
+    this.populateQuestionAnswer('dateOfSurgery', 'Date of Surgery');
+    this.populateQuestionAnswer('abulatory', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)');
+    this.populateQuestionAnswer('painLevel', 'Pain Rating');
   }
 
-  private populateQuestionAnswer(key: string) {
+  private populateQuestionAnswer(key: string, text: string) {
 
     const question = this.intake.questions.filter(q => q.key === key);
     const answer = question[0].answers[0];

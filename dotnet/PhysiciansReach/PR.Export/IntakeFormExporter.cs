@@ -105,13 +105,11 @@ namespace PR.Export
             PhysicianModel physician,
             ICollection<SignatureModel> signatures)
         {
-            //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
-            Properties properties = doc.CustomFilePropertiesPart.Properties;
 
             // Get all question's with a key, then gather the value as all answers comma delimited              
             var intakeFromKeys = intakeForm.Questions
                 .Where(r => !string.IsNullOrEmpty(r.Key))
-                .Select(y => new KeyValuePair<string, string>(y.Key, y.Answers.Select(z => z.Text)
+                .Select(y => new KeyValuePair<string, string>(y.Key.ToUpper(), y.Answers.Select(z => z.Text)
                 .Aggregate((c, n) => $"{c},{n}"))).ToList();
 
             intakeFromKeys.AddRange(GetPatientKeys(patient));
@@ -123,6 +121,10 @@ namespace PR.Export
             //This will update all of the custom properties that are used in the word doc.
             //Again, the fields are update in the document settings, but the downloading user
             //will need to approve the update for any fields.
+
+            //https://docs.microsoft.com/en-us/office/open-xml/how-to-set-a-custom-property-in-a-word-processing-document
+            Properties properties = doc.CustomFilePropertiesPart.Properties;
+
             foreach (MappingEnums propertyEnum in Enum.GetValues(typeof(MappingEnums)))
             {
                 var item = (CustomDocumentProperty)properties
@@ -130,7 +132,7 @@ namespace PR.Export
                 if (item != null)
                 {
                     //If a key doesn't exist, you could see an empty value stuffed into the word doc
-                    var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString()).Value ?? "N/A";
+                    var val = intakeFromKeys.FirstOrDefault(x => x.Key == propertyEnum.ToString().ToUpper()).Value ?? "N/A";
                     item.VTLPWSTR = new VTLPWSTR(val);
                 }
             }
@@ -230,25 +232,25 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.DOB.ToString(), patient.DateOfBirth.ToString("MM/dd/yyyy")),
-                new KeyValuePair<string, string>(MappingEnums.Age.ToString(), patient.DateOfBirth.GetAge()),
-                new KeyValuePair<string, string>(MappingEnums.PatientName.ToString(), $"{patient.FirstName} {patient.LastName}"),
-                new KeyValuePair<string, string>(MappingEnums.Phone.ToString(), patient.PhoneNumber),
-                new KeyValuePair<string, string>(MappingEnums.Gender.ToString(), patient.Sex.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Waist.ToString(), patient.Waist.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Weight.ToString(), patient.Weight.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Height.ToString(), patient.Height.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.ShoeSize.ToString(), patient.ShoeSize.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Allergies.ToString(), patient.Allergies.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Insurance.ToString(), patient.Insurance.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.Address.ToString(), patient.Address.ToString()),
-                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString(), DateTime.Now.ToString("MM/dd/yyyy")),
-                new KeyValuePair<string, string>(MappingEnums.MedMemberId.ToString(), patient.Medicare?.MemberId ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.MedPatientGroup.ToString(), patient.Medicare?.PatientGroup ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.MedPCN.ToString(), patient.Medicare?.Pcn ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.MedSecondary.ToString(), patient.Medicare?.SecondaryCarrier ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.MedSecondarySubscriber.ToString(), patient.Medicare?.SecondarySubscriberNumber ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.MedSubscriber.ToString(), patient.Medicare?.SubscriberNumber  ?? "N/A")
+                new KeyValuePair<string, string>(MappingEnums.DOB.ToString().ToUpper(), patient.DateOfBirth.ToString("MM/dd/yyyy")),
+                new KeyValuePair<string, string>(MappingEnums.Age.ToString().ToUpper(), patient.DateOfBirth.GetAge()),
+                new KeyValuePair<string, string>(MappingEnums.PatientName.ToString().ToUpper(), $"{patient.FirstName} {patient.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.Phone.ToString().ToUpper(), patient.PhoneNumber),
+                new KeyValuePair<string, string>(MappingEnums.Gender.ToString().ToUpper(), patient.Sex.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Waist.ToString().ToUpper(), patient.Waist.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Weight.ToString().ToUpper(), patient.Weight.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Height.ToString().ToUpper(), patient.Height.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.ShoeSize.ToString().ToUpper(), patient.ShoeSize.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Allergies.ToString().ToUpper(), patient.Allergies.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Insurance.ToString().ToUpper(), patient.Insurance.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.Address.ToString().ToUpper(), patient.Address.ToString()),
+                new KeyValuePair<string, string>(MappingEnums.ServiceDate.ToString().ToUpper(), DateTime.Now.ToString("MM/dd/yyyy")),
+                new KeyValuePair<string, string>(MappingEnums.MedMemberId.ToString().ToUpper(), patient.Medicare?.MemberId ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedPatientGroup.ToString().ToUpper(), patient.Medicare?.PatientGroup ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedPCN.ToString().ToUpper(), patient.Medicare?.Pcn ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSecondary.ToString().ToUpper(), patient.Medicare?.SecondaryCarrier ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSecondarySubscriber.ToString().ToUpper(), patient.Medicare?.SecondarySubscriberNumber ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.MedSubscriber.ToString().ToUpper(), patient.Medicare?.SubscriberNumber  ?? "N/A")
             };
 
             return kvps;
@@ -258,13 +260,13 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.PhyName.ToString(), $"Dr {physician?.FirstName} {physician?.LastName}"),
-                new KeyValuePair<string, string>(MappingEnums.PhyNameNoDr.ToString(), $"{physician?.FirstName} {physician?.LastName}"),
-                new KeyValuePair<string, string>(MappingEnums.PhyNpi.ToString(), physician?.NPI ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.PhyDea.ToString(), physician?.DEA ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.PhyAddress.ToString(), physician?.Address?.ToString() ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.PhyPhone.ToString(), physician?.PhoneNumber ?? "N/A"),
-                new KeyValuePair<string, string>(MappingEnums.PhyFax.ToString(), physician?.FaxNumber ?? "N/A")
+                new KeyValuePair<string, string>(MappingEnums.PhyName.ToString().ToUpper(), $"Dr {physician?.FirstName} {physician?.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.PhyNameNoDr.ToString().ToUpper(), $"{physician?.FirstName} {physician?.LastName}"),
+                new KeyValuePair<string, string>(MappingEnums.PhyNpi.ToString().ToUpper(), physician?.NPI ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyDea.ToString().ToUpper(), physician?.DEA ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyAddress.ToString().ToUpper(), physician?.Address?.ToString() ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyPhone.ToString().ToUpper(), physician?.PhoneNumber ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.PhyFax.ToString().ToUpper(), physician?.FaxNumber ?? "N/A")
             };
 
             return kvps;
@@ -274,13 +276,13 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                      new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString(), ""), //Below the Pain Chart Image
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString(), GetOrthoPrescribedAfter255(intake.HCPCSCode)),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString(), intake.Product ?? "N/A"),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString(), GetOrthoPrescribed(intake.HCPCSCode)),
-                      new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString(),"99 months/lifetime"),
-                      new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString(), GetDiagnosis(intake.ICD10Codes)),
-                //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString(), intake.ICD10?.Description  ?? "N/A")
+                      new KeyValuePair<string, string>(MappingEnums.GeneralIntakeNotes.ToString().ToUpper(), ""), //Below the Pain Chart Image
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSCode.ToString().ToUpper(), GetOrthoPrescribedAfter255(intake.HCPCSCode)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSProduct.ToString().ToUpper(), intake.Product ?? "N/A"),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDescription.ToString().ToUpper(), GetOrthoPrescribed(intake.HCPCSCode)),
+                      new KeyValuePair<string, string>(MappingEnums.HCPCSDuration.ToString().ToUpper(),intake.Duration),
+                      new KeyValuePair<string, string>(MappingEnums.ICDCode.ToString().ToUpper(), GetDiagnosis(intake.ICD10Codes)),
+                //  new KeyValuePair<string, string>(MappingEnums.ICDDescription.ToString().ToUpper(), intake.ICD10?.Description  ?? "N/A")
             };
             return kvps;
         }
@@ -294,10 +296,10 @@ namespace PR.Export
         private List<KeyValuePair<string, string>> GetDrNotes(string additionalNotes)
         {
             var kvps = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>(MappingEnums.DrNotes1.ToString(), additionalNotes) };
+                new KeyValuePair<string, string>(MappingEnums.DrNotes1.ToString().ToUpper(), additionalNotes) };
             var secondPart =
             additionalNotes.Length > 255 ? additionalNotes.Substring(254, additionalNotes.Length - 254) : "";
-            kvps.Add(new KeyValuePair<string, string>(MappingEnums.DrNotes2.ToString(), secondPart));
+            kvps.Add(new KeyValuePair<string, string>(MappingEnums.DrNotes2.ToString().ToUpper(), secondPart));
             return kvps;
         }
 
@@ -332,7 +334,7 @@ namespace PR.Export
         /// <returns></returns>
         private string GetOrthoPrescribedAfter255(string hCPCs)
         {
-            var prescribed =" with " + hCPCs;
+            var prescribed = " with " + hCPCs;
             if (prescribed.Length > 255)
             {
                 return prescribed.Substring(254, prescribed.Length - 254);
@@ -349,9 +351,9 @@ namespace PR.Export
         {
             var kvps = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(MappingEnums.IP.ToString(), signature?.IpAddress  ?? "N/A"),
+                new KeyValuePair<string, string>(MappingEnums.IP.ToString().ToUpper(), signature?.IpAddress  ?? "N/A"),
                 //Format - Wednesday, April 03, 2019 11:58:52 PM
-                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")
+                new KeyValuePair<string, string>(MappingEnums.SignatureDate.ToString().ToUpper(), signature?.CreatedOn.ToString("dddd, MMMM dd, yyyy hh:mm:ss tt")  ?? "N/A")
             };
             return kvps;
         }

@@ -11,8 +11,8 @@ export class IntakeForm {
     public status: IntakeStatus;
     public intakeFormType: IntakeFormType;
     public questions: Question[];
-    public ICD10Codes: ICD10Code[];
-    public HCPCSCode: string;
+    public icD10Codes: ICD10Code[];
+    public hcpcsCode: string;
     public duration: string;
     public physicianNotes: string;
     public deniedReason: string;

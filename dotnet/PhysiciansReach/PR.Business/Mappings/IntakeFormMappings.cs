@@ -108,10 +108,10 @@ namespace PR.Business.Mappings
 
         public static void MapFromModel(this ICD10Code entity, ICD10CodeModel model)
         {
-            model.ICD10CodeId = entity.ICD10CodeId;
-            model.Text = entity.Text;
-            model.CreatedOn = entity.CreatedOn;
-            model.ModifiedOn = entity.ModifiedOn;
+            entity.ICD10CodeId = model.ICD10CodeId;
+            entity.Text = model.Text;
+            entity.CreatedOn = model.CreatedOn;
+            entity.ModifiedOn = model.ModifiedOn;
         }
 
         public static QuestionModel ToModel(this Question entity)

@@ -140,24 +140,30 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     intake.intakeFormType = IntakeFormType.PainDmeOnly;
     intake.questions = [];
 
-    intake.questions.push(this.buildQuestion(formGroup, 'painFeeling'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painBegan'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painCause'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painSelfTreatment'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painDescription'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painDuration'));
-    intake.questions.push(this.buildQuestion(formGroup, 'previousTreatment'));
-    intake.questions.push(this.buildQuestion(formGroup, 'effectsDaily'));
-    intake.questions.push(this.buildQuestion(formGroup, 'hadSurgery'));
-    intake.questions.push(this.buildQuestion(formGroup, 'surgies'));
-    intake.questions.push(this.buildQuestion(formGroup, 'dateOfSurgery'));
-    intake.questions.push(this.buildQuestion(formGroup, 'abulatory'));
-    intake.questions.push(this.buildQuestion(formGroup, 'painLevel'));
+    const question = new Question();
+    question.key = 'painArea';
+    question.text = 'painArea';
+    question.answers = [{ answerId: undefined, text: painPoint }];
+
+    intake.questions.push(question);
+    intake.questions.push(this.buildQuestion(formGroup, 'painFeeling', 'Cause of Patients Pain?'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painBegan', 'Onset of pain (When did the pain begin?)'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painCause', 'What Provokes Pain?'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painSelfTreatment', 'What currently relieves the pain?'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painDescription', 'Description of Pain [Sharp/Stabbing, Weak Feeling/Unstable]'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painDuration', 'Duration of Pain (Constant (Daily), Intermittent (from time to time), Specifically when (activity that makes it worse))'));
+    intake.questions.push(this.buildQuestion(formGroup, 'previousTreatment', 'Other or Previous Helpful Treatments(Brace, Physical Therapy, Meds)'));
+    intake.questions.push(this.buildQuestion(formGroup, 'effectsDaily', 'Affects Activities of Daily Living(ADL) (If so, what?)'));
+    intake.questions.push(this.buildQuestion(formGroup, 'hadSurgery', 'Have you had surgery in this area?'));
+    intake.questions.push(this.buildQuestion(formGroup, 'surgies', 'If yes, what type of surgery?'));
+    intake.questions.push(this.buildQuestion(formGroup, 'dateOfSurgery', 'Date of Surgery'));
+    intake.questions.push(this.buildQuestion(formGroup, 'abulatory', 'Are you abulatory? (can you walk on your own, or with a walker, or with a crutch)'));
+    intake.questions.push(this.buildQuestion(formGroup, 'painLevel', 'Pain Rating'));
 
     return intake;
   }
 
-  private buildQuestion(formGroup: FormGroup, key: string): Question {
+  private buildQuestion(formGroup: FormGroup, key: string, text: string): Question {
 
     const question = new Question();
     question.key = key;

@@ -78,7 +78,7 @@
           <mat-card>
             <mat-card-title>DIAGNOSIS</mat-card-title>
             <mat-card-content fxLayout="column">
-              <div>{{getAnswer('PainChart')}} pain. </div>
+              <div>{{getAnswer('painArea')}} pain. </div>
               <mat-checkbox *ngFor="let item of diagnosisOptions; let i = index" [value]="i" color="primary"
                 (change)="onDiagnosisCheck($event, i)">
                 {{item}}
@@ -189,10 +189,10 @@
             <mat-card-content fxLayout="column">
               <p>
                 Based on my examination of this patient, I am ordering the following orthosis for the
-                {{getAnswer('PainChart')}}:
+                {{getAnswer('painArea')}}:
               </p>
 
-              <p>{{intakeForm.HCPCSCode}}</p>
+              <p>{{intakeForm.hcpcsCode}}</p>
 
 
             </mat-card-content>
@@ -208,7 +208,7 @@
               <div>• Improvement in Patient’s function </div>
               <div>• Decrease in Patient’s pain </div>
               <div>• To assist the patient or improve activities of daily living </div>
-              <div>• To aid in the stabilization of the {{getAnswer('PainChart')}} </div>
+              <div>• To aid in the stabilization of the {{getAnswer('painArea')}} </div>
               <div>• To aid in controlling unwanted movements in the area of pain </div>
               <div>• Slow degenerative changes </div>
               <div>• Reduce potential inﬂammation </div>

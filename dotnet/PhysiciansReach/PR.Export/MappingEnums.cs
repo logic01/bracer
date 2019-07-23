@@ -19,7 +19,7 @@
         MemberId = 10,
         ShoeSize = 11,
         Waist = 12,
-        PainChart = 13,
+        PainArea = 13,
         PainFeeling = 14,
         PainBegan = 15,
         PainCause = 16,

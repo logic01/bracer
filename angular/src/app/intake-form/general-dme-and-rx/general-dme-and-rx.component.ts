@@ -57,7 +57,7 @@ export class GeneralDmeAndRxComponent implements OnInit {
   initQuestions() {
     this.questions.push(this.initQuestion('Height', 'How tall are you?'));
     this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('PainChart', 'Location of pain?'));
+    this.questions.push(this.initQuestion('painArea', 'Location of pain?'));
     this.questions.push(this.initQuestion('ShoeSize', 'What is your shoe size?'));
     this.questions.push(this.initQuestion('Waist', 'What is your waist size?'));
     this.questions.push(this.initQuestion('6', 'What current medications are you taking?'));
