@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { Address } from 'src/app/models/address.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { Physician } from 'src/app/models/physician.model';
@@ -33,9 +35,7 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.accountForm = new FormGroup({
-      userName: new FormControl('',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
-        this.dupeValidator.checkUsername.bind(this.dupeValidator)),
+      userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', [CustomValidators.password(6, 20)]),
       confirmationPassword: new FormControl('', [CustomValidators.password(6, 20)]),
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
@@ -71,8 +71,16 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
           this.accountForm.patchValue(result);
           this.accountForm.patchValue(result.userAccount);
           this.accountForm.patchValue(result.address);
+
+          // check for duplicate userName only if the username is different then original
+          this.accountForm.get('userName').asyncValidator = this.dupeValidator.checkUsername.bind(this.dupeValidator, result.userAccount.userName);
+
         });
     } else {
+
+      // check for duplicate username
+      this.accountForm.get('userName').asyncValidator = this.dupeValidator.checkUsername.bind(this.dupeValidator);
+
       // require a password for creating a physician
       this.accountForm.get('password').validator = Validators.compose([
         this.accountForm.get('password').validator, Validators.required
