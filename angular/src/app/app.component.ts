@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   constructor(
+    private titleService: Title,
     private readonly router: Router,
     private readonly session: SessionService,
     private readonly logoutService: LogoutService) {
@@ -28,6 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.titleService.setTitle('Physicians Reach');
+
     this.router.events
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((evt) => {

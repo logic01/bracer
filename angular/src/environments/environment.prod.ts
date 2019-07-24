@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-   api_url: 'https://physicians-reach.azurewebsites.net/api'
+   api_url: 'https://physiciansreach.azurewebsites.net/api'
 };
