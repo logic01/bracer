@@ -25,6 +25,7 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@codewithdan/observable-store": "^1.0.22",
     "angular2-signaturepad": "^2.8.0",
     "angular2-text-mask": "^9.0.0",
     "core-js": "^2.5.4",

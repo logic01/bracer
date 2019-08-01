@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs';
+import { ObservableStore } from '@codewithdan/observable-store';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { StoreState } from 'src/app/store/store-state';
 
 import { environment } from '../../../environments/environment';
 import { Agent } from '../../models/Agent.model';
@@ -9,11 +11,13 @@ import { Agent } from '../../models/Agent.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AgentService {
+export class AgentService extends ObservableStore<StoreState> {
 
   private url = `${environment.api_url}/agent`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super({ trackStateHistory: true });
+  }
 
 
   getList(ids: string[]): Observable<Agent[]> {
@@ -26,7 +30,22 @@ export class AgentService {
   }
 
   getAll(): Observable<Agent[]> {
-    return this.http.get<Agent[]>(this.url);
+
+    const state = this.getState();
+
+    if (state && state.agents) {
+      return of(state.agents);
+    } else {
+      return this.fetchAll();
+    }
+  }
+
+  private fetchAll(): Observable<Agent[]> {
+    return this.http
+      .get<Agent[]>(this.url)
+      .pipe(
+        tap(newAgents => this.setState({ agents: newAgents }, 'agent-get-all'))
+      );
   }
 
   get(id: string): Observable<Agent> {

@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs';
+import { ObservableStore } from '@codewithdan/observable-store';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { StoreState } from 'src/app/store/store-state';
 
 import { environment } from '../../../environments/environment';
 import { Physician } from '../../models/physician.model';
@@ -9,11 +11,13 @@ import { Physician } from '../../models/physician.model';
 @Injectable({
   providedIn: 'root'
 })
-export class PhysicianService {
+export class PhysicianService extends ObservableStore<StoreState>  {
 
   private url = `${environment.api_url}/physician`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super({ trackStateHistory: true });
+  }
 
   get(id: string): Observable<Physician> {
     return this.http.get<Physician>(`${this.url}/${id}`);
@@ -29,7 +33,24 @@ export class PhysicianService {
   }
 
   getAll(): Observable<Physician[]> {
-    return this.http.get<Physician[]>(this.url);
+
+    const state = this.getState();
+
+    if (state && state.physicians) {
+      return of(state.physicians);
+    } else {
+      return this.fetchAll();
+    }
+  }
+
+  private fetchAll(): Observable<Physician[]> {
+
+    return this.http
+      .get<Physician[]>(this.url)
+      .pipe(
+        tap(newPhysicians => {
+          this.setState({ physicians: newPhysicians }, 'physician-get-all');
+        }));
   }
 
   post(physician: Physician): Observable<Physician> {

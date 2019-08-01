@@ -1,19 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs';
-
+import { ObservableStore } from '@codewithdan/observable-store';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Patient } from 'src/app/models/patient.model';
+import { StoreState } from 'src/app/store/store-state';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class PatientService extends ObservableStore<StoreState> {
 
   private url = `${environment.api_url}/patient`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super({ trackStateHistory: true });
+  }
 
   get(id: string): Observable<Patient> {
     return this.http.get<Patient>(`${this.url}/${id}`);
@@ -36,9 +39,25 @@ export class PatientService {
     return this.http.get<Patient[]>(`${this.url}?${queryString}`);
   }
 
-
   getAll(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.url);
+
+    const state = this.getState();
+
+    if (state && state.patients) {
+      return of(state.patients);
+    } else {
+      return this.fetchAll();
+    }
+  }
+
+  private fetchAll(): Observable<Patient[]> {
+
+    return this.http
+      .get<Patient[]>(this.url)
+      .pipe(
+        tap((data: Patient[]) => {
+          this.setState({ patients: data }, 'patient-get-all');
+        }));
   }
 
 
