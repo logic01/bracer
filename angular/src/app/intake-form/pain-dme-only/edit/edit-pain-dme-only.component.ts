@@ -24,6 +24,7 @@ export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   public form: FormGroup;
+  public painArea: string;
 
   constructor(
     private readonly session: SessionService,
@@ -64,6 +65,7 @@ export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
       .subscribe((result: IntakeForm) => {
 
         this.intake = result;
+        this.painArea = this.getAnswer('painArea');
 
         this.form.patchValue({
           painFeeling: this.getAnswer('painFeeling'),

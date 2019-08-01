@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // api_url: 'http://localhost:53702'
-  api_url: 'https://physiciansreach.azurewebsites.net/api'
+  api_url: 'http://localhost:53702'
+  // api_url: 'https://physiciansreach.azurewebsites.net/api'
 };
 
 /*

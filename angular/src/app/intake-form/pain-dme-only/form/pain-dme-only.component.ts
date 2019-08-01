@@ -82,6 +82,10 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   private initForm() {
 
     this.form = this.formBuilder.group({
+      leftWrist: new FormControl(''),
+      leftWristQuestions: this.formBuilder.array([]),
+      rightWrist: new FormControl(''),
+      rightWristQuestions: this.formBuilder.array([]),
       leftElbow: new FormControl(''),
       leftElbowQuestions: this.formBuilder.array([]),
       rightElbow: new FormControl(''),
@@ -101,7 +105,11 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
       leftAnkle: new FormControl(''),
       leftAnkleQuestions: this.formBuilder.array([]),
       rightAnkle: new FormControl(''),
-      rightAnkleQuestions: this.formBuilder.array([])
+      rightAnkleQuestions: this.formBuilder.array([]),
+      rightHip: new FormControl(''),
+      rightHipQuestions: this.formBuilder.array([]),
+      leftHip: new FormControl(''),
+      leftHipQuestions: this.formBuilder.array([]),
     });
   }
 
@@ -109,8 +117,20 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
     const intakeForms: IntakeForm[] = [];
 
+    this.addIntake(intakeForms, 'leftWrist');
+    this.addIntake(intakeForms, 'rightWrist');
     this.addIntake(intakeForms, 'leftElbow');
     this.addIntake(intakeForms, 'rightElbow');
+    this.addIntake(intakeForms, 'leftAnteriorShoulder');
+    this.addIntake(intakeForms, 'rightAnteriorShoulder');
+    this.addIntake(intakeForms, 'leftPosteriorShoulder');
+    this.addIntake(intakeForms, 'rightPosteriorShoulder');
+    this.addIntake(intakeForms, 'leftKnee');
+    this.addIntake(intakeForms, 'rightKnee');
+    this.addIntake(intakeForms, 'leftAnkle');
+    this.addIntake(intakeForms, 'rightAnkle');
+    this.addIntake(intakeForms, 'leftHip');
+    this.addIntake(intakeForms, 'rightHip');
 
     return intakeForms;
   }

@@ -330,11 +330,7 @@ namespace PR.Data.Models
 
                 entity.Property(e => e.Insurance).IsRequired().HasMaxLength(100).HasConversion<string>();
 
-                entity.Property(e => e.Pharmacy).IsRequired().HasMaxLength(100).HasConversion<string>();
-
                 entity.Property(e => e.Sex).IsRequired().HasMaxLength(100).HasConversion<string>();
-
-                entity.Property(e => e.CallBackImmediately).IsRequired().HasDefaultValue(true);
 
                 entity.Property(e => e.IsDme).IsRequired().HasDefaultValue(false);
 

@@ -16,13 +16,11 @@ namespace PR.Business.Mappings
                 BestTimeToCallBack = entity.BestTimeToCallBack,
                 Therapy = entity.Therapy,
                 Insurance = entity.Insurance,
-                Pharmacy = entity.Pharmacy,
                 FirstName = entity.FirstName,
                 MiddleName = entity.MiddleName,
                 LastName = entity.LastName,
                 PhoneNumber = entity.PhoneNumber,
                 DateOfBirth = entity.DateOfBirth,
-                CallBackImmediately = entity.CallBackImmediately,
                 IsDme = entity.IsDme,
                 MainPainArea = entity.MainPainArea,
                 SecondPainArea = entity.SecondPainArea,
@@ -66,13 +64,11 @@ namespace PR.Business.Mappings
             entity.BestTimeToCallBack = model.BestTimeToCallBack;
             entity.Therapy = model.Therapy;
             entity.Insurance = model.Insurance;
-            entity.Pharmacy = model.Pharmacy;
             entity.FirstName = model.FirstName;
             entity.MiddleName = model.MiddleName;
             entity.LastName = model.LastName;
             entity.PhoneNumber = model.PhoneNumber;
             entity.DateOfBirth = model.DateOfBirth;
-            entity.CallBackImmediately = model.CallBackImmediately;
             entity.IsDme = model.IsDme;
             entity.MainPainArea = model.MainPainArea;
             entity.SecondPainArea = model.SecondPainArea;

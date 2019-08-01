@@ -8,7 +8,6 @@ import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
 import { InsuranceType } from 'src/app/models/enums/insurance-type.enum';
 import { LanguageType } from 'src/app/models/enums/language-type.enum';
-import { PharmacyType } from 'src/app/models/enums/pharmacy-type.enum';
 import { SexType } from 'src/app/models/enums/sex-type.enum';
 import { TherapyType } from 'src/app/models/enums/therapy-type.enum';
 import { Medicare } from 'src/app/models/medicare.model';
@@ -50,7 +49,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     { value: 'RightElbow', viewValue: 'Right Elbow' },
     { value: 'LeftAnteriorShoulder', viewValue: 'Left Anterior Shoulder' },
     { value: 'RightAnteriorShoulder', viewValue: 'Right Anterior Shoulder' },
-    { value: 'LeftHip', viewValue: 'TaLeft Hipcos' },
+    { value: 'LeftHip', viewValue: 'Left Hip' },
     { value: 'RightHip', viewValue: 'Right Hip' },
     { value: 'LeftKnee', viewValue: 'Left Knee' },
     { value: 'RightKnee', viewValue: 'Right Knee' },
@@ -101,7 +100,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       zipCode: new FormControl('', [Validators.required, Validators.maxLength(10), CustomValidators.zip]),
       sex: new FormControl('', Validators.required),
       language: new FormControl('', Validators.required),
-      callBackImmediately: new FormControl(false, Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
       allergies: new FormControl('', [Validators.maxLength(500)]),
 
@@ -109,8 +107,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       mainPainArea: new FormControl('', Validators.required),
       secondPainArea: new FormControl('', Validators.required),
       painCream: new FormControl('', Validators.required),
-
-      pharmacy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       medications: new FormControl('', Validators.maxLength(100)),
       notes: new FormControl('', Validators.maxLength(100)),
       physiciansName: new FormControl('', Validators.maxLength(100)),
@@ -120,7 +116,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       physicianCity: new FormControl('', Validators.maxLength(30)),
       physicianState: new FormControl(''),
       physicianZip: new FormControl('', [Validators.maxLength(10), CustomValidators.zip]),
-      therapy: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      therapy: new FormControl('DME', [Validators.required, Validators.maxLength(100)]),
       otherProducts: new FormControl('', Validators.maxLength(100)),
       insurance: new FormControl('', Validators.maxLength(100)),
       insuranceId: new FormControl('', Validators.maxLength(100)),
@@ -151,7 +147,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
         this.form.patchValue(result.address);
         this.form.patchValue(
           {
-            pharmacy: PharmacyType[result.pharmacy],
             sex: SexType[result.sex],
             language: LanguageType[result.language],
             therapy: TherapyType[result.therapy],
@@ -280,73 +275,71 @@ export class PatientFormComponent implements OnInit, OnDestroy {
 
     const patient = new Patient();
     patient.agentId = this.agentId;
-    patient.firstName = this.form.controls['firstName'].value;
-    patient.middleName = this.form.controls['middleName'].value;
-    patient.lastName = this.form.controls['lastName'].value;
-    patient.dateOfBirth = this.form.controls['dateOfBirth'].value;
-    patient.phoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['phoneNumber'].value);
-    patient.allergies = this.form.controls['allergies'].value;
-    patient.waist = this.form.controls['waist'].value;
-    patient.weight = this.form.controls['weight'].value;
-    patient.shoeSize = this.form.controls['shoeSize'].value;
-    patient.height = this.form.controls['height'].value;
+    patient.firstName = this.form.controls.firstName.value;
+    patient.middleName = this.form.controls.middleName.value;
+    patient.lastName = this.form.controls.lastName.value;
+    patient.dateOfBirth = this.form.controls.dateOfBirth.value;
+    patient.phoneNumber = this.formatHelper.toNumbersOnly(this.form.controls.phoneNumber.value);
+    patient.allergies = this.form.controls.allergies.value;
+    patient.waist = this.form.controls.waist.value;
+    patient.weight = this.form.controls.weight.value;
+    patient.shoeSize = this.form.controls.shoeSize.value;
+    patient.height = this.form.controls.height.value;
 
-    patient.language = this.form.controls['language'].value;
-    patient.callBackImmediately = this.form.controls['callBackImmediately'].value;
-    patient.bestTimeToCallBack = this.form.controls['bestTimeToCallBack'].value;
+    patient.language = this.form.controls.language.value;
+    patient.bestTimeToCallBack = this.form.controls.bestTimeToCallBack.value;
 
-    patient.medications = this.form.controls['medications'].value;
-    patient.notes = this.form.controls['notes'].value;
-    patient.otherProducts = this.form.controls['otherProducts'].value;
-    patient.physiciansName = this.form.controls['physiciansName'].value;
-    patient.physiciansPhoneNumber = this.formatHelper.toNumbersOnly(this.form.controls['physiciansPhoneNumber'].value);
+    patient.medications = this.form.controls.medications.value;
+    patient.notes = this.form.controls.notes.value;
+    patient.otherProducts = this.form.controls.otherProducts.value;
+    patient.physiciansName = this.form.controls.physiciansName.value;
+    patient.physiciansPhoneNumber = this.formatHelper.toNumbersOnly(this.form.controls.physiciansPhoneNumber.value);
 
-    patient.therapy = this.form.controls['therapy'].value;
-    patient.insurance = this.form.controls['insuranceType'].value;
-    patient.pharmacy = this.form.controls['pharmacy'].value;
+    patient.therapy = this.form.controls.therapy.value;
+    patient.insurance = this.form.controls.insuranceType.value;
     patient.isDme = true;
 
-    patient.mainPainArea = this.form.controls['mainPainArea'].value;
-    patient.secondPainArea = this.form.controls['secondPainArea'].value;
-    patient.hadBraceBefore = this.form.controls['hadBraceBefore'].value;
-    patient.painCream = this.form.controls['painCream'].value;
+    patient.mainPainArea = this.form.controls.mainPainArea.value;
+    patient.secondPainArea = this.form.controls.secondPainArea.value;
+    patient.hadBraceBefore = this.form.controls.hadBraceBefore.value;
+    patient.painCream = this.form.controls.painCream.value;
 
     patient.address = new Address();
-    patient.address.addressLineOne = this.form.controls['addressLineOne'].value;
-    patient.address.addressLineTwo = this.form.controls['addressLineTwo'].value;
-    patient.address.city = this.form.controls['city'].value;
-    patient.address.state = this.form.controls['state'].value;
-    patient.address.zipCode = this.form.controls['zipCode'].value;
+    patient.address.addressLineOne = this.form.controls.addressLineOne.value;
+    patient.address.addressLineTwo = this.form.controls.addressLineTwo.value;
+    patient.address.city = this.form.controls.city.value;
+    patient.address.state = this.form.controls.state.value;
+    patient.address.zipCode = this.form.controls.zipCode.value;
 
     patient.physiciansAddress = new Address();
-    patient.physiciansAddress.addressLineOne = this.form.controls['physicianAddressLineOne'].value;
-    patient.physiciansAddress.addressLineTwo = this.form.controls['physicianAddressLineTwo'].value;
-    patient.physiciansAddress.city = this.form.controls['physicianCity'].value;
-    patient.physiciansAddress.state = this.form.controls['physicianState'].value;
-    patient.physiciansAddress.zipCode = this.form.controls['physicianZip'].value;
+    patient.physiciansAddress.addressLineOne = this.form.controls.physicianAddressLineOne.value;
+    patient.physiciansAddress.addressLineTwo = this.form.controls.physicianAddressLineTwo.value;
+    patient.physiciansAddress.city = this.form.controls.physicianCity.value;
+    patient.physiciansAddress.state = this.form.controls.physicianState.value;
+    patient.physiciansAddress.zipCode = this.form.controls.physicianZip.value;
 
-    if (this.form.controls['insuranceType'].value === 'PRIVATE') {
+    if (this.form.controls.insuranceType.value === 'PRIVATE') {
       patient.privateInsurance = new PrivateInsurance();
-      patient.privateInsurance.bin = this.form.controls['bin'].value;
-      patient.privateInsurance.insurance = this.form.controls['insurance'].value;
-      patient.privateInsurance.insuranceId = this.form.controls['insuranceId'].value;
-      patient.privateInsurance.group = this.form.controls['privateGroup'].value;
-      patient.privateInsurance.pcn = this.form.controls['privatePcn'].value;
-      patient.privateInsurance.street = this.form.controls['insuranceStreet'].value;
-      patient.privateInsurance.city = this.form.controls['insuranceCity'].value;
-      patient.privateInsurance.state = this.form.controls['insuranceState'].value;
-      patient.privateInsurance.zip = this.form.controls['insuranceZip'].value;
-      patient.privateInsurance.phone = this.formatHelper.toNumbersOnly(this.form.controls['insurancePhone'].value);
+      patient.privateInsurance.bin = this.form.controls.bin.value;
+      patient.privateInsurance.insurance = this.form.controls.insurance.value;
+      patient.privateInsurance.insuranceId = this.form.controls.insuranceId.value;
+      patient.privateInsurance.group = this.form.controls.privateGroup.value;
+      patient.privateInsurance.pcn = this.form.controls.privatePcn.value;
+      patient.privateInsurance.street = this.form.controls.insuranceStreet.value;
+      patient.privateInsurance.city = this.form.controls.insuranceCity.value;
+      patient.privateInsurance.state = this.form.controls.insuranceState.value;
+      patient.privateInsurance.zip = this.form.controls.insuranceZip.value;
+      patient.privateInsurance.phone = this.formatHelper.toNumbersOnly(this.form.controls.insurancePhone.value);
     }
 
-    if (this.form.controls['insuranceType'].value === 'MEDICARE') {
+    if (this.form.controls.insuranceType.value === 'MEDICARE') {
       patient.medicare = new Medicare();
-      patient.medicare.memberId = this.form.controls['memberId'].value;
-      patient.medicare.patientGroup = this.form.controls['medicareGroup'].value;
-      patient.medicare.pcn = this.form.controls['medicarePcn'].value;
-      patient.medicare.subscriberNumber = this.form.controls['subscriberNumber'].value;
-      patient.medicare.secondaryCarrier = this.form.controls['secondaryInsurance'].value;
-      patient.medicare.secondarySubscriberNumber = this.form.controls['secondarySubscriberNumber'].value;
+      patient.medicare.memberId = this.form.controls.memberId.value;
+      patient.medicare.patientGroup = this.form.controls.medicareGroup.value;
+      patient.medicare.pcn = this.form.controls.medicarePcn.value;
+      patient.medicare.subscriberNumber = this.form.controls.subscriberNumber.value;
+      patient.medicare.secondaryCarrier = this.form.controls.secondaryInsurance.value;
+      patient.medicare.secondarySubscriberNumber = this.form.controls.secondarySubscriberNumber.value;
     }
 
     if (patient.physiciansAddress.addressLineOne.length === 0

@@ -18,8 +18,6 @@ namespace PR.Data.Models
 
         public InsuranceType Insurance { get; set; }
 
-        public PharmacyType Pharmacy { get; set; }
-
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
@@ -29,8 +27,6 @@ namespace PR.Data.Models
         public DateTime DateOfBirth { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        public bool CallBackImmediately { get; set; }
 
         public CallbackTime BestTimeToCallBack { get; set; }
 

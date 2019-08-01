@@ -155,25 +155,17 @@
             </mat-form-field>
           </div>
 
-          <!-- CALL BACK TIME, CALL BACK IMEMDIATELY -->
-          <div>
-            <mat-form-field>
-              <mat-select placeholder="Preferred Call Back Time*" formControlName="bestTimeToCallBack">
-                <mat-option value="Morning"> Morning </mat-option>
-                <mat-option value="Afternoon"> Afternoon </mat-option>
-                <mat-option value="Evening"> Evening </mat-option>
-              </mat-select>
-              <mat-error *ngIf="form.get('bestTimeToCallBack').hasError('required')">Please select a time for the call.
-              </mat-error>
-            </mat-form-field>
+          <!-- CALL BACK TIME -->
+          <mat-form-field>
+            <mat-select placeholder="Preferred Call Back Time*" formControlName="bestTimeToCallBack">
+              <mat-option value="Morning"> Morning </mat-option>
+              <mat-option value="Afternoon"> Afternoon </mat-option>
+              <mat-option value="Evening"> Evening </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('bestTimeToCallBack').hasError('required')">Please select a time for the call.
+            </mat-error>
+          </mat-form-field>
 
-            <div>
-              <mat-checkbox formControlName="callBackImmediately" labelPosition="before" color="primary">Call Back
-                Immediately
-              </mat-checkbox>
-            </div>
-
-          </div>
 
           <!-- LANGUAGE -->
           <div>
@@ -249,16 +241,6 @@
         </div>
 
         <br />
-
-        <!-- PHARMACY -->
-        <mat-form-field>
-          <mat-select placeholder="Pharmacy*" formControlName="pharmacy">
-            <mat-option value="TWA"> TWA </mat-option>
-            <mat-option value="UNIVERSALRX"> Universal Rx</mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get('pharmacy').hasError('required')">Please select a pharmacy.
-          </mat-error>
-        </mat-form-field>
 
         <!-- MEDICATIONS -->
         <mat-form-field>
@@ -485,10 +467,10 @@
 
   </form>
 
-  <mat-card>
+  <mat-card *ngIf="patientId">
     <mat-card-title>Intake Forms</mat-card-title>
     <mat-card-content>
-      <app-intake-table *ngIf="patientId" [patientId]="patientId"></app-intake-table>
+      <app-intake-table [patientId]="patientId"></app-intake-table>
     </mat-card-content>
   </mat-card>
 </div>

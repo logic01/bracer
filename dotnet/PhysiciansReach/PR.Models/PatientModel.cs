@@ -19,8 +19,6 @@ namespace PR.Models
 
         public InsuranceType Insurance { get; set; }
 
-        public PharmacyType Pharmacy { get; set; }
-
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
@@ -32,8 +30,6 @@ namespace PR.Models
         public string PhoneNumber { get; set; }
 
         public AddressModel Address { get; set; }
-
-        public bool CallBackImmediately { get; set; }
 
         public bool IsDme { get; set; }
 
