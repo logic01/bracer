@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
 import { InsuranceType } from 'src/app/models/enums/insurance-type.enum';
@@ -15,8 +17,8 @@ import { Patient } from 'src/app/models/patient.model';
 import { PrivateInsurance } from 'src/app/models/private-insurance.model';
 import { FormatHelperService } from 'src/app/services/format-helper.service';
 import { FormHelperService } from 'src/app/services/forms-helper.service';
+import { LookupService } from 'src/app/services/lookupservice';
 import { MaskService } from 'src/app/services/mask.service';
-import { SelectValueService } from 'src/app/services/select-value.service';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
 export interface PainArea {
@@ -39,8 +41,8 @@ export class PatientFormComponent implements OnInit, OnDestroy {
   private agentId: number;
 
   public form: FormGroup;
-  public shoeSizes: string[] = SelectValueService.shoeSizes;
-  public heights: string[] = SelectValueService.heights;
+  public shoeSizes: string[] = LookupService.shoeSizes;
+  public heights: string[] = LookupService.heights;
 
   public painAreas: PainArea[] = [
     { value: 'LeftWrist', viewValue: 'Left Wrist' },

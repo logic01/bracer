@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root'
 })
-export class SelectValueService {
+export class LookupService {
     public static shoeSizes = [
         '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5',
         '10', '10.5', '11', '11.5', '12', '12.5', '13', '13.5', '14', '14.5', '15', '15.5', '16', '16.5', '17', '17.5', '18', '18.5'];
@@ -18,5 +18,12 @@ export class SelectValueService {
     public static painPoints =
         ['Left Wrist', 'Right Wrist', 'Left Elbow', 'Right Elbow', 'Left Shoulder', 'Right Shoulder',
             'Left Knee', 'Right Knee', 'Back', 'Left Ankle', 'Right Ankle'];
+
+    public static states = [
+        'AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
+        'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', , 'TX', 'UT', 'VT',
+        'VA', 'WA', 'WV', 'WI', 'WY'
+    ]
 
 }

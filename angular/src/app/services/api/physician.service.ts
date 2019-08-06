@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { PhysicianStoreService } from 'src/app/store/physician-store.service ';
 
 import { environment } from '../../../environments/environment';
 import { Physician } from '../../models/physician.model';
+import { PhysicianStoreService } from 'src/app/store/physician-store.service ';
 
 @Injectable({
   providedIn: 'root'
@@ -59,10 +60,18 @@ export class PhysicianService {
 
   getList(ids: number[]): Observable<Physician[]> {
 
+    const physicians = this.store.getList(ids);
+
+    if (physicians && physicians.length === ids.length) {
+      return of(physicians);
+    }
+
     let queryString = '';
 
     ids.forEach(id => queryString += `\&ids=${id}`);
 
-    return this.http.get<Physician[]>(`${this.url}?${queryString}`);
+    return this.http
+      .get<Physician[]>(`${this.url}?${queryString}`)
+      .pipe(tap((data: Physician[]) => this.store.updateList(data)));
   }
 }

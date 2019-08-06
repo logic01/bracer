@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
 import { Patient } from 'src/app/models/patient.model';
 import { PatientStoreService } from 'src/app/store/patient-store.service';
 import { environment } from 'src/environments/environment';
@@ -55,7 +57,6 @@ export class PatientService {
       .put<{ patientId: number }>(`${this.url}/${id}`, patient)
       .pipe(tap(() => this.store.update(patient)));
   }
-
 
   getByAgent(agentId: number): Observable<Patient[]> {
     return this.http.get<Patient[]>(`${environment.api_url}/agent/${agentId}/patient`);

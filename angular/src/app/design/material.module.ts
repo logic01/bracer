@@ -9,6 +9,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
   MatSortModule,
@@ -34,7 +36,9 @@ const modules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatDialogModule,
-  MatSortModule
+  MatSortModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

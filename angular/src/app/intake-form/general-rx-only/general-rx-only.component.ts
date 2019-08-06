@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { SelectValueService } from 'src/app/services/select-value.service';
+import { LookupService } from 'src/app/services/lookupservice';
 import { CustomValidators } from 'src/app/validators/custom-validators';
 
 @Component({
@@ -20,7 +21,7 @@ export class GeneralRxOnlyComponent implements OnInit {
   form: FormGroup;
   patientId: number;
   questions: Question[] = [];
-  heights: string[] = SelectValueService.heights;
+  heights: string[] = LookupService.heights;
 
   constructor(private readonly route: ActivatedRoute) { }
 

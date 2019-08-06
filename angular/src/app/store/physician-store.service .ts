@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ObservableStore } from '@codewithdan/observable-store';
-import { StoreState } from 'src/app/store/store-state';
 
 import { Physician } from '../models/physician.model';
+import { ObservableStore } from '@codewithdan/observable-store';
+import { StoreState } from 'src/app/store/store-state';
 
 @Injectable({
   providedIn: 'root'
@@ -42,10 +42,19 @@ export class PhysicianStoreService extends ObservableStore<StoreState> {
 
     const physicians = this.getState().physicians;
 
-    const index = physicians.findIndex(a => a.userAccount.userAccountId === physician.userAccount.userAccountId);
-    physicians[index] = physician;
+    const index = state.physicians.findIndex(a => a.userAccount.userAccountId === physician.userAccount.userAccountId);
+
+    if (!index) {
+      physicians.push(physician);
+    } else {
+      physicians[index] = physician;
+    }
 
     this.setState({ physicians: physicians });
+  }
+
+  updateList(serverPhysicians: Physician[]): void {
+    serverPhysicians.forEach(this.update);
   }
 
   get(id: number): Physician {
@@ -59,6 +68,30 @@ export class PhysicianStoreService extends ObservableStore<StoreState> {
     const physician = state.physicians.find(a => a.userAccount.userAccountId === id);
 
     return physician;
+  }
+
+  getList(ids: number[]): Physician[] {
+
+    const state = this.getState();
+
+    if (!state || !state.physicians) {
+      return undefined;
+    }
+
+    const physicians: Physician[] = [];
+
+    ids.forEach(id => {
+
+      const physician = state.physicians.find(a => a.userAccount.userAccountId === id);
+
+      if (physician) {
+        physicians.push(physician);
+      }
+
+    });
+
+
+    return physicians;
   }
 
   getAll(): Physician[] {
