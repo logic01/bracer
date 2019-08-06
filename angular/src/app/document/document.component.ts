@@ -275,7 +275,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.diagnosisOptions.push('m19.012 primary osteoarthritis, left shoulder');
         this.intakeForm.hcpcsCode = 'L3960(Shoulder Elbow Wrist Hand Orthosis, Abduction Positioning, Airplane Design, Prefabricated, Includes Fitting and Adjustment.)';
         break;
-      case 'LOWER BACK':
+      case 'BACK':
         this.intakeForm.product = 'Back Brace';
         this.diagnosisOptions.push('m54.5 low back pain');
         this.diagnosisOptions.push('m53.2x7 spinal instabilities, lumbosacral region');

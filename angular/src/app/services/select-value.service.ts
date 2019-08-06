@@ -16,8 +16,7 @@ export class SelectValueService {
     ];
 
     public static painPoints =
-        ['Left Wrist', 'Right Wrist', 'Left Elbow', 'Right Elbow', 'Left Anterior Shoulder', 'Right Anterior Shoulder',
-            'Left Hip', 'Right Hip', 'Left Knee', 'Right Knee', 'Posterior Left Shoulder', 'Posterior Right Shoulder', 'Neck',
-            'Upper Middle Back', 'Middle Back', 'Lower Back', 'Left Occipital', 'Right Occipital', 'Frontal or Forehead', 'Left Ankle', 'Right Ankle'];
+        ['Left Wrist', 'Right Wrist', 'Left Elbow', 'Right Elbow', 'Left Shoulder', 'Right Shoulder',
+            'Left Knee', 'Right Knee', 'Back', 'Left Ankle', 'Right Ankle'];
 
 }
