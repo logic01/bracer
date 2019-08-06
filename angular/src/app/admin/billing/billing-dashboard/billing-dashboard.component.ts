@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 
 export class TableRow {
-  intakeFormId: string;
+  intakeFormId: number;
   createdOn: string;
   status: IntakeStatus;
   physicianName: string;

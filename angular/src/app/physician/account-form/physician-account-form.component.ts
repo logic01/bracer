@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { Address } from 'src/app/models/address.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { Physician } from 'src/app/models/physician.model';
@@ -72,9 +70,9 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
           this.accountForm.patchValue(result.userAccount);
           this.accountForm.patchValue(result.address);
 
-          // check for duplicate userName only if the username is different then original
-          this.accountForm.get('userName').asyncValidator = this.dupeValidator.checkUsername.bind(this.dupeValidator, result.userAccount.userName);
-
+          this.accountForm.get('userName').asyncValidator =
+            this.dupeValidator.checkUsername
+              .bind(this.dupeValidator, this.accountForm.get('userName'), result.userAccount.userName);
         });
     } else {
 
@@ -89,6 +87,8 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
       this.accountForm.get('confirmationPassword').validator = Validators.compose([
         this.accountForm.get('confirmationPassword').validator, Validators.required
       ]);
+
+      this.accountForm.get('userName').asyncValidator = this.dupeValidator.checkUsername.bind(this.dupeValidator);
 
     }
 

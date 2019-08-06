@@ -28,9 +28,7 @@ export class AgentAccountFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.accountForm = new FormGroup({
-      userName: new FormControl('',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
-        this.dupeValidator.checkUsername.bind(this.dupeValidator)),
+      userName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       password: new FormControl('', [CustomValidators.password(6, 20)]),
       confirmationPassword: new FormControl('', [CustomValidators.password(6, 20)]),
       emailAddress: new FormControl('', [Validators.required, Validators.maxLength(100), CustomValidators.emailAddress]),
@@ -58,6 +56,10 @@ export class AgentAccountFormComponent implements OnInit, OnDestroy {
           this.accountForm.patchValue(result);
           this.accountForm.patchValue(result.userAccount);
           this.accountForm.patchValue({ vendor: result.vendorId });
+
+          this.accountForm.get('userName').asyncValidator =
+            this.dupeValidator.checkUsername
+              .bind(this.dupeValidator, this.accountForm.get('userName'), result.userAccount.userName);
         });
     } else {
       // require a password for creating an agent
@@ -68,6 +70,9 @@ export class AgentAccountFormComponent implements OnInit, OnDestroy {
       this.accountForm.get('confirmationPassword').validator = Validators.compose([
         this.accountForm.get('confirmationPassword').validator, Validators.required
       ]);
+
+      this.accountForm.get('userName').asyncValidator = this.dupeValidator.checkUsername.bind(this.dupeValidator);
+
     }
 
 

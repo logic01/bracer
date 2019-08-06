@@ -18,7 +18,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
 
-  private intakeId: string;
+  private intakeId: number;
   private intake: IntakeForm;
   private isAdmin: boolean;
   private unsubscribe$ = new Subject();
@@ -35,7 +35,7 @@ export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.intakeId = this.route.snapshot.paramMap.get('intakeFormId');
+    this.intakeId = parseInt(this.route.snapshot.paramMap.get('intakeFormId'), 10);
 
     this.session.userAccount$
       .pipe(takeUntil(this.unsubscribe$))

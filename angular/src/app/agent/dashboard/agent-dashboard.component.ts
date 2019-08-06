@@ -18,7 +18,7 @@ export class AgentDashboardComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
-  private agentId: string;
+  private agentId: number;
 
   public dataSource: MatTableDataSource<Patient>;
   public columnsToDisplay = ['patientId', 'createdOn', 'firstName', 'lastName', 'actions'];
@@ -56,7 +56,7 @@ export class AgentDashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['agent', this.agentId, 'patient']);
   }
 
-  edit(patientId: string) {
+  edit(patientId: number) {
     this.router.navigate(['agent', this.agentId, 'patient', patientId]);
   }
 }

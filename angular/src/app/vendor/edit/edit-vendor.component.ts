@@ -15,7 +15,7 @@ export class EditVendorComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public vendor$: Observable<Vendor>;
-  public id: string;
+  public id: number;
 
   constructor(
     private readonly vendorApi: VendorService,
@@ -23,7 +23,7 @@ export class EditVendorComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.vendor$ = this.vendorApi.get(this.id);
   }
 

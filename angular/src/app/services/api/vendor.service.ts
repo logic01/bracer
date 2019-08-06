@@ -40,7 +40,7 @@ export class VendorService extends ObservableStore<StoreState>  {
         }));
   }
 
-  get(id: string): Observable<Vendor> {
+  get(id: number): Observable<Vendor> {
     return this.http.get<Vendor>(`${this.url}/${id}`);
   }
 
@@ -48,7 +48,7 @@ export class VendorService extends ObservableStore<StoreState>  {
     return this.http.post<Vendor>(this.url, vendor);
   }
 
-  put(id: string, vendor: Vendor): Observable<Vendor> {
+  put(id: number, vendor: Vendor): Observable<Vendor> {
     return this.http.put<Vendor>(`${this.url}/${id}`, vendor);
   }
 }

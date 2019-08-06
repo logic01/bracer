@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -15,7 +14,7 @@ export class IntakeFormService {
 
   constructor(private http: HttpClient) { }
 
-  get(id: string): Observable<IntakeForm> {
+  get(id: number): Observable<IntakeForm> {
     return this.http.get<IntakeForm>(`${this.url}/${id}`);
   }
 
@@ -23,15 +22,15 @@ export class IntakeFormService {
     return this.http.get<IntakeForm[]>(`${this.url}`);
   }
 
-  getByPhysician(physicianId: string): Observable<IntakeForm[]> {
+  getByPhysician(physicianId: number): Observable<IntakeForm[]> {
     return this.http.get<IntakeForm[]>(`${environment.api_url}/physician/${physicianId}/intakeform`);
   }
 
-  getByVendor(vendorId: string): Observable<IntakeForm[]> {
+  getByVendor(vendorId: number): Observable<IntakeForm[]> {
     return this.http.get<IntakeForm[]>(`${environment.api_url}/vendor/${vendorId}/intakeform`);
   }
 
-  getByPatient(patientId: string): Observable<IntakeForm[]> {
+  getByPatient(patientId: number): Observable<IntakeForm[]> {
     return this.http.get<IntakeForm[]>(`${environment.api_url}/patient/${patientId}/intakeform`);
   }
 
@@ -39,7 +38,7 @@ export class IntakeFormService {
     return this.http.post<IntakeForm>(this.url, intakeForm);
   }
 
-  put(id: string, intakeForm: IntakeForm): Observable<IntakeForm> {
+  put(id: number, intakeForm: IntakeForm): Observable<IntakeForm> {
     return this.http.put<IntakeForm>(`${this.url}/${id}`, intakeForm);
   }
 }

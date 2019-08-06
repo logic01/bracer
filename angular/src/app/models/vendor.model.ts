@@ -1,5 +1,5 @@
 export class Vendor {
-    public vendorId: string;
+    public vendorId: number;
     public companyName: string;
     public doingBusinessAs: string;
     public phoneNumber: string;

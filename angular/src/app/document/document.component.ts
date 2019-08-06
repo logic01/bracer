@@ -30,8 +30,8 @@ import { DenyDialogComponent } from './deny-dialog/deny-dialog.component';
 })
 export class DocumentComponent implements OnInit, OnDestroy {
 
-  private intakeFormId: string;
-  private vendorId: string;
+  private intakeFormId: number;
+  private vendorId: number;
 
   public isAdminView = false;
   public IntakeStatus = IntakeStatus;
@@ -60,10 +60,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.intakeFormId = this.route.snapshot.paramMap.get('intakeFormId');
+    this.intakeFormId = parseInt(this.route.snapshot.paramMap.get('intakeFormId'), 10);
 
     if (this.route.snapshot.paramMap.has('vendorId')) {
-      this.vendorId = this.route.snapshot.paramMap.get('vendorId');
+      this.vendorId = parseInt(this.route.snapshot.paramMap.get('vendorId'), 10);
     }
 
     this.session.userAccount$

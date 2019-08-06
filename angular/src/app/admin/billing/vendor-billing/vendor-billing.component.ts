@@ -17,8 +17,8 @@ import { environment } from 'src/environments/environment';
 
 
 export class TableRow {
-  intakeFormId: string;
-  documentId: string;
+  intakeFormId: number;
+  documentId: number;
   createdOn: string;
   status: IntakeStatus;
   patientName: string;
@@ -110,7 +110,7 @@ export class VendorBillingComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  paid(event: MatCheckboxChange, intakeFormId: string) {
+  paid(event: MatCheckboxChange, intakeFormId: number) {
 
     const change = this.changes.find((intake: IntakeForm) => intake.intakeFormId === intakeFormId);
 
@@ -125,7 +125,7 @@ export class VendorBillingComponent implements OnInit, OnDestroy {
     }
   }
 
-  billed(event: MatCheckboxChange, intakeFormId: string) {
+  billed(event: MatCheckboxChange, intakeFormId: number) {
 
     const change = this.changes.find((intake: IntakeForm) => intake.intakeFormId === intakeFormId);
 
@@ -152,7 +152,7 @@ export class VendorBillingComponent implements OnInit, OnDestroy {
   }
 
 
-  download(documentId: string) {
+  download(documentId: number) {
     window.location.href = `${environment.api_url}/document/${documentId}/download`;
   }
 

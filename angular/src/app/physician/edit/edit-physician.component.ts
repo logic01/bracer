@@ -17,7 +17,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public physician$: Observable<Physician>;
-  private id: string;
+  private id: number;
 
   constructor(
     private readonly physicianApi: PhysicianService,
@@ -25,7 +25,7 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.physician$ = this.physicianApi.get(this.id);
   }
 

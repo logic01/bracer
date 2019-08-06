@@ -1,6 +1,6 @@
 export class Document {
-    public documentId: string;
-    public intakeFormId: string;
+    public documentId: number;
+    public intakeFormId: number;
     public content: string;
     public createdOn: Date;
     public modifiedOn: Date;

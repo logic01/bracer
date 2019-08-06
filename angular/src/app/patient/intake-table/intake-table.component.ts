@@ -14,7 +14,7 @@ import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 })
 export class IntakeTableComponent implements OnInit, OnDestroy {
 
-  @Input() patientId: string;
+  @Input() patientId: number;
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
@@ -44,7 +44,7 @@ export class IntakeTableComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  edit(intakeFormId: string) {
+  edit(intakeFormId: number) {
     this.router.navigate(['patient', this.patientId, 'pain-dme-only', intakeFormId, 'edit']);
   }
 }

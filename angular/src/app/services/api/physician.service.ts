@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ObservableStore } from '@codewithdan/observable-store';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { StoreState } from 'src/app/store/store-state';
+import { PhysicianStoreService } from 'src/app/store/physician-store.service ';
 
 import { environment } from '../../../environments/environment';
 import { Physician } from '../../models/physician.model';
@@ -11,53 +10,59 @@ import { Physician } from '../../models/physician.model';
 @Injectable({
   providedIn: 'root'
 })
-export class PhysicianService extends ObservableStore<StoreState>  {
+export class PhysicianService {
 
   private url = `${environment.api_url}/physician`;
 
-  constructor(private http: HttpClient) {
-    super({ trackStateHistory: true });
+  constructor(
+    private readonly http: HttpClient,
+    private readonly store: PhysicianStoreService) {
   }
 
-  get(id: string): Observable<Physician> {
-    return this.http.get<Physician>(`${this.url}/${id}`);
+  getAll(): Observable<Physician[]> {
+
+    const physicians = this.store.getAll();
+
+    if (physicians) {
+      return of(physicians);
+    }
+
+    return this.http
+      .get<Physician[]>(this.url)
+      .pipe(tap((data: Physician[]) => this.store.set(data)));
   }
 
-  getList(ids: string[]): Observable<Physician[]> {
+  get(id: number): Observable<Physician> {
+
+    const physician = this.store.get(id);
+
+    if (physician) {
+      return of(physician);
+    }
+
+    return this.http
+      .get<Physician>(`${this.url}/${id}`)
+      .pipe(tap((data: Physician) => this.store.add(data)));
+  }
+
+  post(physician: Physician): Observable<Physician> {
+    return this.http
+      .post<Physician>(this.url, physician)
+      .pipe(tap((data: Physician) => this.store.add(data)));
+  }
+
+  put(id: number, physician: Physician): Observable<{ physicianId: number }> {
+    return this.http
+      .put<{ physicianId: number }>(`${this.url}/${id}`, physician)
+      .pipe(tap(() => this.store.update(physician)));
+  }
+
+  getList(ids: number[]): Observable<Physician[]> {
 
     let queryString = '';
 
     ids.forEach(id => queryString += `\&ids=${id}`);
 
     return this.http.get<Physician[]>(`${this.url}?${queryString}`);
-  }
-
-  getAll(): Observable<Physician[]> {
-
-    const state = this.getState();
-
-    if (state && state.physicians) {
-      return of(state.physicians);
-    } else {
-      return this.fetchAll();
-    }
-  }
-
-  private fetchAll(): Observable<Physician[]> {
-
-    return this.http
-      .get<Physician[]>(this.url)
-      .pipe(
-        tap(newPhysicians => {
-          this.setState({ physicians: newPhysicians }, 'physician-get-all');
-        }));
-  }
-
-  post(physician: Physician): Observable<Physician> {
-    return this.http.post<Physician>(this.url, physician);
-  }
-
-  put(id: string, physician: Physician): Observable<Physician> {
-    return this.http.put<Physician>(`${this.url}/${id}`, physician);
   }
 }

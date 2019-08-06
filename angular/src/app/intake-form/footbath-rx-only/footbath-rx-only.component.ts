@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
@@ -18,12 +17,12 @@ export class FootbathRxOnlyComponent implements OnInit {
 
   form: FormGroup;
   questions: Question[] = [];
-  patientId: string;
+  patientId: number;
 
   constructor(private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('id');
+    this.patientId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
     this.initQuestions();
     this.initForm();

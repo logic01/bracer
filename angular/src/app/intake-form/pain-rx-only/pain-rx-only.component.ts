@@ -16,13 +16,13 @@ export class PainRxOnlyComponent implements OnInit {
   @Output() formSubmitEvent = new EventEmitter<IntakeForm>();
 
   form: FormGroup;
-  patientId: string;
+  patientId: number;
   questions: Question[] = [];
 
   constructor(private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('id');
+    this.patientId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
     this.initQuestions();
     this.initForm();

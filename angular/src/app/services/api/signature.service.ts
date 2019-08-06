@@ -12,7 +12,7 @@ export class SignatureService {
 
     constructor(private http: HttpClient) { }
 
-    put(intakeFormId: string, signature: Signature): Observable<{ signatureId: string }> {
+    put(intakeFormId: number, signature: Signature): Observable<{ signatureId: string }> {
         return this.http.post<{ signatureId: string }>(`${environment.api_url}/intakeform/${intakeFormId}/signature`, signature);
     }
 }

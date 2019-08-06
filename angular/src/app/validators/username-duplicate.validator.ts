@@ -25,13 +25,22 @@ export class UsernameDuplicateValidator {
                 // only check if the name has changed from the original
                 if (origValue && control.value === origValue) {
                     resolve(null);
+                    return;
+                }
+
+                // only check if there is a value registered
+                if (!control.value) {
+                    resolve(null);
+                    return;
                 }
 
                 this.userAccountApi.exists(control.value).subscribe((exists: boolean) => {
                     if (exists) {
                         resolve({ 'duplicate': true });
+                        return;
                     } else {
                         resolve(null);
+                        return;
                     }
                 });
 

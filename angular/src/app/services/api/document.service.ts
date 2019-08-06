@@ -12,7 +12,7 @@ export class DocumentService {
 
   constructor(private http: HttpClient) { }
 
-  get(documentId: string): Observable<Document> {
+  get(documentId: number): Observable<Document> {
     return this.http.get<Document>(`${environment.api_url}/document/${documentId}`);
   }
 
@@ -20,8 +20,8 @@ export class DocumentService {
     return this.http.put<void>(`${environment.api_url}/document/${document.documentId}`, document);
   }
 
-  post(document: Document): Observable<{ documentId: string }> {
-    return this.http.post<{ documentId: string }>(`${environment.api_url}/document`, document);
+  post(document: Document): Observable<{ documentId: number }> {
+    return this.http.post<{ documentId: number }>(`${environment.api_url}/document`, document);
   }
 
 }

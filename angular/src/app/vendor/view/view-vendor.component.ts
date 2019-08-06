@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 
 export class TableRow {
-  intakeFormId: string;
+  intakeFormId: number;
   physicianName: string;
   physicianState: string;
   patientName: string;
@@ -40,7 +40,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   public columnsToDisplay = ['intakeFormId', 'status', 'physicianName', 'physicianState', 'patientName', 'patientState', 'view', 'assign', 'download'];
 
-  private vendorId: string;
+  private vendorId: number;
   private intakes: IntakeForm[];
   private unsubscribe$ = new Subject();
 
@@ -56,7 +56,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.vendorId = this.route.snapshot.paramMap.get('id');
+    this.vendorId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
     this.vendor$ = this.vendorApi.get(this.vendorId);
 
@@ -82,7 +82,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
 
   }
 
-  buildFullTable(intakes: IntakeForm[], physicianIds: string[], patientIds: string[]) {
+  buildFullTable(intakes: IntakeForm[], physicianIds: number[], patientIds: number[]) {
 
     const patients$ = this.patientApi.getList(patientIds);
     const physicians$ = this.physicianApi.getList(physicianIds);
@@ -108,7 +108,7 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
       });
   }
 
-  buildPatientTable(intakes: IntakeForm[], patientIds: string[]) {
+  buildPatientTable(intakes: IntakeForm[], patientIds: number[]) {
 
     this.patientApi
       .getList(patientIds)
@@ -150,15 +150,15 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     return row;
   }
 
-  assign(intakeFormId: string): void {
+  assign(intakeFormId: number): void {
     const dialogRef = this.dialog.open(AssignmentDialogComponent, { data: { intakeFormId: intakeFormId } });
   }
 
-  view(intakeFormId: string) {
+  view(intakeFormId: number) {
     this.router.navigate(['vendor', this.vendorId, 'intake-document', intakeFormId]);
   }
 
-  download(intakeFormId: string) {
+  download(intakeFormId: number) {
 
     const intake = this.intakes.find(i => i.intakeFormId === intakeFormId);
 

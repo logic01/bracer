@@ -8,8 +8,8 @@ import { Medicare } from './medicare.model';
 import { PrivateInsurance } from './private-insurance.model';
 
 export class Patient {
-    public patientId: string;
-    public agentId: string;
+    public patientId: number;
+    public agentId: number;
     public firstName: string;
     public middleName: string;
     public lastName: string;

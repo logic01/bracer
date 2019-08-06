@@ -18,7 +18,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
   public vendors$ = this.vendorApi.getAll();
   public agent$: Observable<Agent>;
 
-  private id: string;
+  private id: number;
   private unsubscribe$ = new Subject();
 
   constructor(
@@ -28,7 +28,7 @@ export class EditAgentComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.agent$ = this.agentApi.get(this.id);
   }
 

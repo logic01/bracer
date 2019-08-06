@@ -18,7 +18,7 @@ export class EditPatientComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public patient$: Observable<Patient>;
-  public patientId: string;
+  public patientId: number;
 
   private isAdmin = false;
 
@@ -29,7 +29,7 @@ export class EditPatientComponent implements OnInit, OnDestroy {
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('patientId');
+    this.patientId = parseInt(this.route.snapshot.paramMap.get('patientId'), 10);
     this.patient$ = this.patientApi.get(this.patientId);
 
     this.session.userAccount$

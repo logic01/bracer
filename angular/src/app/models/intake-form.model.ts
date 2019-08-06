@@ -4,10 +4,10 @@ import { ICD10Code } from './icd10-code.model';
 import { Question } from './question.model';
 
 export class IntakeForm {
-    public intakeFormId: string;
-    public patientId: string;
-    public physicianId: string;
-    public documentId: string;
+    public intakeFormId: number;
+    public patientId: number;
+    public physicianId: number;
+    public documentId: number;
     public status: IntakeStatus;
     public intakeFormType: IntakeFormType;
     public questions: Question[];

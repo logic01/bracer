@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subject } from 'rxjs';
 import { EmailService } from 'src/app/services/api/email.service';
 
 export class SendEmailDialogData {
-  documentId: string;
+  documentId: number;
 }
 
 

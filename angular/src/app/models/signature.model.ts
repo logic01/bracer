@@ -2,7 +2,7 @@ import { SignatureType } from './enums/signature-type';
 
 export class Signature {
     public signatureId: string;
-    public intakeFormId: string;
+    public intakeFormId: number;
     public content: string;
     public ipAddress: string;
     public type: SignatureType;

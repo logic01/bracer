@@ -20,7 +20,7 @@ export class PhysicianDashboardComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   private unsubscribe$ = new Subject();
-  private physicianId: string;
+  private physicianId: number;
 
   public dataSource: MatTableDataSource<IntakeForm>;
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'view', 'download'];
@@ -56,11 +56,11 @@ export class PhysicianDashboardComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  download(documentId: string) {
+  download(documentId: number) {
     window.location.href = `${environment.api_url}/document/${documentId}/download`;
   }
 
-  view(intakeFormId: string) {
+  view(intakeFormId: number) {
     this.router.navigate(['physician', this.physicianId, 'intake-document', intakeFormId]);
   }
 

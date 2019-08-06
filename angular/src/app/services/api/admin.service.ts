@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ObservableStore } from '@codewithdan/observable-store';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { StoreState } from 'src/app/store/store-state';
+import { AdminStoreService } from 'src/app/store/admin-store.service';
 
 import { environment } from '../../../environments/environment';
 import { Admin } from '../../models/admin.model';
@@ -11,43 +10,51 @@ import { Admin } from '../../models/admin.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminService extends ObservableStore<StoreState> {
+export class AdminService {
 
   private url = `${environment.api_url}/admin`;
 
-  constructor(private http: HttpClient) {
-    super({ trackStateHistory: true });
+  constructor(
+    private readonly http: HttpClient,
+    private readonly store: AdminStoreService) {
   }
-
 
   getAll(): Observable<Admin[]> {
 
-    const state = this.getState();
+    const admins = this.store.getAll();
 
-    if (state && state.admins) {
-      return of(state.admins);
-    } else {
-      return this.fetchAll();
+    if (admins) {
+      return of(admins);
     }
-  }
 
-  private fetchAll(): Observable<Admin[]> {
     return this.http
       .get<Admin[]>(this.url)
-      .pipe(
-        tap((data: Admin[]) => this.setState({ admins: data }, 'admins-get-all'))
-      );
+      .pipe(tap((data: Admin[]) => this.store.set(data)));
   }
 
-  get(id: string): Observable<Admin> {
-    return this.http.get<Admin>(`${this.url}/${id}`);
+  get(id: number): Observable<Admin> {
+
+    const admin = this.store.get(id);
+
+    if (admin) {
+      return of(admin);
+    }
+
+    return this.http
+      .get<Admin>(`${this.url}/${id}`)
+      .pipe(tap((data: Admin) => this.store.add(data)));
   }
 
   post(admin: Admin): Observable<Admin> {
-    return this.http.post<Admin>(this.url, admin);
+    return this.http
+      .post<Admin>(this.url, admin)
+      .pipe(tap((data: Admin) => this.store.add(data)));
   }
 
-  put(id: string, admin: Admin): Observable<{ adminId: string }> {
-    return this.http.put<{ adminId: string }>(`${this.url}/${id}`, admin);
+  put(id: number, admin: Admin): Observable<{ adminId: number }> {
+    return this.http
+      .put<{ adminId: number }>(`${this.url}/${id}`, admin)
+      .pipe(tap(() => this.store.update(admin)));
   }
+
 }

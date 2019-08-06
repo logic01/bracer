@@ -32,11 +32,11 @@ export interface PainArea {
 export class PatientFormComponent implements OnInit, OnDestroy {
 
   @Input() patient$: Observable<Patient>;
-  @Input() patientId: string;
+  @Input() patientId: number;
   @Output() formSubmitEvent = new EventEmitter<Patient>();
 
   private unsubscribe$ = new Subject();
-  private agentId: string;
+  private agentId: number;
 
   public form: FormGroup;
   public shoeSizes: string[] = SelectValueService.shoeSizes;
@@ -49,14 +49,13 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     { value: 'RightElbow', viewValue: 'Right Elbow' },
     { value: 'LeftAnteriorShoulder', viewValue: 'Left Anterior Shoulder' },
     { value: 'RightAnteriorShoulder', viewValue: 'Right Anterior Shoulder' },
-    { value: 'LeftHip', viewValue: 'Left Hip' },
-    { value: 'RightHip', viewValue: 'Right Hip' },
     { value: 'LeftKnee', viewValue: 'Left Knee' },
     { value: 'RightKnee', viewValue: 'Right Knee' },
-    { value: 'PosteriorLeftShoulder', viewValue: 'Posterior Left Shoulder' },
-    { value: 'PosteriorRightShoulder', viewValue: 'Posterior Right Shoulder' },
+    { value: 'PosteriorLeftShoulder', viewValue: 'Left Posterior Shoulder' },
+    { value: 'PosteriorRightShoulder', viewValue: 'Right Posterior Shoulder' },
     { value: 'LeftAnkle', viewValue: 'Left Ankle' },
-    { value: 'RightAnkle', viewValue: 'Right Ankle' }
+    { value: 'RightAnkle', viewValue: 'Right Ankle' },
+    { value: 'Back', viewValue: 'Back' }
   ];
 
   constructor(
@@ -67,7 +66,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.agentId = this.route.snapshot.paramMap.get('agentId');
+    this.agentId = parseInt(this.route.snapshot.paramMap.get('agentId'), 10);
 
     this.initForm();
 

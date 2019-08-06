@@ -30,7 +30,7 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public painPoints = SelectValueService.painPoints;
 
-  public patientId: string;
+  public patientId: number;
 
   private unsubscribe$ = new Subject();
 
@@ -40,7 +40,7 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     public readonly maskService: MaskService) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('patientId');
+    this.patientId = parseInt(this.route.snapshot.paramMap.get('patientId'), 10);
     this.initForm();
   }
 
@@ -129,8 +129,7 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     this.addIntake(intakeForms, 'rightKnee');
     this.addIntake(intakeForms, 'leftAnkle');
     this.addIntake(intakeForms, 'rightAnkle');
-    this.addIntake(intakeForms, 'leftHip');
-    this.addIntake(intakeForms, 'rightHip');
+    this.addIntake(intakeForms, 'back');
 
     return intakeForms;
   }

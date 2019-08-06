@@ -10,7 +10,7 @@ import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 
 export class AssignmentDialogData {
-  intakeFormId: string;
+  intakeFormId: number;
 }
 
 @Component({

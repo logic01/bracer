@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Answer } from 'src/app/models/answer.model';
+import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { ActivatedRoute } from '@angular/router';
-import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
-import { Answer } from 'src/app/models/answer.model';
 
 @Component({
   selector: 'app-heartburn-acid-rx-only',
@@ -16,13 +16,13 @@ export class HeartburnAcidRxOnlyComponent implements OnInit {
   @Output() formSubmitEvent = new EventEmitter<IntakeForm>();
 
   form: FormGroup;
-  patientId: string;
+  patientId: number;
   questions: Question[] = [];
 
   constructor(private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.patientId = this.route.snapshot.paramMap.get('id');
+    this.patientId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
     this.initQuestions();
     this.initForm();

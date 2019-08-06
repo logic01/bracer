@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/Agent.model';
 import { AgentService } from 'src/app/services/api/agent.service';
