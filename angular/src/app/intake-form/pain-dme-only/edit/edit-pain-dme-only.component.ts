@@ -108,7 +108,7 @@ export class EditPainDmeOnlyComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
         if (this.isAdmin) {
-          this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+          this.router.navigateByUrl('admin');
         } else {
           this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
         }

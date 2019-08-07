@@ -2,41 +2,43 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { RouteUrls } from 'src/app/constants/routes';
-import { Vendor } from 'src/app/models/vendor.model';
+import { Agent } from 'src/app/models/agent.model';
+import { AgentService } from 'src/app/services/api/agent.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
-@Component({
-  selector: 'app-edit-vendor',
-  templateUrl: './edit-vendor.component.html',
-  styleUrls: ['./edit-vendor.component.scss']
-})
-export class EditVendorComponent implements OnInit, OnDestroy {
 
+@Component({
+  selector: 'app-agent-edit',
+  templateUrl: './agent-edit.component.html',
+  styleUrls: ['./agent-edit.component.scss']
+})
+export class AgentEditComponent implements OnInit, OnDestroy {
+
+  public vendors$ = this.vendorApi.getAll();
+  public agent$: Observable<Agent>;
+
+  private id: number;
   private unsubscribe$ = new Subject();
-  public vendor$: Observable<Vendor>;
-  public id: number;
 
   constructor(
+    private readonly agentApi: AgentService,
     private readonly vendorApi: VendorService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) { }
 
   ngOnInit() {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.vendor$ = this.vendorApi.get(this.id);
+    this.agent$ = this.agentApi.get(this.id);
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
   }
 
-  onSubmit(vendor: Vendor) {
-    this.vendorApi
-      .put(this.id, vendor)
+  onSubmit(agent: Agent) {
+    this.agentApi
+      .put(this.id, agent)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
-      });
+      .subscribe(() => this.router.navigate(['/admin']));
   }
 }

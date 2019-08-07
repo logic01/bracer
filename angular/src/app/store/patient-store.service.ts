@@ -13,6 +13,10 @@ export class PatientStoreService extends ObservableStore<StoreState> {
     super({ trackStateHistory: true });
   }
 
+  clear() {
+    this.setState({ patients: undefined });
+  }
+
   set(patients: Patient[]) {
     this.setState({ patients: patients });
   }

@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { RouteUrls } from 'src/app/constants/routes';
 import { Agent } from 'src/app/models/Agent.model';
 import { AgentService } from 'src/app/services/api/agent.service';
 
@@ -23,7 +22,8 @@ export class AgentListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly agentApi: AgentService,
-    private readonly router: Router) { }
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.agentApi
@@ -40,10 +40,10 @@ export class AgentListComponent implements OnInit, OnDestroy {
   }
 
   edit(id: number) {
-    this.router.navigate(['/agent/edit', id]);
+    this.router.navigate(['agent/edit', id], { relativeTo: this.activatedRoute });
   }
 
   add() {
-    this.router.navigateByUrl(RouteUrls.AgentCreateComponent);
+    this.router.navigate(['agent/create'], { relativeTo: this.activatedRoute });
   }
 }

@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { RouteUrls } from 'src/app/constants/routes';
 import { Vendor } from 'src/app/models/vendor.model';
 import { VendorService } from 'src/app/services/api/vendor.service';
 
@@ -23,7 +22,8 @@ export class VendorListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly vendorApi: VendorService,
-    private readonly router: Router) { }
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.vendorApi
@@ -39,15 +39,15 @@ export class VendorListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  edit(id: number) {
-    this.router.navigate(['/vendor', id, 'edit']);
-  }
-
   view(id: number) {
     this.router.navigate(['/vendor', id, 'view']);
   }
 
+  edit(id: number) {
+    this.router.navigate(['vendor/edit', id], { relativeTo: this.activatedRoute });
+  }
+
   add() {
-    this.router.navigateByUrl(RouteUrls.VendorCreateComponent);
+    this.router.navigate(['vendor/create'], { relativeTo: this.activatedRoute });
   }
 }

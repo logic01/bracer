@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-
-import { Physician } from '../models/physician.model';
 import { ObservableStore } from '@codewithdan/observable-store';
 import { StoreState } from 'src/app/store/store-state';
+
+import { Physician } from '../models/physician.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,11 @@ export class PhysicianStoreService extends ObservableStore<StoreState> {
   constructor() {
     super({ trackStateHistory: true });
   }
+
+  clear() {
+    this.setState({ physicians: undefined });
+  }
+
 
   set(physicians: Physician[]) {
     this.setState({ physicians: physicians });

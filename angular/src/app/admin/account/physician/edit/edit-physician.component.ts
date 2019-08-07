@@ -5,8 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Physician } from 'src/app/models/physician.model';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 
-import { RouteUrls } from '../../constants/routes';
-
 
 @Component({
   selector: 'app-edit-physician',
@@ -37,8 +35,6 @@ export class EditPhysicianComponent implements OnInit, OnDestroy {
     this.physicianApi
       .put(this.id, physician)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
-      });
+      .subscribe(() => this.router.navigate(['/admin']));
   }
 }

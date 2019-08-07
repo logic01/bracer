@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { RouteUrls } from '../constants/routes';
 import { AccountType } from '../models/enums/account-type.enum';
 import { UserAccount } from '../models/user-account.model';
 import { SessionService } from './session.service';
@@ -32,7 +31,7 @@ export class RoleGuardService implements CanActivate {
           return true;
         }
 
-        this.router.navigateByUrl(RouteUrls.LoginComponent);
+        this.router.navigate(['/login']);
         return false;
       })
     );

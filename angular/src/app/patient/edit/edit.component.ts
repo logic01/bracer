@@ -49,7 +49,7 @@ export class EditPatientComponent implements OnInit, OnDestroy {
       .subscribe(() => {
 
         if (this.isAdmin) {
-          this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+          this.router.navigateByUrl('admin');
         } else {
           this.router.navigateByUrl(RouteUrls.AgentDashboardComponent);
         }

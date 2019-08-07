@@ -5,14 +5,12 @@ import { takeUntil } from 'rxjs/operators';
 import { Admin } from 'src/app/models/admin.model';
 import { AdminService } from 'src/app/services/api/admin.service';
 
-import { RouteUrls } from '../../constants/routes';
-
 @Component({
-  selector: 'app-edit-admin',
-  templateUrl: './edit-admin.component.html',
-  styleUrls: ['./edit-admin.component.scss']
+  selector: 'app-admin-edit',
+  templateUrl: './admin-edit.component.html',
+  styleUrls: ['./admin-edit.component.scss']
 })
-export class EditAdminComponent implements OnInit, OnDestroy {
+export class AdminEditComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject();
   public admin$: Observable<Admin>;
@@ -36,6 +34,6 @@ export class EditAdminComponent implements OnInit, OnDestroy {
     this.adminApi
       .put(this.id, admin)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
+      .subscribe(() => this.router.navigate(['/admin']));
   }
 }

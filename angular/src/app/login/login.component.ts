@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.session.loggedIn$.next(true);
 
         if (result.type === AccountType.Admin) {
-          this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+          this.router.navigateByUrl('admin');
         }
 
         if (result.type === AccountType.Agent) {

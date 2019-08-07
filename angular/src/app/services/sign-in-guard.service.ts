@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SessionService } from './session.service';
-import { RouteUrls } from '../constants/routes';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+
+import { SessionService } from './session.service';
 
 
 @Injectable({
@@ -24,7 +23,7 @@ export class SignInGuardService implements CanActivate {
       map((loggedIn: boolean) => {
 
         if (loggedIn === false) {
-          this.router.navigateByUrl(RouteUrls.LoginComponent);
+          this.router.navigate(['/login']);
           return false;
         }
         return true;

@@ -4,15 +4,14 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Admin } from 'src/app/models/admin.model';
 
-import { RouteUrls } from '../../constants/routes';
-import { AdminService } from '../../services/api/admin.service';
+import { AdminService } from '../../../../services/api/admin.service';
 
 @Component({
-  selector: 'app-create-admin',
-  templateUrl: './create-admin.component.html',
-  styleUrls: ['./create-admin.component.scss']
+  selector: 'app-admin-create',
+  templateUrl: './admin-create.component.html',
+  styleUrls: ['./admin-create.component.scss']
 })
-export class CreateAdminComponent implements OnDestroy {
+export class AdminCreateComponent implements OnDestroy {
 
   private unsubscribe$ = new Subject();
 
@@ -28,9 +27,7 @@ export class CreateAdminComponent implements OnDestroy {
     this.adminApi
       .post(admin)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
-      });
+      .subscribe(() => this.router.navigate(['/admin']));
   }
 
 }

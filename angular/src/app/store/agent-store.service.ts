@@ -14,6 +14,10 @@ export class AgentStoreService extends ObservableStore<StoreState> {
     super({ trackStateHistory: true });
   }
 
+  clear() {
+    this.setState({ agents: undefined });
+  }
+
   set(agents: Agent[]) {
     this.setState({ agents: agents });
   }

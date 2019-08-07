@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { RouteUrls } from 'src/app/constants/routes';
 import { Admin } from 'src/app/models/admin.model';
 import { AdminService } from 'src/app/services/api/admin.service';
 
@@ -25,7 +22,8 @@ export class AdminListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly adminApi: AdminService,
-    private readonly router: Router) { }
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.adminApi
@@ -41,11 +39,11 @@ export class AdminListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
-  edit(adminId: number) {
-    this.router.navigate(['/admin/edit', adminId]);
+  edit(id: number) {
+    this.router.navigate(['admin/edit', id], { relativeTo: this.activatedRoute });
   }
 
   add() {
-    this.router.navigateByUrl(RouteUrls.AdminCreateComponent);
+    this.router.navigate(['admin/create'], { relativeTo: this.activatedRoute });
   }
 }

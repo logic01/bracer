@@ -31,7 +31,7 @@ export class BillingDashboardComponent implements OnInit {
   }
 
   done() {
-    this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+    this.router.navigateByUrl('admin');
   }
 
 }

@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
         (result: UserAccount) => {
 
           if (result.type === AccountType.Admin) {
-            this.router.navigateByUrl(RouteUrls.AdminDashboardComponent);
+            this.router.navigateByUrl('admin');
           }
 
           if (result.type === AccountType.Agent) {

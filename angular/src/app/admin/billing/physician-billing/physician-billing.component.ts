@@ -107,7 +107,7 @@ export class PhysicianBillingComponent implements OnInit, OnDestroy {
 
     forkJoin(observables)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => this.router.navigateByUrl(RouteUrls.AdminDashboardComponent));
+      .subscribe(() => this.router.navigateByUrl('admin'));
   }
 
   download(documentId: number) {

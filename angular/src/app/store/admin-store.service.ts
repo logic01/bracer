@@ -13,6 +13,10 @@ export class AdminStoreService extends ObservableStore<StoreState> {
     super({ trackStateHistory: true });
   }
 
+  clear() {
+    this.setState({ admins: undefined });
+  }
+
   set(admins: Admin[]) {
     this.setState({ admins: admins });
   }
