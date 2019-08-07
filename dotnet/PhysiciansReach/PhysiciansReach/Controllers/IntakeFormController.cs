@@ -2,6 +2,7 @@
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
@@ -23,57 +24,104 @@ namespace PhysiciansReach.Controllers
         [HttpGet("IntakeForm")]
         public ActionResult<List<IntakeFormModel>> Get()
         {
-            _logging.Log(LogSeverity.Info, "Get All IntakeForm");
-            return _intakeBusiness.Get();
+            try
+            {
+                return _intakeBusiness.Get();
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpGet("IntakeForm/{id}")]
         public ActionResult<IntakeFormModel> Get(int id)
         {
-            _logging.Log(LogSeverity.Info, "Get IntakeForm");
-            return _intakeBusiness.Get(id);
+            try
+            {
+                return _intakeBusiness.Get(id);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpGet("Patient/{patientId}/IntakeForm")]
         public ActionResult<List<IntakeFormModel>> GetByPatient(int patientId)
         {
-            _logging.Log(LogSeverity.Info, "Get All Document");
-            return _intakeBusiness.GetByPatient(patientId);
+            try
+            {
+                return _intakeBusiness.GetByPatient(patientId);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
 
         [HttpGet("Physician/{physicianId}/IntakeForm")]
         public ActionResult<List<IntakeFormModel>> GetByPhysician(int physicianId)
         {
-            _logging.Log(LogSeverity.Info, "Get All Document");
-            return _intakeBusiness.GetByPhysician(physicianId);
+            try
+            {
+                return _intakeBusiness.GetByPhysician(physicianId);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpGet("Vendor/{vendorId}/IntakeForm")]
         public ActionResult<List<IntakeFormModel>> GetByVendor(int vendorId)
         {
-            _logging.Log(LogSeverity.Info, "Get All Document");
-            return _intakeBusiness.GetByVendor(vendorId);
+            try
+            {
+                return _intakeBusiness.GetByVendor(vendorId);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPost("IntakeForm")]
         public ActionResult<IntakeFormModel> Post([FromBody] IntakeFormModel intakeForm)
         {
-            _logging.Log(LogSeverity.Info, "Post IntakeForm");
+            try
+            {
+                IntakeFormModel newIntakeForm = _intakeBusiness.Create(intakeForm);
 
-            IntakeFormModel newIntakeForm = _intakeBusiness.Create(intakeForm);
-
-            return newIntakeForm;
+                return newIntakeForm;
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPut("IntakeForm/{id}")]
         public ActionResult<IntakeFormModel> Put(int id, [FromBody] IntakeFormModel intakeForm)
         {
-            _logging.Log(LogSeverity.Info, "Put IntakeForm");
+            try
+            {
+                intakeForm.IntakeFormId = id;
 
-            intakeForm.IntakeFormId = id;
-
-            return _intakeBusiness.Update(intakeForm);
+                return _intakeBusiness.Update(intakeForm);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
     }
 }

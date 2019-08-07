@@ -2,6 +2,7 @@
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
@@ -23,41 +24,67 @@ namespace PhysiciansReach.Controllers
         [HttpGet]
         public ActionResult<List<PhysicianModel>> Get([FromQuery]int[] ids)
         {
-            _logging.Log(LogSeverity.Info, "Get Multiple Physicians");
-
-            if (ids.Length == 0)
+            try
             {
-                return _business.GetAll();
+                if (ids.Length == 0)
+                {
+                    return _business.GetAll();
+                }
+                else
+                {
+                    return _business.Get(ids);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return _business.Get(ids);
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
             }
         }
 
         [HttpGet("{id}")]
         public ActionResult<PhysicianModel> Get(int id)
         {
-            _logging.Log(LogSeverity.Info, "Get Physician");
-            return _business.Get(id);
+            try
+            {
+                return _business.Get(id);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPost]
         public ActionResult<PhysicianModel> Post([FromBody] PhysicianModel physician)
         {
-            physician.UserAccount.Type = AccountType.Physician;
-            _logging.Log(LogSeverity.Info, "Post Physician");
-            return _business.Create(physician);
+            try
+            {
+                physician.UserAccount.Type = AccountType.Physician;
+                return _business.Create(physician);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
         public ActionResult<PhysicianModel> Put(int id, [FromBody] PhysicianModel physician)
         {
-            physician.UserAccount.Type = AccountType.Physician;
-            _logging.Log(LogSeverity.Info, "Put Physician");
-
-            physician.UserAccount.UserAccountId = id;
-            return _business.Update(physician);
+            try
+            {
+                physician.UserAccount.Type = AccountType.Physician;
+                physician.UserAccount.UserAccountId = id;
+                return _business.Update(physician);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
     }
 }

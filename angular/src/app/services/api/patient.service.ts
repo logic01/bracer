@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
 import { Patient } from 'src/app/models/patient.model';
 import { PatientStoreService } from 'src/app/store/patient-store.service';
 import { environment } from 'src/environments/environment';
@@ -68,10 +66,18 @@ export class PatientService {
 
   getList(ids: number[]): Observable<Patient[]> {
 
+    const patients = this.store.getList(ids);
+
+    if (patients && patients.length === ids.length) {
+      return of(patients);
+    }
+
     let queryString = '';
 
     ids.forEach(id => queryString += `\&ids=${id}`);
 
-    return this.http.get<Patient[]>(`${this.url}?${queryString}`);
+    return this.http
+      .get<Patient[]>(`${this.url}?${queryString}`)
+      .pipe(tap((data: Patient[]) => this.store.updateList(data)));
   }
 }

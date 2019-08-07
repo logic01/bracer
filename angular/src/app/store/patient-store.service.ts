@@ -42,11 +42,23 @@ export class PatientStoreService extends ObservableStore<StoreState> {
 
     const patients = this.getState().patients;
 
-    const index = patients.findIndex(a => a.patientId === patient.patientId);
-    patients[index] = patient;
+    const index = state.patients.findIndex(a => a.patientId === patient.patientId);
+
+    if (!index) {
+      patients.push(patient);
+    } else {
+      patients[index] = patient;
+    }
 
     this.setState({ patients: patients });
+
+
   }
+
+  updateList(serverPatients: Patient[]): void {
+    serverPatients.forEach(this.update);
+  }
+
 
   get(id: number): Patient {
 
@@ -69,5 +81,29 @@ export class PatientStoreService extends ObservableStore<StoreState> {
     }
 
     return state.patients;
+  }
+
+  getList(ids: number[]): Patient[] {
+
+    const state = this.getState();
+
+    if (!state || !state.patients) {
+      return undefined;
+    }
+
+    const patients: Patient[] = [];
+
+    ids.forEach(id => {
+
+      const patient = state.patients.find(a => a.patientId === id);
+
+      if (patient) {
+        patients.push(patient);
+      }
+
+    });
+
+
+    return patients;
   }
 }

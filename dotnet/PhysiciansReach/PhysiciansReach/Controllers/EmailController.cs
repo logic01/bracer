@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
-using PR.Constants.Enums;
 using PR.Models;
 
 namespace PhysiciansReach.Controllers
@@ -21,7 +20,6 @@ namespace PhysiciansReach.Controllers
         [HttpPost]
         public ActionResult<bool> Post([FromBody] SendEmailModel sendEmailModel)
         {
-            _logging.Log(LogSeverity.Info, "Send Email");
             return _emailBusiness.SendEmail(sendEmailModel.DocumentId, sendEmailModel.EmailAddress);
         }
     }

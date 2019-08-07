@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
+using System;
 
 namespace PhysiciansReach.Controllers
 {
@@ -26,14 +27,21 @@ namespace PhysiciansReach.Controllers
         [HttpPost("IntakeForm/{intakeFormId}/Signature")]
         public ActionResult Post(int intakeFormId, [FromBody] SignatureModel signature)
         {
-            _logging.Log(LogSeverity.Info, "Sign Document");
+            try
+            {
+                // set the client ip address
+                signature.IpAddress = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
-            // set the client ip address
-            signature.IpAddress = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                var signatureId = _business.Create(intakeFormId, signature);
 
-            var signatureId = _business.Create(intakeFormId, signature);
+                return CreatedAtAction("Post", new { signatureId });
 
-            return CreatedAtAction("Post", new { signatureId });
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
     }

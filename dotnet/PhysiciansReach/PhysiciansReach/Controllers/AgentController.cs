@@ -2,6 +2,7 @@
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
@@ -22,42 +23,68 @@ namespace PhysiciansReach.Controllers
         [HttpGet]
         public ActionResult<List<AgentModel>> Get([FromQuery]int[] ids)
         {
-            _logging.Log(LogSeverity.Info, "Get Multiple Agents");
-
-            if (ids.Length == 0)
+            try
             {
-                return _business.GetAll();
+                if (ids.Length == 0)
+                {
+                    return _business.GetAll();
+                }
+                else
+                {
+                    return _business.Get(ids);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return _business.Get(ids);
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
             }
         }
 
         [HttpGet("{id}")]
         public ActionResult<AgentModel> Get(int id)
         {
-            _logging.Log(LogSeverity.Info, "Get Agent");
-            return _business.Get(id);
+            try
+            {
+                return _business.Get(id);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPost]
         public ActionResult<AgentModel> Post([FromBody] AgentModel agent)
         {
-            agent.UserAccount.Type = AccountType.Agent;
-            _logging.Log(LogSeverity.Info, "Post Agent");
-            return _business.Create(agent);
+            try
+            {
+                agent.UserAccount.Type = AccountType.Agent;
+                return _business.Create(agent);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
         public ActionResult<AgentModel> Put(int id, [FromBody] AgentModel agent)
         {
-            agent.UserAccount.Type = AccountType.Agent;
-            _logging.Log(LogSeverity.Info, "Put Agent");
+            try
+            {
+                agent.UserAccount.Type = AccountType.Agent;
+                agent.UserAccount.UserAccountId = id;
 
-            agent.UserAccount.UserAccountId = id;
-
-            return _business.Update(agent);
+                return _business.Update(agent);
+            }
+            catch (Exception ex)
+            {
+                _logging.Log(LogSeverity.Error, ex.ToString());
+                throw;
+            }
         }
     }
 

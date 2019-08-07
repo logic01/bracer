@@ -20,7 +20,6 @@ namespace PhysiciansReach.Controllers
         [HttpGet("{username}")]
         public ActionResult<bool> Exists(string username)
         {
-            _logging.Log(LogSeverity.Info, "Check if username exists.");
             return _business.Exists(username);
         }
 

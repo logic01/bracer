@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using PR.Business.Interfaces;
-using PR.Constants.Enums;
 using PR.Models;
 using System;
 using System.Net;
@@ -39,7 +38,7 @@ namespace PR.Api.Filters
                 StackTrace = ex.StackTrace
             };
 
-          //  logger.Log(LogSeverity.Error, ex.Message, ex.StackTrace);
+            //  logger.Log(LogSeverity.Error, ex.Message, ex.StackTrace);
 
             var result = JsonConvert.SerializeObject(error);
             context.Response.ContentType = "application/json";

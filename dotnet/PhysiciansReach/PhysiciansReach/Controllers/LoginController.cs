@@ -22,7 +22,6 @@ namespace PhysiciansReach.Controllers
         [HttpPost]
         public ActionResult<UserAccountModel> Post([FromBody] UserAccountModel userAccountModel)
         {
-            _logging.Log(LogSeverity.Info, "Login");
             return _loginBusiness.Login(userAccountModel);
         }
     }
