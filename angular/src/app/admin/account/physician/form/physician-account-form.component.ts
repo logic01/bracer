@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { States } from 'src/app/constants/states';
 import { Address } from 'src/app/models/address.model';
 import { AccountType } from 'src/app/models/enums/account-type.enum';
 import { Physician } from 'src/app/models/physician.model';
@@ -21,6 +24,7 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
   @Input() physician$: Observable<Physician>;
   @Output() formSubmitEvent = new EventEmitter<Physician>();
 
+  public states = States;
   public accountForm: FormGroup;
   private unsubscribe$ = new Subject();
 
@@ -46,7 +50,7 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
       addressLineOne: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       addressLineTwo: new FormControl('', Validators.maxLength(100)),
       city: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      state: new FormControl('', [CustomValidators.state, Validators.required]),
+      state: new FormControl('', [Validators.required]),
       zipCode: new FormControl('', [CustomValidators.zip, Validators.required]),
       active: new FormControl(true)
     });
@@ -69,6 +73,10 @@ export class PhysicianAccountFormComponent implements OnInit, OnDestroy {
           this.accountForm.patchValue(result);
           this.accountForm.patchValue(result.userAccount);
           this.accountForm.patchValue(result.address);
+
+          this.accountForm.patchValue({
+            state: this.states.find(s => s === result.address.state.toUpperCase())
+          });
 
           this.accountForm.get('userName').asyncValidator =
             this.dupeValidator.checkUsername

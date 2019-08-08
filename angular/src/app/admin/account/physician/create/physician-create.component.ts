@@ -1,17 +1,19 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { Physician } from 'src/app/models/physician.model';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 
 
 @Component({
-  selector: 'app-create-physician',
-  templateUrl: './create-physician.component.html',
-  styleUrls: ['./create-physician.component.scss']
+  selector: 'app-physician-create',
+  templateUrl: './physician-create.component.html',
+  styleUrls: ['./physician-create.component.scss']
 })
-export class CreatePhysicianComponent implements OnDestroy {
+export class PhysicianCreateComponent implements OnDestroy {
 
   private unsubscribe$ = new Subject();
 

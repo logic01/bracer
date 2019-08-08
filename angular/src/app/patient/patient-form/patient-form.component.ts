@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { States } from 'src/app/constants/states';
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
 import { InsuranceType } from 'src/app/models/enums/insurance-type.enum';
@@ -41,6 +42,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
   private agentId: number;
 
   public form: FormGroup;
+  public states = States;
   public shoeSizes: string[] = LookupService.shoeSizes;
   public heights: string[] = LookupService.heights;
 
@@ -124,7 +126,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       bin: new FormControl('', [Validators.maxLength(6), CustomValidators.onlyNumeric]),
       insuranceStreet: new FormControl('', Validators.maxLength(100)),
       insuranceCity: new FormControl('', Validators.maxLength(30)),
-      insuranceState: new FormControl('', Validators.maxLength(100)),
+      insuranceState: new FormControl(''),
       insuranceZip: new FormControl('', CustomValidators.zip),
       insurancePhone: new FormControl('', CustomValidators.phonenumber),
       memberId: new FormControl('', Validators.maxLength(100)),
@@ -144,6 +146,11 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       .subscribe((result: Patient) => {
         this.form.patchValue(result);
         this.form.patchValue(result.address);
+
+        this.form.patchValue({
+          state: this.states.find(s => s === result.address.state.toUpperCase())
+        });
+
         this.form.patchValue(
           {
             sex: SexType[result.sex],
@@ -159,7 +166,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
               physicianAddressLineOne: result.physiciansAddress.addressLineOne,
               physicianAddressLineTwo: result.physiciansAddress.addressLineTwo,
               physicianCity: result.physiciansAddress.city,
-              physicianState: result.physiciansAddress.state,
+              physicianState: this.states.find(s => s === result.physiciansAddress.state.toUpperCase()),
               physicianZip: result.physiciansAddress.zipCode,
             });
         }
@@ -185,7 +192,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
             privatePcn: result.privateInsurance.pcn,
             insuranceStreet: result.privateInsurance.street,
             insuranceCity: result.privateInsurance.city,
-            insuranceState: result.privateInsurance.state,
+            insuranceState: this.states.find(s => s === result.privateInsurance.state.toUpperCase()),
             insuranceZip: result.privateInsurance.zip,
             insurancePhone: result.privateInsurance.phone
           });

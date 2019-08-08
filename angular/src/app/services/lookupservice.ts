@@ -19,11 +19,5 @@ export class LookupService {
         ['Left Wrist', 'Right Wrist', 'Left Elbow', 'Right Elbow', 'Left Shoulder', 'Right Shoulder',
             'Left Knee', 'Right Knee', 'Back', 'Left Ankle', 'Right Ankle'];
 
-    public static states = [
-        'AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
-        'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', , 'TX', 'UT', 'VT',
-        'VA', 'WA', 'WV', 'WI', 'WY'
-    ]
 
 }

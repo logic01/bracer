@@ -136,11 +136,12 @@
             </mat-form-field>
 
             <mat-form-field>
-              <input matInput placeholder="State" type="text" formControlName="state"
-                [textMask]="{mask: maskService.state}">
-              <mat-error *ngIf="form.get('state').hasError('required')">Please enter a value.</mat-error>
-              <mat-error *ngIf="form.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
-              <mat-error *ngIf="form.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+              <mat-select placeholder="State" formControlName="state">
+                <mat-option *ngFor="let state of states" [value]="state">
+                  {{ state }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('state').hasError('required')">Please select a value.</mat-error>
             </mat-form-field>
 
             <mat-form-field>
@@ -299,12 +300,14 @@
             </mat-error>
           </mat-form-field>
 
+
           <mat-form-field>
-            <input matInput placeholder="State" type="text" formControlName="physicianState"
-              [textMask]="{mask: maskService.state}">
-            <mat-error *ngIf="form.get('state').hasError('required')">Please enter a value.</mat-error>
-            <mat-error *ngIf="form.get('state').hasError('minlength')">Minimum of 2 characters.</mat-error>
-            <mat-error *ngIf="form.get('state').hasError('maxlength')">Maximum of 100 characters.</mat-error>
+            <mat-select placeholder="State" formControlName="physicianState">
+              <mat-option *ngFor="let state of states" [value]="state">
+                {{ state }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('physicianState').hasError('required')">Please select a value.</mat-error>
           </mat-form-field>
 
           <mat-form-field>
@@ -402,11 +405,17 @@
                 <input matInput placeholder="Insurance City" type="text" formControlName="insuranceCity">
                 <mat-error *ngIf="form.get('insuranceCity').hasError('required')">Please enter a value </mat-error>
               </mat-form-field>
+
               <mat-form-field>
-                <input matInput placeholder="Insurance State" type="text" [textMask]="{mask: maskService.state}"
-                  formControlName="insuranceState">
-                <mat-error *ngIf="form.get('insuranceState').hasError('required')">Please enter a value </mat-error>
+                <mat-select placeholder="Insurance State" formControlName="insuranceState">
+                  <mat-option *ngFor="let state of states" [value]="state">
+                    {{ state }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('insuranceState').hasError('required')">Please select a value.
+                </mat-error>
               </mat-form-field>
+
               <mat-form-field>
                 <input matInput placeholder="Insurance Zip" type="text" [textMask]="{mask: maskService.zip}"
                   formControlName="insuranceZip">
