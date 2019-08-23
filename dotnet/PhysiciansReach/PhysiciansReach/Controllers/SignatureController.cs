@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
@@ -7,6 +8,7 @@ using System;
 
 namespace PhysiciansReach.Controllers
 {
+    [Authorize]
     [ApiController]
     public class SignatureController : ControllerBase
     {

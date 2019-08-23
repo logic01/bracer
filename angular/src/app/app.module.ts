@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { LoginModule } from './login/login.module';
 import { PatientModule } from './patient/patient.module';
 import { PhysicianModule } from './physician/physician.module';
 import { PipesModule } from './pipes/pipes.module';
+import { AuthInterceptor } from './services/auth-interceptor.service';
 import { MaskService } from './services/mask.service';
 import { VendorModule } from './vendor/vendor.module';
 
@@ -37,7 +38,14 @@ import { VendorModule } from './vendor/vendor.module';
     DocumentModule,
     PipesModule
   ],
-  providers: [MaskService],
+  providers: [
+    MaskService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

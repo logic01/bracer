@@ -20,6 +20,8 @@ namespace PR.Models
 
         public bool Active { get; set; }
 
+        public string Token { get; set; }
+
         public List<ErrorModel> Errors { get; set; }
 
         public DateTime CreatedOn { get; set; }

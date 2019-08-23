@@ -1,7 +1,7 @@
 ﻿using PR.Models;
 namespace PR.Business.Interfaces
 {
-    public interface ILoginBusiness
+    public interface IAuthorizationBusiness
     {
         UserAccountModel Login(UserAccountModel userAccountModel);
     }

@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Models;
 using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("[controller]")]
     public class VendorController : ControllerBase
     {
         private readonly IVendorBusiness _business;

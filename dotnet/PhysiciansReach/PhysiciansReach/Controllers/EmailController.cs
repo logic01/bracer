@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Models;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("[controller]")]
     public class EmailController : ControllerBase
     {
         private readonly IEmailBusiness _emailBusiness;

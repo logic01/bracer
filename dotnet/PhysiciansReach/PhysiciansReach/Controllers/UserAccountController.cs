@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
-using PR.Constants.Enums;
 
 namespace PhysiciansReach.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("[controller]")]
     public class UserAccountController : ControllerBase
     {
         private readonly IUserAccountBusiness _business;

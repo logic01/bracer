@@ -1,4 +1,6 @@
-﻿namespace PR.Business.Interfaces
+﻿using PR.Models;
+
+namespace PR.Business.Interfaces
 {
     public interface IUserAccountBusiness
     {

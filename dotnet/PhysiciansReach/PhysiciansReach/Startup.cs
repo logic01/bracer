@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using PR.Api.Filters;
 using PR.Business;
 using PR.Business.Business;
@@ -12,6 +14,7 @@ using PR.Business.Interfaces;
 using PR.Constants.Configurations;
 using PR.Data.Models;
 using PR.Export;
+using System.Text;
 
 namespace PhysiciansReach
 {
@@ -48,8 +51,34 @@ namespace PhysiciansReach
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             ConfigureDatabase(services);
+            ConfigureSecurity(services);
             ConfigureAppSettings(services);
             ConfigureDependecyInjection(services);
+        }
+
+        private void ConfigureSecurity(IServiceCollection services)
+        {
+            var securitySettings = Configuration.GetSection("SecuritySettings");
+            var appSettings = securitySettings.Get<SecuritySettings>();
+            var key = Encoding.UTF8.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         private void ConfigureAppSettings(IServiceCollection services)
@@ -60,6 +89,7 @@ namespace PhysiciansReach
             // Add our Config object so it can be injected
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.Configure<SecuritySettings>(Configuration.GetSection("SecuritySettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +104,7 @@ namespace PhysiciansReach
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseMiddleware(typeof(ExceptionMiddleware));
 
             app.UseCors(MyAllowSpecificOrigins);
@@ -96,7 +127,7 @@ namespace PhysiciansReach
             services.AddTransient<IAgentBusiness, AgentBusiness>();
             services.AddTransient<IPhysicianBusiness, PhysicianBusiness>();
             services.AddTransient<IVendorBusiness, VendorBusiness>();
-            services.AddTransient<ILoginBusiness, LoginBusiness>();
+            services.AddTransient<IAuthorizationBusiness, AuthorizationBusiness>();
             services.AddTransient<IPatientBusiness, PatientBusiness>();
             services.AddTransient<ILoggingBusiness, LoggingBusiness>();
             services.AddTransient<IDocumentBusiness, DocumentBusiness>();

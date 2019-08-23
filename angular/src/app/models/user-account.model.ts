@@ -8,6 +8,7 @@ export class UserAccount {
     public password: string;
     public emailAddress: string;
     public active: boolean;
+    public token: string;
     public confirmationPassword: string;
     public errors: ErrorModel[];
 }

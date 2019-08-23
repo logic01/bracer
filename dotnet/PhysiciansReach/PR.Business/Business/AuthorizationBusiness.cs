@@ -1,23 +1,32 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using PR.Business.Interfaces;
 using PR.Business.Mappings;
+using PR.Constants.Configurations;
 using PR.Constants.Enums;
 using PR.Data.Models;
 using PR.Models;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
 namespace PR.Business.Business
 {
-    public class LoginBusiness : ILoginBusiness
+    public class AuthorizationBusiness : IAuthorizationBusiness
     {
         private DataContext _context;
         private ILoggingBusiness _logging;
+        private SecuritySettings _securitySettings;
 
-        public LoginBusiness(DataContext context, ILoggingBusiness logging)
+        public AuthorizationBusiness(DataContext context, ILoggingBusiness logging, IOptions<SecuritySettings> securitySettings)
         {
             _context = context;
             _logging = logging;
+            _securitySettings = securitySettings.Value;
         }
 
         public UserAccountModel Login(UserAccountModel userAccountModel)
@@ -36,16 +45,34 @@ namespace PR.Business.Business
 
                 if (hash.Verify(userAccountModel.Password))
                 {
-                    return user.ToModel();
+                    var userModel = user.ToModel();
+                    userModel.Token = GetToken(userModel.UserAccountId);
+
+                    return userModel;
                 }
             }
 
             _logging.Log(LogSeverity.Error, "Login Failed", JsonConvert.SerializeObject(userAccountModel));
 
-            return LoginFailed();
+            return Unauthorized();
         }
 
-        private UserAccountModel LoginFailed()
+        private string GetToken(int userAccountId)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securitySettings.Secret));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+            var tokeOptions = new JwtSecurityToken(
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddSeconds(20),
+                signingCredentials: signinCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+        }
+
+        private UserAccountModel Unauthorized()
         {
             var model = new UserAccountModel
             {

@@ -29,7 +29,6 @@ namespace PR.Business
                     .ToList();
         }
 
-
         public List<PatientModel> GetAll()
         {
             return _context.Patient

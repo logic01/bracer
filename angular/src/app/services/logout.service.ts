@@ -22,6 +22,7 @@ export class LogoutService {
   ) { }
 
   logout() {
+    localStorage.removeItem('jwt');
     this.session.clear();
     this.agentStore.clear();
     this.adminStore.clear();

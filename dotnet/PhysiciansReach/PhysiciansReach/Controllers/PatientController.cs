@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PR.Business.Interfaces;
 using PR.Constants.Enums;
 using PR.Models;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 
 namespace PhysiciansReach.Controllers
 {
+    [Authorize]
     [ApiController]
     public class PatientController : ControllerBase
     {
