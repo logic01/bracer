@@ -1,12 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { RouteUrls } from './constants/routes';
 import { AccountType } from './models/enums/account-type.enum';
 import { UserAccount } from './models/user-account.model';
+import { LogoutTimerService } from './services/logout-timer.service';
 import { LogoutService } from './services/logout.service';
 import { SessionService } from './services/session.service';
 
@@ -25,13 +27,15 @@ export class AppComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private readonly router: Router,
     private readonly session: SessionService,
-    private readonly logoutService: LogoutService) {
+    private readonly logoutService: LogoutService,
+    private readonly logoutTimer: LogoutTimerService) {
 
   }
 
   ngOnInit(): void {
 
     this.titleService.setTitle('Physicians Reach');
+    this.logoutTimer.startTimer();
 
     this.router.events
       .pipe(takeUntil(this.unsubscribe$))
@@ -75,4 +79,16 @@ export class AppComponent implements OnInit, OnDestroy {
   billing() {
     this.router.navigateByUrl(RouteUrls.BillingDashboardComponent);
   }
+
+
+  // keep logout timer alive
+  @HostListener('document:mousemove', ['$event'])
+  @HostListener('document:mousedown', ['$event'])
+  @HostListener('document:mousewheel', ['$event'])
+  @HostListener('document:keydown', ['$event'])
+  userInputHandler(event: KeyboardEvent) {
+
+    this.logoutTimer.resetTimer();
+  }
+
 }

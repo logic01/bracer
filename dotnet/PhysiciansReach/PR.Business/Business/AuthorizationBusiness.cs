@@ -62,14 +62,27 @@ namespace PR.Business.Business
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securitySettings.Secret));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-            var tokeOptions = new JwtSecurityToken(
+            var expire = DateTime.UtcNow;
+
+            var handler = new JwtSecurityTokenHandler();
+
+            var token = new JwtSecurityToken(
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddSeconds(20),
+                expires: expire.AddMinutes(_securitySettings.TimeoutInMinutes),
                 signingCredentials: signinCredentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            return handler.WriteToken(token);
 
+        }
+
+        private bool CustomLifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken tokenToValidate, TokenValidationParameters @param)
+        {
+            if (expires != null)
+            {
+                return expires > DateTime.UtcNow;
+            }
+            return false;
         }
 
         private UserAccountModel Unauthorized()

@@ -14,6 +14,7 @@ using PR.Business.Interfaces;
 using PR.Constants.Configurations;
 using PR.Data.Models;
 using PR.Export;
+using System;
 using System.Text;
 
 namespace PhysiciansReach
@@ -72,11 +73,12 @@ namespace PhysiciansReach
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ClockSkew = TimeSpan.FromMinutes(0),
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false                    
                 };
             });
         }
