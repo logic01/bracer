@@ -102,7 +102,7 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       sex: new FormControl('', Validators.required),
       language: new FormControl('', Validators.required),
       bestTimeToCallBack: new FormControl('', Validators.required),
-      allergies: new FormControl('', [Validators.maxLength(500)]),
+      allergies: new FormControl('', [Validators.required, Validators.maxLength(500)]),
 
       hadBraceBefore: new FormControl('', Validators.required),
       mainPainArea: new FormControl('', Validators.required),
