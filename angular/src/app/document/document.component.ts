@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { concat, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -91,6 +92,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
         // load intake
         this.intakeForm = intake;
 
+        // kind of ghetto infering all this but for now it works.
+        const question = this.intakeForm.questions.filter(q => q.key === 'painArea');
+        const painArea = question[0].answers[0].text;
+
         // change intake status to under review is the physician is viewing it.
         if (!this.isAdminView && this.intakeForm.status === IntakeStatus.Assigned) {
           this.intakeForm.status = IntakeStatus.UnderReview;
@@ -106,7 +111,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
           this.patientApi
             .get(intake.patientId)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((patient: Patient) => this.patient = patient);
+            .subscribe((patient: Patient) => {
+              this.patient = patient;
+              this.setHcpcsCodeByPatient(patient, painArea);
+            });
         }
 
         // load physician
@@ -116,10 +124,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((physician: Physician) => this.physician = physician);
         }
-
-        // kind of ghetto infering all this but for now it works.
-        const question = this.intakeForm.questions.filter(q => q.key === 'painArea');
-        const painArea = question[0].answers[0].text;
 
         // the product, lcode and diagnosis options are all distinct via the PainArea
         this.setDiagnosis(painArea);
@@ -190,10 +194,29 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   }
 
+  private setHcpcsCodeByPatient(patient: Patient, painArea: string) {
+    switch (painArea.toUpperCase()) {
+      case 'RIGHTKNEE':
+        if (patient.insurance === InsuranceType.PRIVATE) {
+          this.intakeForm.hcpcsCode = 'L1833 (Hinged Wraparound Knee Support)';
+        } else {
+          this.intakeForm.hcpcsCode = 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)';
+        }
+        break;
+      case 'LEFTKNEE':
+        if (patient.insurance === InsuranceType.PRIVATE) {
+          this.intakeForm.hcpcsCode = 'L1833 (Hinged Wraparound Knee Support)';
+        } else {
+          this.intakeForm.hcpcsCode = 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)';
+        }
+        break;
+    }
+  }
+
   private setDiagnosis(key: string) {
 
     switch (key.toUpperCase()) {
-      case 'RIGHT ANKLE':
+      case 'RIGHTANKLE':
         this.intakeForm.product = 'Ankle Brace';
         this.diagnosisOptions.push('m19.071 primary osteoarthritis, right ankle and foot');
         this.diagnosisOptions.push('m25.579 pain in joint, ankle');
@@ -201,7 +224,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.diagnosisOptions.push('m25.371 instability in right ankle');
         this.intakeForm.hcpcsCode = 'L1906 Ankle Foot Orthosis, Plastic or Other Material With Ankle Joint, Prefabricated, Includes Fitting and Adjustment';
         break;
-      case 'LEFT ANKLE':
+      case 'LEFTANKLE':
         this.intakeForm.product = 'Ankle Brace';
         this.diagnosisOptions.push('m19.072 primary osteoarthritis, left ankle and foot');
         this.diagnosisOptions.push('m25.579 pain in joint, ankle');
@@ -209,45 +232,31 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.diagnosisOptions.push('m25.372 instability left ankle');
         this.intakeForm.hcpcsCode = 'L1906 Ankle Foot Orthosis, Plastic or Other Material With Ankle Joint, Prefabricated, Includes Fitting and Adjustment';
         break;
-      case 'RIGHT KNEE ':
+      case 'RIGHTKNEE':
         this.intakeForm.product = 'Knee Brace';
         this.diagnosisOptions.push('m17.11 unilateral osteoarthritis of the right knee');
         this.diagnosisOptions.push('m23.51 chronic instability of the right knee');
-
-        if (this.patient.insurance === InsuranceType.PRIVATE) {
-          this.intakeForm.hcpcsCode = 'L1833 (Hinged Wraparound Knee Support)';
-        } else {
-          this.intakeForm.hcpcsCode = 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)';
-        }
-
         break;
-      case 'LEFT KNEE':
+      case 'LEFTKNEE':
         this.intakeForm.product = 'Knee Brace';
         this.diagnosisOptions.push('m17.12 unilateral osteoarthritis of left knee');
         this.diagnosisOptions.push('m23.52 chronic instability of the left knee');
-
-        if (this.patient.insurance === InsuranceType.PRIVATE) {
-          this.intakeForm.hcpcsCode = 'L1833 (Hinged Wraparound Knee Support)';
-        } else {
-          this.intakeForm.hcpcsCode = 'L2397 (Universal Suspension Sleeve for ROM Hinged Knee Braces)';
-        }
-
         break;
-      case 'RIGHT WRIST':
+      case 'RIGHTWRIST':
         this.intakeForm.product = 'Wrist Brace';
         this.diagnosisOptions.push('m19.031 primary osteoarthritis, right wrist');
         this.diagnosisOptions.push('g56.0 carpal tunnel syndrome');
         this.diagnosisOptions.push('m19.041 osteoarthritis right hand');
         this.intakeForm.hcpcsCode = 'L3908 wrist hand orthosis, includes one or more non-torsional joint(s), elastic bands, turnbuckles, may include a soft interface and straps. it is prefabricated and off the shelf.';
         break;
-      case 'LEFT WRIST':
+      case 'LEFTWRIST':
         this.intakeForm.product = 'Wrist Brace';
         this.diagnosisOptions.push('m19.032 primary osteoarthritis, left wrist');
         this.diagnosisOptions.push('g56.0 carpal tunnel syndrome');
         this.diagnosisOptions.push('m19.042 osteoarthritis left hand');
         this.intakeForm.hcpcsCode = 'L3908 wrist hand orthosis, includes one or more non-torsional joint(s), elastic bands, turnbuckles, may include a soft interface and straps. it is prefabricated and off the shelf.';
         break;
-      case 'RIGHT ELBOW':
+      case 'RIGHTELBOW':
         this.intakeForm.product = 'Elbow Brace';
         this.diagnosisOptions.push('m24.221 disorder of ligament, right elbow');
         this.diagnosisOptions.push('m12.821 other specific arthropathy, not elsewhere specified, right elbow');
@@ -255,7 +264,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.diagnosisOptions.push('g89.4 chronic pain');
         this.intakeForm.hcpcsCode = 'L3761 Elbow Orthosis, With Adjustable Position Locking Joint(s), Prefabricated, Includes Fitting and Adjustments, Any Type.';
         break;
-      case 'LEFT ELBOW':
+      case 'LEFTELBOW':
         this.intakeForm.product = 'Elbow Brace';
         this.diagnosisOptions.push('m24.221 disorder of ligament, left  elbow');
         this.diagnosisOptions.push('m12.821 other specific arthropathy, not elsewhere specified, left elbow');
@@ -263,13 +272,13 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.diagnosisOptions.push('g89.4 chronic pain');
         this.intakeForm.hcpcsCode = 'L3761 Elbow Orthosis, With Adjustable Position Locking Joint(s), Prefabricated, Includes Fitting and Adjustments, Any Type.';
         break;
-      case 'RIGHT SHOULDER':
+      case 'RIGHTSHOULDER':
         this.intakeForm.product = 'Shoulder Brace';
         this.diagnosisOptions.push('m25.511 pain in right shoulder');
         this.diagnosisOptions.push('m19.011 primary osteoarthritis, right shoulder');
         this.intakeForm.hcpcsCode = 'L3960 (Shoulder Elbow Wrist Hand Orthosis, Abduction Positioning, Airplane Design, Prefabricated, Includes Fitting and Adjustment.)';
         break;
-      case 'LEFT SHOULDER':
+      case 'LEFTSHOULDER':
         this.intakeForm.product = 'Shoulder Brace';
         this.diagnosisOptions.push('m25.512 pain in left shoulder ');
         this.diagnosisOptions.push('m19.012 primary osteoarthritis, left shoulder');

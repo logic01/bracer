@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { States } from 'src/app/constants/states';
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
@@ -219,8 +221,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       this.form.get('medicareGroup').clearValidators();
       this.form.get('medicarePcn').clearValidators();
       this.form.get('subscriberNumber').clearValidators();
-      this.form.get('secondaryInsurance').clearValidators();
-      this.form.get('secondarySubscriberNumber').clearValidators();
 
       this.form.get('bin').validator = Validators.required;
       this.form.get('insurance').validator = Validators.required;
@@ -240,8 +240,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
       this.form.get('medicareGroup').validator = Validators.required;
       this.form.get('medicarePcn').validator = Validators.required;
       this.form.get('subscriberNumber').validator = Validators.required;
-      this.form.get('secondaryInsurance').validator = Validators.required;
-      this.form.get('secondarySubscriberNumber').validator = Validators.required;
 
       this.form.get('bin').clearValidators();
       this.form.get('insurance').clearValidators();
@@ -260,8 +258,6 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     this.form.get('medicareGroup').updateValueAndValidity();
     this.form.get('medicarePcn').updateValueAndValidity();
     this.form.get('subscriberNumber').updateValueAndValidity();
-    this.form.get('secondaryInsurance').updateValueAndValidity();
-    this.form.get('secondarySubscriberNumber').updateValueAndValidity();
 
     this.form.get('bin').updateValueAndValidity();
     this.form.get('insurance').updateValueAndValidity();
