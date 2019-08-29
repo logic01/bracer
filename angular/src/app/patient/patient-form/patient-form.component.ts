@@ -2,10 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { States } from 'src/app/constants/states';
 import { Address } from 'src/app/models/address.model';
 import { CallbackTime } from 'src/app/models/enums/callback-time.enum';
@@ -264,6 +262,8 @@ export class PatientFormComponent implements OnInit, OnDestroy {
     this.form.get('subscriberNumber').updateValueAndValidity();
     this.form.get('secondaryInsurance').updateValueAndValidity();
     this.form.get('secondarySubscriberNumber').updateValueAndValidity();
+
+    this.form.get('bin').updateValueAndValidity();
     this.form.get('insurance').updateValueAndValidity();
     this.form.get('insuranceId').updateValueAndValidity();
     this.form.get('privateGroup').updateValueAndValidity();

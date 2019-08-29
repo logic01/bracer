@@ -2,9 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-
 import { Subject } from 'rxjs';
-
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
@@ -92,14 +90,10 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
       leftElbowQuestions: this.formBuilder.array([]),
       rightElbow: new FormControl(''),
       rightElbowQuestions: this.formBuilder.array([]),
-      leftAnteriorShoulder: new FormControl(''),
-      leftAnteriorShoulderQuestions: this.formBuilder.array([]),
-      rightAnteriorShoulder: new FormControl(''),
-      rightAnteriorShoulderQuestions: this.formBuilder.array([]),
-      leftPosteriorShoulder: new FormControl(''),
-      leftPosteriorShoulderQuestions: this.formBuilder.array([]),
-      rightPosteriorShoulder: new FormControl(''),
-      rightPosteriorShoulderQuestions: this.formBuilder.array([]),
+      leftShoulder: new FormControl(''),
+      leftShoulderQuestions: this.formBuilder.array([]),
+      rightShoulder: new FormControl(''),
+      rightShoulderQuestions: this.formBuilder.array([]),
       leftKnee: new FormControl(''),
       leftKneeQuestions: this.formBuilder.array([]),
       rightKnee: new FormControl(''),
@@ -108,10 +102,8 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
       leftAnkleQuestions: this.formBuilder.array([]),
       rightAnkle: new FormControl(''),
       rightAnkleQuestions: this.formBuilder.array([]),
-      rightHip: new FormControl(''),
-      rightHipQuestions: this.formBuilder.array([]),
-      leftHip: new FormControl(''),
-      leftHipQuestions: this.formBuilder.array([]),
+      back: new FormControl(''),
+      backQuestions: this.formBuilder.array([]),
     });
   }
 
@@ -123,10 +115,8 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
     this.addIntake(intakeForms, 'rightWrist');
     this.addIntake(intakeForms, 'leftElbow');
     this.addIntake(intakeForms, 'rightElbow');
-    this.addIntake(intakeForms, 'leftAnteriorShoulder');
-    this.addIntake(intakeForms, 'rightAnteriorShoulder');
-    this.addIntake(intakeForms, 'leftPosteriorShoulder');
-    this.addIntake(intakeForms, 'rightPosteriorShoulder');
+    this.addIntake(intakeForms, 'leftShoulder');
+    this.addIntake(intakeForms, 'rightShoulder');
     this.addIntake(intakeForms, 'leftKnee');
     this.addIntake(intakeForms, 'rightKnee');
     this.addIntake(intakeForms, 'leftAnkle');

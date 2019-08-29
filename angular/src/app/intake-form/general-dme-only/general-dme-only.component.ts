@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
@@ -49,16 +48,16 @@ export class GeneralDmeOnlyComponent implements OnInit {
   }
 
   initQuestions() {
-    this.questions.push(this.initQuestion('Height', 'How tall are you?'));
-    this.questions.push(this.initQuestion('Weight', 'How much do you weigh?'));
-    this.questions.push(this.initQuestion('ShoeSize', 'What is your shoe size?'));
-    this.questions.push(this.initQuestion('Waist', 'What is your waist size?'));
-    this.questions.push(this.initQuestion('5', 'What current medications are you taking?'));
-    this.questions.push(this.initQuestion('Allergies', 'Do you have any allergies?'));
-    this.questions.push(this.initQuestion('7', 'Have you seen your primary care physician within the last year?'));
-    this.questions.push(this.initQuestion('8', 'Have you been prescribed any type of brace within the last 5 years?'));
-    this.questions.push(this.initQuestion('9', 'Are you diabetic?'));
-    this.questions.push(this.initQuestion('10', 'Do you take insulin or oral medication for diabetes?'));
+    this.questions.push(this.initQuestion('height', 'How tall are you?'));
+    this.questions.push(this.initQuestion('weight', 'How much do you weigh?'));
+    this.questions.push(this.initQuestion('shoesize', 'What is your shoe size?'));
+    this.questions.push(this.initQuestion('waistSize', 'What is your waist size?'));
+    this.questions.push(this.initQuestion('medications', 'What current medications are you taking?'));
+    this.questions.push(this.initQuestion('allergies', 'Do you have any allergies?'));
+    this.questions.push(this.initQuestion('hasSeenPrimaryCareDr', 'Have you seen your primary care physician within the last year?'));
+    this.questions.push(this.initQuestion('hasPrescBrace', 'Have you been prescribed any type of brace within the last 5 years?'));
+    this.questions.push(this.initQuestion('diabetic', 'Are you diabetic?'));
+    this.questions.push(this.initQuestion('insulinOrMedication', 'Do you take insulin or oral medication for diabetes?'));
   }
 
   initQuestion(key: string, text: string): Question {
