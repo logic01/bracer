@@ -2,13 +2,14 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+
 import { Subject } from 'rxjs';
+
 import { Answer } from 'src/app/models/answer.model';
 import { IntakeFormType } from 'src/app/models/enums/intake-form-type.enum';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Question } from 'src/app/models/question.model';
-import { LookupService } from 'src/app/services/lookupservice';
 import { MaskService } from 'src/app/services/mask.service';
 
 
@@ -28,8 +29,6 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
   @Output() formSubmitEvent = new EventEmitter<IntakeForm[]>();
 
   public form: FormGroup;
-  public painPoints = LookupService.painPoints;
-
   public patientId: number;
 
   private unsubscribe$ = new Subject();
@@ -178,7 +177,7 @@ export class PainDmeOnlyComponent implements OnInit, OnDestroy {
 
     const question = new Question();
     question.key = key;
-    question.text = key;
+    question.text = text;
     question.answers = [];
 
     const answer = new Answer();

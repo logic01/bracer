@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange, MatDialog } from '@angular/material';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { SignatureDialogComponent } from 'src/app/document/signature-dialog/signature-dialog.component';
 import { SignatureType } from 'src/app/models/enums/signature-type';
 import { ICD10Code } from 'src/app/models/icd10-code.model';
@@ -61,7 +63,7 @@ export class IntakeComponent implements OnInit, OnDestroy {
   getAnswer(key: string) {
 
     let text = '';
-    const questions = this.intakeForm.questions.filter(q => q.key === key);
+    const questions = this.intakeForm.questions.filter(q => q.key.toLocaleUpperCase() === key.toLocaleUpperCase());
 
     if (questions.length > 0) {
       for (const answer of questions[0].answers) {

@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 import { SignatureType } from 'src/app/models/enums/signature-type';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 import { Signature } from 'src/app/models/signature.model';
-
-import { SignatureDialogComponent } from '../signature-dialog/signature-dialog.component';
 
 @Component({
   selector: 'app-prescription',
@@ -42,7 +43,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy {
   getAnswer(key: string) {
 
     let text = '';
-    const questions = this.intakeForm.questions.filter(q => q.key === key);
+    const questions = this.intakeForm.questions.filter(q => q.key.toLocaleUpperCase() === key.toLocaleUpperCase());
 
     if (questions.length > 0) {
       for (const answer of questions[0].answers) {

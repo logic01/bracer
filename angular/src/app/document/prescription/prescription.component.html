@@ -78,31 +78,31 @@
       <mat-card>
         <mat-card-title>SUBJECTIVE</mat-card-title>
         <mat-card-content>
-          The patient describes their {{getAnswer('painArea')}} pain to be at a level of {{getAnswer('PainLevel')}} on
+          The patient describes their {{getAnswer('painArea')}} pain to be at a level of {{getAnswer('painLevel')}} on
           a
           0 to 10 scale.
           The patient describes
           the
-          duration of the pain as {{getAnswer('PainDuration')}}. The etiology of the patient's
+          duration of the pain as {{getAnswer('painDuration')}}. The etiology of the patient's
           {{getAnswer('painArea')}}
           pain is
-          described by patient as {{getAnswer('PainFeeling')}} .
+          described by patient as {{getAnswer('painFeeling')}} .
           Conditions
-          that cause or aggravate the {{getAnswer('painArea')}} pain include {{getAnswer('PainCause')}}. Previously,
+          that cause or aggravate the {{getAnswer('painArea')}} pain include {{getAnswer('painCause')}}. Previously,
           the
           patient has
           tried
-          {{getAnswer('PainSelfTreatment')}}, with limited
+          {{getAnswer('painSelfTreatment')}}, with limited
           success.
           When
-          asked whether it eﬀects activities of daily living, the patient stated {{getAnswer('EffectsDaily')}}.
+          asked whether it eﬀects activities of daily living, the patient stated {{getAnswer('effectsDaily')}}.
         </mat-card-content>
       </mat-card>
 
       <mat-card>
         <mat-card-title>RELATED SURGERY</mat-card-title>
         <mat-card-content>
-          The patient states, they had {{getAnswer('Surgies')}} surgeries in the area of {{getAnswer('painArea')}}
+          The patient states, they had {{getAnswer('surgies')}} surgeries in the area of {{getAnswer('painArea')}}
         </mat-card-content>
       </mat-card>
 
@@ -111,11 +111,11 @@
         <mat-card-content>
           Patient name, {{patient.firstName}} {{patient.lastName}}, a {{patient.sex | sex}}, currently {{calcAge()}}
           years old and weighs {{patient.weight}} lbs. The patient claims their pain was initially
-          caused by {{getAnswer('PainFeeling')}} . Treatments previously tried for {{getAnswer('painArea')}} pain
+          caused by {{getAnswer('painFeeling')}} . Treatments previously tried for {{getAnswer('painArea')}} pain
           include
-          {{getAnswer('PainSelfTreatment')}}. When asked about previous surgery, the patients
+          {{getAnswer('painSelfTreatment')}}. When asked about previous surgery, the patients
           response was {{getAnswer('Surgies')}}. Conditions that cause or aggravate the patients
-          {{getAnswer('painArea')}} pain include {{getAnswer('PainCause')}}. The condition
+          {{getAnswer('painArea')}} pain include {{getAnswer('painCause')}}. The condition
           necessitating
           the {{intakeForm.product}} is expected to be permanent or of {{productDuration}} duration and there is a need
           to control
