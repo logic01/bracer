@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -22,6 +23,10 @@ export class DocumentService {
 
   post(document: Document): Observable<{ documentId: number }> {
     return this.http.post<{ documentId: number }>(`${environment.api_url}/document`, document);
+  }
+
+  download(documentId: number): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.api_url}/document/${documentId}/download`, { responseType: 'blob' as 'json' });
   }
 
 }

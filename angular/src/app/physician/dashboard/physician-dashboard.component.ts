@@ -1,14 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { UserAccount } from 'src/app/models/user-account.model';
+import { DocumentService } from 'src/app/services/api/document.service';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
+import { FileSaverService } from 'src/app/services/file-saver.service';
 import { SessionService } from 'src/app/services/session.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-physician-dashboard',
@@ -29,6 +32,8 @@ export class PhysicianDashboardComponent implements OnInit, OnDestroy {
   public IntakeStatus = IntakeStatus;
 
   constructor(
+    private readonly fileService: FileSaverService,
+    private readonly docApi: DocumentService,
     private readonly router: Router,
     private readonly session: SessionService,
     private readonly intakeFormApi: IntakeFormService) { }
@@ -57,7 +62,13 @@ export class PhysicianDashboardComponent implements OnInit, OnDestroy {
   }
 
   download(documentId: number) {
-    window.location.href = `${environment.api_url}/document/${documentId}/download`;
+
+    this.docApi.download(documentId).subscribe((response: Blob) => {
+      console.warn(response.type);
+
+      this.fileService.saveFile(response, 'physicians_reach.docx');
+
+    });
   }
 
   view(intakeFormId: number) {
