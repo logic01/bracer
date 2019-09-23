@@ -1,19 +1,21 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { RouteUrls } from 'src/app/constants/routes';
+
 import { Agent } from 'src/app/models/Agent.model';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Vendor } from 'src/app/models/vendor.model';
 import { AgentService } from 'src/app/services/api/agent.service';
+import { DocumentService } from 'src/app/services/api/document.service';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PatientService } from 'src/app/services/api/patient.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
-import { environment } from 'src/environments/environment';
+import { FileSaverService } from 'src/app/services/file-saver.service';
 
 
 export class TableRow {
@@ -53,7 +55,9 @@ export class VendorBillingComponent implements OnInit, OnDestroy {
     private readonly intakeApi: IntakeFormService,
     private readonly patientApi: PatientService,
     private readonly vendorApi: VendorService,
-    private readonly agentApi: AgentService
+    private readonly agentApi: AgentService,
+    private readonly docApi: DocumentService,
+    private readonly fileService: FileSaverService,
   ) { }
 
   ngOnInit() {
@@ -153,7 +157,9 @@ export class VendorBillingComponent implements OnInit, OnDestroy {
 
 
   download(documentId: number) {
-    window.location.href = `${environment.api_url}/document/${documentId}/download`;
+    this.docApi.download(documentId).subscribe((blob: Blob) => {
+      this.fileService.saveFile(blob, 'physicians_reach.docx');
+    });
   }
 
   private buildTableRow(intake: IntakeForm, patient: Patient, agent: Agent, vendor: Vendor): TableRow {

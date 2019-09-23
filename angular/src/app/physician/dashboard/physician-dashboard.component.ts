@@ -63,11 +63,8 @@ export class PhysicianDashboardComponent implements OnInit, OnDestroy {
 
   download(documentId: number) {
 
-    this.docApi.download(documentId).subscribe((response: Blob) => {
-      console.warn(response.type);
-
-      this.fileService.saveFile(response, 'physicians_reach.docx');
-
+    this.docApi.download(documentId).subscribe((blob: Blob) => {
+      this.fileService.saveFile(blob, 'physicians_reach.docx');
     });
   }
 

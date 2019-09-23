@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatCheckboxChange, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { RouteUrls } from 'src/app/constants/routes';
+
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Physician } from 'src/app/models/physician.model';
+import { DocumentService } from 'src/app/services/api/document.service';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
-import { environment } from 'src/environments/environment';
+import { FileSaverService } from 'src/app/services/file-saver.service';
 
 
 export class TableRow {
@@ -41,6 +43,8 @@ export class PhysicianBillingComponent implements OnInit, OnDestroy {
   public columnsToDisplay = ['intakeFormId', 'createdOn', 'status', 'physicianName', 'physicianState', 'physicianPaid', 'download'];
 
   constructor(
+    private readonly docApi: DocumentService,
+    private readonly fileService: FileSaverService,
     private readonly router: Router,
     private readonly physicianApi: PhysicianService,
     private readonly intakeApi: IntakeFormService) { }
@@ -111,7 +115,11 @@ export class PhysicianBillingComponent implements OnInit, OnDestroy {
   }
 
   download(documentId: number) {
-    window.location.href = `${environment.api_url}/document/${documentId}/download`;
+
+    this.docApi.download(documentId).subscribe((blob: Blob) => {
+      this.fileService.saveFile(blob, 'physicians_reach.docx');
+    });
+
   }
 
   private buildTableRow(intake: IntakeForm, physician: Physician): TableRow {

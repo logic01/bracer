@@ -1,20 +1,22 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
 import { IntakeStatus } from 'src/app/models/enums/intake-status.enum';
 import { IntakeForm } from 'src/app/models/intake-form.model';
 import { Patient } from 'src/app/models/patient.model';
 import { Physician } from 'src/app/models/physician.model';
 import { Vendor } from 'src/app/models/vendor.model';
+import { DocumentService } from 'src/app/services/api/document.service';
 import { IntakeFormService } from 'src/app/services/api/intake-form.service';
 import { PatientService } from 'src/app/services/api/patient.service';
 import { PhysicianService } from 'src/app/services/api/physician.service';
 import { VendorService } from 'src/app/services/api/vendor.service';
-import { environment } from 'src/environments/environment';
-
-import { AssignmentDialogComponent } from '../assignment-dialog/assignment-dialog.component';
+import { FileSaverService } from 'src/app/services/file-saver.service';
 
 export class TableRow {
   intakeFormId: number;
@@ -50,6 +52,8 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
     private readonly vendorApi: VendorService,
     private readonly patientApi: PatientService,
     private readonly intakeApi: IntakeFormService,
+    private readonly docApi: DocumentService,
+    private readonly fileService: FileSaverService,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog) {
   }
@@ -161,15 +165,16 @@ export class ViewVendorComponent implements OnInit, OnDestroy {
   download(intakeFormId: number) {
 
     const intake = this.intakes.find(i => i.intakeFormId === intakeFormId);
-
-    window.location.href = `${environment.api_url}/document/${intake.documentId}/download`;
-
     intake.status = IntakeStatus.Downloaded;
 
     this.intakeApi
       .put(intakeFormId, intake)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
+
+    this.docApi.download(intake.documentId).subscribe((blob: Blob) => {
+      this.fileService.saveFile(blob, 'physicians_reach.docx');
+    });
   }
 
 }
